@@ -16,6 +16,8 @@
  */
 package com.crypto.web;
 
+import com.crypto.CurrencyDao;
+
 import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -33,6 +35,9 @@ import javax.ws.rs.Produces;
 public class HelloWorld {
     @Inject
     HelloService helloService;
+
+    @Inject
+    CurrencyDao currencyDao;
 
     @POST
     @Path("/json/{name}")

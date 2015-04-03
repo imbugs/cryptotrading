@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 @Stateful
 public class CurrencyDao implements com.crypto.CurrencyDao {
 
-    @PersistenceContext(unitName = "cryptoPersistencetUnit")
+    @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
 
     /**
