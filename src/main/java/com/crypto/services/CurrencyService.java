@@ -22,6 +22,9 @@ import com.crypto.entities.Currency;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import com.google.gson.Gson;
+
+import java.rmi.server.ExportException;
 
 /**
  * Rest service returning currency
@@ -40,12 +43,14 @@ public class CurrencyService {
         final Currency currency = currencyDao.getCurrency(code);
 
         if (currency != null) {
-            return "{ \"code\": \"" + currency.getCode() + "\"," +
-                     "\"description\":\"" + currency.getDescription() + "\"," +
-                     "\"symbol\":\"" + currency.getSymbol() + "\"}";
+
+            final Gson gson = new Gson();
+            final String jsonString = gson.toJson (currency);
+
+            return jsonString;
         }
         else {
-            return "{\"description\":\"NOT FOUND\"}";
+          throw new NotFoundException("Currency not found");
         }
     }
 }

@@ -28,6 +28,9 @@ public class Currency {
         this.symbol = symbol;
     }
 
+    /**
+     * Default constructor
+     */
     public Currency() {
     }
 
