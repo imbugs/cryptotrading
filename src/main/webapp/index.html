@@ -30,8 +30,7 @@ $( document ).ready( function() {
             data:{},
             type:'POST',
             success:function ( data ) {
-                console.log("success: " + data.result);
-                $( '#result' ).text( data.result );
+                $( '#result' ).text( data.description );
             }
         })
         .error( function() {

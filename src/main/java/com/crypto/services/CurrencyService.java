@@ -24,12 +24,8 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 
 /**
- * A simple REST service which is able to say hello to someone using HelloService Please take a look at the web.xml where JAX-RS
- * is enabled And notice the @PathParam which expects the URL to contain /json/David or /xml/Mary
- *
- * @author bsutter@redhat.com
+ * Rest service returning currency
  */
-
 @Path("/")
 public class CurrencyService {
 
@@ -44,12 +40,12 @@ public class CurrencyService {
         final Currency currency = currencyDao.getCurrency(code);
 
         if (currency != null) {
-            System.out.println("code: " + code);
-            return "{\"result\":\"" + currency.getDescription() + "\"}";
+            return "{ \"code\": \"" + currency.getCode() + "\"," +
+                     "\"description\":\"" + currency.getDescription() + "\"," +
+                     "\"symbol\":\"" + currency.getSymbol() + "\"}";
         }
         else {
-            System.out.println("Currency not found!");
-            return "{\"result\":\"NOT FOUND\"}";
+            return "{\"description\":\"NOT FOUND\"}";
         }
     }
 }
