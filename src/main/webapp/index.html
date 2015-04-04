@@ -34,18 +34,19 @@ $( document ).ready( function() {
             result.addClass( 'invalid' ).text( 'A name is required!' );
             return;
         }
+
         //console.log("clicked: " + name);
-        $.ajax( 'hello/json/' + name, {
+        $.ajax( 'crypto-trading/json/' + name, {
             dataType:'json',
             data:{},
             type:'POST',
             success:function ( data ) {
-                //console.log("success: " + data.result);
+                console.log("success: " + data.result);
                 $( '#result' ).text( data.result );
             }
         })
         .error( function() {
-            //console.log("error");
+            console.log("error");
         });
     });
 }); // (document).ready
@@ -60,6 +61,5 @@ HTML5 + REST Hello World<br>
         <input type="submit" id="sayHello" value="Say Hello"/><span id="result"></span>
     </fieldset>
 </form>
-
 </body>
 </html>

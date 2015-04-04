@@ -23,6 +23,6 @@
          annotation @Path("/") to receive the REST invocation -->
     <servlet-mapping>
         <servlet-name>javax.ws.rs.core.Application</servlet-name>
-        <url-pattern>/hello/*</url-pattern>
+        <url-pattern>/crypto-trading/*</url-pattern>
     </servlet-mapping>
 </web-app>

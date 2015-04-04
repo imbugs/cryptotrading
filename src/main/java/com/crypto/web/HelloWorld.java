@@ -36,9 +36,6 @@ public class HelloWorld {
     @Inject
     HelloService helloService;
 
-    @Inject
-    CurrencyDao currencyDao;
-
     @POST
     @Path("/json/{name}")
     @Produces("application/json")
