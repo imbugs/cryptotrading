@@ -1,10 +1,8 @@
 package com.crypto.dao;
 
-import com.crypto.com.crypto.dao.CurrencyDao;
-import org.junit.Ignore;
+import com.crypto.com.crypto.dao.CurrencyDaoImpl;
 import org.junit.Test;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 
 /**
@@ -13,7 +11,7 @@ import javax.inject.Inject;
 
 public class TestCurrencyDao {
 
-    @Inject private CurrencyDao currencyDao;
+    @Inject private CurrencyDaoImpl currencyDao;
 
     @Test
     public void testAddCurrency() {
