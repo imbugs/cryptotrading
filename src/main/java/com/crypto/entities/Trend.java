@@ -8,6 +8,7 @@ import javax.persistence.Id;
  * <p/>
  * Created by Jan Wicherink on 25-3-2015.
  */
+
 public class Trend {
     private Integer id;
     private TrendType type;
