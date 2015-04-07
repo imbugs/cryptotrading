@@ -1,4 +1,4 @@
-package com.crypto.com.crypto.dao;
+package com.crypto.dao;
 
 import com.crypto.entities.Currency;
 
@@ -46,8 +46,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
      */
     public Currency getCurrency (final String code) {
 
-        final Currency currency = em.find(Currency.class, code);
-
-        return currency;
+        return em.find(Currency.class, code);
     }
 }

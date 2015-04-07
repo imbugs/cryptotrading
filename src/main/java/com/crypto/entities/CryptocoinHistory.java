@@ -1,30 +1,50 @@
 package com.crypto.entities;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by Jan Wicherink on 31-3-2015.
  */
+@Entity
+@Table(name = "CRYPTOCOIN_HISTORY")
 public class CryptocoinHistory {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "INDX")
     private Integer indx;
 
+    @Column(name = "TIMESTAMP")
     private Date timestamp;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="TRADE_PAIR_ID", nullable=false, updatable=false)
     private TradePair tradePair;
+
+    @Column(name = "OPEN")
     private Float open;
+
+    @Column(name = "LOW")
     private Float low;
+
+    @Column(name = "HIGH")
     private Float high;
-    private Float cloase;
+
+    @Column(name = "CLOSE")
+    private Float close;
+
+    @Column(name = "VOLUME")
     private Long volume;
 
-    public CryptocoinHistory(Integer indx, Date timestamp, TradePair tradePair, Float open, Float low, Float high, Float cloase, Long volume) {
+    public CryptocoinHistory(Integer indx, Date timestamp, TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
         this.indx = indx;
         this.timestamp = timestamp;
         this.tradePair = tradePair;
         this.open = open;
         this.low = low;
         this.high = high;
-        this.cloase = cloase;
+        this.close = close;
         this.volume = volume;
     }
 
@@ -68,12 +88,20 @@ public class CryptocoinHistory {
         this.high = high;
     }
 
-    public Float getCloase() {
-        return cloase;
+    public TradePair getTradePair() {
+        return tradePair;
     }
 
-    public void setCloase(Float cloase) {
-        this.cloase = cloase;
+    public void setTradePair(TradePair tradePair) {
+        this.tradePair = tradePair;
+    }
+
+    public Float getClose() {
+        return close;
+    }
+
+    public void setClose(Float close) {
+        this.close = close;
     }
 
     public Long getVolume() {

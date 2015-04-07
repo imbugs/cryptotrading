@@ -1,22 +1,40 @@
 package com.crypto.entities;
 
+import javax.persistence.*;
+
 /**
  * Created by Jan Wicherink on 31-3-2015.
  */
+@Entity
+@Table(name="TRADE_PAIR")
 public class TradePair {
 
+    @Id
+    @GeneratedValue
+    @Column (name="ID")
     private Integer id;
-    private String tradingSite;
-    private Currency currency;
-    private CryptoCurrency cryptoCurrency;
-    private Float tradingFee;
 
-    public TradePair(Integer id, String tradingSite, Currency currency, CryptoCurrency cryptoCurrency, Float tradingFee) {
-        id = id;
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name="TRADING_SITE_CODE", nullable=false, updatable=false)
+    private TradingSite tradingSite;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn (name="CURRENCY_CODE", nullable=false, updatable=false)
+    private Currency currency;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn (name="CRYPTO_CURRENCY_CODE", nullable=false, updatable=false)
+    private CryptoCurrency cryptoCurrency;
+
+    @Column (name="TRANSACTION_FEE")
+    private Float transactionFee;
+
+    public TradePair(Integer id, TradingSite tradingSite, Currency currency, CryptoCurrency cryptoCurrency, Float transactionFee) {
+        this.id = id;
         this.tradingSite = tradingSite;
         this.currency = currency;
         this.cryptoCurrency = cryptoCurrency;
-        this.tradingFee = tradingFee;
+        this.transactionFee = transactionFee;
     }
 
     public Integer getId() {
@@ -27,11 +45,11 @@ public class TradePair {
         id = id;
     }
 
-    public String getTradingSite() {
+    public TradingSite getTradingSite() {
         return tradingSite;
     }
 
-    public void setTradingSite(String tradingSite) {
+    public void setTradingSite(TradingSite tradingSite) {
         this.tradingSite = tradingSite;
     }
 
@@ -51,11 +69,11 @@ public class TradePair {
         this.cryptoCurrency = cryptoCurrency;
     }
 
-    public Float getTradingFee() {
-        return tradingFee;
+    public Float getTransactionFee() {
+        return transactionFee;
     }
 
-    public void setTradingFee(Float tradingFee) {
-        this.tradingFee = tradingFee;
+    public void setTransactionFee(Float transactionFee) {
+        this.transactionFee = transactionFee;
     }
 }

@@ -1,45 +1,65 @@
 package com.crypto.entities;
 
+import javax.persistence.*;
+
 /**
  * Represents a trading by the cryptocoin trader
  * Created by Jan Wicherink on 31-3-2015.
  */
+@Entity
+@Table(name="TRADINGS")
 public class Trading {
 
+    @Id
+    @Column (name = "ID")
     private Integer id;
+
     // the minimum crypto coins accepted for trading
+    @Column (name = "MIN_TRADING_CRYPTOCURRENCY")
     private Float minTradingCryptoCurrency;
 
     // the maximum percentage to be used while trading coins
+    @Column (name = "MAX_TRADING_COINS_PERC")
     private Float maxTradingCoinsPerc;
 
     // The maximum percentage to be used while trading crypto coins
+    @Column (name = "MAX_TRADING_CRYPTOCOINS_PERC")
     private Float maxTradingCryptoCoinsPerc;
 
     // The percentage to be refunded to the wallets when an trading has taken place
+    @Column (name = "REFUND_PERC")
     private Float refundPercentage;
 
     // Check on bad buying situations while trading
+    @Column (name = "CHECK_BAD_BUY")
     private Boolean checkBadBuy;
 
     // Check on bad selling situations while trading
+    @Column (name = "CHECK_BAD_SELL")
     private Boolean checkBadSell;
 
+    @Column (name = "CHECK_BAD_SELL_WALLET")
     private Boolean checkBadSellWallet;
 
     // The minimum profit desired when trading
+    @Column (name = "MIN_PROFIT_PERCENTAGE")
     private Float minProfitPercentage;
 
     // Boolean indicating if the trading is enabled (active) or disabled (inactive)
+    @Column (name = "ENABLED")
     private Boolean enabled;
 
     // Boolean indicating if logging is desired.
+    @Column (name = "LOGGING")
     private Boolean logging;
 
     // The number of retries to sell of buy cryptocoins.
+    @Column (name = "RETRIES")
     private Integer retries;
 
     // The trading pair.
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn (name = "TRADE_PAIR_ID", nullable=false, updatable=false)
     private TradePair tradePair;
 
     public Trading(Integer id, Float minTradingCryptoCurrency, Float maxTradingCoinsPerc, Float maxTradingCryptoCoinsPerc, Float refundPercentage, Boolean checkBadBuy, Boolean checkBadSell, Boolean checkBadSellWallet, Float minProfitPercentage, Boolean enabled, Boolean logging, Integer retries, TradePair tradePair) {

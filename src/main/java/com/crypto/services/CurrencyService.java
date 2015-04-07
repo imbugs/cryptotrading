@@ -16,15 +16,12 @@
  */
 package com.crypto.services;
 
-import com.crypto.com.crypto.dao.CurrencyDao;
-import com.crypto.com.crypto.dao.CurrencyDaoImpl;
+import com.crypto.dao.CurrencyDao;
 import com.crypto.entities.Currency;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import com.google.gson.Gson;
-
-import java.rmi.server.ExportException;
 
 /**
  * Rest service returning currency
@@ -50,7 +47,7 @@ public class CurrencyService {
             return jsonString;
         }
         else {
-          throw new NotFoundException("Currency not found");
+          throw new NotFoundException("Currency not found: " + code);
         }
     }
 }

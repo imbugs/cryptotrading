@@ -1,4 +1,4 @@
-package com.crypto.com.crypto.dao;
+package com.crypto.dao;
 
 import com.crypto.entities.Currency;
 
@@ -19,7 +19,7 @@ public interface CurrencyDao {
      * @param code the code representing the currency
      * @param description the description of the currency
      * @param symbol the symbol representing the currency
-     * @return
+     * @return the persisted currency
      */
     public Currency addCurrency (final String code, final String description, final String symbol);
 

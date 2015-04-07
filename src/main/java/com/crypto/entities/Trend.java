@@ -1,22 +1,32 @@
 package com.crypto.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * A trend is currency exchange rate development
- * <p/>
  * Created by Jan Wicherink on 25-3-2015.
  */
-
+@Entity
+@Table(name = "TRENDS")
 public class Trend {
+
+    @Id
+    @GeneratedValue
+    @Column (name = "ID")
     private Integer id;
+
+    @Column (name = "TREND_TYPE")
     private TrendType type;
+
+    @Column (name = "PERIOD")
     private Integer period;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="SMOOTHING_TREND_ID", nullable=false, updatable=false)
     private Trend smoothingTrend;
 
     /**
-     * Consructor
+     * Constructor
      *
      * @param id             identification
      * @param type           trend type
