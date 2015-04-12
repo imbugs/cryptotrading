@@ -17,17 +17,17 @@ import javax.inject.Inject;
 @RunWith(Arquillian.class)
 public class CurrencyDaoTest {
 
-    @Inject
-    private CurrencyDao currencyDao;
+    //@Inject
+    //private CurrencyDao currencyDao;
 
     @Deployment
     public static WebArchive createDeployment() {
 
-        return ShrinkWrap.create(WebArchive.class, "test.war")
+        return ShrinkWrap.create(WebArchive.class, "testCurrencyDao.war")
                         .addPackage((CurrencyDaoImpl.class).getPackage())
                         .addPackage((Currency.class).getPackage())
         // .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-         .addAsResource("/src/test/resources/META-INF/test-persistence.xml");
+                        .addAsResource("test-persistence.xml");
 
     }
 
