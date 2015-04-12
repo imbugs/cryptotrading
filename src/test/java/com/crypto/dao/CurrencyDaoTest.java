@@ -8,6 +8,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -36,7 +37,7 @@ public class CurrencyDaoTest {
     }
 
     @Test
-    public void helloWorld() {
+    public void testAddCurrency() {
 
         currencyDao.addCurrency("EUR", "Euro", "€");
 
@@ -45,24 +46,20 @@ public class CurrencyDaoTest {
         assertNotNull(currency);
         assertEquals("Euro", currency.getDescription());
         assertEquals("€", currency.getSymbol());
+   }
 
-        return;
+    @Ignore
+    public void testUpdateCurrency () {
+
+        Currency currency = currencyDao.addCurrency("EUR", "Euro", "€");
+
+        currency.setDescription("Dollars");
+        currency.setSymbol("$");
+
+        currency = currencyDao.updateCurrency(currency);
+
+        assertNotNull(currency);
+        assertEquals("Dollars", currency.getDescription());
+        assertEquals("$", currency.getSymbol());
     }
-
-/*
-    @Before
-    public void setUp() {
-
-        assertNotNull(currencyDao);
-        currencyDao.addCurrency("EUR", "Euro", "€");
-    }
-
-    @Test
-    public void testGetCurrency() {
-
-        assertEquals("EUR", currencyDao.getCurrency("EUR").getCode());
-        assertEquals("Euro",currencyDao.getCurrency("EUR").getDescription());
-        assertEquals("€", currencyDao.getCurrency("EUR").getSymbol());
-    }
-*/
 }

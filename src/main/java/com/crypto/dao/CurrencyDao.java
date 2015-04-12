@@ -26,6 +26,7 @@ public interface CurrencyDao {
     /**
      * Update an existing currency in the database
      * @param currency the currency to be updated.
+     * @return the updated currency
      */
-    public void updateCurrency (Currency currency);
+    public Currency updateCurrency (Currency currency);
 }

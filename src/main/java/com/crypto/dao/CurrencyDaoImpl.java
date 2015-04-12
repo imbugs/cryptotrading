@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 @Stateful
 public class CurrencyDaoImpl implements CurrencyDao {
 
-    @PersistenceContext(unitName = "ExampleDS")
+    @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
 
     /**
@@ -35,8 +35,8 @@ public class CurrencyDaoImpl implements CurrencyDao {
      * Update an existing currency in the database
      * @param currency the currency to be updated
      */
-    public void updateCurrency (Currency currency) {
-        em.merge(currency);
+    public Currency updateCurrency (Currency currency) {
+        return em.merge(currency);
     }
 
     /**
