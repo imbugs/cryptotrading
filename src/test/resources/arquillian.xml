@@ -10,7 +10,7 @@
             <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m -Xverify:none -XX:+UseFastAccessorMethods
                                              -Dserver-config=${project.basedir}/src/test/resources/test-standalone.xml</property>
             <property name="allowConnectingToRunningServer">true</property>
-            <property name="serverConfig">test-standalone.xml</property>
+            <property name="serverConfig">standalone.xml</property>
             <property name="outputToConsole">true</property>
         </configuration>
     </container>
