@@ -13,13 +13,17 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Created by Jan Wicherink on 7-4-2015.
  */
 @RunWith(Arquillian.class)
 public class CurrencyDaoTest {
 
-    //private CurrencyDao currencyDao;
+    @Inject
+    private CurrencyDao currencyDao;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -33,6 +37,15 @@ public class CurrencyDaoTest {
 
     @Test
     public void helloWorld() {
+
+        currencyDao.addCurrency("EUR", "Euro", "€");
+
+        Currency currency = currencyDao.getCurrency("EUR");
+
+        assertNotNull(currency);
+        assertEquals("Euro", currency.getDescription());
+        assertEquals("€", currency.getSymbol());
+
         return;
     }
 
