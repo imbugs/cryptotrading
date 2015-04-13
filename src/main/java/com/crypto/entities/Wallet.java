@@ -40,6 +40,22 @@ public class Wallet implements Serializable{
     @Column(name="EXCHANGE_RATE")
     private Float exchangeRate;
 
+    /**
+     * Default constructor
+     */
+    public Wallet() {
+
+    }
+
+    /**
+     * Wallet constructor
+     * @param trading the trading
+     * @param coins the coins in the wallet
+     * @param cryptoCoins the cryptocoins in the wallet
+     * @param currency the currency of the coins
+     * @param cryptoCurrency the cryptocurrency of the crypto coins
+     * @param exchangeRate the exchange rate between coins and crypto coins
+     */
     public Wallet(Trading trading, Float coins, Float cryptoCoins, Currency currency, CryptoCurrency cryptoCurrency, Float exchangeRate) {
         this.trading = trading;
         this.coins = coins;
@@ -49,14 +65,27 @@ public class Wallet implements Serializable{
         this.exchangeRate = exchangeRate;
     }
 
+    /**
+     * Add coins to the wallet
+     * @param coinsToBeAdded the coins to be added to the wallet
+     */
     public void addCoins (Float coinsToBeAdded) {
         this.coins = this.coins + coinsToBeAdded;
     }
 
+    /**
+     * Add crypto coins to the wallet
+     * @param cryptoCoinsToBeAdded the crypto coins to be added to the wallet
+     */
     public void addCryptoCoins (Float cryptoCoinsToBeAdded) {
         this.cryptoCoins = this.cryptoCoins + cryptoCoinsToBeAdded;
     }
 
+    /**
+     * Determine the maximum amount of cryptocoins that can be used in a trading
+     * @param maxTradingCryptoCoinsPerc
+     * @return the maximum number of crypto coins
+     */
     public Float determineMaxTradingCryptoCoins (Float maxTradingCryptoCoinsPerc) {
 
         final Float maxCryptoCoins = this.cryptoCoins * maxTradingCryptoCoinsPerc / 100;
@@ -64,6 +93,11 @@ public class Wallet implements Serializable{
         return maxCryptoCoins;
     }
 
+    /**
+     * Determine the maximum number of coins available for trading
+     * @param maxTradingCoinsPerc
+     * @return the maximum number of coins for trading.
+     */
     public Float determineMaxTradingCoins ( Float maxTradingCoinsPerc) {
 
         final Float maxCoins = this.coins * maxTradingCoinsPerc/ 100;
@@ -71,6 +105,10 @@ public class Wallet implements Serializable{
         return maxCoins;
     }
 
+    /**
+     * Get total value of the wallet expressed in coins
+     * @return the total value of the wallet
+     */
     public Float getTotalValue() {
 
         final Float value = this.coins + this.cryptoCoins * this.exchangeRate;
@@ -101,6 +139,4 @@ public class Wallet implements Serializable{
     public Float getExchangeRate() {
         return exchangeRate;
     }
-
-
 }

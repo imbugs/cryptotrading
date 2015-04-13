@@ -23,6 +23,12 @@ public class TradingSite {
     @Column(name = "URL")
     private String url;
 
+    /**
+     * Default constructor
+     */
+    public TradingSite() {
+    }
+
     public TradingSite(String code, String description, String url) {
         this.code = code;
         this.description = description;

@@ -26,6 +26,13 @@ public class Trend {
     private Trend smoothingTrend;
 
     /**
+     * Default constructor
+     */
+    public Trend () {
+
+    }
+
+    /**
      * Constructor
      *
      * @param id             identification

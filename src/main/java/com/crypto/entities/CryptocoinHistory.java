@@ -37,9 +37,41 @@ public class CryptocoinHistory {
     @Column(name = "VOLUME")
     private Long volume;
 
+    public CryptocoinHistory() {
+    }
+
+    /**
+     * Cryptocoin history
+     * @param indx the index of the history
+     * @param timestamp the timestampt of the history
+     * @param tradePair the tradepair belonging to the history
+     * @param open the opening exchange rate
+     * @param low the lowest exchange rate
+     * @param high the highest exchange rate
+     * @param close the closing exchange rate
+     * @param volume the volume of the trading
+     */
     public CryptocoinHistory(Integer indx, Date timestamp, TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
         this.indx = indx;
         this.timestamp = timestamp;
+        this.tradePair = tradePair;
+        this.open = open;
+        this.low = low;
+        this.high = high;
+        this.close = close;
+        this.volume = volume;
+    }
+
+    /**
+     * Cryptocoin history
+     * @param tradePair the tradepair belonging to the history
+     * @param open the opening exchange rate
+     * @param low the lowest exchange rate
+     * @param high the highest exchange rate
+     * @param close the closing exchange rate
+     * @param volume the volume of the trading
+     */
+    public CryptocoinHistory(TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
         this.tradePair = tradePair;
         this.open = open;
         this.low = low;

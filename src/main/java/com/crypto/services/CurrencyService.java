@@ -37,7 +37,7 @@ public class CurrencyService {
     @Produces("application/json")
     public String getCurrency(@PathParam("code") String code) {
 
-        final Currency currency = currencyDao.getCurrency(code);
+        final Currency currency = currencyDao.get(code);
 
         if (currency != null) {
 

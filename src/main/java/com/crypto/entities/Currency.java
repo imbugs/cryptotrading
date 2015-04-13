@@ -25,6 +25,12 @@ public class Currency {
     private String symbol;
 
     /**
+     * Default constructor
+     */
+    public Currency() {
+    }
+
+    /**
      * @param code the code representing the currency
      * @param description description of the currency
      * @param symbol the symbol representing the currency
@@ -33,12 +39,6 @@ public class Currency {
         this.code = code;
         this.description = description;
         this.symbol = symbol;
-    }
-
-    /**
-     * Default constructor
-     */
-    public Currency() {
     }
 
     public String getCode() {

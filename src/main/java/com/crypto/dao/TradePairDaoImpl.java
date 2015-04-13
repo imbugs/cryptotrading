@@ -5,6 +5,7 @@ import com.crypto.entities.TradePair;
 import com.crypto.entities.TradingSite;
 
 
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -14,15 +15,23 @@ import javax.persistence.TypedQuery;
 /**
  * Created by Jan Wicherink on 7-4-2015.
  */
+@Stateful
 public class TradePairDaoImpl implements TradePairDao {
+
+    private static final long serialVersionUID = -8127877891137126595L;
 
     @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
 
     @Override
-    public TradePair getTradePairById(Integer id) {
+    public void persist(TradePair tradePair) {
+        em.persist(tradePair);
+    }
 
-       Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.id = " + id.toString());
+    @Override
+    public TradePair get(Integer id) {
+
+       final Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.id = " + id.toString());
 
        return (TradePair) query.getSingleResult();
     }
@@ -35,7 +44,7 @@ public class TradePairDaoImpl implements TradePairDao {
 
     @Override
     public TradePair getTradePairOfTradingSite(TradingSite tradingSite) {
-        Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.tradingSite = " + tradingSite.getCode());
+        final Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.tradingSite.code ='" + tradingSite.getCode() + "'");
 
         return (TradePair) query.getSingleResult();
     }

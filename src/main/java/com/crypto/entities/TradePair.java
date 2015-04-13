@@ -10,7 +10,6 @@ import javax.persistence.*;
 public class TradePair {
 
     @Id
-    @GeneratedValue
     @Column (name="ID")
     private Integer id;
 
@@ -28,6 +27,10 @@ public class TradePair {
 
     @Column (name="TRANSACTION_FEE")
     private Float transactionFee;
+
+
+    public TradePair() {
+    }
 
     public TradePair(Integer id, TradingSite tradingSite, Currency currency, CryptoCurrency cryptoCurrency, Float transactionFee) {
         this.id = id;

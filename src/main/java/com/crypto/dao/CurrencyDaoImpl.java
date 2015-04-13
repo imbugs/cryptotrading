@@ -13,29 +13,26 @@ import javax.persistence.PersistenceContext;
 @Stateful
 public class CurrencyDaoImpl implements CurrencyDao {
 
+    private static final long serialVersionUID = 9080357979975346857L;
+
     @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
 
     /**
      * Add a new currency to the database
-     * @param code the currency code
-     * @param description the description of the currency
-     * @param symbol the symbol representing the currency
+     * @param currency the currency to be persisted
      * @return the persisted currency in the database
      */
-    public Currency addCurrency (final String code, final String description, final String symbol) {
-        final Currency currency = new Currency(code, description, symbol);
+    public void persist(Currency currency) {
 
         em.persist(currency);
-
-        return currency;
     }
 
     /**
      * Update an existing currency in the database
      * @param currency the currency to be updated
      */
-    public Currency updateCurrency (Currency currency) {
+    public Currency update(Currency currency) {
         return em.merge(currency);
     }
 
@@ -44,7 +41,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
      * @param code the code of the currency
      * @return the fetched currency with the given code.
      */
-    public Currency getCurrency (final String code) {
+    public Currency get(final String code) {
 
         return em.find(Currency.class, code);
     }

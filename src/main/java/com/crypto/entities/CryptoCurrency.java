@@ -13,4 +13,7 @@ public class CryptoCurrency extends Currency{
     public CryptoCurrency (String code, String description, String symbol) {
         super(code, description, symbol);
     }
+
+    public CryptoCurrency() {
+    }
 }

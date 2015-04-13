@@ -2,31 +2,30 @@ package com.crypto.dao;
 
 import com.crypto.entities.Currency;
 
+import java.io.Serializable;
+
 /**
  * Created by Jan Wicherink on 25-3-2015.
  */
-public interface CurrencyDao {
+public interface CurrencyDao extends Serializable {
+
+    /**
+     * Add a currency to the database
+     * @param currency the currency to be persisted
+     */
+    public void persist(Currency currency);
 
     /**
      * get a currency
      * @param code the code representing the currency
      * @return the currency
      */
-    Currency getCurrency (String code);
-
-    /**
-     * Add a currency to the database
-     * @param code the code representing the currency
-     * @param description the description of the currency
-     * @param symbol the symbol representing the currency
-     * @return the persisted currency
-     */
-    public Currency addCurrency (final String code, final String description, final String symbol);
+    Currency get(String code);
 
     /**
      * Update an existing currency in the database
      * @param currency the currency to be updated.
      * @return the updated currency
      */
-    public Currency updateCurrency (Currency currency);
+    public Currency update(Currency currency);
 }

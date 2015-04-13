@@ -6,10 +6,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,7 +26,6 @@ public class CurrencyDaoTest {
     @Inject
     private CurrencyDao currencyDao;
 
-
     @Deployment
     public static Archive<?> createDeployment() {
 
@@ -43,26 +39,29 @@ public class CurrencyDaoTest {
     @Test
     public void testAddCurrency() {
 
-        currencyDao.addCurrency("EUR", "Euro", "€");
+        final Currency currency = new Currency("EUR", "Euro", "€");
+        currencyDao.persist(currency);
 
-        Currency currency = currencyDao.getCurrency("EUR");
+        final Currency retrievedCurrency = currencyDao.get("EUR");
 
         assertNotNull(currency);
-        assertEquals("Euro", currency.getDescription());
-        assertEquals("€", currency.getSymbol());
+        assertEquals("Euro", retrievedCurrency.getDescription());
+        assertEquals("€", retrievedCurrency.getSymbol());
    }
 
     @Test
     public void testUpdateCurrency () {
 
-        currencyDao.addCurrency("DLR", "Euro", "€");
+        final Currency currency = new Currency("DLR", "Euro", "€");
 
-        Currency currency = new Currency("DLR", "Dollars", "$");
+        currencyDao.persist(currency);
 
-        currency = currencyDao.updateCurrency(currency);
+        Currency updatedCurrency = new Currency("DLR", "Dollars", "$");
 
-        assertNotNull(currency);
-        assertEquals("Dollars", currency.getDescription());
-        assertEquals("$", currency.getSymbol());
+        updatedCurrency = currencyDao.update(updatedCurrency);
+
+        assertNotNull(updatedCurrency);
+        assertEquals("Dollars", updatedCurrency.getDescription());
+        assertEquals("$", updatedCurrency.getSymbol());
     }
 }
