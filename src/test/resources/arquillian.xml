@@ -7,9 +7,8 @@
     <container qualifier="arquillian-wildfly8-managed" default="true">
         <configuration>
             <property name="jbossHome">target/wildfly-8.2.0.Final</property>
-            <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m -Xverify:none -XX:+UseFastAccessorMethods</property>
-            <property name="allowConnectingToRunningServer">true</property>
-            <property name="serverConfig">test-standalone.xml</property>
+            <property name="modulePath">target/wildfly-8.2.0.Final/modules</property>
+            <property name="serverConfig">${jboss.server.config.file.name:test-standalone.xml}</property>
             <property name="outputToConsole">true</property>
         </configuration>
     </container>

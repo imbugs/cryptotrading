@@ -8,6 +8,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
+ * Test Currency Dao with Arquillian
+ *
  * Created by Jan Wicherink on 7-4-2015.
  */
 @RunWith(Arquillian.class)
@@ -25,6 +28,7 @@ public class CurrencyDaoTest {
 
     @Inject
     private CurrencyDao currencyDao;
+
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -48,13 +52,12 @@ public class CurrencyDaoTest {
         assertEquals("€", currency.getSymbol());
    }
 
-    @Ignore
+    @Test
     public void testUpdateCurrency () {
 
-        Currency currency = currencyDao.addCurrency("EUR", "Euro", "€");
+        currencyDao.addCurrency("DLR", "Euro", "€");
 
-        currency.setDescription("Dollars");
-        currency.setSymbol("$");
+        Currency currency = new Currency("DLR", "Dollars", "$");
 
         currency = currencyDao.updateCurrency(currency);
 
