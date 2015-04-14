@@ -189,6 +189,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+
             <!-- WildFly plugin to deploy war -->
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
@@ -204,7 +205,6 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-
 
             <!-- Copy server configuration -->
             <plugin>

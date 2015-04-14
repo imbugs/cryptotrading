@@ -18,6 +18,10 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -107,7 +111,45 @@ public class CryptocoinHistoryDaoTest {
     }
 
 
+    @Test
+    @CleanupUsingScript("sql/cleanup.sql")
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    @Transactional(TransactionMode.ROLLBACK)
+    public void testGetStartAndLastIndex() {
 
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
 
-
+        assertEquals(new Integer(3), cryptocoinHistoryDao.getStartIndex(tradePair));
+        assertEquals(new Integer(4), cryptocoinHistoryDao.getLastIndex(tradePair));
     }
+
+    @Test
+    @CleanupUsingScript("sql/cleanup.sql")
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    @Transactional(TransactionMode.ROLLBACK)
+    public void testGetLast() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        assertEquals(new Integer(4), cryptocoinHistoryDao.getLast(tradePair).getIndx());
+    }
+
+    @Test
+    @CleanupUsingScript("sql/cleanup.sql")
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    @Transactional(TransactionMode.ROLLBACK)
+    public void testGetCryptoCoinHistoryByTimestamp() throws ParseException {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date parsedDate = dateFormat.parse("2014-04-14 12:01:00");
+        Timestamp timestamp = new Timestamp(parsedDate.getTime());
+
+        assertEquals(new Integer(4), cryptocoinHistoryDao.getCryptoCoinHistoryByTimestamp(tradePair, timestamp));
+    }
+
+}

@@ -4,6 +4,7 @@ import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -13,37 +14,59 @@ public interface CryptocoinHistoryDao extends Serializable {
 
     /**
      * Persist a crypto coin history
+     *
      * @param cryptocoinHistory a crypto coin history
      */
-    public void persist (CryptocoinHistory cryptocoinHistory);
+    public void persist(CryptocoinHistory cryptocoinHistory);
 
     /**
      * Get crypto coin history by index and tradepair
+     *
      * @param tradePair the tradepair
-     * @param indx the index
+     * @param indx      the index
      * @return
      */
-    public CryptocoinHistory getCryptoCoinHistoryByIndex (TradePair tradePair, Integer indx);
+    public CryptocoinHistory getCryptoCoinHistoryByIndex(TradePair tradePair, Integer indx);
 
     /**
      * Get the cryptocoin history with the lowest index of a given trade pair.
+     *
      * @param tradePair the trade pair
      * @return the index
      */
-    public Integer getStartIndex (TradePair tradePair);
+    public Integer getStartIndex(TradePair tradePair);
 
     /**
      * Get the cryptocoin history with the latest (highest) index of a given trade pair.
+     *
      * @param tradePair the trade pair
      * @return the index
      */
-    public Integer getLastIndex (TradePair tradePair);
+    public Integer getLastIndex(TradePair tradePair);
 
     /**
      * Get all crypto coin history data of a given tradepair
+     *
      * @param tradePair the tradepair
      * @return the list of cryptocoin histories
      */
-    public List<CryptocoinHistory> getAll (TradePair tradePair);
+    public List<CryptocoinHistory> getAll(TradePair tradePair);
 
+
+    /**
+     * Get the last crypto coin history data of a given trade pair
+     *
+     * @param tradePair the tradepair
+     * @return the last crypto coin history
+     */
+    public CryptocoinHistory getLast(TradePair tradePair);
+
+    /**
+     * Get the crypto coin history by timestamp
+     *
+     * @param tradePair the tradepair
+     * @param timestamp the timestamp
+     * @return the crypto coin history with the given timestamp
+     */
+    public CryptocoinHistory getCryptoCoinHistoryByTimestamp(TradePair tradePair, Timestamp timestamp);
 }

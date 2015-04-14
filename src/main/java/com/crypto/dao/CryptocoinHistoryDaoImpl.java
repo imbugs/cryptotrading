@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -55,5 +56,19 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
 
         return query.getResultList();
+    }
+
+    @Override
+    public CryptocoinHistory getLast(TradePair tradePair) {
+        final Query query = em.createQuery("SELECT c1 FROM CryptocoinHistory c1 WHERE c1.tradePair.id = " + tradePair.getId() +
+                                            " AND c1.indx = (SELECT MAX (c2.indx) FROM CryptocoinHistory c2 WHERE c2.tradePair.id =" + tradePair.getId() + ")");
+        return (CryptocoinHistory) query.getSingleResult();
+    }
+
+    @Override
+    public CryptocoinHistory getCryptoCoinHistoryByTimestamp(TradePair tradePair, Timestamp timestamp) {
+        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.timestamp='" + timestamp.toString() + "'");
+
+        return (CryptocoinHistory) query.getSingleResult();
     }
 }
