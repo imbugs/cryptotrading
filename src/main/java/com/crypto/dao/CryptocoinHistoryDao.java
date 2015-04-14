@@ -4,6 +4,7 @@ import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Jan Wicherink on 13-4-2015.
@@ -15,6 +16,14 @@ public interface CryptocoinHistoryDao extends Serializable {
      * @param cryptocoinHistory a crypto coin history
      */
     public void persist (CryptocoinHistory cryptocoinHistory);
+
+    /**
+     * Get crypto coin history by index and tradepair
+     * @param tradePair the tradepair
+     * @param indx the index
+     * @return
+     */
+    public CryptocoinHistory getCryptoCoinHistoryByIndex (TradePair tradePair, Integer indx);
 
     /**
      * Get the cryptocoin history with the lowest index of a given trade pair.
@@ -29,5 +38,12 @@ public interface CryptocoinHistoryDao extends Serializable {
      * @return the index
      */
     public Integer getLastIndex (TradePair tradePair);
+
+    /**
+     * Get all crypto coin history data of a given tradepair
+     * @param tradePair the tradepair
+     * @return the list of cryptocoin histories
+     */
+    public List<CryptocoinHistory> getAll (TradePair tradePair);
 
 }

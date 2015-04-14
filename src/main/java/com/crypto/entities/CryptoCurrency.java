@@ -9,7 +9,6 @@ import javax.persistence.Table;
  * Created by Jan Wicherink on 31-3-2015.
  */
 @Entity
-@Table(name="CURRENCIES")
 @DiscriminatorValue("CRC")
 public class CryptoCurrency extends Currency {
 

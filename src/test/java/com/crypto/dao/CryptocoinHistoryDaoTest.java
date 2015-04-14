@@ -10,12 +10,17 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.theories.suppliers.TestedOn;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -51,7 +56,9 @@ public class CryptocoinHistoryDaoTest {
     }
 
     @Test
+    @CleanupUsingScript("sql/cleanup.sql")
     @UsingDataSet("datasets/it_test_dataset_1.xml")
+    @Transactional(TransactionMode.ROLLBACK)
     public void testPersistCryptocoinHistory() {
 
         final Currency dollar = currencyDao.get("DLR");
@@ -66,19 +73,41 @@ public class CryptocoinHistoryDaoTest {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        final CryptocoinHistory cryptocoinHistory1 = new CryptocoinHistory(tradePair,230F, 240F, 200F, 250F, 1000L);
-        final CryptocoinHistory cryptocoinHistory2 = new CryptocoinHistory(tradePair,210F, 220F, 210F, 260F, 2000L);
+        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(tradePair,230F, 240F, 200F, 250F, 1000L);
 
-        cryptocoinHistoryDao.persist(cryptocoinHistory1);
-        cryptocoinHistoryDao.persist(cryptocoinHistory2);
+        cryptocoinHistoryDao.persist(cryptocoinHistory);
 
-        final Integer startIndex = cryptocoinHistoryDao.getStartIndex(tradePair);
-        final Integer lastIndex = cryptocoinHistoryDao.getLastIndex(tradePair);
+        final CryptocoinHistory persistedCriptocoinHistory = cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(tradePair, 1);
 
-        assertNotNull(startIndex);
-        assertEquals(new Integer(1), startIndex);
-        assertEquals(new Integer(2), lastIndex);
+        assertNotNull(persistedCriptocoinHistory);
+        assertEquals(tradePair.getId(), persistedCriptocoinHistory.getTradePair().getId());
+        assertEquals(230F , persistedCriptocoinHistory.getOpen(), 0.1F);
+        assertEquals(240F , persistedCriptocoinHistory.getLow(), 0.1F);
+        assertEquals(200F , persistedCriptocoinHistory.getHigh(), 0.1F);
+        assertEquals(250F , persistedCriptocoinHistory.getClose(), 0.1F);
+        assertEquals(1000L , persistedCriptocoinHistory.getVolume(), 0.1F);
+    }
+
+    @Test
+    @CleanupUsingScript("sql/cleanup.sql")
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    @Transactional(TransactionMode.ROLLBACK)
+     public void testGetAll() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getAll(tradePair);
+
+        assertNotNull(cryptocoinHistories);
+        assertEquals(2, cryptocoinHistories.size());
+
+        assertEquals(new Integer(3), cryptocoinHistories.get(0).getIndx());
+        assertEquals(new Integer(4), cryptocoinHistories.get(1).getIndx());
     }
 
 
-}
+
+
+
+    }

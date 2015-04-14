@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Jan Wicherink on 13-4-2015.
@@ -25,16 +26,14 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         final Date currentDate = new Date();
 
         cryptocoinHistory.setTimestamp(currentDate);
-
         em.persist(cryptocoinHistory);
     }
 
     @Override
-    public Integer getStartIndex(TradePair tradePair) {
+    public CryptocoinHistory getCryptoCoinHistoryByIndex(TradePair tradePair, Integer indx) {
+        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.indx=" + indx);
 
-        final Query query = em.createQuery("SELECT MIN(c.indx) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
-
-        return (Integer) query.getSingleResult();
+        return (CryptocoinHistory) query.getSingleResult();
     }
 
     @Override
@@ -42,5 +41,19 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         final Query query = em.createQuery("SELECT MAX(c.indx) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
 
         return (Integer) query.getSingleResult();
+    }
+
+    @Override
+    public Integer getStartIndex(TradePair tradePair) {
+        final Query query = em.createQuery("SELECT MIN(c.indx) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+
+        return (Integer) query.getSingleResult();
+    }
+
+    @Override
+    public List<CryptocoinHistory> getAll(TradePair tradePair) {
+        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+
+        return query.getResultList();
     }
 }
