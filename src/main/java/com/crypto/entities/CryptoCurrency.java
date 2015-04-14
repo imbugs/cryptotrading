@@ -1,6 +1,8 @@
 package com.crypto.entities;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -8,7 +10,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="CURRENCIES")
-public class CryptoCurrency extends Currency{
+@DiscriminatorValue("CRC")
+public class CryptoCurrency extends Currency {
 
     public CryptoCurrency (String code, String description, String symbol) {
         super(code, description, symbol);

@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
  * Created by Jan Wicherink on 7-4-2015.
  */
 @RunWith(Arquillian.class)
-public class CurrencyDaoTest {
+public class CurrencyDaoTest_IT {
 
     @Inject
     private CurrencyDao currencyDao;

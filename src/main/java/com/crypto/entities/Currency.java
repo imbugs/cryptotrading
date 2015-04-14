@@ -1,9 +1,6 @@
 package com.crypto.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Currency represents a country's currency
@@ -12,6 +9,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "CURRENCIES")
+@DiscriminatorValue("CUR")
 public class Currency {
 
     @Id

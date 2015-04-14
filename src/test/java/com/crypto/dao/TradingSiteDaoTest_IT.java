@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  * Created by nl04990 on 13-4-2015.
  */
 @RunWith(Arquillian.class)
-public class TradingSiteDaoTest {
+public class TradingSiteDaoTest_IT {
 
     @Inject
     private TradingSiteDao tradingSiteDao;
