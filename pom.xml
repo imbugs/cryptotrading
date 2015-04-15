@@ -315,16 +315,20 @@
                 </configuration>
             </plugin>
 
-            <!--Skip IT test for faster testing during development, set value of <skipITs> to true, false otherwise-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <skipITs>true</skipITs>
-                </configuration>
-            </plugin>
+            <!--Skip IT test for faster testing during development, set value of <skipITs> to true, false otherwise  -->
+            <!--
+                      <plugin>
+                          <groupId>org.apache.maven.plugins</groupId>
+                          <artifactId>maven-failsafe-plugin</artifactId>
+                          <version>2.18.1</version>
+                          <configuration>
+                              <excludes>
+                                  <exclude>*_IT.java</exclude>
+                              </excludes>
+                          </configuration>
+                      </plugin>
+-->
+                  </plugins>
 
-        </plugins>
-    </build>
-</project>
+              </build>
+          </project>

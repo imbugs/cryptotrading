@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Currency represents a country's currency
@@ -10,7 +11,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "CURRENCIES")
 @DiscriminatorValue("CUR")
-public class Currency {
+public class Currency implements Serializable{
+
+    private static final long serialVersionUID = 6916833154440481595L;
 
     @Id
     @Column (name="CODE")

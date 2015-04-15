@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -8,7 +9,9 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "CRYPTOCOIN_HISTORY")
-public class CryptocoinHistory {
+public class CryptocoinHistory implements Serializable {
+
+    private static final long serialVersionUID = -7267559706573006370L;
 
     @Id
     @GeneratedValue

@@ -10,7 +10,11 @@ import java.io.Serializable;
  */
 
 @Entity
+@Table (name="WALLET")
 public class Wallet implements Serializable{
+
+
+    private static final long serialVersionUID = -2028307033146190019L;
 
     // The trading of this wallet
     @Id

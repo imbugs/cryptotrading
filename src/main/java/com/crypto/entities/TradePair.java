@@ -1,13 +1,16 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by Jan Wicherink on 31-3-2015.
  */
 @Entity
 @Table(name="TRADE_PAIR")
-public class TradePair {
+public class TradePair implements Serializable {
+
+    private static final long serialVersionUID = -4363837420737951917L;
 
     @Id
     @Column (name="ID")

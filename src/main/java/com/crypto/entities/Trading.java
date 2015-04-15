@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Represents a trading by the cryptocoin trader
@@ -8,7 +9,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="TRADINGS")
-public class Trading {
+public class Trading implements Serializable {
+
+    private static final long serialVersionUID = 5493213831662060441L;
 
     @Id
     @Column (name = "ID")

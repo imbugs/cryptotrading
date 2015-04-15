@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * A trend is currency exchange rate development
@@ -8,7 +9,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "TRENDS")
-public class Trend {
+public class Trend implements Serializable {
+
+    private static final long serialVersionUID = 5445153257648020272L;
 
     @Id
     @GeneratedValue
@@ -16,13 +19,14 @@ public class Trend {
     private Integer id;
 
     @Column (name = "TREND_TYPE")
+    @Enumerated(EnumType.STRING)
     private TrendType type;
 
     @Column (name = "PERIOD")
     private Integer period;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="SMOOTHING_TREND_ID", nullable=false, updatable=false)
+    @JoinColumn(name="SMOOTHING_TREND_ID", nullable=true, updatable=true)
     private Trend smoothingTrend;
 
     /**
@@ -63,12 +67,12 @@ public class Trend {
         }
 
         switch (this.type) {
-            case MOVING_AVERAGE:
-            case EXPONENTIAL_MOVING_AVERAGE:
+            case MA:
+            case EMA:
                 name = this.type.toString() + periodString;
                 break;
 
-            case SMOOTHING_MOVING_AVERAGE:
+            case SMA:
                 final String smaName = this.type.toString() + periodString;
                 final String trendNam;
 

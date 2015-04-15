@@ -7,9 +7,9 @@ package com.crypto.entities;
  */
 public enum TrendType {
 
-    MOVING_AVERAGE("MA"),
-    EXPONENTIAL_MOVING_AVERAGE("EMA"),
-    SMOOTHING_MOVING_AVERAGE("SMA");
+    MA("MA"),    // Moving Average
+    EMA("EMA"),  // Exponential Moving Average
+    SMA("SMA");  // Smoothing Moving Average
 
     private String code;
 
