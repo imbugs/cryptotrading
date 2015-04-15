@@ -10,10 +10,8 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
@@ -35,6 +33,7 @@ import static org.junit.Assert.assertNotNull;
 @PersistenceTest
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase=TestExecutionPhase.NONE)
+@CleanupUsingScript("sql/cleanup.sql")
 public class CryptocoinHistoryDaoTest {
 
     @Inject
@@ -60,9 +59,7 @@ public class CryptocoinHistoryDaoTest {
     }
 
     @Ignore
-    @CleanupUsingScript("sql/cleanup.sql")
     @UsingDataSet("datasets/it_test_dataset_1.xml")
-    @Transactional(TransactionMode.ROLLBACK)
     public void testPersistCryptocoinHistory() {
 
         final Currency dollar = currencyDao.get("DLR");
@@ -93,9 +90,7 @@ public class CryptocoinHistoryDaoTest {
     }
 
     @Ignore
-    @CleanupUsingScript("sql/cleanup.sql")
     @UsingDataSet("datasets/it_test_dataset_2.xml")
-    @Transactional(TransactionMode.ROLLBACK)
      public void testGetAll() {
 
         final TradePair tradePair = tradePairDao.get(1);
@@ -110,11 +105,8 @@ public class CryptocoinHistoryDaoTest {
         assertEquals(new Integer(4), cryptocoinHistories.get(1).getIndx());
     }
 
-
     @Ignore
-    @CleanupUsingScript("sql/cleanup.sql")
     @UsingDataSet("datasets/it_test_dataset_2.xml")
-    @Transactional(TransactionMode.ROLLBACK)
     public void testGetStartAndLastIndex() {
 
         final TradePair tradePair = tradePairDao.get(1);
@@ -125,9 +117,7 @@ public class CryptocoinHistoryDaoTest {
     }
 
     @Ignore
-    @CleanupUsingScript("sql/cleanup.sql")
     @UsingDataSet("datasets/it_test_dataset_2.xml")
-    @Transactional(TransactionMode.ROLLBACK)
     public void testGetLast() {
 
         final TradePair tradePair = tradePairDao.get(1);
@@ -136,21 +126,104 @@ public class CryptocoinHistoryDaoTest {
         assertEquals(new Integer(4), cryptocoinHistoryDao.getLast(tradePair).getIndx());
     }
 
-    @Test
-    @CleanupUsingScript("sql/cleanup.sql")
+    @Ignore
     @UsingDataSet("datasets/it_test_dataset_2.xml")
-    @Transactional(TransactionMode.ROLLBACK)
     public void testGetCryptoCoinHistoryByTimestamp() throws ParseException {
 
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT);
-        Date date = dateFormat.parse("2014-04-14 12:01:00.0");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
+        Date date = dateFormat.parse("2014-04-14 12:01:00");
         Long time = date.getTime();
         Timestamp timestamp = new Timestamp(time);
 
         assertEquals(new Integer(4), cryptocoinHistoryDao.getCryptoCoinHistoryByTimestamp(tradePair, timestamp).getIndx());
+    }
+
+    @Ignore
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testGetCryptoCoinHistorySinceDate() throws ParseException {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE);
+        Date date = dateFormat.parse("2014-04-14");
+
+        List <CryptocoinHistory> retrievedCryptocoinHistories =  cryptocoinHistoryDao.getCryptoCoinHistorySinceDate(tradePair, date);
+        assertEquals(2, retrievedCryptocoinHistories.size());
+
+        assertEquals(new Integer(3), cryptocoinHistoryDao.getStartIndex(tradePair));
+        assertEquals(new Integer(4), cryptocoinHistoryDao.getLastIndex(tradePair));
+    }
+
+    @Ignore
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testGetCryptoCoinHistorySinceIndex() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        List <CryptocoinHistory> retrievedCryptocoinHistories =  cryptocoinHistoryDao.getCryptoCoinHistorySinceIndex(tradePair, 4);
+        assertEquals(1, retrievedCryptocoinHistories.size());
+
+        assertEquals(new Integer(4), retrievedCryptocoinHistories.get(0).getIndx());
+    }
+
+
+    @Ignore
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testGetCryptoCoinHistoryRangeIndex() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        List <CryptocoinHistory> retrievedCryptocoinHistories =  cryptocoinHistoryDao.getCryptoCoinHistoryRangeIndex(tradePair, 3, 4);
+        assertEquals(2, retrievedCryptocoinHistories.size());
+
+        assertEquals(new Integer(3), retrievedCryptocoinHistories.get(0).getIndx());
+        assertEquals(new Integer(4), retrievedCryptocoinHistories.get(1).getIndx());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testGetEarliestDate() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        Timestamp timestamp =  cryptocoinHistoryDao.getEarliestDate(tradePair);
+
+        assertNotNull(timestamp);
+
+        assertEquals("2014-04-14 12:00:00.0", timestamp.toString());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testGetLatestDate() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        Timestamp timestamp =  cryptocoinHistoryDao.getLatestDate(tradePair);
+
+        assertNotNull(timestamp);
+
+        assertEquals("2014-04-14 12:01:00.0", timestamp.toString());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testGetSumCryptoCoinRate() {
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        Float total =  cryptocoinHistoryDao.getSumCryptoCoinRate(4,2, tradePair);
+
+        assertEquals(610F, total, 0.001F);
     }
 
 }

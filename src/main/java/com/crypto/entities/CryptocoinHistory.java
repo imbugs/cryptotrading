@@ -18,7 +18,11 @@ public class CryptocoinHistory {
     @Column(name = "TIMESTAMP")
     private Timestamp timestamp;
 
-    public static String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.S";
+    // Timestamp format with date and time
+    public static String TIMESTAMP_FORMAT_DATE_AND_TIME = "yyyy-MM-dd HH:mm:ss";
+
+    // Timestamp format with date only
+    public static String TIMESTAMP_FORMAT_DATE = "yyyy-MM-dd";
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TRADE_PAIR_ID", nullable = false, updatable = false)
