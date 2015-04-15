@@ -15,5 +15,7 @@
     <orderEntry type="library" name="Maven: org.jboss.arquillian.container:arquillian-container-spi:1.1.2.Final-wildfly-1" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-api:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.arquillian.container:arquillian-container-test-api:1.1.2.Final-wildfly-1" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.arquillian.extension:arquillian-persistence-api:1.0.0.Alpha7" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.arquillian.extension:arquillian-transaction-api:1.0.1.Final" level="project" />
   </component>
 </module>

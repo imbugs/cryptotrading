@@ -22,9 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by Jan Wicherink on 13-4-2015.
@@ -34,7 +32,7 @@ import static org.junit.Assert.assertNotNull;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase=TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class CryptocoinHistoryDaoTest {
+public class CryptocoinHistoryDaoTest_IT {
 
     @Inject
     CryptocoinHistoryDao cryptocoinHistoryDao;
@@ -58,7 +56,7 @@ public class CryptocoinHistoryDaoTest {
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_1.xml")
     public void testPersistCryptocoinHistory() {
 
@@ -74,7 +72,7 @@ public class CryptocoinHistoryDaoTest {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(tradePair,230F, 240F, 200F, 250F, 1000L);
+        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(tradePair, 230F, 240F, 200F, 250F, 1000L);
 
         cryptocoinHistoryDao.persist(cryptocoinHistory);
 
@@ -82,16 +80,16 @@ public class CryptocoinHistoryDaoTest {
 
         assertNotNull(persistedCriptocoinHistory);
         assertEquals(tradePair.getId(), persistedCriptocoinHistory.getTradePair().getId());
-        assertEquals(230F , persistedCriptocoinHistory.getOpen(), 0.1F);
-        assertEquals(240F , persistedCriptocoinHistory.getLow(), 0.1F);
-        assertEquals(200F , persistedCriptocoinHistory.getHigh(), 0.1F);
-        assertEquals(250F , persistedCriptocoinHistory.getClose(), 0.1F);
-        assertEquals(1000L , persistedCriptocoinHistory.getVolume(), 0.1F);
+        assertEquals(230F, persistedCriptocoinHistory.getOpen(), 0.1F);
+        assertEquals(240F, persistedCriptocoinHistory.getLow(), 0.1F);
+        assertEquals(200F, persistedCriptocoinHistory.getHigh(), 0.1F);
+        assertEquals(250F, persistedCriptocoinHistory.getClose(), 0.1F);
+        assertEquals(1000L, persistedCriptocoinHistory.getVolume(), 0.1F);
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
-     public void testGetAll() {
+    public void testGetAll() {
 
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
@@ -105,7 +103,7 @@ public class CryptocoinHistoryDaoTest {
         assertEquals(new Integer(4), cryptocoinHistories.get(1).getIndx());
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
     public void testGetStartAndLastIndex() {
 
@@ -116,7 +114,7 @@ public class CryptocoinHistoryDaoTest {
         assertEquals(new Integer(4), cryptocoinHistoryDao.getLastIndex(tradePair));
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
     public void testGetLast() {
 
@@ -126,7 +124,7 @@ public class CryptocoinHistoryDaoTest {
         assertEquals(new Integer(4), cryptocoinHistoryDao.getLast(tradePair).getIndx());
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
     public void testGetCryptoCoinHistoryByTimestamp() throws ParseException {
 
@@ -141,7 +139,7 @@ public class CryptocoinHistoryDaoTest {
         assertEquals(new Integer(4), cryptocoinHistoryDao.getCryptoCoinHistoryByTimestamp(tradePair, timestamp).getIndx());
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
     public void testGetCryptoCoinHistorySinceDate() throws ParseException {
 
@@ -151,35 +149,35 @@ public class CryptocoinHistoryDaoTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE);
         Date date = dateFormat.parse("2014-04-14");
 
-        List <CryptocoinHistory> retrievedCryptocoinHistories =  cryptocoinHistoryDao.getCryptoCoinHistorySinceDate(tradePair, date);
+        List<CryptocoinHistory> retrievedCryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistorySinceDate(tradePair, date);
         assertEquals(2, retrievedCryptocoinHistories.size());
 
         assertEquals(new Integer(3), cryptocoinHistoryDao.getStartIndex(tradePair));
         assertEquals(new Integer(4), cryptocoinHistoryDao.getLastIndex(tradePair));
     }
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
     public void testGetCryptoCoinHistorySinceIndex() {
 
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        List <CryptocoinHistory> retrievedCryptocoinHistories =  cryptocoinHistoryDao.getCryptoCoinHistorySinceIndex(tradePair, 4);
+        List<CryptocoinHistory> retrievedCryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistorySinceIndex(tradePair, 4);
         assertEquals(1, retrievedCryptocoinHistories.size());
 
         assertEquals(new Integer(4), retrievedCryptocoinHistories.get(0).getIndx());
     }
 
 
-    @Ignore
+    @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
     public void testGetCryptoCoinHistoryRangeIndex() {
 
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        List <CryptocoinHistory> retrievedCryptocoinHistories =  cryptocoinHistoryDao.getCryptoCoinHistoryRangeIndex(tradePair, 3, 4);
+        List<CryptocoinHistory> retrievedCryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistoryRangeIndex(tradePair, 3, 4);
         assertEquals(2, retrievedCryptocoinHistories.size());
 
         assertEquals(new Integer(3), retrievedCryptocoinHistories.get(0).getIndx());
@@ -193,7 +191,7 @@ public class CryptocoinHistoryDaoTest {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        Timestamp timestamp =  cryptocoinHistoryDao.getEarliestDate(tradePair);
+        Timestamp timestamp = cryptocoinHistoryDao.getEarliestDate(tradePair);
 
         assertNotNull(timestamp);
 
@@ -207,7 +205,7 @@ public class CryptocoinHistoryDaoTest {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        Timestamp timestamp =  cryptocoinHistoryDao.getLatestDate(tradePair);
+        Timestamp timestamp = cryptocoinHistoryDao.getLatestDate(tradePair);
 
         assertNotNull(timestamp);
 
@@ -221,9 +219,26 @@ public class CryptocoinHistoryDaoTest {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        Float total =  cryptocoinHistoryDao.getSumCryptoCoinRate(4,2, tradePair);
+        Float total = cryptocoinHistoryDao.getSumCryptoCoinRate(4, 2, tradePair);
 
         assertEquals(610F, total, 0.001F);
     }
 
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_2.xml")
+    public void testDeleleteBeforeDate() throws ParseException {
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE);
+        final Date date = dateFormat.parse("2014-04-15");
+
+        final TradePair tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        cryptocoinHistoryDao.deleteBeforeDate(date);
+        final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getAll(tradePair);
+
+        assertNotNull(cryptocoinHistories);
+        assertTrue(cryptocoinHistories.isEmpty());
+    }
 }

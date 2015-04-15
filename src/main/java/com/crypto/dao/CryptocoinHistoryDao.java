@@ -122,4 +122,12 @@ public interface CryptocoinHistoryDao extends Serializable {
      * @return the total sum of the crypto curreny rates
      */
     public Float getSumCryptoCoinRate (final Integer index, final Integer period, final TradePair tradePair);
+
+    /**
+     * Delete all crypto currencies before a given date
+     * @param date the date
+     */
+    public void deleteBeforeDate (Date date);
+
+
 }

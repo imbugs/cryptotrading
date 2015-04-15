@@ -2,8 +2,10 @@ package com.crypto.dao;
 
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 
 import javax.ejb.Stateful;
+import javax.ejb.TransactionManagement;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -150,5 +152,17 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         final Double result = (Double) query.getSingleResult();
 
         return new Float(result);
+    }
+
+    @Override
+    public void deleteBeforeDate(Date date) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
+        final String timestampString = dateFormat.format(date);
+
+        LOG.info("Delete cryptocoin currency before date: "+ timestampString);
+
+        final Query query = em.createQuery("DELETE FROM CryptocoinHistory c WHERE c.timestamp < '" + timestampString + "'");
+
+        query.executeUpdate();
     }
 }
