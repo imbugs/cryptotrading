@@ -6,6 +6,8 @@ import com.crypto.entities.TradingSite;
 import java.io.Serializable;
 
 /**
+ * The trade pair Dao
+ *
  * Created by Jan Wicherink on 7-4-2015.
  */
 public interface TradePairDao extends Serializable {

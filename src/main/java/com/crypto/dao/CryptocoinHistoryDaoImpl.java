@@ -2,15 +2,11 @@ package com.crypto.dao;
 
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
 
 import javax.ejb.Stateful;
-import javax.ejb.TransactionManagement;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.math.BigDecimal;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,14 +15,16 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
+ * Implementation of te CryptocoinhistoryDao
+ *
  * Created by Jan Wicherink on 13-4-2015.
  */
 @Stateful
-public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
+public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
 
     private static final long serialVersionUID = -2060460657264169995L;
 
-    private static final Logger LOG = Logger.getLogger( CryptocoinHistoryDaoImpl.class.getName() );
+    private static final Logger LOG = Logger.getLogger(CryptocoinHistoryDaoImpl.class.getName());
 
     @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
@@ -37,7 +35,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         Calendar calendar = Calendar.getInstance();
         final Timestamp currentDate = new Timestamp(calendar.getTime().getTime());
 
-        LOG.info ("Persist cryptocoin history for tradepair : " + cryptocoinHistory.getTradePair().getId() + " with current time: " + currentDate.getTime());
+        LOG.info("Persist cryptocoin history for tradepair : " + cryptocoinHistory.getTradePair().getId() + " with current time: " + currentDate.getTime());
 
         cryptocoinHistory.setTimestamp(currentDate);
         em.persist(cryptocoinHistory);
@@ -68,13 +66,13 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
     public List<CryptocoinHistory> getAll(final TradePair tradePair) {
         final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
 
-        return query.getResultList();
+        return (List<CryptocoinHistory>) query.getResultList();
     }
 
     @Override
     public CryptocoinHistory getLast(final TradePair tradePair) {
         final Query query = em.createQuery("SELECT c1 FROM CryptocoinHistory c1 WHERE c1.tradePair.id = " + tradePair.getId() +
-                                            " AND c1.indx = (SELECT MAX (c2.indx) FROM CryptocoinHistory c2 WHERE c2.tradePair.id =" + tradePair.getId() + ")");
+                " AND c1.indx = (SELECT MAX (c2.indx) FROM CryptocoinHistory c2 WHERE c2.tradePair.id =" + tradePair.getId() + ")");
         return (CryptocoinHistory) query.getSingleResult();
     }
 
@@ -82,7 +80,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
     public CryptocoinHistory getCryptoCoinHistoryByTimestamp(final TradePair tradePair, final Timestamp timestamp) {
 
         final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
-        final String timestampString = dateFormat.format (timestamp).toString();
+        final String timestampString = dateFormat.format(timestamp);
 
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with timestamp: " + timestampString);
 
@@ -114,16 +112,16 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
     }
 
     @Override
-    public List<CryptocoinHistory> getCryptoCoinHistoryRangeIndex(final TradePair tradePair, final Integer fromIndex, final Integer toIndex) {
+    public List<CryptocoinHistory>  getCryptoCoinHistoryRangeIndex(final TradePair tradePair, final Integer fromIndex, final Integer toIndex) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with index greater than: " + fromIndex + " and smaller than : " + toIndex);
 
         final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.indx  >= " + fromIndex + " AND c.indx <= " + toIndex);
 
-        return (List<CryptocoinHistory>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
-    public Timestamp  getEarliestDate(final TradePair tradePair) {
+    public Timestamp getEarliestDate(final TradePair tradePair) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with the earliest date");
 
         final Query query = em.createQuery("SELECT MIN(c.timestamp) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
@@ -132,7 +130,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
     }
 
     @Override
-    public Timestamp  getLatestDate(final TradePair tradePair) {
+    public Timestamp getLatestDate(final TradePair tradePair) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with the latest date");
 
         final Query query = em.createQuery("SELECT MAX(c.timestamp) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
@@ -147,7 +145,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         final Integer fromIndex = index - period;
 
         final Query query = em.createQuery("SELECT SUM(c.close) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() +
-        " AND c.indx <=" + index +  " AND c.indx > " + fromIndex);
+                " AND c.indx <=" + index + " AND c.indx > " + fromIndex);
 
         final Double result = (Double) query.getSingleResult();
 
@@ -159,7 +157,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
         final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
         final String timestampString = dateFormat.format(date);
 
-        LOG.info("Delete cryptocoin currency before date: "+ timestampString);
+        LOG.info("Delete cryptocoin currency before date: " + timestampString);
 
         final Query query = em.createQuery("DELETE FROM CryptocoinHistory c WHERE c.timestamp < '" + timestampString + "'");
 

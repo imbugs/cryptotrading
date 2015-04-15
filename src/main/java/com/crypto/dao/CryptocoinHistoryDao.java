@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * The crypto coin history DAO
+ *
  * Created by Jan Wicherink on 13-4-2015.
  */
 public interface CryptocoinHistoryDao extends Serializable {
@@ -25,7 +27,7 @@ public interface CryptocoinHistoryDao extends Serializable {
      *
      * @param tradePair the tradepair
      * @param indx      the index
-     * @return
+     * @return the crypto coin history
      */
     public CryptocoinHistory getCryptoCoinHistoryByIndex(final TradePair tradePair, final Integer indx);
 
@@ -97,7 +99,7 @@ public interface CryptocoinHistoryDao extends Serializable {
      * @param toIndex the upper index
      * @return the list of crypto coin histories.
      */
-    public List<CryptocoinHistory> getCryptoCoinHistoryRangeIndex (final TradePair tradePair, final Integer fromIndex, final Integer toIndex);
+    public List getCryptoCoinHistoryRangeIndex(final TradePair tradePair, final Integer fromIndex, final Integer toIndex);
 
     /**
      * Get the earliest timestamp of all of the crypto coin histories in the database

@@ -6,13 +6,15 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * The Treand Dao
+ *
  * Created by Jan Wicherink on 15-4-15.
  */
 public interface TrendDao extends Serializable {
 
-
     /**
      * Get the trend with a given id
+     *
      * @param Id the id
      * @return the trend
      */

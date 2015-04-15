@@ -5,6 +5,8 @@ import com.crypto.entities.Currency;
 import java.io.Serializable;
 
 /**
+ * CurrencyDao
+ *
  * Created by Jan Wicherink on 25-3-2015.
  */
 public interface CurrencyDao extends Serializable {

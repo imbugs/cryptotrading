@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
+ * The curremcy Dao implementation
+ *
  * Created by Jan Wicherink on 30-3-2015.
  */
 
@@ -20,8 +22,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     /**
      * Add a new currency to the database
-     * @param currency the currency to be persisted
-     * @return the persisted currency in the database
      */
     public void persist(Currency currency) {
 

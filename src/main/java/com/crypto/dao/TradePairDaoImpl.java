@@ -4,15 +4,15 @@ package com.crypto.dao;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.TradingSite;
 
-
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 
 /**
+ * The trade pair Dao
+ * <p/>
  * Created by Jan Wicherink on 7-4-2015.
  */
 @Stateful
@@ -31,9 +31,9 @@ public class TradePairDaoImpl implements TradePairDao {
     @Override
     public TradePair get(Integer id) {
 
-       final Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.id = " + id.toString());
+        final Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.id = " + id.toString());
 
-       return (TradePair) query.getSingleResult();
+        return (TradePair) query.getSingleResult();
     }
 
     @Override

@@ -10,6 +10,8 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
+ * The Trend Dao implementation
+ *
  * Created by Jan Wicherink on 15-4-15.
  */
 @Stateful
