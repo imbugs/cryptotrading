@@ -136,4 +136,8 @@ public class Trading implements Serializable {
     public TradePair getTradePair() {
         return tradePair;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }
