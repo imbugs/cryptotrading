@@ -7,9 +7,13 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Jan Wicherink on 13-4-2015.
@@ -19,12 +23,18 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
 
     private static final long serialVersionUID = -2060460657264169995L;
 
+    private static final Logger LOG = Logger.getLogger( CryptocoinHistoryDaoImpl.class.getName() );
+
     @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
 
     @Override
     public void persist(final CryptocoinHistory cryptocoinHistory) {
-        final Date currentDate = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        final Timestamp currentDate = new Timestamp(calendar.getTime().getTime());
+
+        LOG.info ("Persist cryptocoin history for tradepair : " + cryptocoinHistory.getTradePair().getId() + " with current time: " + currentDate.getTime());
 
         cryptocoinHistory.setTimestamp(currentDate);
         em.persist(cryptocoinHistory);
@@ -67,7 +77,13 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao{
 
     @Override
     public CryptocoinHistory getCryptoCoinHistoryByTimestamp(TradePair tradePair, Timestamp timestamp) {
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.timestamp='" + timestamp.toString() + "'");
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT);
+        final String timestampString = dateFormat.format (timestamp).toString();
+
+        LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with timestamp: " + timestampString);
+
+        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.timestamp='" + timestampString + "'");
 
         return (CryptocoinHistory) query.getSingleResult();
     }

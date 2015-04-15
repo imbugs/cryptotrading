@@ -1,7 +1,7 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by Jan Wicherink on 31-3-2015.
@@ -16,10 +16,12 @@ public class CryptocoinHistory {
     private Integer indx;
 
     @Column(name = "TIMESTAMP")
-    private Date timestamp;
+    private Timestamp timestamp;
+
+    public static String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.S";
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="TRADE_PAIR_ID", nullable=false, updatable=false)
+    @JoinColumn(name = "TRADE_PAIR_ID", nullable = false, updatable = false)
     private TradePair tradePair;
 
     @Column(name = "OPEN")
@@ -42,16 +44,17 @@ public class CryptocoinHistory {
 
     /**
      * Cryptocoin history
-     * @param indx the index of the history
-     * @param timestamp the timestampt of the history
+     *
+     * @param indx      the index of the history
+     * @param timestamp the timestamp of the history
      * @param tradePair the tradepair belonging to the history
-     * @param open the opening exchange rate
-     * @param low the lowest exchange rate
-     * @param high the highest exchange rate
-     * @param close the closing exchange rate
-     * @param volume the volume of the trading
+     * @param open      the opening exchange rate
+     * @param low       the lowest exchange rate
+     * @param high      the highest exchange rate
+     * @param close     the closing exchange rate
+     * @param volume    the volume of the trading
      */
-    public CryptocoinHistory(Integer indx, Date timestamp, TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
+    public CryptocoinHistory(Integer indx, Timestamp timestamp, TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
         this.indx = indx;
         this.timestamp = timestamp;
         this.tradePair = tradePair;
@@ -64,12 +67,13 @@ public class CryptocoinHistory {
 
     /**
      * Cryptocoin history
+     *
      * @param tradePair the tradepair belonging to the history
-     * @param open the opening exchange rate
-     * @param low the lowest exchange rate
-     * @param high the highest exchange rate
-     * @param close the closing exchange rate
-     * @param volume the volume of the trading
+     * @param open      the opening exchange rate
+     * @param low       the lowest exchange rate
+     * @param high      the highest exchange rate
+     * @param close     the closing exchange rate
+     * @param volume    the volume of the trading
      */
     public CryptocoinHistory(TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
         this.tradePair = tradePair;
@@ -86,14 +90,6 @@ public class CryptocoinHistory {
 
     public void setIndx(Integer indx) {
         this.indx = indx;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 
     public Float getOpen() {
@@ -142,5 +138,13 @@ public class CryptocoinHistory {
 
     public void setVolume(Long volume) {
         this.volume = volume;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 }
