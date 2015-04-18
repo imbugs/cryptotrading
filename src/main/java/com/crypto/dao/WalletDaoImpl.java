@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  * The wallet Dao implementation
@@ -28,9 +29,9 @@ public class WalletDaoImpl implements WalletDao {
 
     @Override
     public Wallet get(Trading trading) {
-        final Query query = em.createQuery("SELECT w FROM Wallet w WHERE w.trading.id=" + trading.getId());
-        return (Wallet) query.getSingleResult();
+        final TypedQuery <Wallet> query = (TypedQuery<Wallet>) em.createQuery("SELECT w FROM Wallet w WHERE w.trading= :trading");
+        query.setParameter("trading", trading);
+
+        return query.getSingleResult();
     }
-
-
 }

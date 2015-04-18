@@ -9,6 +9,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 
 /**
@@ -21,13 +22,12 @@ public class FundDaoImpl implements FundDao {
 
     private static final Logger LOG = Logger.getLogger(FundDaoImpl.class.getName());
 
-
     @PersistenceContext
     private EntityManager em;
 
     @Override
     public void perist(Fund fund) {
-
+        em.persist(fund);
     }
 
     @Override
@@ -35,9 +35,10 @@ public class FundDaoImpl implements FundDao {
 
         LOG.info("Get fund, tradepair id: " + tradepair.getId() + " currency: " + currency.getCode());
 
-        final Query query = em.createQuery("SELECT f FROM Fund f WHERE f.tradepair.id=" + tradepair.getId() +
-                                           " AND f.currency.code='" + currency.getCode() + "'");
-        return (Fund) query.getSingleResult();
+        final TypedQuery<Fund> query = (TypedQuery<Fund>) em.createQuery("SELECT f FROM Fund f WHERE f.tradepair = :tradepair AND f.currency = :currency");
+        query.setParameter("tradepair", tradepair);
+        query.setParameter("currency", currency);
+
+        return query.getSingleResult();
     }
 }
-

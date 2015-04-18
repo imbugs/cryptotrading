@@ -21,16 +21,19 @@ public class TradingSiteDaoImpl implements TradingSiteDao{
 
     @Override
     public void persist(TradingSite tradingSite) {
+
         em.persist(tradingSite);
     }
 
     @Override
     public TradingSite get(String code) {
+
         return em.find(TradingSite.class, code);
     }
 
     @Override
     public void update(TradingSite tradingSite) {
+
         em.merge(tradingSite);
     }
 }

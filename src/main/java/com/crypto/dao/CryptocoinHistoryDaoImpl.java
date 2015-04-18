@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,37 +44,43 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
 
     @Override
     public CryptocoinHistory getCryptoCoinHistoryByIndex(final TradePair tradePair, final Integer indx) {
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.indx=" + indx);
+        final TypedQuery<CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair = :tradePair AND c.indx = :indx");
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("indx", indx);
 
-        return (CryptocoinHistory) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
     public Integer getLastIndex(final TradePair tradePair) {
-        final Query query = em.createQuery("SELECT MAX(c.indx) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+        final TypedQuery <Integer> query = (TypedQuery<Integer>) em.createQuery("SELECT MAX(c.indx) FROM CryptocoinHistory c WHERE c.tradePair = :tradePair");
+        query.setParameter("tradePair", tradePair);
 
-        return (Integer) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
     public Integer getStartIndex(final TradePair tradePair) {
-        final Query query = em.createQuery("SELECT MIN(c.indx) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+        final TypedQuery <Integer> query = (TypedQuery<Integer>) em.createQuery("SELECT MIN(c.indx) FROM CryptocoinHistory c WHERE c.tradePair = :tradePair");
+        query.setParameter("tradePair", tradePair);
 
-        return (Integer) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
     public List<CryptocoinHistory> getAll(final TradePair tradePair) {
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+        final TypedQuery <CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair = :tradePair");
+        query.setParameter("tradePair", tradePair);
 
-        return (List<CryptocoinHistory>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
     public CryptocoinHistory getLast(final TradePair tradePair) {
-        final Query query = em.createQuery("SELECT c1 FROM CryptocoinHistory c1 WHERE c1.tradePair.id = " + tradePair.getId() +
-                " AND c1.indx = (SELECT MAX (c2.indx) FROM CryptocoinHistory c2 WHERE c2.tradePair.id =" + tradePair.getId() + ")");
-        return (CryptocoinHistory) query.getSingleResult();
+        final TypedQuery <CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c1 FROM CryptocoinHistory c1 WHERE c1.tradePair = :tradePair " +
+                "AND c1.indx = (SELECT MAX (c2.indx) FROM CryptocoinHistory c2 WHERE c2.tradePair = :tradePair)");
+        query.setParameter("tradePair", tradePair);
+        return query.getSingleResult();
     }
 
     @Override
@@ -84,9 +91,10 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
 
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with timestamp: " + timestampString);
 
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.timestamp='" + timestampString + "'");
+        final TypedQuery <CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair = :tradePair AND c.timestamp='" + timestampString + "'");
+        query.setParameter("tradePair", tradePair);
 
-        return (CryptocoinHistory) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
@@ -97,25 +105,31 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
 
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with timestamp later than: " + timestampString);
 
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.timestamp >='" + timestampString + "'");
+        final TypedQuery <CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair = :tradePair AND c.timestamp >='" + timestampString + "'");
+        query.setParameter("tradePair", tradePair);
 
-        return (List<CryptocoinHistory>) query.getResultList();
+        return  query.getResultList();
     }
 
     @Override
     public List<CryptocoinHistory> getCryptoCoinHistorySinceIndex(final TradePair tradePair, final Integer index) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with index greater than: " + index);
 
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.indx  >= " + index);
+        final TypedQuery <CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair = :tradePair AND c.indx  >= :index");
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("index", index);
 
-        return (List<CryptocoinHistory>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
     public List<CryptocoinHistory>  getCryptoCoinHistoryRangeIndex(final TradePair tradePair, final Integer fromIndex, final Integer toIndex) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with index greater than: " + fromIndex + " and smaller than : " + toIndex);
 
-        final Query query = em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() + " AND c.indx  >= " + fromIndex + " AND c.indx <= " + toIndex);
+        final TypedQuery <CryptocoinHistory> query = (TypedQuery<CryptocoinHistory>) em.createQuery("SELECT c FROM CryptocoinHistory c WHERE c.tradePair= :tradePair AND c.indx  >= :fromIndex  AND c.indx <= :toIndex");
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("fromIndex", fromIndex);
+        query.setParameter("toIndex", toIndex);
 
         return query.getResultList();
     }
@@ -124,18 +138,20 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
     public Timestamp getEarliestDate(final TradePair tradePair) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with the earliest date");
 
-        final Query query = em.createQuery("SELECT MIN(c.timestamp) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+        final TypedQuery <Timestamp> query = (TypedQuery<Timestamp>) em.createQuery("SELECT MIN(c.timestamp) FROM CryptocoinHistory c WHERE c.tradePair = :tradePair");
+        query.setParameter("tradePair", tradePair);
 
-        return (Timestamp) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
     public Timestamp getLatestDate(final TradePair tradePair) {
         LOG.info("Get cryptocoin history for tradepair : " + tradePair.getId() + " with the latest date");
 
-        final Query query = em.createQuery("SELECT MAX(c.timestamp) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId());
+        final TypedQuery <Timestamp> query = (TypedQuery<Timestamp>) em.createQuery("SELECT MAX(c.timestamp) FROM CryptocoinHistory c WHERE c.tradePair = :tradePair");
+        query.setParameter("tradePair", tradePair);
 
-        return (Timestamp) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
@@ -144,12 +160,12 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
 
         final Integer fromIndex = index - period;
 
-        final Query query = em.createQuery("SELECT SUM(c.close) FROM CryptocoinHistory c WHERE c.tradePair.id = " + tradePair.getId() +
-                " AND c.indx <=" + index + " AND c.indx > " + fromIndex);
+        final TypedQuery <Double> query = (TypedQuery<Double>) em.createQuery("SELECT SUM(c.close) FROM CryptocoinHistory c WHERE c.tradePair= :tradePair AND c.indx <= :index AND c.indx > :fromIndex");
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("index", index);
+        query.setParameter("fromIndex", fromIndex);
 
-        final Double result = (Double) query.getSingleResult();
-
-        return new Float(result);
+        return new Float(query.getSingleResult());
     }
 
     @Override

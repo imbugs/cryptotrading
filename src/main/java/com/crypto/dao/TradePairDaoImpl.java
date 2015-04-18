@@ -8,6 +8,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 
 /**
@@ -44,8 +45,9 @@ public class TradePairDaoImpl implements TradePairDao {
 
     @Override
     public TradePair getTradePairOfTradingSite(TradingSite tradingSite) {
-        final Query query = em.createQuery("SELECT t FROM TradePair t WHERE t.tradingSite.code ='" + tradingSite.getCode() + "'");
+        final TypedQuery<TradePair> query = (TypedQuery<TradePair>) em.createQuery("SELECT t FROM TradePair t WHERE t.tradingSite = :tradingSite");
+        query.setParameter("tradingSite", tradingSite);
 
-        return (TradePair) query.getSingleResult();
+        return query.getSingleResult();
     }
 }

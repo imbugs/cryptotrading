@@ -23,7 +23,7 @@ import javax.inject.Inject;
  * Created by Jan Wicherink on 13-4-2015.
  */
 @RunWith(Arquillian.class)
-public class TradePairDaoTest_IT {
+public class TradePairDaoTest {
 
     @Inject
     private TradePairDao tradePairDao;

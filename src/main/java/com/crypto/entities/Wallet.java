@@ -92,9 +92,7 @@ public class Wallet implements Serializable{
      */
     public Float determineMaxTradingCryptoCoins (Float maxTradingCryptoCoinsPerc) {
 
-        final Float maxCryptoCoins = this.cryptoCoins * maxTradingCryptoCoinsPerc / 100;
-
-        return maxCryptoCoins;
+        return this.cryptoCoins * maxTradingCryptoCoinsPerc / 100;
     }
 
     /**
@@ -104,9 +102,7 @@ public class Wallet implements Serializable{
      */
     public Float determineMaxTradingCoins ( Float maxTradingCoinsPerc) {
 
-        final Float maxCoins = this.coins * maxTradingCoinsPerc/ 100;
-
-        return maxCoins;
+        return this.coins * maxTradingCoinsPerc/ 100;
     }
 
     /**
@@ -115,9 +111,7 @@ public class Wallet implements Serializable{
      */
     public Float getTotalValue() {
 
-        final Float value = this.coins + this.cryptoCoins * this.exchangeRate;
-
-        return value;
+        return  this.coins + this.cryptoCoins * this.exchangeRate;
     }
 
     public Trading getTrading() {

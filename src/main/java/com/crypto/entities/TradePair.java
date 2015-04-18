@@ -55,9 +55,6 @@ public class TradePair implements Serializable {
         return tradingSite;
     }
 
-    public void setTradingSite(TradingSite tradingSite) {
-        this.tradingSite = tradingSite;
-    }
 
     public Currency getCurrency() {
         return currency;
@@ -69,17 +66,5 @@ public class TradePair implements Serializable {
 
     public CryptoCurrency getCryptoCurrency() {
         return cryptoCurrency;
-    }
-
-    public void setCryptoCurrency(CryptoCurrency cryptoCurrency) {
-        this.cryptoCurrency = cryptoCurrency;
-    }
-
-    public Float getTransactionFee() {
-        return transactionFee;
-    }
-
-    public void setTransactionFee(Float transactionFee) {
-        this.transactionFee = transactionFee;
     }
 }

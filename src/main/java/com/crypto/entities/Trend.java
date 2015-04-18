@@ -58,7 +58,7 @@ public class Trend implements Serializable {
      */
     public String getName() {
         String name = "";
-        String periodString = "";
+        String periodString;
 
         if (this.period != null) {
             periodString = this.period.toString();

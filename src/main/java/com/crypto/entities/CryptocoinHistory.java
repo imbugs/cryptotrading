@@ -95,60 +95,29 @@ public class CryptocoinHistory implements Serializable {
         return indx;
     }
 
-    public void setIndx(Integer indx) {
-        this.indx = indx;
-    }
-
     public Float getOpen() {
         return open;
-    }
-
-    public void setOpen(Float open) {
-        this.open = open;
     }
 
     public Float getLow() {
         return low;
     }
 
-    public void setLow(Float low) {
-        this.low = low;
-    }
-
     public Float getHigh() {
         return high;
     }
 
-    public void setHigh(Float high) {
-        this.high = high;
-    }
 
     public TradePair getTradePair() {
         return tradePair;
-    }
-
-    public void setTradePair(TradePair tradePair) {
-        this.tradePair = tradePair;
     }
 
     public Float getClose() {
         return close;
     }
 
-    public void setClose(Float close) {
-        this.close = close;
-    }
-
     public Long getVolume() {
         return volume;
-    }
-
-    public void setVolume(Long volume) {
-        this.volume = volume;
-    }
-
-    public Timestamp getTimestamp() {
-        return timestamp;
     }
 
     public void setTimestamp(Timestamp timestamp) {

@@ -1,9 +1,6 @@
 package com.crypto.dao;
 
-import com.crypto.entities.Trading;
-import com.crypto.entities.Trend;
-import com.crypto.entities.Wallet;
-import junit.framework.Assert;
+import com.crypto.entities.*;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -18,44 +15,45 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
-
 /**
- * Created by Jan Wicherink on 15-4-15.
+ * Created by jan on 17-4-15.
  */
 @RunWith(Arquillian.class)
 @PersistenceTest
 @Transactional(TransactionMode.ROLLBACK)
-@Cleanup(phase= TestExecutionPhase.NONE)
+@Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class WalletDaoTest_IT {
+public class FundDaoTest_IT {
 
     @Inject
-    private WalletDao walletDao;
+    private FundDao fundDao;
 
     @Deployment
     public static Archive<?> createDeployment() {
 
-        return ShrinkWrap.create(WebArchive.class, "test3.war")
-                .addPackage((WalletDaoImpl.class).getPackage())
-                .addPackage((Wallet.class).getPackage())
+        return ShrinkWrap.create(WebArchive.class, "test.war")
+                .addPackage((FundDaoImpl.class).getPackage())
+                .addPackage((Fund.class).getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_4.xml")
-    public void testGet () {
+    @UsingDataSet("datasets/it_test_dataset_5.xml")
+    public void testGet() {
 
-        final Trading trading = new Trading ();
-        trading.setId(1);
+        final Integer id = new Integer(1);
 
-        final Wallet wallet = walletDao.get(trading);
+        final TradePair tradePair = new TradePair();
+        tradePair.setId(id);
 
-        assertNotNull(wallet);
+        final Currency euro = new Currency("EUR", "Euro", "€");
 
-        assertEquals(100F, wallet.getCoins());
+        final Fund fund = fundDao.get(tradePair, euro);
+
+        assertNotNull(fund);
     }
+
 }

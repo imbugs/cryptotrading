@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -29,22 +30,22 @@ public class TrendDaoImpl implements TrendDao {
 
     @Override
     public List<Trend> getAllMovingAverageTrends() {
-        final Query query = em.createQuery("SELECT t FROM Trend t WHERE t.type = 'MA'");
+        final TypedQuery <Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type = 'MA'");
 
-        return (List<Trend>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
     public List<Trend> getAllExponentialMovingAverageTrends() {
-        final Query query = em.createQuery("SELECT t FROM Trend t WHERE t.type = 'EMA'");
+        final TypedQuery<Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type = 'EMA'");
 
-        return (List<Trend>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
     public List<Trend> getAllSmoothingMovingAverageTrends() {
-        final Query query = em.createQuery("SELECT t FROM Trend t WHERE t.type = 'SMA'");
+        final TypedQuery <Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type = 'SMA'");
 
-        return (List<Trend>) query.getResultList();
+        return query.getResultList();
     }
 }

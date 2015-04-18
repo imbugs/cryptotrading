@@ -57,12 +57,4 @@ public class Currency implements Serializable{
     public void setCode(String code) {
         this.code = code;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
 }
