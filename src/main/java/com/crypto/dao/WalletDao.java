@@ -3,6 +3,7 @@ package com.crypto.dao;
 import com.crypto.entities.Trading;
 import com.crypto.entities.Wallet;
 
+import javax.ejb.Stateful;
 import java.io.Serializable;
 
 /**
@@ -12,7 +13,19 @@ import java.io.Serializable;
  */
 public interface WalletDao extends Serializable {
 
+    /**
+     * Persist the wallet
+     * @param wallet the wallet to be persisted
+     */
+    public void persist (final Wallet wallet);
+
+    /**
+     * Get the wallet
+     * @param trading the trading of the wallet
+     * @return the wallet
+     */
     public Wallet get (final Trading trading);
+
 
 
 }

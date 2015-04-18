@@ -89,6 +89,10 @@ public class Trading implements Serializable {
         this.tradePair = tradePair;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Float getMinTradingCryptoCurrency() {
         return minTradingCryptoCurrency;
     }

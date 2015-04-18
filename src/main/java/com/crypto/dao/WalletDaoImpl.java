@@ -22,8 +22,15 @@ public class WalletDaoImpl implements WalletDao {
     EntityManager em;
 
     @Override
+    public void persist(final Wallet wallet) {
+        em.persist(wallet);
+    }
+
+    @Override
     public Wallet get(Trading trading) {
         final Query query = em.createQuery("SELECT w FROM Wallet w WHERE w.trading.id=" + trading.getId());
         return (Wallet) query.getSingleResult();
     }
+
+
 }

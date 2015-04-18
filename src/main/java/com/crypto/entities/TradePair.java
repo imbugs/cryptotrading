@@ -48,7 +48,7 @@ public class TradePair implements Serializable {
     }
 
     public void setId(Integer id) {
-        id = id;
+        this.id = id;
     }
 
     public TradingSite getTradingSite() {

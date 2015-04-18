@@ -17,6 +17,7 @@ import java.util.List;
 @Stateful
 public class TrendDaoImpl implements TrendDao {
 
+
     @PersistenceContext(unitName = "CryptoDS")
     EntityManager em;
 
