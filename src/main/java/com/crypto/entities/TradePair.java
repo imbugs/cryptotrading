@@ -43,28 +43,40 @@ public class TradePair implements Serializable {
         this.transactionFee = transactionFee;
     }
 
+    public Float getTransactionFee() {
+        return transactionFee;
+    }
+
     public Integer getId() {
+
         return id;
     }
 
     public void setId(Integer id) {
+
         this.id = id;
     }
 
     public TradingSite getTradingSite() {
+
         return tradingSite;
     }
 
 
     public Currency getCurrency() {
+
         return currency;
     }
 
     public void setCurrency(Currency currency) {
+
         this.currency = currency;
     }
 
     public CryptoCurrency getCryptoCurrency() {
+
         return cryptoCurrency;
     }
+
+
 }

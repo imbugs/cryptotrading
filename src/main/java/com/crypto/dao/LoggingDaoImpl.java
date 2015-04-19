@@ -1,5 +1,6 @@
 package com.crypto.dao;
 
+import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Logging;
 import com.crypto.entities.LoggingLevel;
 import com.crypto.entities.Trading;
@@ -7,13 +8,16 @@ import com.crypto.entities.Trading;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.crypto.entities.LoggingLevel.*;
 
 /**
- * Created by jan on 18-4-15.
+ * Created by Jan Wicherink on 18-4-15.
  */
 @Stateful
 public class LoggingDaoImpl implements LoggingDa0 {
@@ -56,5 +60,16 @@ public class LoggingDaoImpl implements LoggingDa0 {
         query.setParameter("trading", trading);
 
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteBeforeDate(Date beforeDate) {
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
+        final String timestampString = dateFormat.format(beforeDate);
+
+        final Query query = em.createQuery("DELETE FROM Logging l WHERE l.timestamp < '" + timestampString + "'");
+
+        query.executeUpdate();
     }
 }
