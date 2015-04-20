@@ -1,22 +1,23 @@
 package com.crypto.entities;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
 /**
  * Created by jan on 19-4-15.
  */
 @Entity
-public class BuyOrder extends Order {
-
+@DiscriminatorValue("BUY")
+public class BuyMarketOrder extends MarketOrder {
 
     @Column(name="COINS")
     private Float coins;
 
-    public BuyOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float coins) {
-        super(orderReference, index, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
-
+    public BuyMarketOrder(Integer id, Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float coins) {
+        super(id, index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
         this.coins = coins;
     }
 

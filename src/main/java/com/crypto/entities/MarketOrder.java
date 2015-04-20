@@ -1,20 +1,27 @@
 package com.crypto.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
+ * A market order, order to immediately sell or buy a position at at given exchange rate.
+ *
  * Created by Jan Wicherink on 19-4-15.
  */
 @Entity
-public class Order {
+@Table (name="MARKET_ORDERS")
+@DiscriminatorColumn(name = "ORDER_TYPE", discriminatorType = DiscriminatorType.STRING)
+public class MarketOrder {
 
-    @Column (name="ORDER_REFERENCE")
-    private String orderReference;
+    @Id
+    @Column(name="ID")
+    private Integer Id;
 
     @Column (name="INDX")
     private Integer index;
+
+    @Column (name="ORDER_REFERENCE")
+    private String orderReference;
 
     @Column (name="TRADING_ID")
     private Trading trading;
@@ -37,9 +44,23 @@ public class Order {
     @Column (name="MANUALLY_CREATED")
     private Boolean manuallyCreated;
 
-    public Order(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated) {
-        this.orderReference = orderReference;
+    /**
+     * Constructor
+     * @param id the id
+     * @param index the index of the order
+     * @param orderReference our order reference of the order
+     * @param trading the trading
+     * @param timestamp the timestamp of the order
+     * @param exchangeRate the exchange rate at which to sell or buy
+     * @param fee the fee to be payed
+     * @param status the status of the order
+     * @param retryCount the number of retries to execute this order
+     * @param manuallyCreated indicator if the order was manually created
+     */
+    public MarketOrder(Integer id, Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated) {
+        Id = id;
         this.index = index;
+        this.orderReference = orderReference;
         this.trading = trading;
         this.timestamp = timestamp;
         this.exchangeRate = exchangeRate;
@@ -49,12 +70,16 @@ public class Order {
         this.manuallyCreated = manuallyCreated;
     }
 
-    public String getOrderReference() {
-        return orderReference;
+    public Integer getId() {
+        return Id;
     }
 
     public Integer getIndex() {
         return index;
+    }
+
+    public String getOrderReference() {
+        return orderReference;
     }
 
     public Trading getTrading() {
@@ -81,7 +106,7 @@ public class Order {
         return retryCount;
     }
 
-    public Boolean isManuallyCreated() {
+    public Boolean getManuallyCreated() {
         return manuallyCreated;
     }
 
