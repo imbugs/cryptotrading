@@ -3,6 +3,7 @@ package com.crypto.dao;
 import com.crypto.entities.Currency;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.PersistenceTest;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -21,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
  * Created by Jan Wicherink on 7-4-2015.
  */
 @RunWith(Arquillian.class)
+@PersistenceTest
 public class CurrencyDaoTest_IT {
 
     @Inject

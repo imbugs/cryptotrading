@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * Created by jan on 21-4-15.
+ * Created by Jan Wicherink on 21-4-15.
  */
 @Stateful
 public class MarketOrderDaoImpl implements MarketOrderDao {
@@ -22,17 +22,19 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public void persist(MarketOrder marketOrder) {
+
         em.persist(marketOrder);
     }
 
     @Override
     public void merge(MarketOrder marketOrder) {
+
         em.merge(marketOrder);
     }
 
     @Override
     public MarketOrder getByOrderReference(String orderReferecence) {
-       final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.orderReference= : orderReference");
+       final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.orderReference= :orderReference");
        query.setParameter("orderReference", orderReferecence);
 
        return query.getSingleResult();
@@ -46,44 +48,59 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public MarketOrder getLastSell(Integer beforeIndex, Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.index < :beforeIndex AND  m.trading = :trading AND m.order_type= 'SELL' ORDER BY m.timestamp DESC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.index < :beforeIndex AND m.trading = :trading AND ORDER_TYPE = 'SELL' ORDER BY m.timestamp DESC");
         query.setParameter("beforeIndex", beforeIndex);
         query.setParameter("trading", trading);
 
-        return query.getSingleResult();
+        return query.getResultList().get(0);
     }
 
     @Override
     public MarketOrder getLastBuy(Integer beforeIndex, Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.index < :beforeIndex AND  m.trading = :trading AND m.order_type= 'BUY' ORDER BY m.timestamp DESC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.index < :beforeIndex AND m.trading = :trading AND ORDER_TYPE = 'BUY' ORDER BY m.timestamp DESC");
         query.setParameter("beforeIndex", beforeIndex);
         query.setParameter("trading", trading);
 
-        return query.getSingleResult();
+        return query.getResultList().get(0);
     }
 
     @Override
     public List<MarketOrder> getOpenOrders(Trading trading) {
-        return null;
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN ('OPEN','EXECUTING') ORDER BY m.timestamp ASC");
+        query.setParameter("trading", trading);
+
+        return query.getResultList();
     }
 
     @Override
     public List<MarketOrder> getOpenManualSellOrders(Trading trading) {
-        return null;
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN 'OPEN','RETRY','EXECUTING') AND m.manually_created=1 AND m.order_type = 'SELL' ORDER BY m.timestamp ASC");
+        query.setParameter("trading", trading);
+
+        return query.getResultList();
     }
 
     @Override
     public List<MarketOrder> getOpenManualBuyOrders(Trading trading) {
-        return null;
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN 'OPEN','RETRY','EXECUTING') AND m.manually_created=1 AND m.order_type ='BUY' ORDER BY m.timestamp ASC");
+        query.setParameter("trading", trading);
+
+        return query.getResultList();
     }
 
     @Override
     public List<MarketOrder> getRetryOrders(Trading trading) {
-        return null;
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status = 'RETRY' ORDER BY m.timestamp ASC");
+        query.setParameter("trading", trading);
+
+        return query.getResultList();
     }
 
     @Override
     public List<MarketOrder> getAll(Trading trading) {
-        return null;
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading ORDER BY m.timestamp ASC");
+        query.setParameter("trading", trading);
+
+        return query.getResultList();
     }
 }

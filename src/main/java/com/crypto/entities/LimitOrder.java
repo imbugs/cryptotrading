@@ -24,7 +24,8 @@ public class LimitOrder {
     @Column (name="INDX")
     private Integer index;
 
-    @Column (name="TRADING_ID")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn (name="TRADING_ID", nullable = false, updatable = true)
     private Trading trading;
 
     @Column (name="TIMESTAMP")

@@ -33,7 +33,7 @@ import static junit.framework.TestCase.assertNotNull;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class FundHistoryDaoTest {
+public class FundHistoryDaoTest_IT {
 
     @Inject
     private FundHistoryDao fundHistoryDao;

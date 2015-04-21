@@ -21,6 +21,14 @@ public class BuyMarketOrder extends MarketOrder {
         this.coins = coins;
     }
 
+
+    /**
+     * Default constructor;
+     */
+    public BuyMarketOrder() {
+        super();
+    }
+
     public void calculateFee () {
 
         final Float feePercentage = this.getTrading().getTradePair().getTransactionFee();
@@ -30,12 +38,10 @@ public class BuyMarketOrder extends MarketOrder {
         setFee(fee);
     }
 
-
     public Float getCryptoCoins () {
 
         return (this.getCoins() - getFee()) / getExchangeRate();
     }
-
 
     public Float getCoins() {
         return coins;

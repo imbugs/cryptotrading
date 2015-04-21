@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import static junit.framework.TestCase.assertNotNull;
 
 /**
- * Created by jan on 17-4-15.
+ * Created by Jan Wicherink on 17-4-15.
  */
 @RunWith(Arquillian.class)
 @PersistenceTest

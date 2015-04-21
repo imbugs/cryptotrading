@@ -21,6 +21,10 @@ public class SellMarketOrder extends MarketOrder {
         this.cryptoCoins = cryptoCoins;
     }
 
+    public SellMarketOrder (){
+        super();
+    }
+
     public void calculateFee() {
 
         final Float feePercentage = this.getTrading().getTradePair().getTransactionFee();

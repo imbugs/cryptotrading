@@ -30,7 +30,7 @@ import static junit.framework.TestCase.assertNotNull;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase= TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class WalletDaoTest {
+public class WalletDaoTest_IT {
 
     @Inject
     private WalletDao walletDao;

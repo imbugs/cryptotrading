@@ -23,7 +23,8 @@ public class MarketOrder {
     @Column (name="ORDER_REFERENCE")
     private String orderReference;
 
-    @Column (name="TRADING_ID")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn (name="TRADING_ID", nullable = false, updatable = true)
     private Trading trading;
 
     @Column (name="TIMESTAMP")
@@ -68,6 +69,10 @@ public class MarketOrder {
         this.status = status;
         this.retryCount = retryCount;
         this.manuallyCreated = manuallyCreated;
+    }
+
+    public MarketOrder() {
+
     }
 
     public Integer getId() {
