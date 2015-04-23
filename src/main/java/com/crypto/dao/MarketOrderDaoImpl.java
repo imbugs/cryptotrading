@@ -74,7 +74,7 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public List<MarketOrder> getOpenManualSellOrders(Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN 'OPEN','RETRY','EXECUTING') AND m.manually_created=1 AND m.order_type = 'SELL' ORDER BY m.timestamp ASC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN ('OPEN','RETRY','EXECUTING') AND m.manuallyCreated=1 AND ORDER_TYPE='SELL' ORDER BY m.timestamp ASC");
         query.setParameter("trading", trading);
 
         return query.getResultList();
@@ -82,7 +82,7 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public List<MarketOrder> getOpenManualBuyOrders(Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN 'OPEN','RETRY','EXECUTING') AND m.manually_created=1 AND m.order_type ='BUY' ORDER BY m.timestamp ASC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN ('OPEN','RETRY','EXECUTING') AND m.manuallyCreated=1 AND ORDER_TYPE='BUY' ORDER BY m.timestamp ASC");
         query.setParameter("trading", trading);
 
         return query.getResultList();
