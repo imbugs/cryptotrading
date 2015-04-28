@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <parameters NAME="Parameter1" STRING="Text1" VALUE="1"/>
+    <parameters NAME="Parameter2" STRING="Text2" VALUE="2"/>
+</dataset>

@@ -3,7 +3,6 @@ package com.crypto.dao;
 import com.crypto.entities.MarketOrder;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
-import org.yaml.snakeyaml.error.Mark;
 
 import java.io.Serializable;
 import java.util.List;
