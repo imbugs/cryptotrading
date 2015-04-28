@@ -32,7 +32,7 @@ import static junit.framework.TestCase.assertNotNull;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class MarketOrderDaoTest {
+public class MarketOrderDaoTest_IT {
 
     @Inject
     private MarketOrderDao marketOrderDao;

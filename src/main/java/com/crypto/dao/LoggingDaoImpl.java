@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.crypto.entities.LoggingLevel.*;
 
@@ -20,7 +21,7 @@ import static com.crypto.entities.LoggingLevel.*;
  * Created by Jan Wicherink on 18-4-15.
  */
 @Stateful
-public class LoggingDaoImpl implements LoggingDa0 {
+public class LoggingDaoImpl implements LoggingDao {
 
 
     private static final long serialVersionUID = 6177946802223896971L;
@@ -28,19 +29,38 @@ public class LoggingDaoImpl implements LoggingDa0 {
     @PersistenceContext
     EntityManager em;
 
+    private static final Logger LOG = Logger.getLogger(LoggingDaoImpl.class.getName());
+
+
     @Override
-    public void persist(Logging logging) {
+    public void persist(final Logging logging) {
+
+        LOG.info ("Persisting logging id:" + logging.getIndex());
+        LOG.info ("Level :" + logging.getLevel());
+        LOG.info ("Trading id:" + logging.getTrading().getId());
+        LOG.info ("Timestamp:" + logging.getTimestamp());
+
         em.persist(logging);
     }
 
+
     @Override
-    public List<Logging> getAll(Trading trading, LoggingLevel level) {
+    public Logging get(Integer index) {
+        final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.index= :index");
+        query.setParameter("index", index);
+
+        return query.getSingleResult();
+    }
+
+
+    @Override
+    public List<Logging> getAll(final Trading trading, final LoggingLevel level) {
 
         String inClause = null;
 
         switch (level) {
             case DEBUG:
-                inClause = "('DEBUG', 'INFO', 'WARNING', 'ERROR')";
+                inClause = "(DEBUG', 'INFO', 'WARNING', 'ERROR')";
                 break;
             case INFO:
                 inClause = "('INFO', 'WARNING', 'ERROR')";
@@ -56,8 +76,9 @@ public class LoggingDaoImpl implements LoggingDa0 {
                 break;
         }
 
-        final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.trading= :trading AND l.level IN " + inClause);
+        final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.trading= :trading AND l.level IN :inClause");
         query.setParameter("trading", trading);
+        query.setParameter("inClause", inClause);
 
         return query.getResultList();
     }

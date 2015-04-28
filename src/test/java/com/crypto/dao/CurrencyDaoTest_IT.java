@@ -28,6 +28,8 @@ public class CurrencyDaoTest_IT {
     @Inject
     private CurrencyDao currencyDao;
 
+
+
     @Deployment
     public static Archive<?> createDeployment() {
 

@@ -21,7 +21,7 @@ public class Logging {
     private Integer index;
 
     @Column(name="LEVEL")
-    private LoggingLevel level;
+    private String level;
 
     @Column (name="MESSAGE")
     private String messsage;
@@ -34,7 +34,7 @@ public class Logging {
      * @param level the logging leve
      * @param messsage the logging message
      */
-    public Logging(Timestamp timestamp, Trading trading, Integer index, LoggingLevel level, String messsage) {
+    public Logging(Timestamp timestamp, Trading trading, Integer index, String level, String messsage) {
         this.timestamp = timestamp;
         this.trading = trading;
         this.index = index;
@@ -54,7 +54,7 @@ public class Logging {
         return index;
     }
 
-    public LoggingLevel getLevel() {
+    public String getLevel() {
         return level;
     }
 

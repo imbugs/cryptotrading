@@ -33,6 +33,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
      * @param currency the currency to be updated
      */
     public Currency update(Currency currency) {
+
         return em.merge(currency);
     }
 
