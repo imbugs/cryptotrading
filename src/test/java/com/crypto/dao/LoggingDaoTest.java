@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 
 
 /**
@@ -53,25 +52,73 @@ public class LoggingDaoTest {
 
     @Test
     @UsingDataSet("datasets/it_test_dataset_9.xml")
-    public void testPersist () {
+    public void testPersist() {
 
         final Trading trading = tradingDao.get(1);
 
-        assertEquals(new Integer(1),trading.getId());
+        assertEquals(new Integer(1), trading.getId());
 
         final Calendar calendar = Calendar.getInstance();
         final Timestamp timestamp = new Timestamp(calendar.getTime().getTime());
 
-        final Logging logging = new Logging(timestamp,trading, 1, LoggingLevel.INFO.toString(), "LOGGING1");
+        final Logging logging = new Logging(timestamp, trading, 1, LoggingLevel.INFO.toString(), "LOGGING1");
 
         loggingDao.persist(logging);
 
-      //  final List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.INFO);
+        final Logging loggingPersisted = loggingDao.get(1);
 
-         final Logging loggingPersisted= loggingDao.get(1);
+        assertEquals(new Integer(1), loggingPersisted.getIndex());
+    }
 
-         assertEquals(new Integer(1), loggingPersisted.getIndex());
 
- //       assertEquals ("LOGGING1", loggings.get(0).getMesssage());
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_10.xml")
+    public void testGetAllInfoLevel() {
+
+        final Trading trading = tradingDao.get(1);
+
+        List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.INFO);
+
+        assertEquals(3, loggings.size());
+        assertEquals("INFO", loggings.get(0).getMesssage());
+    }
+
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_10.xml")
+    public void testGetAllWarningLevel() {
+
+        final Trading trading = tradingDao.get(1);
+
+        List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.WARNING);
+
+        assertEquals(2, loggings.size());
+        assertEquals("WARNING", loggings.get(0).getMesssage());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_10.xml")
+    public void testGetAllDebugLevel() {
+
+        final Trading trading = tradingDao.get(1);
+
+        List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.DEBUG);
+
+        assertEquals(4, loggings.size());
+        assertEquals("DEBUG", loggings.get(3).getMesssage());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_10.xml")
+    public void testGetAllErrorLevel() {
+
+        final Trading trading = tradingDao.get(1);
+
+        List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.ERROR);
+
+        assertEquals(1, loggings.size());
+
+        assertEquals("ERROR", loggings.get(0).getMesssage());
     }
 }
+

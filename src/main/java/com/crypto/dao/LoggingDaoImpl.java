@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -56,27 +57,38 @@ public class LoggingDaoImpl implements LoggingDao {
     @Override
     public List<Logging> getAll(final Trading trading, final LoggingLevel level) {
 
-        String inClause = null;
+        List<String> inClause = new ArrayList<String>();
 
         switch (level) {
             case DEBUG:
-                inClause = "(DEBUG', 'INFO', 'WARNING', 'ERROR')";
+                inClause.add("DEBUG");
+                inClause.add("INFO");
+                inClause.add("WARNING");
+                inClause.add("ERROR");
                 break;
             case INFO:
-                inClause = "('INFO', 'WARNING', 'ERROR')";
+                inClause.add("INFO");
+                inClause.add("WARNING");
+                inClause.add("ERROR");
                 break;
             case WARNING:
-                inClause = "('WARNING', 'ERROR')";
+                inClause.add("WARNING");
+                inClause.add("ERROR");
                 break;
             case ERROR:
-                inClause = "('ERROR')";
+                inClause.add("ERROR");
                 break;
             default:
-                inClause = "('INFO', 'WARNING', 'ERROR')";
+                inClause.add("INFO");
+                inClause.add("WARNING");
+                inClause.add("ERROR");
                 break;
         }
 
-        final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.trading= :trading AND l.level IN :inClause");
+        LOG.info("Trading id:" + trading.getId());
+        LOG.info ("Level:" + level.toString());
+
+        final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.trading= :trading AND l.level IN (:inClause)");
         query.setParameter("trading", trading);
         query.setParameter("inClause", inClause);
 

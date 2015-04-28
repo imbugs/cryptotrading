@@ -42,6 +42,9 @@ public class Logging {
         this.messsage = messsage;
     }
 
+    public Logging() {
+    }
+
     public Timestamp getTimestamp() {
         return timestamp;
     }

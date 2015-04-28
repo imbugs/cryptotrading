@@ -10,8 +10,7 @@ import java.io.Serializable;
 @Table(name="PARAMETERS")
 public class Parameter implements Serializable {
 
-   // TODO: Change
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1162570804717107341L;
 
     @Id
     @Column(name="NAME")

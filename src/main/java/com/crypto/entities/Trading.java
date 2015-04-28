@@ -72,7 +72,6 @@ public class Trading implements Serializable {
 
     }
 
-
     public Trading(Integer id, Float minTradingCryptoCurrency, Float maxTradingCoinsPerc, Float maxTradingCryptoCoinsPerc, Float refundPercentage, Boolean checkBadBuy, Boolean checkBadSell, Boolean checkBadSellWallet, Float minProfitPercentage, Boolean enabled, Boolean logging, Integer retries, TradePair tradePair) {
         this.id = id;
         this.minTradingCryptoCurrency = minTradingCryptoCurrency;
