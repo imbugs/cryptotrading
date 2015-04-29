@@ -32,7 +32,7 @@ import static junit.framework.TestCase.assertEquals;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class LoggingDaoTest {
+public class LoggingDaoTest_IT {
 
     @Inject
     private LoggingDao loggingDao;

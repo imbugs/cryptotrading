@@ -14,10 +14,14 @@ import javax.persistence.Id;
 public class TradeRule {
 
     @Id
+    @Column (name="ID")
     private Integer Id;
 
+    @Column(name="TYPE")
+    private MarketEnum type;
+
     @Column(name="MARKET") 
-    private String market;
+    private MarketEnum market;
 
     @Column(name="DESCRIPTION")
     private String description;
@@ -28,12 +32,14 @@ public class TradeRule {
     /**
      * Constructor
      * @param id trade rule identification
+     * @param type the type of market
      * @param market the market of the trade rule
      * @param description description of the trade rule
      * @param enabled true when activated, false otherwise
      */
-    public TradeRule(Integer id, String market, String description, Boolean enabled) {
+    public TradeRule(final Integer id, final MarketEnum type, final MarketEnum market, final String description, final Boolean enabled) {
         Id = id;
+        this.type = type;
         this.market = market;
         this.description = description;
         this.enabled = enabled;
@@ -43,7 +49,11 @@ public class TradeRule {
         return Id;
     }
 
-    public String getMarket() {
+    public MarketEnum getType() {
+        return type;
+    }
+
+    public MarketEnum getMarket() {
         return market;
     }
 

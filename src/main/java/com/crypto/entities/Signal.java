@@ -12,11 +12,11 @@ public class Signal {
     @GeneratedValue
     private Integer id;
 
-    @Column(name="MARKET_TYPE")
-    private MarketType marketType;
-
     @Column (name="INDX")
     private Integer indx;
+
+    @Column(name="SIGNAL")
+    private MarketEnum signal;
 
     @ManyToOne
     @JoinColumn (name="TRADERULE_ID")
@@ -29,14 +29,14 @@ public class Signal {
     /**
      * The signal for a bull or bear situation
      * @param id the id of the signal
-     * @param marketType the signal type, bull or bear
+     * @param signal the signal type, bull or bear
      * @param indx the index at which the signal is raised
      * @param tradeRule the traderule responsible for this signal
      * @param trading the trading applicable for this signal
      */
-    public Signal(Integer id, MarketType marketType, Integer indx, TradeRule tradeRule, Trading trading) {
+    public Signal(Integer id, MarketEnum signal, Integer indx, TradeRule tradeRule, Trading trading) {
         this.id = id;
-        this.marketType = marketType;
+        this.signal = signal;
         this.indx = indx;
         this.tradeRule = tradeRule;
         this.trading = trading;
@@ -46,8 +46,8 @@ public class Signal {
         return id;
     }
 
-    public MarketType getMarketType() {
-        return marketType;
+    public MarketEnum getSignal() {
+        return signal;
     }
 
     public Integer getIndx() {

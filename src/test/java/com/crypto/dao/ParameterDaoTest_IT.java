@@ -29,7 +29,7 @@ import javax.inject.Inject;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class ParameterDaoTest {
+public class ParameterDaoTest_IT {
 
     @Inject
     private ParameterDao parameterDao;

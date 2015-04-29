@@ -143,4 +143,53 @@ public class Trading implements Serializable {
     public Integer getId() {
         return id;
     }
+
+
+    public void setMinTradingCryptoCurrency(Float minTradingCryptoCurrency) {
+        this.minTradingCryptoCurrency = minTradingCryptoCurrency;
+    }
+
+    public void setMaxTradingCoinsPerc(Float maxTradingCoinsPerc) {
+        this.maxTradingCoinsPerc = maxTradingCoinsPerc;
+    }
+
+    public void setMaxTradingCryptoCoinsPerc(Float maxTradingCryptoCoinsPerc) {
+        this.maxTradingCryptoCoinsPerc = maxTradingCryptoCoinsPerc;
+    }
+
+    public void setRefundPercentage(Float refundPercentage) {
+        this.refundPercentage = refundPercentage;
+    }
+
+    public void setCheckBadBuy(Boolean checkBadBuy) {
+        this.checkBadBuy = checkBadBuy;
+    }
+
+    public void setCheckBadSell(Boolean checkBadSell) {
+        this.checkBadSell = checkBadSell;
+    }
+
+    public void setCheckBadSellWallet(Boolean checkBadSellWallet) {
+        this.checkBadSellWallet = checkBadSellWallet;
+    }
+
+    public void setMinProfitPercentage(Float minProfitPercentage) {
+        this.minProfitPercentage = minProfitPercentage;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setLogging(Boolean logging) {
+        this.logging = logging;
+    }
+
+    public void setRetries(Integer retries) {
+        this.retries = retries;
+    }
+
+    public void setTradePair(TradePair tradePair) {
+        this.tradePair = tradePair;
+    }
 }

@@ -5,13 +5,13 @@ package com.crypto.entities;
  *
  * Created by Jan Wicherink on 29-4-2015.
  */
-public enum MarketType {
+public enum MarketEnum {
 
     BEAR("BEAR"), BULL("BULL");
 
     private String signalType;
 
-    MarketType(final String signalType) {
+    MarketEnum(final String signalType) {
         this.signalType = signalType;
     }
 

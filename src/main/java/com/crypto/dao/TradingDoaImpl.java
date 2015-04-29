@@ -6,6 +6,8 @@ import com.crypto.entities.TradingSite;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -26,23 +28,29 @@ public class TradingDoaImpl implements TradingDao {
 
     @Override
     public List<Trading> getAll() {
+        TypedQuery<Trading> query = (TypedQuery<Trading>) em.createQuery("SELECT t FROM Trading t");
 
-        return null;
+        return  query.getResultList();
     }
 
     @Override
     public List<Trading> getActiveTradings() {
+        TypedQuery<Trading> query = (TypedQuery<Trading>) em.createQuery("SELECT t FROM Trading t WHERE t.enabled = 1");
 
-        return null;
+        return  query.getResultList();
     }
 
     @Override
     public List<Trading> getActiveTradingsOfTradingSite(TradingSite tradingSite) {
-        return null;
+        TypedQuery<Trading> query = (TypedQuery<Trading>) em.createQuery("SELECT t FROM Trading t, TradePair p WHERE t.tradePair.id = p.id  AND t.enabled = 1 AND p.tradingSite = :tradingSite");
+        query.setParameter("tradingSite", tradingSite);
+
+        return  query.getResultList();
     }
 
     @Override
     public void update(Trading trading) {
 
+        em.merge(trading);
     }
 }

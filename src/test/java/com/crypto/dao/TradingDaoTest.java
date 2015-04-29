@@ -1,14 +1,10 @@
 package com.crypto.dao;
 
 import com.crypto.entities.Trading;
-import com.crypto.dao.TradingDao;
-
+import com.crypto.entities.TradingSite;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.Cleanup;
-import org.jboss.arquillian.persistence.CleanupUsingScript;
-import org.jboss.arquillian.persistence.PersistenceTest;
-import org.jboss.arquillian.persistence.TestExecutionPhase;
+import org.jboss.arquillian.persistence.*;
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
@@ -20,8 +16,13 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
+
 /**
- * Created by jan on 26-4-15.
+ * Created by Jan Wicherink on 26-4-15.
  */
 @RunWith(Arquillian.class)
 @PersistenceTest
@@ -33,8 +34,8 @@ public class TradingDaoTest {
     @Inject
     private TradingDao tradingDao;
 
-        @Deployment
-        public static Archive<?> createDeployment() {
+    @Deployment
+    public static Archive<?> createDeployment() {
 
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage((Trading.class).getPackage())
@@ -45,10 +46,58 @@ public class TradingDaoTest {
     }
 
     @Test
+    @UsingDataSet("datasets/it_test_dataset_11.xml")
     public void testGet() {
-         final Trading trading = tradingDao.get(1);
+        final Trading trading = tradingDao.get(1);
 
+        assertEquals(new Integer(1), trading.getId());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_11.xml")
+    public void testGetAll() {
+        final List<Trading> tradings = tradingDao.getAll();
+
+        assertEquals(3, tradings.size());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_11.xml")
+    public void testGetActiveTradings() {
+        final List<Trading> tradings = tradingDao.getActiveTradings();
+
+        assertEquals(2, tradings.size());
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_11.xml")
+    public void testGetActiveTradingsOfTradingSite() {
+
+        final TradingSite tradingSite = new TradingSite();
+        tradingSite.setCode("BTCE");
+
+        final List<Trading> tradings = tradingDao.getActiveTradingsOfTradingSite(tradingSite);
+
+        assertEquals(2, tradings.size());
     }
 
 
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_11.xml")
+    public void testUpdate() {
+
+        final Trading trading = tradingDao.get(1);
+
+        trading.setMaxTradingCoinsPerc(99F);
+        trading.setMinProfitPercentage(1F);
+        trading.setRefundPercentage(23F);
+
+        tradingDao.update(trading);
+
+        tradingDao.get(1);
+
+        assertEquals(new Float(99), trading.getMaxTradingCoinsPerc());
+        assertEquals(new Float(1), trading.getMinProfitPercentage());
+        assertEquals(new Float(23), trading.getRefundPercentage());
+    }
 }

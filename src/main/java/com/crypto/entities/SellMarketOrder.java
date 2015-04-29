@@ -3,7 +3,6 @@ package com.crypto.entities;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.sql.Timestamp;
 
 /**
@@ -52,6 +51,6 @@ public class SellMarketOrder extends MarketOrder {
 
     public String getOrderType () {
 
-        return OrderType.SELL.toString().toLowerCase();
+        return OrderTypeEnum.SELL.toString().toLowerCase();
     }
 }
