@@ -81,7 +81,6 @@ public class TradingDaoTest {
         assertEquals(2, tradings.size());
     }
 
-
     @Test
     @UsingDataSet("datasets/it_test_dataset_11.xml")
     public void testUpdate() {

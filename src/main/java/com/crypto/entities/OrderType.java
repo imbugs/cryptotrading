@@ -1,8 +1,10 @@
 package com.crypto.entities;
 
 /**
+ * Order Type
+ *
  * Created by Jan Wicherink on 19-4-15.
  */
-public enum OrderTypeEnum {
+public enum OrderType {
     SELL, BUY
 }

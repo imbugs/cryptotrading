@@ -16,7 +16,7 @@ public class Signal {
     private Integer indx;
 
     @Column(name="SIGNAL")
-    private MarketEnum signal;
+    private Market signal;
 
     @ManyToOne
     @JoinColumn (name="TRADERULE_ID")
@@ -34,7 +34,7 @@ public class Signal {
      * @param tradeRule the traderule responsible for this signal
      * @param trading the trading applicable for this signal
      */
-    public Signal(Integer id, MarketEnum signal, Integer indx, TradeRule tradeRule, Trading trading) {
+    public Signal(Integer id, Market signal, Integer indx, TradeRule tradeRule, Trading trading) {
         this.id = id;
         this.signal = signal;
         this.indx = indx;
@@ -46,7 +46,7 @@ public class Signal {
         return id;
     }
 
-    public MarketEnum getSignal() {
+    public Market getSignal() {
         return signal;
     }
 

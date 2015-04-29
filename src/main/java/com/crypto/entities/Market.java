@@ -5,16 +5,23 @@ package com.crypto.entities;
  *
  * Created by Jan Wicherink on 29-4-2015.
  */
-public enum MarketEnum {
+public enum Market {
 
     BEAR("BEAR"), BULL("BULL");
 
-    private String signalType;
+    final private String signalType;
 
-    MarketEnum(final String signalType) {
+    /**
+     * Constructor
+     *
+     * @param signalType the signal type
+     */
+    Market(final String signalType) {
+
         this.signalType = signalType;
     }
 
+    @Override
     public String toString () {
         return signalType;
     }

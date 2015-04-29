@@ -11,7 +11,7 @@ public enum TrendType {
     EMA("EMA"),  // Exponential Moving Average
     SMA("SMA");  // Smoothing Moving Average
 
-    private String code;
+    final private String code;
 
     TrendType(String code) {
         this.code = code;

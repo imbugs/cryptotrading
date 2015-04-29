@@ -1,15 +1,21 @@
 package com.crypto.entities;
 
 /**
- * Created by Jan Wicheirnk on 18-4-15.
+ * The Logging Level
+ *
+ * Created by Jan Wicherink on 18-4-15.
  */
 public enum LoggingLevel {
 
     DEBUG("DEBUG"), INFO("INFO"), WARNING ("WARNING"), ERROR("ERROR");
 
-    private String code;
+    final private String code;
 
-    LoggingLevel(String code) {
+    /**
+     * Constructor
+     * @param code the logging level code
+     */
+    LoggingLevel(final String code) {
 
         this.code = code;
     }

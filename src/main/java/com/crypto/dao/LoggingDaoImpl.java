@@ -16,8 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.crypto.entities.LoggingLevel.*;
-
 /**
  * Created by Jan Wicherink on 18-4-15.
  */

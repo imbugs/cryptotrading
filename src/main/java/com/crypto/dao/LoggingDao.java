@@ -3,7 +3,6 @@ package com.crypto.dao;
 import com.crypto.entities.Logging;
 import com.crypto.entities.LoggingLevel;
 import com.crypto.entities.Trading;
-import sun.rmi.runtime.Log;
 
 import java.util.Date;
 import java.util.List;

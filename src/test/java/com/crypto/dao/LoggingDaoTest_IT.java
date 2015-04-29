@@ -3,7 +3,6 @@ package com.crypto.dao;
 import com.crypto.entities.Logging;
 import com.crypto.entities.LoggingLevel;
 import com.crypto.entities.Trading;
-import junit.framework.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;

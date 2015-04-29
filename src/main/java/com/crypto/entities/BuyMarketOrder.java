@@ -52,6 +52,6 @@ public class BuyMarketOrder extends MarketOrder {
 
     public String getOrderType () {
 
-        return OrderTypeEnum.BUY.toString().toLowerCase();
+        return OrderType.BUY.toString().toLowerCase();
     }
 }
