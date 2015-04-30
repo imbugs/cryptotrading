@@ -1,5 +1,6 @@
 package com.crypto.entities;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 

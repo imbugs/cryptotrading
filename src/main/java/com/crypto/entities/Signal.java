@@ -1,22 +1,30 @@
 package com.crypto.entities;
 
+import com.crypto.entities.MarketTrend;
+import com.crypto.entities.TradeRule;
+import com.crypto.entities.Trading;
+
 import javax.persistence.*;
 
 /**
+ * Signal, a signal represents a BEAR or BULL situation
  * Created by Jan Wicherink on 29-4-2015.
  */
 @Entity
+@Table (name="SIGNALS")
 public class Signal {
 
     @Id
     @GeneratedValue
+    @Column (name="ID")
     private Integer id;
 
     @Column (name="INDX")
     private Integer indx;
 
     @Column(name="SIGNAL")
-    private Market signal;
+    @Enumerated(EnumType.STRING)
+    private MarketTrend signal;
 
     @ManyToOne
     @JoinColumn (name="TRADERULE_ID")
@@ -34,7 +42,7 @@ public class Signal {
      * @param tradeRule the traderule responsible for this signal
      * @param trading the trading applicable for this signal
      */
-    public Signal(Integer id, Market signal, Integer indx, TradeRule tradeRule, Trading trading) {
+    public Signal(Integer id, MarketTrend signal, Integer indx, TradeRule tradeRule, Trading trading) {
         this.id = id;
         this.signal = signal;
         this.indx = indx;
@@ -42,11 +50,18 @@ public class Signal {
         this.trading = trading;
     }
 
+    /**
+     * Default constructor
+     */
+    public Signal() {
+
+    }
+
     public Integer getId() {
         return id;
     }
 
-    public Market getSignal() {
+    public MarketTrend getSignal() {
         return signal;
     }
 

@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
+ * Logging
+ *
  * Created by jan on 18-4-15.
  */
 @Entity

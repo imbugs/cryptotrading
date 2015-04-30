@@ -1,9 +1,6 @@
 package com.crypto.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Trade rule, a rule for trading
@@ -20,10 +17,12 @@ public class TradeRule {
     private Integer Id;
 
     @Column(name="TYPE")
-    private Market type;
+    @Enumerated (EnumType.STRING)
+    private MarketTrend type;
 
-    @Column(name="MARKET") 
-    private Market market;
+    @Column(name="MARKET")
+    @Enumerated (EnumType.STRING)
+    private MarketTrend marketTrend;
 
     @Column(name="DESCRIPTION")
     private String description;
@@ -33,16 +32,17 @@ public class TradeRule {
 
     /**
      * Constructor
+     *
      * @param id trade rule identification
      * @param type the type of market
-     * @param market the market of the trade rule
+     * @param marketTrend the market of the trade rule
      * @param description description of the trade rule
      * @param enabled true when activated, false otherwise
      */
-    public TradeRule(final Integer id, final Market type, final Market market, final String description, final Boolean enabled) {
+    public TradeRule(final Integer id, final MarketTrend type, final MarketTrend marketTrend, final String description, final Boolean enabled) {
         Id = id;
         this.type = type;
-        this.market = market;
+        this.marketTrend = marketTrend;
         this.description = description;
         this.enabled = enabled;
     }
@@ -58,12 +58,12 @@ public class TradeRule {
         return Id;
     }
 
-    public Market getType() {
+    public MarketTrend getType() {
         return type;
     }
 
-    public Market getMarket() {
-        return market;
+    public MarketTrend getMarketTrend() {
+        return marketTrend;
     }
 
     public String getDescription() {
@@ -78,12 +78,12 @@ public class TradeRule {
         Id = id;
     }
 
-    public void setType(Market type) {
+    public void setType(MarketTrend type) {
         this.type = type;
     }
 
-    public void setMarket(Market market) {
-        this.market = market;
+    public void setMarketTrend(MarketTrend marketTrend) {
+        this.marketTrend = marketTrend;
     }
 
     public void setDescription(String description) {

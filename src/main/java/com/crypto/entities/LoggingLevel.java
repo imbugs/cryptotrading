@@ -7,7 +7,10 @@ package com.crypto.entities;
  */
 public enum LoggingLevel {
 
-    DEBUG("DEBUG"), INFO("INFO"), WARNING ("WARNING"), ERROR("ERROR");
+    DEBUG("DEBUG"),
+    INFO("INFO"),
+    WARNING ("WARNING"),
+    ERROR("ERROR");
 
     final private String code;
 

@@ -28,8 +28,7 @@ public class SignalDaoImpl implements SignalDao {
     @Override
     public Signal get(final Integer indx, final TradeRule tradeRule, final Trading trading) {
 
-        //   final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.trading = :trading AND s.tradeRule = :tradeRule AND s.indx = :indx");
-        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE indx= :indx");
+        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.trading = :trading AND s.tradeRule = :tradeRule AND s.indx = :indx");
 
         query.setParameter("trading", trading);
         query.setParameter("tradeRule", tradeRule);

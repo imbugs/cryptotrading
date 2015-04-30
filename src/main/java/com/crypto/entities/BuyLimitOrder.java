@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import java.sql.Timestamp;
 
 /**
+ * Buy limit order, a buy order with an exchange rate limit.
  * Created by jan on 20-4-15.
  */
 @Entity

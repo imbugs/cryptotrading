@@ -5,9 +5,10 @@ package com.crypto.entities;
  *
  * Created by Jan Wicherink on 29-4-2015.
  */
-public enum Market {
+public enum MarketTrend {
 
-    BEAR("BEAR"), BULL("BULL");
+    BEAR("BEAR"),
+    BULL("BULL");
 
     final private String signalType;
 
@@ -16,7 +17,7 @@ public enum Market {
      *
      * @param signalType the signal type
      */
-    Market(final String signalType) {
+    MarketTrend(final String signalType) {
 
         this.signalType = signalType;
     }

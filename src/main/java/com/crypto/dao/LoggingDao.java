@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Logging Dao
+ *
  * Created by Jan Wicherink on 23-4-15.
  */
 public interface LoggingDao {
@@ -30,8 +32,7 @@ public interface LoggingDao {
      * @param trading the trading
      * @return the list of loggings of a trading
      */
-    public List<Logging> getAll(final Trading trading, LoggingLevel level);
-
+    public List<Logging> getAll(final Trading trading, final LoggingLevel level);
 
     /**
      * Delete all logging before a given date
