@@ -1,6 +1,8 @@
 package com.crypto.entities;
 
 
+import com.crypto.enums.TrendType;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

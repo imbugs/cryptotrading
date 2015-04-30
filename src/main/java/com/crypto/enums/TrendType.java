@@ -1,4 +1,4 @@
-package com.crypto.entities;
+package com.crypto.enums;
 
 /**
  * A trendtype, defines the kind of a trend in a currency exchange rate development

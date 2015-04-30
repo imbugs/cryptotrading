@@ -1,5 +1,9 @@
 package com.crypto.entities;
 
+import com.crypto.entities.CryptoCurrency;
+import com.crypto.entities.Currency;
+import com.crypto.entities.Trading;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

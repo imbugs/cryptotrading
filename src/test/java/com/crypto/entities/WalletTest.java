@@ -1,6 +1,6 @@
 package com.crypto.entities;
 
-import junit.framework.Assert;
+import com.crypto.entities.Wallet;
 import org.junit.Before;
 import org.junit.Test;
 

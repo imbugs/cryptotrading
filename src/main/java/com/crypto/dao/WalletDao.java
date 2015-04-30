@@ -3,7 +3,6 @@ package com.crypto.dao;
 import com.crypto.entities.Trading;
 import com.crypto.entities.Wallet;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 
 /**

@@ -1,5 +1,6 @@
 package com.crypto.entities;
 
+import com.crypto.enums.TrendType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

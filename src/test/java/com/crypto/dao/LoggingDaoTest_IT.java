@@ -1,7 +1,7 @@
 package com.crypto.dao;
 
 import com.crypto.entities.Logging;
-import com.crypto.entities.LoggingLevel;
+import com.crypto.enums.LoggingLevel;
 import com.crypto.entities.Trading;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;

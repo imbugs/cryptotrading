@@ -3,6 +3,7 @@ package com.crypto.dao;
 import com.crypto.entities.Signal;
 import com.crypto.entities.TradeRule;
 import com.crypto.entities.Trading;
+import com.crypto.enums.MarketTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -39,7 +40,7 @@ public class SignalDaoTest {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage(Signal.class.getPackage())
                 .addPackage((SignalDao.class).getPackage())
-                .addPackage((Trading.class).getPackage())
+                .addPackage((MarketTrend.class).getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
@@ -61,4 +62,19 @@ public class SignalDaoTest {
         assertEquals(new Integer(100), signal.getIndx());
     }
 
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_12.xml")
+    public void testGetLast() {
+
+        final TradeRule tradeRule = new TradeRule();
+        tradeRule.setId(2);
+
+        final Trading trading = new Trading();
+        trading.setId(1);
+
+        final Signal signal = signalDao.getLast(trading);
+
+        assertEquals(new Integer(102), signal.getIndx());
+    }
 }

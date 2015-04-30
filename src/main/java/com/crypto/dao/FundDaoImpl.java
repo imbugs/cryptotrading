@@ -3,12 +3,10 @@ package com.crypto.dao;
 import com.crypto.entities.Currency;
 import com.crypto.entities.Fund;
 import com.crypto.entities.TradePair;
-import com.crypto.entities.Wallet;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 

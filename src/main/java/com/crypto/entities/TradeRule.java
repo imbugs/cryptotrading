@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.enums.MarketTrend;
+
 import javax.persistence.*;
 
 /**

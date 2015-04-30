@@ -2,6 +2,7 @@ package com.crypto.dao;
 
 import com.crypto.entities.Trading;
 import com.crypto.entities.TradingSite;
+import com.crypto.enums.LoggingLevel;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -40,7 +41,7 @@ public class TradingDaoTest {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage((Trading.class).getPackage())
                 .addPackage((TradingDao.class).getPackage())
-                .addPackage((Trading.class).getPackage())
+                .addPackage((LoggingLevel.class).getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

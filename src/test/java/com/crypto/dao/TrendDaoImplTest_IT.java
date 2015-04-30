@@ -1,9 +1,7 @@
 package com.crypto.dao;
 
 
-import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Trend;
-import junit.framework.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;

@@ -1,4 +1,4 @@
-package com.crypto.entities;
+package com.crypto.enums;
 
 /**
  * Signal type indicating of the market is in a bull or bear situation

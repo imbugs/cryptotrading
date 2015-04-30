@@ -1,4 +1,4 @@
-package com.crypto.entities;
+package com.crypto.enums;
 
 /**
  * The Logging Level

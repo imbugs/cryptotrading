@@ -2,7 +2,7 @@ package com.crypto.dao;
 
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Logging;
-import com.crypto.entities.LoggingLevel;
+import com.crypto.enums.LoggingLevel;
 import com.crypto.entities.Trading;
 
 import javax.ejb.Stateful;
