@@ -1,5 +1,6 @@
 package com.crypto.entities;
 
+import com.crypto.entities.pkey.SignalPk;
 import com.crypto.enums.MarketTrend;
 
 import javax.persistence.*;
@@ -12,13 +13,8 @@ import javax.persistence.*;
 @Table (name="SIGNALS")
 public class Signal {
 
-    @Id
-    @GeneratedValue
-    @Column (name="ID")
-    private Integer id;
-
-    @Column (name="INDX")
-    private Integer indx;
+    @EmbeddedId
+    private SignalPk pk;
 
     @Column(name="SIGNAL")
     @Enumerated(EnumType.STRING)
@@ -28,24 +24,16 @@ public class Signal {
     @JoinColumn (name="TRADERULE_ID")
     private TradeRule tradeRule;
 
-    @ManyToOne
-    @JoinColumn (name="TRADING_ID")
-    private Trading trading;
-
     /**
      * The signal for a bull or bear situation
-     * @param id the id of the signal
      * @param signal the signal type, bull or bear
      * @param indx the index at which the signal is raised
      * @param tradeRule the traderule responsible for this signal
      * @param trading the trading applicable for this signal
      */
-    public Signal(Integer id, MarketTrend signal, Integer indx, TradeRule tradeRule, Trading trading) {
-        this.id = id;
+    public Signal(MarketTrend signal, Integer indx, TradeRule tradeRule, Trading trading) {
+        this.pk = new SignalPk(indx,trading);
         this.signal = signal;
-        this.indx = indx;
-        this.tradeRule = tradeRule;
-        this.trading = trading;
     }
 
     /**
@@ -55,16 +43,12 @@ public class Signal {
 
     }
 
-    public Integer getId() {
-        return id;
-    }
-
     public MarketTrend getSignal() {
         return signal;
     }
 
     public Integer getIndx() {
-        return indx;
+        return pk.getIndex();
     }
 
     public TradeRule getTradeRule() {
@@ -72,6 +56,6 @@ public class Signal {
     }
 
     public Trading getTrading() {
-        return trading;
+        return pk.getTrading();
     }
 }

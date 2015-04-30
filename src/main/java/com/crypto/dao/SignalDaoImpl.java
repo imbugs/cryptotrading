@@ -28,7 +28,7 @@ public class SignalDaoImpl implements SignalDao {
     @Override
     public Signal get(final Integer indx, final TradeRule tradeRule, final Trading trading) {
 
-        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.trading = :trading AND s.tradeRule = :tradeRule AND s.indx = :indx");
+        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.pk.trading = :trading AND s.tradeRule = :tradeRule AND s.pk.index = :indx");
 
         query.setParameter("trading", trading);
         query.setParameter("tradeRule", tradeRule);
@@ -40,7 +40,7 @@ public class SignalDaoImpl implements SignalDao {
     @Override
     public Signal getLast(Trading trading) {
 
-        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.trading = :trading AND s.indx = (SELECT MAX(s2.indx) FROM Signal s2 WHERE s2.trading = :trading)");
+        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.pk.trading = :trading AND s.pk.index = (SELECT MAX(s2.pk.index) FROM Signal s2 WHERE s2.pk.trading = :trading)");
         query.setParameter("trading", trading);
 
         return query.getSingleResult();
