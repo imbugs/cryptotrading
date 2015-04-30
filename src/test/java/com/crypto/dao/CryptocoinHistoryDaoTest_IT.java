@@ -17,8 +17,10 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class CryptocoinHistoryDaoTest_IT {
 
     @Test
     @UsingDataSet("datasets/it_test_dataset_1.xml")
-    public void testPersistCryptocoinHistory() {
+    public void testPersistCryptocoinHistory() throws ParseException {
 
         final Currency dollar = currencyDao.get("DLR");
         assertNotNull(dollar);
@@ -72,7 +74,10 @@ public class CryptocoinHistoryDaoTest_IT {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(tradePair, 230F, 240F, 200F, 250F, 1000L);
+        final Calendar calendar = Calendar.getInstance();
+        final Timestamp timestamp = new Timestamp(calendar.getTime().getTime());
+
+        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(100, timestamp, tradePair, 230F, 240F, 200F, 250F, 1000L);
 
         cryptocoinHistoryDao.persist(cryptocoinHistory);
 

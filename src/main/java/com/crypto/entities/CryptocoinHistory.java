@@ -1,6 +1,11 @@
 package com.crypto.entities;
 
-import javax.persistence.*;
+import com.crypto.entities.pkey.CrytptocoinHistoryPk;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -13,10 +18,8 @@ public class CryptocoinHistory implements Serializable {
 
     private static final long serialVersionUID = -7267559706573006370L;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "INDX")
-    private Integer indx;
+    @EmbeddedId
+    private CrytptocoinHistoryPk pk;
 
     @Column(name = "TIMESTAMP")
     private Timestamp timestamp;
@@ -26,10 +29,6 @@ public class CryptocoinHistory implements Serializable {
 
     // Timestamp format with date only
     public static String TIMESTAMP_FORMAT_DATE = "yyyy-MM-dd";
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "TRADE_PAIR_ID", nullable = false, updatable = false)
-    private TradePair tradePair;
 
     @Column(name = "OPEN")
     private Float open;
@@ -62,9 +61,10 @@ public class CryptocoinHistory implements Serializable {
      * @param volume    the volume of the trading
      */
     public CryptocoinHistory(Integer indx, Timestamp timestamp, TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
-        this.indx = indx;
+
+        this.pk = new CrytptocoinHistoryPk(indx, tradePair);
+
         this.timestamp = timestamp;
-        this.tradePair = tradePair;
         this.open = open;
         this.low = low;
         this.high = high;
@@ -72,27 +72,13 @@ public class CryptocoinHistory implements Serializable {
         this.volume = volume;
     }
 
-    /**
-     * Cryptocoin history
-     *
-     * @param tradePair the tradepair belonging to the history
-     * @param open      the opening exchange rate
-     * @param low       the lowest exchange rate
-     * @param high      the highest exchange rate
-     * @param close     the closing exchange rate
-     * @param volume    the volume of the trading
-     */
-    public CryptocoinHistory(TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
-        this.tradePair = tradePair;
-        this.open = open;
-        this.low = low;
-        this.high = high;
-        this.close = close;
-        this.volume = volume;
-    }
 
     public Integer getIndx() {
-        return indx;
+        return this.pk.getIndx();
+    }
+
+    public TradePair getTradePair() {
+        return this.pk.getTradePair();
     }
 
     public Float getOpen() {
@@ -105,11 +91,6 @@ public class CryptocoinHistory implements Serializable {
 
     public Float getHigh() {
         return high;
-    }
-
-
-    public TradePair getTradePair() {
-        return tradePair;
     }
 
     public Float getClose() {

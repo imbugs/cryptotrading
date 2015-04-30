@@ -2,6 +2,7 @@ package com.crypto.dao;
 
 import com.crypto.entities.Trading;
 import com.crypto.entities.TradingSite;
+import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -42,6 +43,7 @@ public class TradingDaoTest {
                 .addPackage((Trading.class).getPackage())
                 .addPackage((TradingDao.class).getPackage())
                 .addPackage((LoggingLevel.class).getPackage())
+                .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

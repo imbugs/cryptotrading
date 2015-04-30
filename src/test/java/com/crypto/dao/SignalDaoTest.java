@@ -3,6 +3,7 @@ package com.crypto.dao;
 import com.crypto.entities.Signal;
 import com.crypto.entities.TradeRule;
 import com.crypto.entities.Trading;
+import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.MarketTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -41,6 +42,7 @@ public class SignalDaoTest {
                 .addPackage(Signal.class.getPackage())
                 .addPackage((SignalDao.class).getPackage())
                 .addPackage((MarketTrend.class).getPackage())
+                .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
