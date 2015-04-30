@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.entities.pkey.FundPk;
+
 import javax.persistence.*;
 
 /**
@@ -10,26 +12,16 @@ import javax.persistence.*;
 @Table(name="FUNDS")
 public class Fund {
 
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue
-    private Integer Id;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn (name = "TRADE_PAIR_ID", nullable=false, updatable=false)
-    private TradePair tradepair;
+    @EmbeddedId
+    private FundPk pk;
 
     @Column(name="COINS")
     private Float coins;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn (name = "CURRENCY", nullable=false, updatable=false)
-    private Currency currency;
-
     public Fund(TradePair tradepair, Float coins, Currency currency) {
-        this.tradepair = tradepair;
+
+        this.pk    = new FundPk(tradepair, currency);
         this.coins = coins;
-        this.currency = currency;
     }
 
     public Fund() {
@@ -46,11 +38,7 @@ public class Fund {
     }
 
     public TradePair getTradepair() {
-        return tradepair;
-    }
-
-    public void setTradepair(TradePair tradepair) {
-        this.tradepair = tradepair;
+        return this.pk.getTradepair();
     }
 
     public Float getCoins() {
@@ -62,10 +50,6 @@ public class Fund {
     }
 
     public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+        return this.pk.getCurrency();
     }
 }
