@@ -1,0 +1,50 @@
+-- phpMyAdmin SQL Dump
+-- version 3.3.5
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: May 01, 2015 at 03:51 AM
+-- Server version: 5.1.36
+-- PHP Version: 5.3.26
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `ctp_trading`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TRADE_CONDITION_LOG`
+--
+
+CREATE TABLE IF NOT EXISTS `TRADE_CONDITION_LOG` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `TRADING_ID` int(11) NOT NULL,
+  `INDX1` int(11) DEFAULT NULL,
+  `INDX2` int(11) NOT NULL,
+  `TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `EXPRESSION` varchar(5) NOT NULL,
+  `TRADE_CONDITION_ID` int(11) NOT NULL,
+  `TYPE` varchar(20) NOT NULL,
+  `MACD_VALUE` float DEFAULT NULL,
+  `TREND_VALUE` float DEFAULT NULL,
+  `DELTA_VALUE` float DEFAULT NULL,
+  `EXCHANGE_RATE` float DEFAULT NULL,
+  `REFERENCE_MACD_VALUE` float DEFAULT NULL,
+  `REFERENCE_TREND_VALUE` float DEFAULT NULL,
+  `PERCENTAGE` float DEFAULT NULL,
+  `THRESHOLD` float DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `TRADE_CONDITION_LOG`
+--
