@@ -15,7 +15,6 @@ public class BuyLimitOrder extends LimitOrder {
     /**
      * Constructor
      *
-     * @param id                  the id
      * @param orderReference      our order reference of the order
      * @param index               the index of the order
      * @param trading             the trading
@@ -28,7 +27,7 @@ public class BuyLimitOrder extends LimitOrder {
      * @param stopLossRate        exchange rate to sell or buy the order to limit the loss
      * @param timestampEndOfOrder closing timestamp of the order
      */
-    public BuyLimitOrder(Integer id, String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder) {
-        super(id, orderReference, index, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated, stopLossRate, timestampEndOfOrder);
+    public BuyLimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder) {
+        super(orderReference, index, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated, stopLossRate, timestampEndOfOrder);
     }
 }

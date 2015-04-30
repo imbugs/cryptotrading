@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
- * Primary key of Fund
+ * Composite primary key of Fund
  *
  * Created by Jan Wicherink on 30-4-15.
  */

@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.entities.pkey.LimitOrderPk;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -14,19 +16,11 @@ import java.sql.Timestamp;
 @DiscriminatorColumn(name = "ORDER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class LimitOrder {
 
-    @Id
-    @Column (name="ID")
-    private Integer Id;
+    @EmbeddedId
+    LimitOrderPk pk;
 
     @Column (name="ORDER_REFERENCE")
     private String orderReference;
-
-    @Column (name="INDX")
-    private Integer index;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn (name="TRADING_ID", nullable = false, updatable = true)
-    private Trading trading;
 
     @Column (name="TIMESTAMP")
     private Timestamp timestamp;
@@ -54,7 +48,6 @@ public class LimitOrder {
 
     /**
      * Constructor
-     * @param id the id
      * @param index the index of the order
      * @param orderReference our order reference of the order
      * @param trading the trading
@@ -67,11 +60,10 @@ public class LimitOrder {
      * @param stopLossRate exchange rate to sell or buy the order to limit the loss
      * @param timestampEndOfOrder closing timestamp of the order
      */
-    public LimitOrder(Integer id, String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder) {
-        Id = id;
+    public LimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder) {
+
+        this.pk = new LimitOrderPk(index, trading);
         this.orderReference = orderReference;
-        this.index = index;
-        this.trading = trading;
         this.timestamp = timestamp;
         this.exchangeRate = exchangeRate;
         this.fee = fee;
@@ -87,11 +79,11 @@ public class LimitOrder {
     }
 
     public Integer getIndex() {
-        return index;
+        return pk.getIndex();
     }
 
     public Trading getTrading() {
-        return trading;
+        return pk.getTrading();
     }
 
     public Timestamp getTimestamp() {

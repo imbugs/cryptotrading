@@ -24,11 +24,13 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="crypto trading" />
+        <module name="crypto-trading" />
         <module name="wildfly-helloworld-html5" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="crypto trading" target="1.7" />
+      <module name="crypto-trading" target="1.7" />
       <module name="wildfly-helloworld-html5" target="1.7" />
     </bytecodeTargetLevel>
   </component>
