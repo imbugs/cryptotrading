@@ -1,9 +1,5 @@
 package com.crypto.entities;
 
-import com.crypto.entities.CryptoCurrency;
-import com.crypto.entities.Currency;
-import com.crypto.entities.Trading;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,7 +12,6 @@ import java.io.Serializable;
 @Entity
 @Table (name="WALLET")
 public class Wallet implements Serializable{
-
 
     private static final long serialVersionUID = -2028307033146190019L;
 

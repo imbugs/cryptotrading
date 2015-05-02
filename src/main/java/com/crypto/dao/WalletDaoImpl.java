@@ -19,7 +19,7 @@ public class WalletDaoImpl implements WalletDao {
     private static final long serialVersionUID = -2760326770511695578L;
 
     @PersistenceContext(unitName = "CryptoDS")
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public void persist(final Wallet wallet) {

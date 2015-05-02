@@ -17,7 +17,7 @@ public class TradingSiteDaoImpl implements TradingSiteDao{
     private static final long serialVersionUID = 9103982057375624503L;
 
     @PersistenceContext(unitName = "CryptoDS")
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public void persist(TradingSite tradingSite) {

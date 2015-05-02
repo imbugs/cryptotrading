@@ -18,7 +18,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
     private static final long serialVersionUID = 9080357979975346857L;
 
     @PersistenceContext(unitName = "CryptoDS")
-    EntityManager em;
+    private EntityManager em;
 
     /**
      * Add a new currency to the database

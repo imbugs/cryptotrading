@@ -18,7 +18,7 @@ public class TrendDaoImpl implements TrendDao {
 
 
     @PersistenceContext(unitName = "CryptoDS")
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public Trend get(Integer Id) {

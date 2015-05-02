@@ -22,7 +22,7 @@ public class TradePairDaoImpl implements TradePairDao {
     private static final long serialVersionUID = -8127877891137126595L;
 
     @PersistenceContext(unitName = "CryptoDS")
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public void persist(TradePair tradePair) {

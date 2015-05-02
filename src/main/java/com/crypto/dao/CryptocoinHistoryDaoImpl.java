@@ -28,7 +28,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
     private static final Logger LOG = Logger.getLogger(CryptocoinHistoryDaoImpl.class.getName());
 
     @PersistenceContext(unitName = "CryptoDS")
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public void persist(final CryptocoinHistory cryptocoinHistory) {
