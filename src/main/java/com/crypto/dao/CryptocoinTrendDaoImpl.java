@@ -34,12 +34,27 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
 
     @Override
     public Float getSumTrend(Integer index, Trend trend, Integer period, TradePair tradePair) {
-        return null;
+
+        final Integer fromIndex = index-period;
+
+        final TypedQuery<Double> query = (TypedQuery<Double>) em.createQuery("SELECT SUM(t.value) FROM TrendValue t WHERE t.trend =:trend AND t.tradePair = :tradePair AND t.indx > :fromIndex AND t.indx <= :toIndex");
+        query.setParameter("trend", trend);
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("fromIndex", fromIndex);
+        query.setParameter("toIndex", index);
+
+        return new Float(query.getSingleResult());
     }
 
     @Override
     public MacdValue getMacdValue(Integer index, Macd macd, TradePair tradePair) {
-        return null;
+
+        final TypedQuery<MacdValue> query = (TypedQuery<MacdValue>) em.createQuery("SELECT m FROM MacdValue m WHERE m.macd=:macd AND m.tradePair = :tradePair AND m.indx=:index");
+        query.setParameter("macd", macd);
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("index", index);
+
+        return query.getSingleResult();
     }
 
     @Override

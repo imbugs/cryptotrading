@@ -1,9 +1,6 @@
 package com.crypto.dao;
 
-import com.crypto.entities.MovingAverage;
-import com.crypto.entities.TradePair;
-import com.crypto.entities.Trend;
-import com.crypto.entities.TrendValue;
+import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.TrendType;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -51,7 +48,6 @@ public class CrytptoCoinTrendDaoTest {
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
 
-
     @Test
     @UsingDataSet("datasets/it_test_dataset_13.xml")
     public void testGetTrendValue() {
@@ -64,5 +60,36 @@ public class CrytptoCoinTrendDaoTest {
 
         assertEquals(new Float(100.1F), trendValue.getValue());
     }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_13.xml")
+    public void testGetSumTrend() {
+
+        final Trend trend = new Trend(1, TrendType.EMA, 50, null);
+        final TradePair tradePair = new TradePair();
+        tradePair.setId(new Integer(1));
+
+        final Float total  = cryptocoinTrendDao.getSumTrend(100, trend, 2, tradePair);
+
+        assertEquals(new Float(301F), total);
+    }
+
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_13.xml")
+    public void testGetMacdValue() {
+
+        final Trend shortTrend = new Trend(1, TrendType.EMA, 50, null);
+        final Trend longTrend  = new Trend(2, TrendType.EMA, 500, null);
+
+        final Macd macd = new Macd(2,shortTrend,longTrend);
+        final TradePair tradePair = new TradePair();
+        tradePair.setId(new Integer(1));
+
+        final MacdValue macdValue = cryptocoinTrendDao.getMacdValue(101, macd, tradePair);
+
+        assertEquals(new Float(99.99F), macdValue.getValue());
+    }
+
 
 }

@@ -37,6 +37,12 @@ public class Macd {
         this.longTrend = longTrend;
     }
 
+    /**
+     * Default constructor
+     */
+    public Macd() {
+    }
+
     public Integer getId() {
         return Id;
     }

@@ -8,7 +8,10 @@
     <trade_rules ID="2" TYPE="BEAR" MARKET="BEAR" DESCRIPTION="Description BUY rule" ENABLED="1" />
     <signals INDX="100" SIGNAL="BEAR" TRADERULE_ID="2" TRADING_ID="1"/>
     <trends ID="1" TREND_TYPE="MA"  PERIOD="50"/>
-    <macd ID="1" SHORT_TREND_ID="1" LONG_TREND_ID="1"/>
-    <cryptocoin_trends ID="1" TRADE_PAIR_ID="1"  INDX="100" TREND_ID="1" MACD_ID="1" VALUE="100.1" DELTA="0.1" TYPE="TREND"/>
-
+    <trends ID="2" TREND_TYPE="MA"  PERIOD="500"/>
+    <macd ID="1" SHORT_TREND_ID="1" LONG_TREND_ID="2"/>
+    <macd ID="2" SHORT_TREND_ID="1" LONG_TREND_ID="2"/>
+    <cryptocoin_trends ID="1" TRADE_PAIR_ID="1"  INDX="99"  TREND_ID="1" MACD_ID="1" VALUE="200.9" DELTA="0.1" TYPE="TREND"/>
+    <cryptocoin_trends ID="2" TRADE_PAIR_ID="1"  INDX="100" TREND_ID="1" MACD_ID="1" VALUE="100.1" DELTA="0.2" TYPE="TREND"/>
+    <cryptocoin_trends ID="3" TRADE_PAIR_ID="1"  INDX="101" TREND_ID="1" MACD_ID="2" VALUE="99.99" DELTA="0.3" TYPE="MACD"/>
 </dataset>

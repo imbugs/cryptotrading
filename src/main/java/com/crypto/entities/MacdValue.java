@@ -24,7 +24,7 @@ public class MacdValue {
     private TradePair tradePair;
 
     @Column(name="INDX")
-    private Integer Indx;
+    private Integer indx;
 
     @ManyToOne
     @JoinColumn(name="MACD_ID", nullable = true, updatable = true)
@@ -49,7 +49,7 @@ public class MacdValue {
     public MacdValue(Integer id, TradePair tradePair, Integer indx, Trend trend, Macd macd, Float value, Float delta) {
         Id = id;
         this.tradePair = tradePair;
-        Indx = indx;
+        indx = indx;
         this.macd = macd;
         this.value = value;
         this.delta = delta;
@@ -71,7 +71,7 @@ public class MacdValue {
     }
 
     public Integer getIndx() {
-        return Indx;
+        return indx;
     }
 
     public Macd getMacd() {
