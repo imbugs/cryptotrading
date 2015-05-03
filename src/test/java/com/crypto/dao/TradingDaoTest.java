@@ -1,6 +1,6 @@
 package com.crypto.dao;
 
-import com.crypto.dataprovider.MovingAverageCalculator;
+import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.entities.Trading;
 import com.crypto.entities.TradingSite;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;

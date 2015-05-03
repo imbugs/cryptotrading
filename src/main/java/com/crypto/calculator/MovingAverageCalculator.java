@@ -1,6 +1,7 @@
 
-package com.crypto.dataprovider;
+package com.crypto.calculator;
 
+import com.crypto.dataprovider.MovingAverageDataProvider;
 import com.crypto.entities.TrendValue;
 
 /**
@@ -23,7 +24,7 @@ public class MovingAverageCalculator {
      * @param dataProvider the data provider of this moving average
      * @param index the index of the moving average
      */
-    public MovingAverageCalculator(MovingAverageDataProvider dataProvider, Integer index) {
+    public MovingAverageCalculator(final MovingAverageDataProvider dataProvider, final Integer index) {
         this.dataProvider = dataProvider;
         this.index = index;
     }
@@ -44,13 +45,16 @@ public class MovingAverageCalculator {
 
         final Integer period = this.dataProvider.getTrend().getPeriod();
         final Float   sum    = this.dataProvider.getSumOverPeriod(this.index);
-        final Float   movingAverage = sum/period;
+        this.value  = sum/period;
 
         final Integer previousIndex = this.index - 1;
         final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
 
         if (previousValue != null) {
-            this.delta = movingAverage - previousValue.getValue();
+            this.delta = this.value  - previousValue.getValue();
+        }
+        else {
+            this.delta = null;
         }
     }
 

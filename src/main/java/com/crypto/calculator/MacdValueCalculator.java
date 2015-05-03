@@ -1,5 +1,6 @@
-package com.crypto.dataprovider;
+package com.crypto.calculator;
 
+import com.crypto.dataprovider.MacdDataProvider;
 import com.crypto.entities.TrendValue;
 
 /**
