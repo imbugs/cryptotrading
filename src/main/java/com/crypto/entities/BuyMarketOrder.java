@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.enums.MarketOrderStatus;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -15,7 +17,7 @@ public class BuyMarketOrder extends MarketOrder {
     @Column(name="COINS")
     private Float coins;
 
-    public BuyMarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float coins) {
+    public BuyMarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, MarketOrderStatus status, Integer retryCount, Boolean manuallyCreated, Float coins) {
         super(index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
         this.coins = coins;
     }

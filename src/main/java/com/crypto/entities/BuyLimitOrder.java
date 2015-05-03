@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.enums.LimitOrderStatus;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -32,7 +34,7 @@ public class BuyLimitOrder extends LimitOrder {
      * @param timestampEndOfOrder closing timestamp of the order
      * @param coins               the number of coins used to byy the limit order
      */
-    public BuyLimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder, Float coins) {
+    public BuyLimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, LimitOrderStatus status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder, Float coins) {
         super(orderReference, index, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated, stopLossRate, timestampEndOfOrder);
         this.coins = coins;
     }

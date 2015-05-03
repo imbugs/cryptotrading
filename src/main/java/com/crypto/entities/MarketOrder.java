@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import com.crypto.entities.pkey.OrderPk;
+import com.crypto.enums.MarketOrderStatus;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -31,7 +32,8 @@ public class MarketOrder {
     private Float fee;
 
     @Column (name="STATUS")
-    private String status;
+    @Enumerated(value = EnumType.STRING)
+    private MarketOrderStatus status;
 
     @Column (name="RETRY_COUNT")
     private Integer retryCount;
@@ -51,7 +53,7 @@ public class MarketOrder {
      * @param retryCount the number of retries to execute this order
      * @param manuallyCreated indicator if the order was manually created
      */
-    public MarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated) {
+    public MarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, MarketOrderStatus status, Integer retryCount, Boolean manuallyCreated) {
         OrderPk orderPk = new OrderPk(index,trading);
         this.pk = orderPk;
         this.orderReference = orderReference;
@@ -83,7 +85,7 @@ public class MarketOrder {
         return fee;
     }
 
-    public String getStatus() {
+    public MarketOrderStatus getStatus() {
         return status;
     }
 
@@ -101,5 +103,9 @@ public class MarketOrder {
 
     public OrderPk getPk() {
         return pk;
+    }
+
+    public Integer getIndex() {
+        return getPk().getIndex();
     }
 }
