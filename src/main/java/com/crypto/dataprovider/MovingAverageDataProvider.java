@@ -1,10 +1,11 @@
 package com.crypto.dataprovider;
 
+import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
 /**
- * Provider of crypto coin exchange data for moving average trends
+ * Provider of crypto coin exchange data for the calculation of a moving average trend
  *
  * Created by Jan Wicherink on 1-5-15.
  */
@@ -41,4 +42,9 @@ public interface MovingAverageDataProvider {
      */
     public Trend getTrend ();
 
+    /**
+     * Get the trade pair
+     * @return the trade pair
+     */
+    public TradePair getTradePair();
 }

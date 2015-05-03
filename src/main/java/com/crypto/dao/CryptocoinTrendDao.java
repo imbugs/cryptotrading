@@ -1,6 +1,6 @@
 package com.crypto.dao;
 
-import com.crypto.entities.MovingAverage;
+import com.crypto.dataprovider.MovingAverageCalculator;
 import com.crypto.entities.*;
 
 import java.io.Serializable;
@@ -46,7 +46,7 @@ public interface CryptocoinTrendDao extends Serializable{
      * Store a moving average value
      * @param ma the moving average to be stored
      */
-    public void storeMovingAverageValue (final MovingAverage ma);
+    public void storeMovingAverageValue (final MovingAverageCalculator ma);
 
 
     /**

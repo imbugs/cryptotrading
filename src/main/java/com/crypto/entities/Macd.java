@@ -54,4 +54,9 @@ public class Macd {
     public Trend getLongTrend() {
         return longTrend;
     }
+
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 }

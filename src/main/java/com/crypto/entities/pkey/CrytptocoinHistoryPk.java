@@ -34,6 +34,12 @@ public class CrytptocoinHistoryPk implements Serializable {
         this.tradePair = tradePair;
     }
 
+    /**
+     * Default constructor
+     */
+    public CrytptocoinHistoryPk() {
+    }
+
     public Integer getIndx() {
         return indx;
     }

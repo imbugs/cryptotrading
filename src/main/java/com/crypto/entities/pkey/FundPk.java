@@ -38,6 +38,13 @@ public class FundPk implements Serializable {
         this.currency = currency;
     }
 
+    /**
+     * Default constructor
+     */
+    public FundPk() {
+
+    }
+
     public TradePair getTradepair() {
         return tradepair;
     }

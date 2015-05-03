@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class TrendValue {
 
     @Id
+    @GeneratedValue
     @Column(name="ID")
     private Integer Id;
 
@@ -42,7 +43,7 @@ public class TrendValue {
      * @param id        the Id
      * @param tradePair the tradepair
      * @param indx      the index
-     * @param trend     the trend of this cryptocointrend value
+     * @param trend     the trend of this cryptocoin trend value
      * @param value     the value of the trend
      * @param delta     the delta value of trend with respect to the previous trend value with index = indx-1
      */

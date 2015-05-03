@@ -1,5 +1,6 @@
 package com.crypto.dao;
 
+import com.crypto.dataprovider.MovingAverageCalculator;
 import com.crypto.entities.Trading;
 import com.crypto.entities.TradingSite;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
@@ -44,6 +45,7 @@ public class TradingDaoTest {
                 .addPackage((TradingDao.class).getPackage())
                 .addPackage((LoggingLevel.class).getPackage())
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
+                .addPackage(MovingAverageCalculator.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

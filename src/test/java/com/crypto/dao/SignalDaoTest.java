@@ -1,5 +1,6 @@
 package com.crypto.dao;
 
+import com.crypto.dataprovider.MovingAverageCalculator;
 import com.crypto.entities.Signal;
 import com.crypto.entities.TradeRule;
 import com.crypto.entities.Trading;
@@ -43,6 +44,7 @@ public class SignalDaoTest {
                 .addPackage((SignalDao.class).getPackage())
                 .addPackage((MarketTrend.class).getPackage())
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
+                .addPackage(MovingAverageCalculator.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

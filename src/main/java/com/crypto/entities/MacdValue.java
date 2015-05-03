@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class MacdValue {
 
     @Id
+    @GeneratedValue
     @Column(name="ID")
     private Integer Id;
 
@@ -24,7 +25,8 @@ public class MacdValue {
     private TradePair tradePair;
 
     @Column(name="INDX")
-    private Integer indx;
+    private
+   Integer indx;
 
     @ManyToOne
     @JoinColumn(name="MACD_ID", nullable = true, updatable = true)
@@ -38,18 +40,14 @@ public class MacdValue {
 
     /**
      * Constructor
-     *
-     * @param id        the Id
-     * @param tradePair the tradepair
      * @param indx      the index
      * @param macd      the macd of this cryptocointrend value
-     * @param value     the value of the trend
-     * @param delta     the delta value of trend with respect to the previous trend value with index = indx-1
+     * @param tradePair the tradepair
      */
-    public MacdValue(Integer id, TradePair tradePair, Integer indx, Trend trend, Macd macd, Float value, Float delta) {
-        Id = id;
+    public MacdValue(final Integer indx, final Macd macd, final TradePair tradePair, final Float value, final Float delta) {
+
+        this.indx = indx;
         this.tradePair = tradePair;
-        indx = indx;
         this.macd = macd;
         this.value = value;
         this.delta = delta;
@@ -84,5 +82,17 @@ public class MacdValue {
 
     public Float getDelta() {
         return delta;
+    }
+
+    public void setValue(Float value) {
+        this.value = value;
+    }
+
+    public void setDelta(Float delta) {
+        this.delta = delta;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
     }
 }

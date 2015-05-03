@@ -1,12 +1,13 @@
 package com.crypto.dao;
 
-import com.crypto.entities.MovingAverage;
+import com.crypto.dataprovider.MovingAverageCalculator;
 import com.crypto.entities.*;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -58,17 +59,29 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
     }
 
     @Override
-    public void storeMovingAverageValue(MovingAverage ma) {
+    public void storeMovingAverageValue(MovingAverageCalculator ma) {
 
+        final Trend trend = ma.getDataProvider().getTrend();
+        final Integer index = ma.getIndex();
+        final TradePair tradePair = ma.getDataProvider().getTradePair();
+        final Float value = ma.getValue();
+        final Float delta = ma.getDelta();
+
+        final TrendValue trendValue = new TrendValue(1,tradePair,index,trend, null, value, delta);
+        em.persist(trendValue);
     }
 
     @Override
     public void storeMacdValue(MacdValue macdValue) {
 
+        em.persist(macdValue);
     }
 
     @Override
     public void deleteBeforeDate(Date beforeDate) {
 
+        final TypedQuery query = (TypedQuery) em.createQuery("DELETE FROM TrendValue t WHERE t.indx IN (SELECT c.pk.indx FROM CryptocoinHistory c WHERE c.timestamp < :timestamp)");
+        query.setParameter("timestamp", new Timestamp(beforeDate.getTime()));
+        query.executeUpdate();
     }
 }

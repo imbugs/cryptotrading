@@ -1,15 +1,14 @@
 
-package com.crypto.entities;
+package com.crypto.dataprovider;
 
-import com.crypto.dataprovider.MovingAverageDataProvider;
 import com.crypto.entities.TrendValue;
 
 /**
- * Moving Average, a calculated moving average value
+ * Moving Average calculator, calculates a moving average value of crypto coin data
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public class MovingAverage {
+public class MovingAverageCalculator {
 
     private MovingAverageDataProvider dataProvider;
 
@@ -19,30 +18,25 @@ public class MovingAverage {
 
     private Float delta = null;
 
-
     /**
      * Constructor
      * @param dataProvider the data provider of this moving average
      * @param index the index of the moving average
-     * @param value the value of the moving average
-     * @param delta the difference with the previous moving average value at index= indx-1
      */
-    public MovingAverage(MovingAverageDataProvider dataProvider, Integer index, Float value, Float delta) {
+    public MovingAverageCalculator(MovingAverageDataProvider dataProvider, Integer index) {
         this.dataProvider = dataProvider;
         this.index = index;
-        this.value = value;
-        this.delta = delta;
     }
 
     /**
      * Default constructor
      */
-    public MovingAverage () {
+    public MovingAverageCalculator() {
 
     }
 
     /**
-     * Calculate the moving average value and delta of this moving average
+     * Calculate the moving average value and delta of a given trend on the crypto coin exchange rate data
      *
      * @return the moving average value
      */

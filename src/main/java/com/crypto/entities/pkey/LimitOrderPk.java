@@ -31,6 +31,13 @@ public class LimitOrderPk implements Serializable{
         this.trading = trading;
     }
 
+    /**
+     * Default constructor
+     */
+    public LimitOrderPk () {
+
+    }
+
     public Integer getIndex() {
         return index;
     }
