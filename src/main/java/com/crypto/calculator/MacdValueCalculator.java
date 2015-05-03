@@ -1,6 +1,7 @@
 package com.crypto.calculator;
 
 import com.crypto.dataprovider.MacdDataProvider;
+import com.crypto.entities.MacdValue;
 import com.crypto.entities.TrendValue;
 
 /**
@@ -18,12 +19,13 @@ public class MacdValueCalculator {
 
     private MacdDataProvider dataProvider;
 
-
-    public void setIndx(Integer indx) {
-        this.indx = indx;
-    }
-
-    public void setDataProvider(final MacdDataProvider dataProvider, final Integer indx) {
+    /**
+     * Constructor
+     *
+     * @param dataProvider the Macd data provider
+     * @param indx the index of the macd value
+     */
+    public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx) {
         this.dataProvider = dataProvider;
         this.indx = indx;
     }
@@ -35,22 +37,30 @@ public class MacdValueCalculator {
 
     }
 
+    public void setIndx(Integer indx) {
+        this.indx = indx;
+    }
+
     /**
-     * Calculates the macd value
+     * Calculates the macd value, the macd value is the difference between the short term trend value and
+     * the long term trend value at a given index.
+     * In addition the delta value is calculated with respect to the previous Macd value at index = indx - 1
      */
     public void calculate () {
 
         final TrendValue shortTrendvalue = dataProvider.getShortTrendValue(this.indx);
         final TrendValue longTrendvalue = dataProvider.getLongTrendValue(this.indx);
 
-        final Float macdValue = shortTrendvalue.getValue() - longTrendvalue.getValue();
+        this.value = shortTrendvalue.getValue() - longTrendvalue.getValue();
 
-        this.setValue(macdValue);
+        final MacdValue previousMacdValue = this.dataProvider.getMacdValue(this.indx - 1);
 
-        final com.crypto.entities.MacdValue previousMacdValue = this.dataProvider.getMacdValue(this.indx - 1);
+        Float delta = null;
 
-        final Float delta = macdValue - previousMacdValue.getValue();
+        if (previousMacdValue != null) {
 
+            delta = this.value - previousMacdValue.getValue();
+        }
         this.setDelta(delta);
     }
 
