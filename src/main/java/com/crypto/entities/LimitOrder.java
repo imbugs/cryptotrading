@@ -1,6 +1,6 @@
 package com.crypto.entities;
 
-import com.crypto.entities.pkey.LimitOrderPk;
+import com.crypto.entities.pkey.OrderPk;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 public class LimitOrder {
 
     @EmbeddedId
-    LimitOrderPk pk;
+    private OrderPk pk;
 
     @Column (name="ORDER_REFERENCE")
     private String orderReference;
@@ -62,7 +62,7 @@ public class LimitOrder {
      */
     public LimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder) {
 
-        this.pk = new LimitOrderPk(index, trading);
+        this.pk = new OrderPk(index, trading);
         this.orderReference = orderReference;
         this.timestamp = timestamp;
         this.exchangeRate = exchangeRate;
@@ -72,6 +72,13 @@ public class LimitOrder {
         this.manuallyCreated = manuallyCreated;
         this.stopLossRate = stopLossRate;
         this.timestampEndOfOrder = timestampEndOfOrder;
+    }
+
+    /**
+     * Default constructor
+     */
+    public LimitOrder () {
+
     }
 
     public String getOrderReference() {

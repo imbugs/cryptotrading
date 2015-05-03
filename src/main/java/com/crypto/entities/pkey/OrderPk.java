@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Jan Wicherink on 30-4-15.
  */
 @Embeddable
-public class LimitOrderPk implements Serializable{
+public class OrderPk implements Serializable{
 
     private static final long serialVersionUID = 4713600959390167409L;
 
@@ -26,7 +26,7 @@ public class LimitOrderPk implements Serializable{
      * @param index the index
      * @param trading the trading
      */
-    public LimitOrderPk(Integer index, Trading trading) {
+    public OrderPk(Integer index, Trading trading) {
         this.index = index;
         this.trading = trading;
     }
@@ -34,7 +34,7 @@ public class LimitOrderPk implements Serializable{
     /**
      * Default constructor
      */
-    public LimitOrderPk () {
+    public OrderPk() {
 
     }
 

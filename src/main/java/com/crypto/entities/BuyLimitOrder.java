@@ -1,5 +1,6 @@
 package com.crypto.entities;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.sql.Timestamp;
@@ -11,6 +12,9 @@ import java.sql.Timestamp;
 @Entity
 @DiscriminatorValue("BUY")
 public class BuyLimitOrder extends LimitOrder {
+
+    @Column(name="COINS")
+    private Float coins;
 
     /**
      * Constructor
@@ -26,8 +30,21 @@ public class BuyLimitOrder extends LimitOrder {
      * @param manuallyCreated     indicator if the order was manually created
      * @param stopLossRate        exchange rate to sell or buy the order to limit the loss
      * @param timestampEndOfOrder closing timestamp of the order
+     * @param coins               the number of coins used to byy the limit order
      */
-    public BuyLimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder) {
+    public BuyLimitOrder(String orderReference, Integer index, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float stopLossRate, Timestamp timestampEndOfOrder, Float coins) {
         super(orderReference, index, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated, stopLossRate, timestampEndOfOrder);
+        this.coins = coins;
+    }
+
+    /**
+     * Default constructor
+     */
+    public BuyLimitOrder() {
+        super();
+    }
+
+    public Float getCoins() {
+        return coins;
     }
 }

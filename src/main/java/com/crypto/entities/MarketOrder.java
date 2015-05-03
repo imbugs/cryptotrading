@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.entities.pkey.OrderPk;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -13,19 +15,11 @@ import java.sql.Timestamp;
 @DiscriminatorColumn(name = "ORDER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class MarketOrder {
 
-    @Id
-    @Column(name="ID")
-    private Integer Id;
-
-    @Column (name="INDX")
-    private Integer index;
+    @EmbeddedId
+    private OrderPk pk;
 
     @Column (name="ORDER_REFERENCE")
     private String orderReference;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn (name="TRADING_ID", nullable = false, updatable = true)
-    private Trading trading;
 
     @Column (name="TIMESTAMP")
     private Timestamp timestamp;
@@ -47,7 +41,6 @@ public class MarketOrder {
 
     /**
      * Constructor
-     * @param id the id
      * @param index the index of the order
      * @param orderReference our order reference of the order
      * @param trading the trading
@@ -58,11 +51,10 @@ public class MarketOrder {
      * @param retryCount the number of retries to execute this order
      * @param manuallyCreated indicator if the order was manually created
      */
-    public MarketOrder(Integer id, Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated) {
-        Id = id;
-        this.index = index;
+    public MarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated) {
+        OrderPk orderPk = new OrderPk(index,trading);
+        this.pk = orderPk;
         this.orderReference = orderReference;
-        this.trading = trading;
         this.timestamp = timestamp;
         this.exchangeRate = exchangeRate;
         this.fee = fee;
@@ -75,20 +67,8 @@ public class MarketOrder {
 
     }
 
-    public Integer getId() {
-        return Id;
-    }
-
-    public Integer getIndex() {
-        return index;
-    }
-
     public String getOrderReference() {
         return orderReference;
-    }
-
-    public Trading getTrading() {
-        return trading;
     }
 
     public Timestamp getTimestamp() {
@@ -117,5 +97,9 @@ public class MarketOrder {
 
     public void setFee(Float fee) {
         this.fee = fee;
+    }
+
+    public OrderPk getPk() {
+        return pk;
     }
 }

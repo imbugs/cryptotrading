@@ -2,7 +2,6 @@ package com.crypto.dao;
 
 import com.crypto.entities.MarketOrder;
 import com.crypto.entities.Trading;
-import junit.framework.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
@@ -54,7 +52,7 @@ public class MarketOrderDaoTest_IT {
         final MarketOrder marketOrder = marketOrderDao.getByOrderReference("OUR_ORDER_1");
 
         assertNotNull(marketOrder);
-        assertEquals(new Integer(1), marketOrder.getId());
+        assertEquals(new Integer(1), marketOrder.getIndex());
     }
 
     @Test
@@ -67,7 +65,7 @@ public class MarketOrderDaoTest_IT {
         final MarketOrder marketOrder = marketOrderDao.getLastSell(new Integer(5), trading);
 
         assertNotNull(marketOrder);
-        assertEquals(new Integer(4), marketOrder.getId());
+        assertEquals(new Integer(4), marketOrder.getIndex());
     }
 
     @Test
@@ -80,7 +78,7 @@ public class MarketOrderDaoTest_IT {
         final MarketOrder marketOrder = marketOrderDao.getLastBuy(new Integer(5), trading);
 
         assertNotNull(marketOrder);
-        assertEquals(new Integer(3), marketOrder.getId());
+        assertEquals(new Integer(3), marketOrder.getIndex());
     }
 
     @Test
@@ -108,7 +106,7 @@ public class MarketOrderDaoTest_IT {
 
         assertNotNull(marketOrders);
         assertEquals(2, marketOrders.size());
-        assertEquals(new Integer(4), marketOrders.get(0).getId());
+        assertEquals(new Integer(4), marketOrders.get(0).getIndex());
     }
 
     @Test
@@ -122,7 +120,7 @@ public class MarketOrderDaoTest_IT {
 
         assertNotNull(marketOrders);
         assertEquals(2, marketOrders.size());
-        assertEquals(new Integer(3), marketOrders.get(0).getId());
+        assertEquals(new Integer(3), marketOrders.get(0).getIndex());
     }
 
     @Test
@@ -136,7 +134,7 @@ public class MarketOrderDaoTest_IT {
 
         assertNotNull(marketOrders);
         assertEquals(2, marketOrders.size());
-        assertEquals(new Integer(5), marketOrders.get(0).getId());
+        assertEquals(new Integer(5), marketOrders.get(0).getIndex());
         assertEquals("RETRY", marketOrders.get(0).getStatus());
     }
 

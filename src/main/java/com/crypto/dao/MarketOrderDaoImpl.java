@@ -48,7 +48,7 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public MarketOrder getLastSell(Integer beforeIndex, Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.index < :beforeIndex AND m.trading = :trading AND ORDER_TYPE = 'SELL' ORDER BY m.timestamp DESC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.pk.index < :beforeIndex AND m.pk.trading = :trading AND ORDER_TYPE = 'SELL' ORDER BY m.timestamp DESC");
         query.setParameter("beforeIndex", beforeIndex);
         query.setParameter("trading", trading);
 
@@ -57,7 +57,7 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public MarketOrder getLastBuy(Integer beforeIndex, Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.index < :beforeIndex AND m.trading = :trading AND ORDER_TYPE = 'BUY' ORDER BY m.timestamp DESC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.pk.index < :beforeIndex AND m.pk.trading = :trading AND ORDER_TYPE = 'BUY' ORDER BY m.timestamp DESC");
         query.setParameter("beforeIndex", beforeIndex);
         query.setParameter("trading", trading);
 
@@ -66,7 +66,7 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public List<MarketOrder> getOpenOrders(Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.trading = :trading AND m.status IN ('OPEN','EXECUTING') ORDER BY m.timestamp ASC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.pk.trading = :trading AND m.status IN ('OPEN','EXECUTING') ORDER BY m.timestamp ASC");
         query.setParameter("trading", trading);
 
         return query.getResultList();

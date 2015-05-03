@@ -15,8 +15,8 @@ public class SellMarketOrder extends MarketOrder {
     @Column(name="CRYPTOCOINS")
     private Float cryptoCoins;
 
-    public SellMarketOrder(Integer id, Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float cryptoCoins) {
-        super(id, index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
+    public SellMarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float cryptoCoins) {
+        super(index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
         this.cryptoCoins = cryptoCoins;
     }
 
@@ -26,7 +26,7 @@ public class SellMarketOrder extends MarketOrder {
 
     public void calculateFee() {
 
-        final Float feePercentage = this.getTrading().getTradePair().getTransactionFee();
+        final Float feePercentage = this.getPk().getTrading().getTradePair().getTransactionFee();
 
         final Float value = getExchangeRate() * this.getCryptoCoins() - getFee();
 

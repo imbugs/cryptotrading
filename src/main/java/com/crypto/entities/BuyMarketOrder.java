@@ -15,11 +15,10 @@ public class BuyMarketOrder extends MarketOrder {
     @Column(name="COINS")
     private Float coins;
 
-    public BuyMarketOrder(Integer id, Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float coins) {
-        super(id, index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
+    public BuyMarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, String status, Integer retryCount, Boolean manuallyCreated, Float coins) {
+        super(index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
         this.coins = coins;
     }
-
 
     /**
      * Default constructor;
@@ -30,7 +29,7 @@ public class BuyMarketOrder extends MarketOrder {
 
     public void calculateFee () {
 
-        final Float feePercentage = this.getTrading().getTradePair().getTransactionFee();
+        final Float feePercentage = this.getPk().getTrading().getTradePair().getTransactionFee();
 
         final Float fee = this.getCoins() * feePercentage / 100;
 
