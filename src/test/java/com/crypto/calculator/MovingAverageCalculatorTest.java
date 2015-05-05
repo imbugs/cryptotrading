@@ -19,6 +19,7 @@ public class MovingAverageCalculatorTest {
     @Test
     public void testMovingAverageCalculator () {
 
+        //Arrange
         final MovingAverageCalculator movingAverageCalculator;
 
         final MovingAverageDataProvider dataProvider;
@@ -63,9 +64,11 @@ public class MovingAverageCalculatorTest {
             }
         };
 
+        //Act
         movingAverageCalculator = new MovingAverageCalculator(dataProvider,100);
         movingAverageCalculator.calculate();
 
+        //Assert
         assertEquals(new Float(4F), movingAverageCalculator.getValue());
         assertEquals(new Float(1F), movingAverageCalculator.getDelta());
     }

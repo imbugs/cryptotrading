@@ -10,14 +10,11 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -228,7 +225,6 @@ public class CryptocoinHistoryDaoTest_IT {
 
         assertEquals(610F, total, 0.001F);
     }
-
 
     @Test
     @UsingDataSet("datasets/it_test_dataset_2.xml")
