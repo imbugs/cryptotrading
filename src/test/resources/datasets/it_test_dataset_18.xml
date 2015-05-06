@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+  <trade_condition_types NAME="POS_TREND_CHANGE" DESCRIPTION="Positive trend change" MESSAGE_FORMAT="Positieve trendverandering voor trend"/>
+</dataset>
