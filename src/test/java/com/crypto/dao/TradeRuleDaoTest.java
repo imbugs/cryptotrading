@@ -1,10 +1,10 @@
 package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
-import com.crypto.entities.CryptocoinHistory;
-import com.crypto.entities.TradeConditionLog;
+import com.crypto.entities.TradeRule;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
+import com.crypto.enums.MarketTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -18,15 +18,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Trade condition log Dao test
+ * Trade rule Dao test
  *
  * Created by Jan Wicherink on 7-5-15.
  */
@@ -35,17 +32,17 @@ import static org.junit.Assert.assertEquals;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class TradeConditionLogDaoTest {
+public class TradeRuleDaoTest {
 
     @Inject
-    private TradeConditionLogDao tradeConditionLogDao;
+    private TradeRuleDao tradeRuleDao;
 
     @Deployment
     public static Archive<?> createDeployment() {
 
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackage(TradeConditionLog.class.getPackage())
-                .addPackage(TradeConditionLogDao.class.getPackage())
+                .addPackage((TradeRuleDao.class).getPackage())
+                .addPackage((TradeRule.class).getPackage())
                 .addPackage(LoggingLevel.class.getPackage())
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addPackage(MovingAverageCalculator.class.getPackage())
@@ -54,26 +51,41 @@ public class TradeConditionLogDaoTest {
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_19.xml")
-    public void testGetAll() {
+    @UsingDataSet("datasets/it_test_dataset_15.xml")
+    public void testGet() {
+        final TradeRule tradeRule = tradeRuleDao.get(1);
 
-        final List<TradeConditionLog> tradeConditionLogs = tradeConditionLogDao.getAll();
-
-        assertEquals(2, tradeConditionLogs.size());
+        assertEquals(new Integer(1), tradeRule.getId());
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_19.xml")
-    public void testDeleteBeforeDate() throws ParseException {
+    @UsingDataSet("datasets/it_test_dataset_15.xml")
+    public void testGetActiveTradeRules() {
 
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
-        final Date beforeDate = dateFormat.parse("2015-05-07 12:30:00");
+        final List<TradeRule> tradeRules = tradeRuleDao.getActiveRules();
 
-        tradeConditionLogDao.deleteBeforeDate(beforeDate);
-
-        final List<TradeConditionLog> tradeConditionLogs = tradeConditionLogDao.getAll();
-
-        assertEquals(1, tradeConditionLogs.size());
+        assertEquals(2, tradeRules.size());
     }
 
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_15.xml")
+    public void testGetActiveBullTradeRules() {
+
+        final List<TradeRule> tradeRules = tradeRuleDao.getActiveBullRules();
+        assertEquals(1, tradeRules.size());
+
+        assertEquals(new Integer(1), tradeRules.get(0).getId());
+        assertEquals(MarketTrend.BULL, tradeRules.get(0).getMarketTrend());
+   }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_15.xml")
+    public void testGetActiveBearTradeRules() {
+
+        final List<TradeRule> tradeRules = tradeRuleDao.getActiveBearRules();
+        assertEquals(1, tradeRules.size());
+
+        assertEquals(new Integer(2), tradeRules.get(0).getId());
+        assertEquals(MarketTrend.BEAR, tradeRules.get(0).getMarketTrend());
+    }
 }
