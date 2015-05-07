@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class TradeRuleDaoTest {
+public class TradeRuleDaoTest_IT {
 
     @Inject
     private TradeRuleDao tradeRuleDao;
