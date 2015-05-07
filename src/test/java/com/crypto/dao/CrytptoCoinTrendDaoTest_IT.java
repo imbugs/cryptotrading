@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class CrytptoCoinTrendDaoTest {
+public class CrytptoCoinTrendDaoTest_IT {
 
     @Inject
     private CryptocoinTrendDao cryptocoinTrendDao;

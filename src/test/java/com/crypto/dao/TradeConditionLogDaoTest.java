@@ -1,9 +1,9 @@
 package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
-import com.crypto.entities.Macd;
-import com.crypto.entities.TradingSite;
-import com.crypto.entities.pkey.OrderPk;
+import com.crypto.entities.CryptocoinHistory;
+import com.crypto.entities.TradeConditionLog;
+import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -18,52 +18,62 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Jan Wicherink on 5-5-15.
+ * Trade condition log Dao test
+ *
+ * Created by Jan Wicherink on 7-5-15.
  */
 @RunWith(Arquillian.class)
 @PersistenceTest
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-
-public class MacdDaoTest {
+public class TradeConditionLogDaoTest {
 
     @Inject
-    private MacdDao macdDao;
+    private TradeConditionLogDao tradeConditionLogDao;
 
     @Deployment
     public static Archive<?> createDeployment() {
 
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackage((MacdDaoImpl.class).getPackage())
-                .addPackage(TradingSite.class.getPackage())
+                .addPackage(TradeConditionLog.class.getPackage())
+                .addPackage(TradeConditionLogDao.class.getPackage())
                 .addPackage(LoggingLevel.class.getPackage())
+                .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addPackage(MovingAverageCalculator.class.getPackage())
-                .addPackage(OrderPk.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_17.xml")
+    @UsingDataSet("datasets/it_test_dataset_19.xml")
     public void testGetAll() {
 
-        final List<Macd> macds= macdDao.getAll();
+        final List<TradeConditionLog> tradeConditionLogs = tradeConditionLogDao.getAll();
 
-        assertEquals(2, macds.size());
+        assertEquals(2, tradeConditionLogs.size());
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_17.xml")
-    public void testGet() {
+    @UsingDataSet("datasets/it_test_dataset_19.xml")
+    public void testDeleteBeforeDate() throws ParseException {
 
-        final Macd macd= macdDao.get(1);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
+        final Date beforeDate = dateFormat.parse("2015-05-07 12:30:00");
 
-        assertEquals(new Integer(1), macd.getId());
+        tradeConditionLogDao.deleteBeforeDate(beforeDate);
+
+        final List<TradeConditionLog> tradeConditionLogs = tradeConditionLogDao.getAll();
+
+        assertEquals(1, tradeConditionLogs.size());
     }
+
 }

@@ -33,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class LimitOrderDaoTest {
+public class LimitOrderDaoTest_IT {
 
     @Inject
     private LimitOrderDao limitOrderDao;

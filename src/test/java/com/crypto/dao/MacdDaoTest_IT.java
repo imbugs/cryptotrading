@@ -1,9 +1,9 @@
 package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
-import com.crypto.entities.TradeCondition;
-import com.crypto.entities.TradeRule;
-import com.crypto.entities.pkey.CrytptocoinHistoryPk;
+import com.crypto.entities.Macd;
+import com.crypto.entities.TradingSite;
+import com.crypto.entities.pkey.OrderPk;
 import com.crypto.enums.LoggingLevel;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -23,50 +23,47 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test Trade condition Dao
- * Created by Jan Wicherink on 6-5-15.
+ * Created by Jan Wicherink on 5-5-15.
  */
 @RunWith(Arquillian.class)
 @PersistenceTest
 @Transactional(TransactionMode.ROLLBACK)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class TradeConditionDaoTest {
+
+public class MacdDaoTest_IT {
 
     @Inject
-    private TradeConditionDao tradeConditionDao;
+    private MacdDao macdDao;
 
     @Deployment
     public static Archive<?> createDeployment() {
 
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackage(TradeCondition.class.getPackage())
-                .addPackage(TradeConditionDao.class.getPackage())
+                .addPackage((MacdDaoImpl.class).getPackage())
+                .addPackage(TradingSite.class.getPackage())
                 .addPackage(LoggingLevel.class.getPackage())
-                .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addPackage(MovingAverageCalculator.class.getPackage())
+                .addPackage(OrderPk.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_18.xml")
-    public void testGet() {
+    @UsingDataSet("datasets/it_test_dataset_17.xml")
+    public void testGetAll() {
 
-        final TradeCondition tradeCondition = tradeConditionDao.get(1);
+        final List<Macd> macds= macdDao.getAll();
 
-        assertEquals(new Integer(1), tradeCondition.getId());
+        assertEquals(2, macds.size());
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_18.xml")
-    public void testGetAllActiveTradeConditionsOfTradeRule() {
+    @UsingDataSet("datasets/it_test_dataset_17.xml")
+    public void testGet() {
 
-       final TradeRule tradeRule= new TradeRule();
-        tradeRule.setId(1);
+        final Macd macd= macdDao.get(1);
 
-       final List<TradeCondition> tradeConditions = tradeConditionDao.getAllActiveTradeConditionsOfTradeRule(tradeRule);
-
-       assertEquals(1, tradeConditions.size());
+        assertEquals(new Integer(1), macd.getId());
     }
 }
