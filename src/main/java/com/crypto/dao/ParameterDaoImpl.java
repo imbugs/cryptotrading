@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 @Stateful
 public class ParameterDaoImpl implements ParameterDao{
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     @Override

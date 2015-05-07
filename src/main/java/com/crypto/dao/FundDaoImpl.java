@@ -20,7 +20,7 @@ public class FundDaoImpl implements FundDao {
 
     private static final Logger LOG = Logger.getLogger(FundDaoImpl.class.getName());
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     @Override

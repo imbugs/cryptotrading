@@ -18,7 +18,7 @@ public class TradingDoaImpl implements TradingDao {
 
     private static final long serialVersionUID = -8024256375977572764L;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     @Override

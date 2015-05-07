@@ -25,7 +25,7 @@ public class LoggingDaoImpl implements LoggingDao {
 
     private static final long serialVersionUID = 6177946802223896971L;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     private static final Logger LOG = Logger.getLogger(LoggingDaoImpl.class.getName());

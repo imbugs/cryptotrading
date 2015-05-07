@@ -1,4 +1,4 @@
-package com.crypto.entities;
+package com.crypto.enums;
 
 /**
  * Order Type

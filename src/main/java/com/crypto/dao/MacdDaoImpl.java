@@ -19,7 +19,7 @@ public class MacdDaoImpl implements MacdDao {
 
     private static final long serialVersionUID = -4852177382690819345L;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     @Override

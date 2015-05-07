@@ -16,7 +16,7 @@ public class TradeConditionTypeDaoImpl implements TradeConditionTypeDao{
 
     private static final long serialVersionUID = -4092022727984997669L;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     @Override

@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import com.crypto.enums.MarketOrderStatus;
+import com.crypto.enums.OrderType;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
