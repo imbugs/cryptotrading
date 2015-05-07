@@ -2,82 +2,84 @@ package com.crypto.entities;
 
 import com.crypto.enums.LogicalOperator;
 
-import javax.persistence.Column;
 import javax.persistence.*;
+
 /**
  * A trade condition
- *
+ * <p/>
  * Created by Jan Wicherink on 6-5-15.
  */
-@Entity(name="TRADE_CONDITIONS")
+@Entity
+@Table(name = "TRADE_CONDITIONS")
 public class TradeCondition {
 
     @Id
-    @Column(name="ID")
+    @Column(name = "ID")
     private Integer Id;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn (name="TRADE_RULE_ID", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TRADE_RULE_ID", nullable = false)
     private TradeRule tradeRule;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name="TYPE", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TYPE", nullable = false)
     private TradeConditionType tradeConditionType;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name="MACD_ID", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MACD_ID", nullable = true)
     private Macd macd;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name="TREND_ID", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TREND_ID", nullable = true)
     private Trend trend;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name="REFERENCE_MACD_ID", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "REFERENCE_MACD_ID", nullable = true)
     private Macd reference_macd;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name="REFERENCE_TREND_ID", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "REFERENCE_TREND_ID", nullable = true)
     private Trend reference_trend;
 
-    @Column(name="PERCENTAGE")
+    @Column(name = "PERCENTAGE")
     private Float percentage;
 
-    @Column(name="PERCENTAGE_LIMIT")
+    @Column(name = "PERCENTAGE_LIMIT")
     private Float percentage_limit;
 
-    @Column(name="RATE")
+    @Column(name = "RATE")
     private Float rate;
 
-    @Column(name="PERIOD")
+    @Column(name = "PERIOD")
     private Integer period;
 
     @Column(name = "PREVIOUS")
     private Integer previous;
 
-    @Column (name="LOGICAL_OPERATOR")
-    @Enumerated (EnumType.STRING)
+    @Column(name = "LOGICAL_OPERATOR")
+    @Enumerated(EnumType.STRING)
     private LogicalOperator logicalOperator;
 
-    @Column (name="ENABLED")
+    @Column(name = "ENABLED")
     private Boolean enabled;
 
     /**
      * Trade condition
-     * @param id the identifier
-     * @param tradeRule the traderule to which the tradecondition belongs
+     *
+     * @param id                 the identifier
+     * @param tradeRule          the traderule to which the tradecondition belongs
      * @param tradeConditionType tradecondition type
-     * @param macd reference to a macd
-     * @param trend reference to a trend
-     * @param reference_macd reference to a reference macd
-     * @param reference_trend reference to a reference trend
-     * @param percentage percentage
-     * @param percentage_limit percentage limit
-     * @param rate trading bitcoin rate
-     * @param period period to which the tradecondition belongs
-     * @param previous previous value
-     * @param logicalOperator logical operator
-     * @param enabled true when the trade condition is active
+     * @param macd               reference to a macd
+     * @param trend              reference to a trend
+     * @param reference_macd     reference to a reference macd
+     * @param reference_trend    reference to a reference trend
+     * @param percentage         percentage
+     * @param percentage_limit   percentage limit
+     * @param rate               trading bitcoin rate
+     * @param period             period to which the tradecondition belongs
+     * @param previous           previous value
+     * @param logicalOperator    logical operator
+     * @param enabled            true when the trade condition is active
      */
     public TradeCondition(Integer id, TradeRule tradeRule, TradeConditionType tradeConditionType, Macd macd, Trend trend, Macd reference_macd, Trend reference_trend, Float percentage, Float percentage_limit, Float rate, Integer period, Integer previous, LogicalOperator logicalOperator, Boolean enabled) {
         Id = id;
@@ -85,7 +87,7 @@ public class TradeCondition {
         this.tradeConditionType = tradeConditionType;
         this.macd = macd;
         this.trend = trend;
-        this.reference_macd=  reference_macd;
+        this.reference_macd = reference_macd;
         this.reference_trend = reference_trend;
         this.percentage = percentage;
         this.percentage_limit = percentage_limit;
@@ -99,7 +101,7 @@ public class TradeCondition {
     /**
      * Default constructor
      */
-    public TradeCondition () {
+    public TradeCondition() {
 
     }
 

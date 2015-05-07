@@ -28,7 +28,7 @@ public class TradeConditionDaoImpl implements TradeConditionDao {
 
     @Override
     public List<TradeCondition> getAllActiveTradeConditionsOfTradeRule(final TradeRule tradeRule) {
-        final TypedQuery<TradeCondition> query = (TypedQuery<TradeCondition>) em.createQuery("SELECT t FROM TradeCondition t WHERE t.tradeRule=:tradeRule AND t.enabled=1");
+        final TypedQuery<TradeCondition> query = (TypedQuery<TradeCondition>) em.createQuery("SELECT t FROM TradeCondition t WHERE t.tradeRule=:tradeRule AND enabled=1");
         query.setParameter("tradeRule", tradeRule);
 
         return query.getResultList();
