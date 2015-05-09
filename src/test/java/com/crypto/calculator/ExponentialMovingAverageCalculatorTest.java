@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  * Exponential Moving Average test
  * 
  * Using the following data table,the exponential moving average is calculated for 5 May -2010 (index 30)
- * Example taken from : http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages
+ * Example data taken from : http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages
  *
  *
  * 	Index Date	        Price	10-day MA	10-day EMA
@@ -66,6 +66,7 @@ public class ExponentialMovingAverageCalculatorTest {
     @Test
     public void testExponentialMovingAverageCalculator() throws ParseException {
 
+       //Arrange
        final TradingSite tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
        final Currency currency = new Currency("EUR", "Euro", "&euro");
        final CryptoCurrency cryptoCurrency = new CryptoCurrency("BTC", "Bitcoin", "BTC");
@@ -120,10 +121,13 @@ public class ExponentialMovingAverageCalculatorTest {
            }
        };
 
+       //Act
        final ExponentialMovingAverageCalculator calculator = new ExponentialMovingAverageCalculator(dataProvider, 30);
        calculator.calculate();
 
-       // Expected exponential moving average value at index = 30 (5th may 2010), rounding error of 0.01
+
+       // Assert
+       // Expected exponential moving average value at index = 30 (5th may 2010) = 22.92 with rounding error of 0.01
        assertEquals (new Float(22.92F), calculator.getValue(), 0.01F);
 
        calculator.calculate();
