@@ -3,6 +3,7 @@ package com.crypto.calculator.bulk;
 import com.crypto.calculator.Calculator;
 import com.crypto.dataprovider.BulkDataProvider;
 import com.crypto.dataprovider.DataProvider;
+import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
 /**
  * Generic bulk calculator, calculates moving averages, smoothing moving averages, macdś etc. in bulk
  * for cryptocoin histories
+ *
+ * @param <D> Datatype of the bulkcalculator,maybe TrendValue or CryptocoinHistory
  *
  * Created by Jan Wicherink on 9-5-15.
  */
@@ -51,6 +54,16 @@ public class BulkCalculator <D extends DataProvider> {
             calculator.setIndex(data.getIndex());
             calculator.calculate();
         }
+    }
+
+    /**
+     * Calculate the last cryptocoin history
+     */
+    public void calculateLast() {
+        final CryptocoinHistory cryptocoinHistory = (CryptocoinHistory) getDataProvider().getLast();
+
+        getCalculator().setIndex(cryptocoinHistory.getIndex());
+        getCalculator().calculate();
     }
 
     public Calculator getCalculator() {
