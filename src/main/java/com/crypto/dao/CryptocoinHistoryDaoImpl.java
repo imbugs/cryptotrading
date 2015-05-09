@@ -30,6 +30,13 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
     @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
+    /**
+     * Default constructor
+     */
+    public CryptocoinHistoryDaoImpl () {
+
+    }
+
     @Override
     public void persist(final CryptocoinHistory cryptocoinHistory) {
 

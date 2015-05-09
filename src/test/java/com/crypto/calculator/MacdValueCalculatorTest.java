@@ -18,7 +18,7 @@ public class MacdValueCalculatorTest {
 
         final MacdDataProvider dataProvider = new MacdDataProvider() {
             @Override
-            public MacdValue getMacdValue(Integer index) {
+            public MacdValue getValue(Integer index) {
 
                 if (index == 100) {
                     return new MacdValue(100,null,null, 6F, 1F);
@@ -26,6 +26,11 @@ public class MacdValueCalculatorTest {
                 else {
                     return new MacdValue(99, null,null, 4F, 1F);
                 }
+            }
+
+            @Override
+            public Integer getIndex() {
+                return 100;
             }
 
             @Override

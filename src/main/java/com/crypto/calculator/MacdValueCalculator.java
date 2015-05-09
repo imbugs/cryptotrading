@@ -9,7 +9,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 3-5-15.
  */
-public class MacdValueCalculator {
+public class MacdValueCalculator implements Calculator{
 
     private Integer indx;
 
@@ -38,6 +38,7 @@ public class MacdValueCalculator {
     }
 
     public void setIndx(Integer indx) {
+
         this.indx = indx;
     }
 
@@ -53,7 +54,7 @@ public class MacdValueCalculator {
 
         this.value = shortTrendvalue.getValue() - longTrendvalue.getValue();
 
-        final MacdValue previousMacdValue = this.dataProvider.getMacdValue(this.indx - 1);
+        final MacdValue previousMacdValue = this.dataProvider.getValue(this.indx - 1);
 
         Float delta = null;
 
@@ -76,7 +77,16 @@ public class MacdValueCalculator {
         return delta;
     }
 
+    public Integer getIndex() {
+        return indx;
+    }
+
+    public void setIndex(Integer index) {
+      this.indx = index;
+    }
+
     public void setDelta(Float delta) {
+
         this.delta = delta;
     }
 }

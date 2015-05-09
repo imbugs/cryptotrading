@@ -101,8 +101,8 @@ public class CryptocoinHistoryDaoTest_IT {
         assertNotNull(cryptocoinHistories);
         assertEquals(2, cryptocoinHistories.size());
 
-        assertEquals(new Integer(3), cryptocoinHistories.get(0).getIndx());
-        assertEquals(new Integer(4), cryptocoinHistories.get(1).getIndx());
+        assertEquals(new Integer(3), cryptocoinHistories.get(0).getIndex());
+        assertEquals(new Integer(4), cryptocoinHistories.get(1).getIndex());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class CryptocoinHistoryDaoTest_IT {
         final TradePair tradePair = tradePairDao.get(1);
         assertNotNull(tradePair);
 
-        assertEquals(new Integer(4), cryptocoinHistoryDao.getLast(tradePair).getIndx());
+        assertEquals(new Integer(4), cryptocoinHistoryDao.getLast(tradePair).getIndex());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class CryptocoinHistoryDaoTest_IT {
         Long time = date.getTime();
         Timestamp timestamp = new Timestamp(time);
 
-        assertEquals(new Integer(4), cryptocoinHistoryDao.getCryptoCoinHistoryByTimestamp(tradePair, timestamp).getIndx());
+        assertEquals(new Integer(4), cryptocoinHistoryDao.getCryptoCoinHistoryByTimestamp(tradePair, timestamp).getIndex());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class CryptocoinHistoryDaoTest_IT {
         List<CryptocoinHistory> retrievedCryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistorySinceIndex(tradePair, 4);
         assertEquals(1, retrievedCryptocoinHistories.size());
 
-        assertEquals(new Integer(4), retrievedCryptocoinHistories.get(0).getIndx());
+        assertEquals(new Integer(4), retrievedCryptocoinHistories.get(0).getIndex());
     }
 
 
@@ -182,8 +182,8 @@ public class CryptocoinHistoryDaoTest_IT {
         List<CryptocoinHistory> retrievedCryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistoryRangeIndex(tradePair, 3, 4);
         assertEquals(2, retrievedCryptocoinHistories.size());
 
-        assertEquals(new Integer(3), retrievedCryptocoinHistories.get(0).getIndx());
-        assertEquals(new Integer(4), retrievedCryptocoinHistories.get(1).getIndx());
+        assertEquals(new Integer(3), retrievedCryptocoinHistories.get(0).getIndex());
+        assertEquals(new Integer(4), retrievedCryptocoinHistories.get(1).getIndex());
     }
 
     @Test

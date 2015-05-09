@@ -9,7 +9,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public class MovingAverageCalculator {
+public class MovingAverageCalculator implements Calculator{
 
     private MovingAverageDataProvider dataProvider;
 
@@ -72,5 +72,17 @@ public class MovingAverageCalculator {
 
     public Float getDelta() {
         return delta;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public void setValue(Float value) {
+        this.value = value;
+    }
+
+    public void setDelta(Float delta) {
+        this.delta = delta;
     }
 }

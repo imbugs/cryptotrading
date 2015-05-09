@@ -2,7 +2,6 @@ package com.crypto.dataprovider;
 
 import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
-import com.crypto.entities.TradePair;
 import com.crypto.entities.TrendValue;
 
 /**
@@ -10,14 +9,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public interface MacdDataProvider {
-
-    /**
-     * Get the Macd Value at a given index
-     * @param index index
-     * @return the macd value
-     */
-    public MacdValue getMacdValue (final Integer index);
+public interface MacdDataProvider extends DataProvider<MacdValue>{
 
     /**
      * Get the short trend value
@@ -39,10 +31,4 @@ public interface MacdDataProvider {
      * @return the macd
      */
     public Macd getMacd();
-
-    /**
-     * Get the trade pair
-     * @return the trade pair
-     */
-    public TradePair getTradePair();
 }

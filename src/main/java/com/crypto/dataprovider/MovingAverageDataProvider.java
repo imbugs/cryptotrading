@@ -1,6 +1,6 @@
 package com.crypto.dataprovider;
 
-import com.crypto.entities.TradePair;
+import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
@@ -9,7 +9,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public interface MovingAverageDataProvider {
+public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistory>{
 
     /**
      * Get the total sum of exchange rates of the crypto coin over a given period upto an index.
@@ -18,14 +18,6 @@ public interface MovingAverageDataProvider {
      * @return the total sum of exchange rates
      */
     public Float getSumOverPeriod(final Integer index);
-
-    /**
-     * Get a crypto coin value at a given index
-     *
-     * @param index the index
-     * @return the crypto coin value
-     */
-    public Float getValue (final Integer index);
 
     /**
      * Get a trend value at a given index
@@ -41,10 +33,4 @@ public interface MovingAverageDataProvider {
      * @return the trend
      */
     public Trend getTrend ();
-
-    /**
-     * Get the trade pair
-     * @return the trade pair
-     */
-    public TradePair getTradePair();
 }

@@ -21,22 +21,22 @@ public interface TrendDao extends Serializable {
     public Trend get (final Integer Id);
 
     /**
-     * Get all moving average trends
-     * @return the moving average trends
+     * Get all moving average bulk
+     * @return the moving average bulk
      */
     public List<Trend> getAllMovingAverageTrends();
 
 
     /**
-     * Get all exponential moving average trends
-     * @return the moving average trends
+     * Get all exponential moving average bulk
+     * @return the moving average bulk
      */
     public List<Trend> getAllExponentialMovingAverageTrends();
 
 
     /**
-     * Get all smoothing moving average trends
-     * @return the moving average trends
+     * Get all smoothing moving average bulk
+     * @return the moving average bulk
      */
     public List<Trend> getAllSmoothingMovingAverageTrends();
 

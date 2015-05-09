@@ -1,11 +1,14 @@
 package com.crypto.calculator;
 
 import com.crypto.dataprovider.MovingAverageDataProvider;
+import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 import com.crypto.enums.TrendType;
 import org.junit.Test;
+
+import java.text.ParseException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class MovingAverageCalculatorTest {
 
     @Test
-    public void testMovingAverageCalculator () {
+    public void testMovingAverageCalculator () throws ParseException {
 
         //Arrange
         final MovingAverageCalculator movingAverageCalculator;
@@ -32,14 +35,23 @@ public class MovingAverageCalculatorTest {
             }
 
             @Override
-            public Float getValue(Integer index) {
+            public CryptocoinHistory getValue(Integer index) {
+
+                final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory();
 
                 if (index == 100) {
-                    return 4F;
+                    cryptocoinHistory.setClose(4F);
                 }
                 else {
-                    return 3F;
+                    cryptocoinHistory.setClose(3F);
                 }
+
+                return cryptocoinHistory;
+            }
+
+            @Override
+            public Integer getIndex() {
+                return 100;
             }
 
             @Override
