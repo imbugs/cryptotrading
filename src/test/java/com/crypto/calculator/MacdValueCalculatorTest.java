@@ -16,6 +16,7 @@ public class MacdValueCalculatorTest {
     @Test
     public void testMacdValueCalculator() {
 
+        //Arrange
         final MacdDataProvider dataProvider = new MacdDataProvider() {
             @Override
             public MacdValue getValue(Integer index) {
@@ -55,9 +56,11 @@ public class MacdValueCalculatorTest {
             }
         };
 
+        // Act
         final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider, new Integer(100));
         macdValueCalculator.calculate();
 
+        //Assert
         assertEquals(new Float(6F), macdValueCalculator.getValue());
         assertEquals(new Float(2F), macdValueCalculator.getDelta());
     }
