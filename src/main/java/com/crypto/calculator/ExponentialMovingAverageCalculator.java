@@ -28,7 +28,7 @@ public class ExponentialMovingAverageCalculator extends MovingAverageCalculator 
 
         if (previousValue != null) {
 
-            final Float ema = currentRate.getClose() - previousValue.getValue() * multiplier + previousValue.getValue();
+            final Float ema = (currentRate.getClose() - previousValue.getValue()) * multiplier + previousValue.getValue();
             this.setValue(ema);
             this.setDelta(ema -previousValue.getValue());
         }

@@ -13,7 +13,6 @@ import com.crypto.entities.TradePair;
  */
 public class CryptoCoinHistoryTrendCalculator extends BulkCalculator<CryptocoinHistory> {
 
-
     /**
      * Constructor
      *
