@@ -1,6 +1,7 @@
 package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
+import com.crypto.dao.impl.WalletHistoryDaoImpl;
 import com.crypto.dataprovider.DataProvider;
 import com.crypto.entities.Trading;
 import com.crypto.entities.WalletHistory;
@@ -43,6 +44,7 @@ public class WalletHistoryDaoTest {
 
         return ShrinkWrap.create(WebArchive.class, "test3.war")
                 .addPackage((WalletHistoryDao.class).getPackage())
+                .addPackage((WalletHistoryDaoImpl.class).getPackage())
                 .addPackage((WalletHistory.class).getPackage())
                 .addPackage((LoggingLevel.class).getPackage())
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
