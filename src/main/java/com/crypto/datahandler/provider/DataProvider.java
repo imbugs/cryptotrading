@@ -1,5 +1,6 @@
-package com.crypto.dataprovider;
+package com.crypto.datahandler.provider;
 
+import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.TradePair;
 
 /**

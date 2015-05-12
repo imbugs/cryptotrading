@@ -1,4 +1,4 @@
-package com.crypto.dataprovider;
+package com.crypto.datahandler.provider;
 
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Trend;
@@ -9,7 +9,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistory>{
+public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistory> {
 
     /**
      * Get the total sum of exchange rates of the crypto coin over a given period upto an index.

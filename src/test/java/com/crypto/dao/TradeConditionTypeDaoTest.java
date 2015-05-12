@@ -2,7 +2,7 @@ package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
-import com.crypto.dataprovider.DataProvider;
+import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.TradeConditionType;
 import com.crypto.entities.pkey.WithdrawalPk;
 import com.crypto.enums.LoggingLevel;

@@ -1,9 +1,9 @@
 package com.crypto.calculator.bulk;
 
 import com.crypto.calculator.Calculator;
-import com.crypto.dataprovider.BulkDataProvider;
-import com.crypto.dataprovider.DataIndexProvider;
-import com.crypto.dataprovider.DataPersister;
+import com.crypto.datahandler.provider.BulkDataProvider;
+import com.crypto.datahandler.provider.DataIndexProvider;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 

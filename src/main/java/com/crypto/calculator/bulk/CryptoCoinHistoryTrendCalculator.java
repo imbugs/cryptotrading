@@ -1,7 +1,7 @@
 package com.crypto.calculator.bulk;
 
 import com.crypto.calculator.MovingAverageCalculator;
-import com.crypto.dataprovider.impl.CryptoCoinHistoryBulkDataProvider;
+import com.crypto.datahandler.impl.CryptoCoinHistoryBulkDataHandler;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.TrendValue;
@@ -22,7 +22,7 @@ public class CryptoCoinHistoryTrendCalculator extends BulkCalculator<CryptocoinH
 
         super();
 
-        CryptoCoinHistoryBulkDataProvider dataProvider = new CryptoCoinHistoryBulkDataProvider();
+        CryptoCoinHistoryBulkDataHandler dataProvider = new CryptoCoinHistoryBulkDataHandler();
         MovingAverageCalculator calculator = new MovingAverageCalculator(dataProvider,0);
 
         setDataProvider(dataProvider);

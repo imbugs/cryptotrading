@@ -3,7 +3,7 @@ package com.crypto.dao;
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.MacdDaoImpl;
-import com.crypto.dataprovider.DataProvider;
+import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.BuyLimitOrder;
 import com.crypto.entities.LimitOrder;
 import com.crypto.entities.SellLimitOrder;

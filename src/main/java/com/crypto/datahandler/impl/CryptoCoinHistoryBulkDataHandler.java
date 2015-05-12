@@ -1,9 +1,10 @@
-package com.crypto.dataprovider.impl;
+package com.crypto.datahandler.impl;
 
 import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.CryptocoinTrendDao;
-import com.crypto.dataprovider.BulkDataProvider;
-import com.crypto.dataprovider.MovingAverageDataProvider;
+import com.crypto.datahandler.provider.BulkDataProvider;
+import com.crypto.datahandler.persister.DataPersister;
+import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * Created by Jan Wicherink on 9-5-15.
  */
-public class CryptoCoinHistoryBulkDataProvider implements BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider {
+public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider, DataPersister<TrendValue> {
 
     @EJB
     private CryptocoinHistoryDao cryptocoinHistoryDao;
@@ -28,7 +29,7 @@ public class CryptoCoinHistoryBulkDataProvider implements BulkDataProvider<Crypt
     /**
      * Default constructor
      */
-    public CryptoCoinHistoryBulkDataProvider() {
+    public CryptoCoinHistoryBulkDataHandler() {
     }
 
     @Override
@@ -39,6 +40,12 @@ public class CryptoCoinHistoryBulkDataProvider implements BulkDataProvider<Crypt
     @Override
     public CryptocoinHistory getValue(Integer index) {
         return cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(getTradePair(), index);
+    }
+
+    @Override
+    public void storeValue(TrendValue value) {
+        cryptocoinTrendDao.getTrendValue(value.getIndx(), value.getTrend(), value.getTradePair());
+
     }
 
     @Override

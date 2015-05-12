@@ -1,6 +1,6 @@
 package com.crypto.calculator;
 
-import com.crypto.dataprovider.MovingAverageDataProvider;
+import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TrendValue;
 

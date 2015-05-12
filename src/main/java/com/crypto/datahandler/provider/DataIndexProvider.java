@@ -1,4 +1,4 @@
-package com.crypto.dataprovider;
+package com.crypto.datahandler.provider;
 
 /**
  * Provides the index of a daeta item such as a cryptocoin history or trend value

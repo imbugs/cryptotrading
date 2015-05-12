@@ -1,5 +1,6 @@
-package com.crypto.dataprovider;
+package com.crypto.datahandler.provider;
 
+import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TrendValue;
@@ -9,7 +10,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public interface MacdDataProvider extends DataProvider<MacdValue>{
+public interface MacdDataProvider extends DataProvider<MacdValue> {
 
     /**
      * Get the short trend value

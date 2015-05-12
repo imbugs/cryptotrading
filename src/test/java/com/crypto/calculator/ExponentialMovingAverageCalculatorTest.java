@@ -1,6 +1,6 @@
 package com.crypto.calculator;
 
-import com.crypto.dataprovider.MovingAverageDataProvider;
+import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.*;
 import com.crypto.enums.TrendType;
 import org.junit.Test;

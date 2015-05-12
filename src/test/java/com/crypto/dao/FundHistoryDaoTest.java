@@ -4,7 +4,7 @@ import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.FundDaoImpl;
 import com.crypto.dao.impl.MacdDaoImpl;
-import com.crypto.dataprovider.DataProvider;
+import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.Fund;
 import com.crypto.entities.FundHistory;
 import com.crypto.entities.Trading;

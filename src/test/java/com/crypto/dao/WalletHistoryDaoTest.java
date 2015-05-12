@@ -2,7 +2,7 @@ package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.WalletHistoryDaoImpl;
-import com.crypto.dataprovider.DataProvider;
+import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.Trading;
 import com.crypto.entities.WalletHistory;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;

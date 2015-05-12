@@ -1,6 +1,6 @@
 package com.crypto.entities;
 
-import com.crypto.dataprovider.DataIndexProvider;
+import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 
 import javax.persistence.Column;

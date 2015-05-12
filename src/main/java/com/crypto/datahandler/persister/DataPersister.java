@@ -1,4 +1,4 @@
-package com.crypto.dataprovider;
+package com.crypto.datahandler.persister;
 
 import com.crypto.entities.TradePair;
 

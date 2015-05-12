@@ -3,7 +3,7 @@ package com.crypto.dao;
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
 import com.crypto.dao.impl.MacdDaoImpl;
-import com.crypto.dataprovider.MovingAverageDataProvider;
+import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.TrendType;
