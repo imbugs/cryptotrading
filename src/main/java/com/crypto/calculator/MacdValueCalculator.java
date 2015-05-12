@@ -13,7 +13,7 @@ public class MacdValueCalculator implements Calculator{
 
     private Integer indx;
 
-    private Float value;
+    private Float calculatedValue;
 
     private Float delta;
 
@@ -23,7 +23,7 @@ public class MacdValueCalculator implements Calculator{
      * Constructor
      *
      * @param dataProvider the Macd data provider
-     * @param indx the index of the macd value
+     * @param indx the index of the macd calculatedValue
      */
     public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx) {
         this.dataProvider = dataProvider;
@@ -43,16 +43,16 @@ public class MacdValueCalculator implements Calculator{
     }
 
     /**
-     * Calculates the macd value, the macd value is the difference between the short term trend value and
-     * the long term trend value at a given index.
-     * In addition the delta value is calculated with respect to the previous Macd value at index = indx - 1
+     * Calculates the macd calculatedValue, the macd calculatedValue is the difference between the short term trend calculatedValue and
+     * the long term trend calculatedValue at a given index.
+     * In addition the delta calculatedValue is calculated with respect to the previous Macd calculatedValue at index = indx - 1
      */
     public void calculate () {
 
         final TrendValue shortTrendvalue = dataProvider.getShortTrendValue(this.indx);
         final TrendValue longTrendvalue = dataProvider.getLongTrendValue(this.indx);
 
-        this.value = shortTrendvalue.getValue() - longTrendvalue.getValue();
+        this.calculatedValue = shortTrendvalue.getValue() - longTrendvalue.getValue();
 
         final MacdValue previousMacdValue = this.dataProvider.getValue(this.indx - 1);
 
@@ -60,17 +60,13 @@ public class MacdValueCalculator implements Calculator{
 
         if (previousMacdValue != null) {
 
-            delta = this.value - previousMacdValue.getValue();
+            delta = this.calculatedValue - previousMacdValue.getValue();
         }
         this.setDelta(delta);
     }
 
-    public Float getValue() {
-        return value;
-    }
-
-    public void setValue(Float value) {
-        this.value = value;
+    public Float getCalculatedValue() {
+        return calculatedValue;
     }
 
     public Float getDelta() {

@@ -128,7 +128,7 @@ public class ExponentialMovingAverageCalculatorTest {
 
        // Assert
        // Expected exponential moving average value at index = 30 (5th may 2010) = 22.92 with rounding error of 0.01
-       assertEquals (new Float(22.92F), calculator.getValue(), 0.01F);
+       assertEquals (new Float(22.92F), calculator.getCalculatedValue(), 0.01F);
 
        calculator.calculate();
     }

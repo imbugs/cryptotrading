@@ -1,6 +1,6 @@
 package com.crypto.entities;
 
-import com.crypto.dataprovider.DataProvider;
+import com.crypto.dataprovider.DataIndexProvider;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 
 import javax.persistence.Column;
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "CRYPTOCOIN_HISTORY")
-public class CryptocoinHistory implements Serializable, DataProvider {
+public class CryptocoinHistory implements Serializable, DataIndexProvider {
 
     private static final long serialVersionUID = -7267559706573006370L;
 
@@ -71,11 +71,6 @@ public class CryptocoinHistory implements Serializable, DataProvider {
         this.high = high;
         this.close = close;
         this.volume = volume;
-    }
-
-    @Override
-    public Object getValue(Integer index) {
-        return this.close;
     }
 
     @Override

@@ -61,7 +61,7 @@ public class MacdValueCalculatorTest {
         macdValueCalculator.calculate();
 
         //Assert
-        assertEquals(new Float(6F), macdValueCalculator.getValue());
+        assertEquals(new Float(6F), macdValueCalculator.getCalculatedValue());
         assertEquals(new Float(2F), macdValueCalculator.getDelta());
     }
 }

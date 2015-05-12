@@ -5,7 +5,7 @@ import com.crypto.dataprovider.MovingAverageDataProvider;
 import com.crypto.entities.TrendValue;
 
 /**
- * Moving Average calculator, calculates a moving average value of crypto coin data
+ * Moving Average calculator, calculates a moving average calculatedValue of crypto coin data
  *
  * Created by Jan Wicherink on 1-5-15.
  */
@@ -15,7 +15,7 @@ public class MovingAverageCalculator implements Calculator{
 
     private Integer index;
 
-    private Float value = null;
+    private Float calculatedValue = null;
 
     private Float delta = null;
 
@@ -37,21 +37,21 @@ public class MovingAverageCalculator implements Calculator{
     }
 
     /**
-     * Calculate the moving average value and delta of a given trend on the crypto coin exchange rate data
+     * Calculate the moving average calculatedValue and delta of a given trend on the crypto coin exchange rate data
      *
-     * @return the moving average value
+     * @return the moving average calculatedValue
      */
     public void calculate() {
 
         final Integer period = this.dataProvider.getTrend().getPeriod();
         final Float   sum    = this.dataProvider.getSumOverPeriod(this.index);
-        this.value  = sum/period;
+        this.calculatedValue = sum/period;
 
         final Integer previousIndex = this.index - 1;
         final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
 
         if (previousValue != null) {
-            this.delta = this.value  - previousValue.getValue();
+            this.delta = this.calculatedValue - previousValue.getValue();
         }
         else {
             this.delta = null;
@@ -66,8 +66,8 @@ public class MovingAverageCalculator implements Calculator{
         return index;
     }
 
-    public Float getValue() {
-        return value;
+    public Float getCalculatedValue() {
+        return calculatedValue;
     }
 
     public Float getDelta() {
@@ -79,7 +79,7 @@ public class MovingAverageCalculator implements Calculator{
     }
 
     public void setValue(Float value) {
-        this.value = value;
+        this.calculatedValue = value;
     }
 
     public void setDelta(Float delta) {

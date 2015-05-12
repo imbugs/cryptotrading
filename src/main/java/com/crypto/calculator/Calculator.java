@@ -13,16 +13,10 @@ public interface Calculator {
     public void calculate();
 
     /**
-     * Set the calculated value
-     * @param value the calculated value
-     */
-    public void setValue (final Float value);
-
-    /**
      * Get the calculated value
      * @return the calculated value
      */
-    public Float getValue();
+    public Float getCalculatedValue();
 
     /**
      * Set the calculated value

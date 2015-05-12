@@ -4,13 +4,14 @@ import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dataprovider.impl.CryptoCoinHistoryBulkDataProvider;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
+import com.crypto.entities.TrendValue;
 
 /**
  * Cryptcoin history trend calculator, calculates the bulk on a cryptocoin history data
  *
  * Created by Jan Wicherink on 8-5-15.
  */
-public class CryptoCoinHistoryTrendCalculator extends BulkCalculator<CryptocoinHistory> {
+public class CryptoCoinHistoryTrendCalculator extends BulkCalculator<CryptocoinHistory, TrendValue> {
 
     /**
      * Constructor

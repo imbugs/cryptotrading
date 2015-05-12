@@ -2,7 +2,8 @@ package com.crypto.calculator.bulk;
 
 import com.crypto.calculator.Calculator;
 import com.crypto.dataprovider.BulkDataProvider;
-import com.crypto.dataprovider.DataProvider;
+import com.crypto.dataprovider.DataIndexProvider;
+import com.crypto.dataprovider.DataPersister;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 
@@ -16,11 +17,13 @@ import java.util.List;
  *
  * Created by Jan Wicherink on 9-5-15.
  */
-public class BulkCalculator <D extends DataProvider> {
+public class BulkCalculator <D extends DataIndexProvider, E> {
 
     private Calculator calculator;
 
     private BulkDataProvider dataProvider;
+
+    private DataPersister dataPersister;
 
     private  TradePair tradePair;
 
@@ -30,9 +33,10 @@ public class BulkCalculator <D extends DataProvider> {
      * @param calculator
      * @param dataProvider
      */
-    public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, TradePair tradePair) {
+    public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, TradePair tradePair) {
         this.calculator = calculator;
         this.dataProvider = dataProvider;
+        this.dataPersister = dataPersister;
         this.tradePair = tradePair;
     }
 
@@ -53,6 +57,8 @@ public class BulkCalculator <D extends DataProvider> {
         for (final D data : bulkData) {
             calculator.setIndex(data.getIndex());
             calculator.calculate();
+
+            dataPersister.storeValue(calculator.getCalculatedValue());
         }
     }
 

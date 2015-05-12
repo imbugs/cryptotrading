@@ -129,7 +129,7 @@ public class MovingAverageCalculatorTest {
 
         // Assert
         // Moving Average at index 30, 5th may 2010 = 23.13 with rounding error of 0.01
-        assertEquals(new Float(23.13F), movingAverageCalculator.getValue(), 0.01F);
+        assertEquals(new Float(23.13F), movingAverageCalculator.getCalculatedValue(), 0.01F);
         assertEquals(new Float(-0.15F), movingAverageCalculator.getDelta(), 0.01F);
     }
 }

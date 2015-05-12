@@ -6,16 +6,22 @@ import com.crypto.entities.TradePair;
  * Provider of crypto coin exchange data for the calculation of a moving average trend
  *
  * Created by Jan Wicherink on 1-5-15.
+ *
+ * @param <D> the data type to be persisted
  */
-public interface DataProvider <D> extends DataIndexProvider {
+public interface DataPersister<D>{
 
     /**
-     * Get a value at a given index
-     *
-     * @param index the index
-     * @return the crypto coin value
+     * Store the value to the data store
+     * @param value the value to be stored
      */
-    public D getValue(final Integer index);
+    public void storeValue(D value);
+
+    /**
+     * Get the index of a given value
+     * @return the index of a value
+     */
+    public Integer getIndex();
 
     /**
      * Get the trade pair
