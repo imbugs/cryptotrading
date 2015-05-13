@@ -60,15 +60,7 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
     }
 
     @Override
-    public void storeMovingAverageValue(MovingAverageCalculator ma) {
-
-        final Trend trend = ma.getDataProvider().getTrend();
-        final Integer index = ma.getIndex();
-        final TradePair tradePair = ma.getDataProvider().getTradePair();
-        final Float value = ma.getCalculatedValue();
-        final Float delta = ma.getDelta();
-
-        final TrendValue trendValue = new TrendValue(1,tradePair,index,trend, null, value, delta);
+    public void storeTrendValue(TrendValue trendValue) {
         em.persist(trendValue);
     }
 

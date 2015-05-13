@@ -41,13 +41,11 @@ public interface CryptocoinTrendDao extends Serializable{
      */
     public MacdValue getMacdValue (final Integer index, final Macd macd, final TradePair tradePair);
 
-
-    /**
-     * Store a moving average value
-     * @param ma the moving average to be stored
+   /**
+     * Stores a trend value
+     * @param trendValue the trend value
      */
-    public void storeMovingAverageValue (final MovingAverageCalculator ma);
-
+    public void storeTrendValue(final TrendValue trendValue);
 
     /**
      * Store the moving average macd value

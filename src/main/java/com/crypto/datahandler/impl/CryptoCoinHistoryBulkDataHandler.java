@@ -44,8 +44,7 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
 
     @Override
     public void storeValue(TrendValue value) {
-        cryptocoinTrendDao.getTrendValue(value.getIndx(), value.getTrend(), value.getTradePair());
-
+        cryptocoinTrendDao.storeTrendValue(value);
     }
 
     @Override
