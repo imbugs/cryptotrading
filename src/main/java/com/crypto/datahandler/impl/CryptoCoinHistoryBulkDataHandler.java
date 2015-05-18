@@ -2,6 +2,7 @@ package com.crypto.datahandler.impl;
 
 import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.CryptocoinTrendDao;
+import com.crypto.dao.TrendDao;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
@@ -25,6 +26,9 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
 
     @EJB
     private CryptocoinTrendDao cryptocoinTrendDao;
+
+    @EJB
+    private TrendDao trendDao;
 
     /**
      * Default constructor
@@ -58,22 +62,31 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     }
 
     @Override
-    public Float getSumOverPeriod(Integer index) {
-        return cryptocoinHistoryDao.getSumCryptoCoinRate(getIndex(), getTrend().getPeriod(), getTradePair());
+    public Float getSumOverPeriod(Integer index, Integer period) {
+        return cryptocoinHistoryDao.getSumCryptoCoinRate(getIndex(), period, getTradePair());
     }
 
     @Override
-    public TrendValue getTrendValue(Integer index) {
-        return cryptocoinTrendDao.getTrendValue(getIndex(), getTrend(), getTradePair());
+    public TrendValue getTrendValue(Integer index, Trend trend) {
+        return cryptocoinTrendDao.getTrendValue(getIndex(), trend, getTradePair());
     }
-
-    @Override
-    public Trend getTrend() {
-        return getTrend();
-    }
-
     @Override
     public CryptocoinHistory getLast() {
         return cryptocoinHistoryDao.getLast(getTradePair());
+    }
+
+    @Override
+    public List<Trend> getAllMovingAverageTrends() {
+        return trendDao.getAllMovingAverageTrends();
+    }
+
+    @Override
+    public List<Trend> getAllExponentialMovingAverageTrends() {
+        return trendDao.getAllExponentialMovingAverageTrends();
+    }
+
+    @Override
+    public List<Trend> getAllSmoothingMovingAverageTrends() {
+        return trendDao.getAllSmoothingMovingAverageTrends();
     }
 }

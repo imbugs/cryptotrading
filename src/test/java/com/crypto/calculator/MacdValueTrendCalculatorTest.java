@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  *
  * Created by Jan Wicherink on 3-5-15.
  */
-public class MacdValueCalculatorTest {
+public class MacdValueTrendCalculatorTest {
 
     @Test
     public void testMacdValueCalculator() {
@@ -57,7 +57,9 @@ public class MacdValueCalculatorTest {
         };
 
         // Act
-        final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider, new Integer(100));
+        final Trend shortTrend = new Trend();
+        final Trend longTrend = new Trend();
+        final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider, new Integer(100), shortTrend, longTrend);
         macdValueCalculator.calculate();
 
         //Assert

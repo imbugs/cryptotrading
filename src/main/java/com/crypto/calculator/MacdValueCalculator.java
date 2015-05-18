@@ -2,6 +2,7 @@ package com.crypto.calculator;
 
 import com.crypto.datahandler.provider.MacdDataProvider;
 import com.crypto.entities.MacdValue;
+import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
 /**
@@ -9,9 +10,13 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 3-5-15.
  */
-public class MacdValueCalculator implements Calculator{
+public class MacdValueCalculator implements TrendCalculator {
 
     private Integer indx;
+
+    private Trend shortTrend;
+
+    private Trend longTrend;
 
     private Float calculatedValue;
 
@@ -25,9 +30,11 @@ public class MacdValueCalculator implements Calculator{
      * @param dataProvider the Macd data provider
      * @param indx the index of the macd calculatedValue
      */
-    public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx) {
+    public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx, final Trend shortTrend, final Trend longTrend) {
         this.dataProvider = dataProvider;
         this.indx = indx;
+        this.shortTrend = shortTrend;
+        this.longTrend = longTrend;
     }
 
     /**
@@ -84,5 +91,21 @@ public class MacdValueCalculator implements Calculator{
     public void setDelta(Float delta) {
 
         this.delta = delta;
+    }
+
+    public Trend getShortTrend() {
+        return shortTrend;
+    }
+
+    public void setShortTrend(Trend shortTrend) {
+        this.shortTrend = shortTrend;
+    }
+
+    public Trend getLongTrend() {
+        return longTrend;
+    }
+
+    public void setLongTrend(Trend longTrend) {
+        this.longTrend = longTrend;
     }
 }

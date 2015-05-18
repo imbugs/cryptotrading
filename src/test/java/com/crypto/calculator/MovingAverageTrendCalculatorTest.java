@@ -58,7 +58,7 @@ import static org.junit.Assert.assertEquals;
  *
  * Created by Jan Wicherink on 3-5-15.
  */
-public class MovingAverageCalculatorTest {
+public class MovingAverageTrendCalculatorTest {
 
     @Test
     public void testMovingAverageCalculator () throws ParseException {
@@ -71,7 +71,7 @@ public class MovingAverageCalculatorTest {
         dataProvider = new MovingAverageDataProvider() {
 
             @Override
-            public Float getSumOverPeriod(Integer index) {
+            public Float getSumOverPeriod(Integer index, Integer period) {
 
                 // Sum of price of the last 10 days (from the 5th of may 2010, index 30)
                 final Float total = 22.17F +  22.40F + 23.10F + 22.68F + 23.33F + 23.10F + 23.19F + 23.65F + 23.87F + 23.82F;
@@ -100,7 +100,7 @@ public class MovingAverageCalculatorTest {
             }
 
             @Override
-            public TrendValue getTrendValue(Integer index) {
+            public TrendValue getTrendValue(Integer index, Trend trend) {
 
                 if (index == 29) {
                     return new TrendValue(1, new TradePair(), 29, new Trend(), null, 23.28F, 0.15F);
@@ -111,20 +111,16 @@ public class MovingAverageCalculatorTest {
             }
 
             @Override
-            public Trend getTrend() {
-                // Moving average of 10 days
-                return new Trend(100, TrendType.MA, 10, null);
-            }
-
-            @Override
             public TradePair getTradePair() {
 
                 return null;
             }
         };
 
+        final Trend trend = new Trend(0, TrendType.MA, 10, null);
+        movingAverageCalculator = new MovingAverageCalculator(dataProvider, 30, trend);
+
         //Act
-        movingAverageCalculator = new MovingAverageCalculator(dataProvider, 30);
         movingAverageCalculator.calculate();
 
         // Assert

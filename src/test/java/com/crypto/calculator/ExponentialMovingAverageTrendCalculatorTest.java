@@ -61,7 +61,7 @@ import static org.junit.Assert.assertEquals;
  *
  * Created by Jan Wicherink on 8-5-15.
  */
-public class ExponentialMovingAverageCalculatorTest {
+public class ExponentialMovingAverageTrendCalculatorTest {
 
     @Test
     public void testExponentialMovingAverageCalculator() throws ParseException {
@@ -75,7 +75,7 @@ public class ExponentialMovingAverageCalculatorTest {
        final MovingAverageDataProvider dataProvider = new MovingAverageDataProvider() {
 
            @Override
-           public Float getSumOverPeriod(Integer index) {
+           public Float getSumOverPeriod(Integer index, Integer period) {
                return null;
            }
 
@@ -102,16 +102,10 @@ public class ExponentialMovingAverageCalculatorTest {
            }
 
            @Override
-           public TrendValue getTrendValue(Integer index) {
+           public TrendValue getTrendValue(Integer index, Trend trend) {
 
                // Return moving average value of index 29, 4th may 2010 :  EMA=23.08  delta = -0.15
                return new TrendValue(1, tradePair, 29, null, null, 23.08F, -0.15F);
-           }
-
-           @Override
-           public Trend getTrend() {
-                // Exponential Moving Average period = 10 days
-               return new Trend(1, TrendType.EMA, 10, null);
            }
 
            @Override
@@ -122,9 +116,9 @@ public class ExponentialMovingAverageCalculatorTest {
        };
 
        //Act
-       final ExponentialMovingAverageCalculator calculator = new ExponentialMovingAverageCalculator(dataProvider, 30);
-       calculator.calculate();
-
+        final  Trend trend = new Trend(1, TrendType.EMA, 10, null);
+        final ExponentialMovingAverageCalculator calculator = new ExponentialMovingAverageCalculator(dataProvider, 30, trend );
+        calculator.calculate();
 
        // Assert
        // Expected exponential moving average value at index = 30 (5th may 2010) = 22.92 with rounding error of 0.01

@@ -2,6 +2,7 @@
 package com.crypto.calculator;
 
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
+import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
 /**
@@ -9,7 +10,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public class MovingAverageCalculator implements Calculator{
+public class MovingAverageCalculator implements TrendCalculator {
 
     private MovingAverageDataProvider dataProvider;
 
@@ -19,14 +20,26 @@ public class MovingAverageCalculator implements Calculator{
 
     private Float delta = null;
 
+    private Trend trend;
+
     /**
      * Constructor
      * @param dataProvider the data provider of this moving average
      * @param index the index of the moving average
+     * @param trend the trend of this calculator
      */
-    public MovingAverageCalculator(final MovingAverageDataProvider dataProvider, final Integer index) {
+    public MovingAverageCalculator(final MovingAverageDataProvider dataProvider, final Integer index, final Trend trend) {
         this.dataProvider = dataProvider;
         this.index = index;
+        this.trend = trend;
+    }
+
+    /**
+     * Constructor
+     * @param dataProvider data provider
+     */
+    public MovingAverageCalculator(final MovingAverageDataProvider dataProvider) {
+        this.dataProvider = dataProvider;
     }
 
     /**
@@ -43,12 +56,12 @@ public class MovingAverageCalculator implements Calculator{
      */
     public void calculate() {
 
-        final Integer period = this.dataProvider.getTrend().getPeriod();
-        final Float   sum    = this.dataProvider.getSumOverPeriod(this.index);
+        final Integer period = getTrend().getPeriod();
+        final Float   sum    = this.dataProvider.getSumOverPeriod(this.index, period);
         this.calculatedValue = sum/period;
 
         final Integer previousIndex = this.index - 1;
-        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
+        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex, getTrend());
 
         if (previousValue != null) {
             this.delta = this.calculatedValue - previousValue.getValue();
@@ -76,6 +89,14 @@ public class MovingAverageCalculator implements Calculator{
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+
+    public Trend getTrend() {
+        return this.trend;
+    }
+
+    public void setTrend(Trend trend) {
+         this.trend = trend;
     }
 
     public void setValue(Float value) {

@@ -15,9 +15,10 @@ public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistor
      * Get the total sum of exchange rates of the crypto coin over a given period upto an index.
      *
      * @param index the index
+     * @param period the period of which the sum is taken
      * @return the total sum of exchange rates
      */
-    public Float getSumOverPeriod(final Integer index);
+    public Float getSumOverPeriod(final Integer index, final Integer period);
 
     /**
      * Get a trend value at a given index
@@ -25,12 +26,5 @@ public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistor
      * @param index
      * @return the trend value
      */
-    public TrendValue getTrendValue (final Integer index);
-
-    /**
-     * Get the trend of this moving average provider.
-     *
-     * @return the trend
-     */
-    public Trend getTrend ();
+    public TrendValue getTrendValue (final Integer index, final Trend trend);
 }
