@@ -1,6 +1,7 @@
 package com.crypto.datahandler.provider;
 
 import com.crypto.entities.CryptocoinHistory;
+import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
@@ -23,8 +24,10 @@ public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistor
     /**
      * Get a trend value at a given index
      *
-     * @param index
+     * @param index the index of the value
+     * @param trend the trend of the value
+     * @param tradePair the tradepair
      * @return the trend value
      */
-    public TrendValue getTrendValue (final Integer index, final Trend trend);
+    public TrendValue getTrendValue (final Integer index, final Trend trend, final TradePair tradePair);
 }

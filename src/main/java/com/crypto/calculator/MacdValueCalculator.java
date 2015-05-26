@@ -10,7 +10,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 3-5-15.
  */
-public class MacdValueCalculator implements TrendCalculator {
+public class MacdValueCalculator implements MacdCalculator {
 
     private Integer indx;
 

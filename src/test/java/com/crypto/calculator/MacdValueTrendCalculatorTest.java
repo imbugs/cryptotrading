@@ -30,11 +30,6 @@ public class MacdValueTrendCalculatorTest {
             }
 
             @Override
-            public Integer getIndex() {
-                return 100;
-            }
-
-            @Override
             public TrendValue getShortTrendValue(Integer index) {
                 return new TrendValue(1, new TradePair(), 100, new Trend(), null, 10F, 1F);
 

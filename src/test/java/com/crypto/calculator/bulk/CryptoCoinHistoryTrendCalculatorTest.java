@@ -22,6 +22,10 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.inject.Inject;
+
+import static junit.framework.TestCase.assertNotNull;
+
 /**
  * Test the bulk CryptoCoinHistoryTrendCalculator
  * Created by Jan Wicherink on 18-5-2015.
@@ -32,6 +36,9 @@ import org.junit.runner.RunWith;
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
 public class CryptoCoinHistoryTrendCalculatorTest {
+
+    @Inject
+    private CryptoCoinHistoryTrendCalculator cryptoCoinHistoryTrendCalculator;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -47,20 +54,20 @@ public class CryptoCoinHistoryTrendCalculatorTest {
                 .addPackage(DataProvider.class.getPackage())
                 .addPackage(DataPersister.class.getPackage())
                 .addPackage(CryptoCoinHistoryBulkDataHandler.class.getPackage())
+                .addPackage(CryptoCoinHistoryBulkDataHandler.class.getPackage())
                 .addPackage(DataProvider.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_21.xml")
+    @UsingDataSet("datasets/it_test_dataset_23.xml")
     public void testCalculation() {
 
         final TradePair tradePair = new TradePair();
         tradePair.setId(new Integer(1));
 
-       final CryptoCoinHistoryTrendCalculator calculator = new CryptoCoinHistoryTrendCalculator(tradePair);
-      //  calculator.calculate();
-
+        cryptoCoinHistoryTrendCalculator.init(tradePair);
+        cryptoCoinHistoryTrendCalculator.calculate();
     }
 }

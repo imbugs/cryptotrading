@@ -19,17 +19,21 @@ package com.crypto.services;
 import com.crypto.dao.CurrencyDao;
 import com.crypto.entities.Currency;
 
+import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+
 import com.google.gson.Gson;
 
 /**
  * Rest service returning currency
  */
 @Path("/")
+@ApplicationScoped
 public class CurrencyService {
 
-    @Inject
+    @EJB
     private CurrencyDao currencyDao;
 
     @POST
@@ -42,12 +46,11 @@ public class CurrencyService {
         if (currency != null) {
 
             final Gson gson = new Gson();
-            final String jsonString = gson.toJson (currency);
+            final String jsonString = gson.toJson(currency);
 
             return jsonString;
-        }
-        else {
-          throw new NotFoundException("Currency not found: " + code);
+        } else {
+            throw new NotFoundException("Currency not found: " + code);
         }
     }
 }

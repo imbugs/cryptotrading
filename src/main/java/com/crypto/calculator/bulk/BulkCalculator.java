@@ -25,7 +25,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
 
     private DataPersister dataPersister;
 
-    private  TradePair tradePair;
+    private TradePair tradePair;
 
     /**
      * Constructor
@@ -52,7 +52,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
      */
     public void calculate () {
 
-        final List<D> bulkData = dataProvider.getAll(this.tradePair);
+        final List<D> bulkData = dataProvider.getAll();
 
         for (final D data : bulkData) {
             calculator.setIndex(data.getIndex());
@@ -63,12 +63,12 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
     }
 
     /**
-     * Calculate the last cryptocoin history
+     * Calculate the last vast value
      */
     public void calculateLast() {
-        final CryptocoinHistory cryptocoinHistory = (CryptocoinHistory) getDataProvider().getLast();
+        final D data = (D) getDataProvider().getLast();
 
-        getCalculator().setIndex(cryptocoinHistory.getIndex());
+        getCalculator().setIndex(data.getIndex());
         getCalculator().calculate();
     }
 

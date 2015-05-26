@@ -94,13 +94,12 @@ public class MovingAverageTrendCalculatorTest {
                 return cryptocoinHistory;
             }
 
-            @Override
             public Integer getIndex() {
                 return 30;
             }
 
             @Override
-            public TrendValue getTrendValue(Integer index, Trend trend) {
+            public TrendValue getTrendValue(Integer index, Trend trend, TradePair tradePair) {
 
                 if (index == 29) {
                     return new TrendValue(1, new TradePair(), 29, new Trend(), null, 23.28F, 0.15F);

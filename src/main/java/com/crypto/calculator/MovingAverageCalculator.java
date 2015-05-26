@@ -2,8 +2,11 @@
 package com.crypto.calculator;
 
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
+import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
+
+import java.util.logging.Logger;
 
 /**
  * Moving Average calculator, calculates a moving average calculatedValue of crypto coin data
@@ -11,6 +14,8 @@ import com.crypto.entities.TrendValue;
  * Created by Jan Wicherink on 1-5-15.
  */
 public class MovingAverageCalculator implements TrendCalculator {
+
+    private static final Logger LOG = Logger.getLogger(MovingAverageCalculator.class.getName());
 
     private MovingAverageDataProvider dataProvider;
 
@@ -21,6 +26,7 @@ public class MovingAverageCalculator implements TrendCalculator {
     private Float delta = null;
 
     private Trend trend;
+
 
     /**
      * Constructor
@@ -46,11 +52,10 @@ public class MovingAverageCalculator implements TrendCalculator {
      * Default constructor
      */
     public MovingAverageCalculator() {
-
     }
 
     /**
-     * Calculate the moving average calculatedValue and delta of a given trend on the crypto coin exchange rate data
+     * Calculate the moving average calculated value and delta of a given trend on the crypto coin exchange rate data
      *
      * @return the moving average calculatedValue
      */
@@ -61,7 +66,9 @@ public class MovingAverageCalculator implements TrendCalculator {
         this.calculatedValue = sum/period;
 
         final Integer previousIndex = this.index - 1;
-        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex, getTrend());
+        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex, getTrend(), this.dataProvider.getTradePair());
+
+        LOG.info("Calculate index : " + this.index.toString());
 
         if (previousValue != null) {
             this.delta = this.calculatedValue - previousValue.getValue();

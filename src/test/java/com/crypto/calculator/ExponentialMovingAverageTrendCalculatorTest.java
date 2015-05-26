@@ -96,13 +96,9 @@ public class ExponentialMovingAverageTrendCalculatorTest {
                return cryptocoinHistory;
            }
 
-           @Override
-           public Integer getIndex() {
-               return 30;
-           }
 
            @Override
-           public TrendValue getTrendValue(Integer index, Trend trend) {
+           public TrendValue getTrendValue(Integer index, Trend trend, TradePair tradePair) {
 
                // Return moving average value of index 29, 4th may 2010 :  EMA=23.08  delta = -0.15
                return new TrendValue(1, tradePair, 29, null, null, 23.08F, -0.15F);

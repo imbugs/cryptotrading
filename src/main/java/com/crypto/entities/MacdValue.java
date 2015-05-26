@@ -1,5 +1,7 @@
 package com.crypto.entities;
 
+import com.crypto.datahandler.provider.DataIndexProvider;
+
 import javax.persistence.*;
 
 /**
@@ -13,7 +15,7 @@ import javax.persistence.*;
 @Table(name="CRYPTOCOIN_TRENDS")
 @DiscriminatorColumn(name = "TYPE")
 @DiscriminatorValue(value = "MACD")
-public class MacdValue {
+public class MacdValue  implements DataIndexProvider{
 
     @Id
     @GeneratedValue
@@ -25,8 +27,7 @@ public class MacdValue {
     private TradePair tradePair;
 
     @Column(name="INDX")
-    private
-   Integer indx;
+    private Integer indx;
 
     @ManyToOne
     @JoinColumn(name="MACD_ID", nullable = true, updatable = true)
@@ -94,5 +95,10 @@ public class MacdValue {
 
     public void setId(Integer id) {
         Id = id;
+    }
+
+    @Override
+    public Integer getIndex() {
+        return this.indx;
     }
 }

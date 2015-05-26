@@ -16,16 +16,4 @@ public interface DataPersister<D>{
      * @param value the value to be stored
      */
     public void storeValue(D value);
-
-    /**
-     * Get the index of a given value
-     * @return the index of a value
-     */
-    public Integer getIndex();
-
-    /**
-     * Get the trade pair
-     * @return the trade pair
-     */
-    public TradePair getTradePair();
 }
