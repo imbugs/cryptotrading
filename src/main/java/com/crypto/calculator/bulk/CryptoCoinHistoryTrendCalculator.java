@@ -51,8 +51,8 @@ public class CryptoCoinHistoryTrendCalculator {
         final MovingAverageCalculator maCalculator = new MovingAverageCalculator(this.dataProvider);
         final ExponentialMovingAverageCalculator emaCalculator = new ExponentialMovingAverageCalculator(this.dataProvider);
 
-        this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, dataProvider, dataProvider, tradePair);
-        this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, dataProvider, dataProvider, tradePair);
+        this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, tradePair);
+        this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, tradePair);
         this.tradePair = tradePair;
 
         LOG.info("Initialise for tradepair : " + tradePair.getId());
@@ -71,6 +71,7 @@ public class CryptoCoinHistoryTrendCalculator {
 
             LOG.info("Calculator for trend : " + trend.getName());
 
+            dataProvider.setTrend(trend);
             maCalculator.getCalculator().setTrend(trend);
             maCalculator.calculate();
         }

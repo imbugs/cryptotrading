@@ -25,9 +25,21 @@ public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistor
      * Get a trend value at a given index
      *
      * @param index the index of the value
-     * @param trend the trend of the value
-     * @param tradePair the tradepair
      * @return the trend value
      */
-    public TrendValue getTrendValue (final Integer index, final Trend trend, final TradePair tradePair);
+    public TrendValue getTrendValue (final Integer index);
+
+
+    /**
+     * Get the trend of this moving average data provider
+     * @return
+     */
+    public Trend getTrend ();
+
+
+    /**
+     * Set the trend of the moving average data provider
+     * @param trend
+     */
+    public void setTrend(final Trend trend);
 }

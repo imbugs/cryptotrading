@@ -98,16 +98,31 @@ public class ExponentialMovingAverageTrendCalculatorTest {
 
 
            @Override
-           public TrendValue getTrendValue(Integer index, Trend trend, TradePair tradePair) {
+           public TrendValue getTrendValue(Integer index) {
 
                // Return moving average value of index 29, 4th may 2010 :  EMA=23.08  delta = -0.15
                return new TrendValue(1, tradePair, 29, null, null, 23.08F, -0.15F);
            }
 
            @Override
+           public Trend getTrend() {
+               return null;
+           }
+
+           @Override
+           public void setTrend(Trend trend) {
+
+           }
+
+           @Override
            public TradePair getTradePair() {
 
                return tradePair;
+           }
+
+           @Override
+           public void setTradePair(TradePair tradePair) {
+
            }
        };
 

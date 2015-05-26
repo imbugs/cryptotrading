@@ -25,4 +25,9 @@ public interface DataProvider <D extends DataIndexProvider> {
      * @return the trade pair
      */
     public TradePair getTradePair();
+
+    /**
+     * Set the trade pair
+     */
+    public void setTradePair(final TradePair tradePair);
 }

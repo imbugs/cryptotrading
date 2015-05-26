@@ -49,6 +49,11 @@ public class MacdValueTrendCalculatorTest {
             public TradePair getTradePair() {
                 return null;
             }
+
+            @Override
+            public void setTradePair(TradePair tradePair) {
+
+            }
         };
 
         // Act

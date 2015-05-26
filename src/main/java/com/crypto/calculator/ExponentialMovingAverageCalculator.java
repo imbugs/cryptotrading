@@ -38,7 +38,7 @@ public class ExponentialMovingAverageCalculator extends MovingAverageCalculator 
         final Float multiplier = (2F / (getTrend().getPeriod() + 1));
         final Integer previousIndex = this.getIndex() - 1;
 
-        final TrendValue previousValue = this.getDataProvider().getTrendValue(previousIndex, getTrend(), this.getDataProvider().getTradePair());
+        final TrendValue previousValue = this.getDataProvider().getTrendValue(previousIndex);
         final CryptocoinHistory currentRate = this.getDataProvider().getValue(this.getIndex());
 
         if (previousValue != null) {

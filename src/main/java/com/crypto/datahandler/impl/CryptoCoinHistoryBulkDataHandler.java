@@ -34,6 +34,8 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     @Inject
     private TrendDao trendDao;
 
+    private Trend trend;
+
     private TradePair tradePair;
 
     /**
@@ -45,9 +47,12 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     /**
      * Constructor
      * @param tradePair tradepair of the bulk data handler
+     * @param trend  the trend for the moving average data provider
      */
-    public CryptoCoinHistoryBulkDataHandler(final TradePair tradePair){
-      this.tradePair = tradePair;
+    public CryptoCoinHistoryBulkDataHandler(final TradePair tradePair, final Trend trend){
+
+        this.tradePair = tradePair;
+        this.trend = trend;
     }
 
     @Override
@@ -72,8 +77,18 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     }
 
     @Override
-    public TrendValue getTrendValue(final Integer index, final Trend trend, final TradePair tradePair) {
-        return cryptocoinTrendDao.getTrendValue(index, trend, tradePair);
+    public Trend getTrend() {
+        return this.trend;
+    }
+
+    @Override
+    public void setTrend(Trend trend) {
+        this.trend = trend;
+    }
+
+    @Override
+    public TrendValue getTrendValue(final Integer index) {
+        return cryptocoinTrendDao.getTrendValue(index, this.trend, this.tradePair);
     }
     @Override
     public CryptocoinHistory getLast() {
@@ -98,5 +113,10 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     @Override
     public TradePair getTradePair() {
         return this.tradePair;
+    }
+
+    @Override
+    public void setTradePair(TradePair tradePair) {
+        this.tradePair = tradePair;
     }
 }

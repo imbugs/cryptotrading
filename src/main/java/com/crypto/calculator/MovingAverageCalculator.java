@@ -66,7 +66,7 @@ public class MovingAverageCalculator implements TrendCalculator {
         this.calculatedValue = sum/period;
 
         final Integer previousIndex = this.index - 1;
-        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex, getTrend(), this.dataProvider.getTradePair());
+        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
 
         LOG.info("Calculate index : " + this.index.toString());
 

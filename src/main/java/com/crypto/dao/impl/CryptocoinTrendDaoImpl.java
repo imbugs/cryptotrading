@@ -1,6 +1,5 @@
 package com.crypto.dao.impl;
 
-import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.*;
 
@@ -37,7 +36,7 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
     @Override
     public Float getSumTrend(Integer index, Trend trend, Integer period, TradePair tradePair) {
 
-        final Integer fromIndex = index-period;
+        final Integer fromIndex = index - period;
 
         final TypedQuery<Double> query = (TypedQuery<Double>) em.createQuery("SELECT SUM(t.value) FROM TrendValue t WHERE t.trend =:trend AND t.tradePair = :tradePair AND t.indx > :fromIndex AND t.indx <= :toIndex");
         query.setParameter("trend", trend);

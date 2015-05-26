@@ -80,6 +80,16 @@ public class MovingAverageTrendCalculatorTest {
             }
 
             @Override
+            public Trend getTrend() {
+                return null;
+            }
+
+            @Override
+            public void setTrend(Trend trend) {
+
+            }
+
+            @Override
             public CryptocoinHistory getValue(Integer index) {
 
                 final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory();
@@ -99,7 +109,7 @@ public class MovingAverageTrendCalculatorTest {
             }
 
             @Override
-            public TrendValue getTrendValue(Integer index, Trend trend, TradePair tradePair) {
+            public TrendValue getTrendValue(Integer index) {
 
                 if (index == 29) {
                     return new TrendValue(1, new TradePair(), 29, new Trend(), null, 23.28F, 0.15F);
@@ -113,6 +123,11 @@ public class MovingAverageTrendCalculatorTest {
             public TradePair getTradePair() {
 
                 return null;
+            }
+
+            @Override
+            public void setTradePair(TradePair tradePair) {
+
             }
         };
 
