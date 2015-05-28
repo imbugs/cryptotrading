@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crypto.services;
+package com.crypto.trading.services;
 
 import com.crypto.dao.CurrencyDao;
 import com.crypto.entities.Currency;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.ws.rs.*;
 
 import com.google.gson.Gson;

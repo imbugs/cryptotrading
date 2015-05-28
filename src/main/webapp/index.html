@@ -38,7 +38,29 @@ $( document ).ready( function() {
         });
     });
 }); // (document).ready
+
+$( document ).ready( function() {
+    $( '#recalculate' ).click( function( event ) {
+        event.preventDefault();
+
+        $.ajax('crypto-trading/recalculate', {
+            dataType:'json',
+            data:{},
+            type:'POST',
+            success:function ( data ) {
+                console.log("ready");
+            }
+        })
+        .error( function() {
+           console.log("error");
+        });
+    });
+}); // (document).ready
+
+
 </script>
+
+
 </head>
 <body>
 <form name="theForm">
@@ -46,6 +68,11 @@ $( document ).ready( function() {
         <input type="submit" id="getEuro" value="Get EURO"/>
         <span id="result"></span>
     </fieldset>
+
+    <fieldset>
+        <input type="submit" id="recalculate" value="Recalculate Trends"/>
+    </fieldset>
+
 </form>
 </body>
 </html>

@@ -3,6 +3,6 @@
     <currencies CODE="EUR" DESCRIPTION="Euro" SYMBOL="€" DTYPE="CUR"/>
     <currencies CODE="BTC" DESCRIPTION="Bitcoin" SYMBOL="BTC" DTYPE="CRC"/>
     <trading_sites CODE="BTCE" DESCRIPTION="BTC-e" URL="www.btc-e.com"/>
-    <trade_pair ID="1"  TRADING_SITE_CODE="BTCE" CURRENCY_CODE="EUR" CRYPTO_CURRENCY_CODE="BTC" TRANSACTION_FEE="0.1"/>
+    <trade_pairs ID="1"  TRADING_SITE_CODE="BTCE" CURRENCY_CODE="EUR" CRYPTO_CURRENCY_CODE="BTC" TRANSACTION_FEE="0.1"/>
     <funds TRADE_PAIR_ID="1" CURRENCY="EUR" COINS="50"/>
 </dataset>

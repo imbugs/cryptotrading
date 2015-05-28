@@ -3,5 +3,5 @@
     <currencies CODE="DLR" DESCRIPTION="Dollars" SYMBOL="$"   DTYPE="CUR"/>
     <currencies CODE="BTC" DESCRIPTION="Bitcoin" SYMBOL="BTC" DTYPE="CRC"/>
     <trading_sites CODE="BTCE" DESCRIPTION="BTC-e" URL="www.btc-e.com"/>
-    <trade_pair ID="1" TRADING_SITE_CODE="BTCE" CURRENCY_CODE="DLR" CRYPTO_CURRENCY_CODE="BTC" TRANSACTION_FEE="0.1"/>
+    <trade_pairs ID="1" TRADING_SITE_CODE="BTCE" CURRENCY_CODE="DLR" CRYPTO_CURRENCY_CODE="BTC" TRANSACTION_FEE="0.1"/>
 </dataset>
