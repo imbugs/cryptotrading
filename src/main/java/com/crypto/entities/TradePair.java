@@ -1,9 +1,12 @@
 package com.crypto.entities;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 
 /**
+ * Entity trade pair, defines a pair of currency and crypto currency for trading
+ *
  * Created by Jan Wicherink on 31-3-2015.
  */
 @Entity
@@ -13,10 +16,10 @@ public class TradePair implements Serializable {
     private static final long serialVersionUID = -4363837420737951917L;
 
     @Id
-    @Column (name="ID")
+    @Column(name="ID")
     private Integer id;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name="TRADING_SITE_CODE", nullable=false, updatable=false)
     private TradingSite tradingSite;
 
@@ -30,7 +33,6 @@ public class TradePair implements Serializable {
 
     @Column (name="TRANSACTION_FEE")
     private Float transactionFee;
-
 
     public TradePair() {
     }
@@ -61,7 +63,6 @@ public class TradePair implements Serializable {
 
         return tradingSite;
     }
-
 
     public Currency getCurrency() {
 

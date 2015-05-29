@@ -1,9 +1,6 @@
 package com.crypto.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -11,7 +8,8 @@ import java.io.Serializable;
  *
  * Created by Jan Wicherink on 7-4-2015.
  */
-@Entity(name="TRADING_SITES")
+@Entity
+@Table(name="TRADING_SITES")
 public class TradingSite implements Serializable {
 
     private static final long serialVersionUID = -2609436472397103930L;

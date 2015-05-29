@@ -14,22 +14,22 @@ import java.sql.Timestamp;
  * Created by Jan Wicherink on 31-3-2015.
  */
 @Entity
-@Table(name = "CRYPTOCOIN_HISTORY")
+@Table (name = "CRYPTOCOIN_HISTORY")
 public class CryptocoinHistory implements Serializable, DataIndexProvider {
 
     private static final long serialVersionUID = -7267559706573006370L;
-
-    @EmbeddedId
-    private CrytptocoinHistoryPk pk;
-
-    @Column(name = "TIMESTAMP")
-    private Timestamp timestamp;
 
     // Timestamp format with date and time
     public static String TIMESTAMP_FORMAT_DATE_AND_TIME = "yyyy-MM-dd HH:mm:ss";
 
     // Timestamp format with date only
     public static String TIMESTAMP_FORMAT_DATE = "yyyy-MM-dd";
+
+    @EmbeddedId
+    private CrytptocoinHistoryPk pk;
+
+    @Column(name = "TIMESTAMP")
+    private Timestamp timestamp;
 
     @Column(name = "OPEN")
     private Float open;

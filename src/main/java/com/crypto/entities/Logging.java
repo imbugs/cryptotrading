@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  * Created by jan on 18-4-15.
  */
 @Entity
-@Table(name="LOGGING")
+@Table (name="LOGGING")
 public class Logging {
 
     @Id

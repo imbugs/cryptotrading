@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by Jan Wicherink on 25-3-2015.
  */
 @Entity
-@Table(name = "TRENDS")
+@Table(name="TRENDS")
 public class Trend implements Serializable {
 
     private static final long serialVersionUID = 5445153257648020272L;

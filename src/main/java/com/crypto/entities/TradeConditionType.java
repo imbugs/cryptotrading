@@ -3,13 +3,15 @@ package com.crypto.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Trade condition type
  *
  * Created by Jan Wicherink on 6-5-15.
  */
-@Entity (name="TRADE_CONDITION_TYPES")
+@Entity
+@Table(name="TRADE_CONDITION_TYPES")
 public class TradeConditionType {
 
     @Id
