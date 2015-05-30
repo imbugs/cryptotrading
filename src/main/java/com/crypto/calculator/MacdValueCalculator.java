@@ -1,26 +1,22 @@
 package com.crypto.calculator;
 
 import com.crypto.datahandler.provider.MacdDataProvider;
+import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
-import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
 /**
- * The Calculated Macd Value
- *
+ * The Macd calculator
+ * <p/>
  * Created by Jan Wicherink on 3-5-15.
  */
 public class MacdValueCalculator implements MacdCalculator {
 
     private Integer indx;
 
-    private Trend shortTrend;
+    private Macd macd;
 
-    private Trend longTrend;
-
-    private Float calculatedValue;
-
-    private Float delta;
+    private TrendValue calculatedValue;
 
     private MacdDataProvider dataProvider;
 
@@ -28,13 +24,12 @@ public class MacdValueCalculator implements MacdCalculator {
      * Constructor
      *
      * @param dataProvider the Macd data provider
-     * @param indx the index of the macd calculatedValue
+     * @param indx         the index of the macd calculatedValue
      */
-    public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx, final Trend shortTrend, final Trend longTrend) {
+    public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx, final Macd macd) {
         this.dataProvider = dataProvider;
         this.indx = indx;
-        this.shortTrend = shortTrend;
-        this.longTrend = longTrend;
+        this.macd = macd;
     }
 
     /**
@@ -54,12 +49,12 @@ public class MacdValueCalculator implements MacdCalculator {
      * the long term trend calculatedValue at a given index.
      * In addition the delta calculatedValue is calculated with respect to the previous Macd calculatedValue at index = indx - 1
      */
-    public void calculate () {
+    public void calculate() {
 
-        final TrendValue shortTrendvalue = dataProvider.getShortTrendValue(this.indx);
-        final TrendValue longTrendvalue = dataProvider.getLongTrendValue(this.indx);
+        final TrendValue shortTrendvalue = this.dataProvider.getShortTrendValue(this.indx);
+        final TrendValue longTrendvalue = this.dataProvider.getLongTrendValue(this.indx);
 
-        this.calculatedValue = shortTrendvalue.getValue() - longTrendvalue.getValue();
+        final Float value = shortTrendvalue.getValue() - longTrendvalue.getValue();
 
         final MacdValue previousMacdValue = this.dataProvider.getValue(this.indx - 1);
 
@@ -67,45 +62,46 @@ public class MacdValueCalculator implements MacdCalculator {
 
         if (previousMacdValue != null) {
 
-            delta = this.calculatedValue - previousMacdValue.getValue();
+            delta = value - previousMacdValue.getValue();
         }
-        this.setDelta(delta);
+
+        final TrendValue trendValue = new TrendValue(this.dataProvider.getTradePair(), getIndex(), null, this.macd, value, delta);
+
+        this.calculatedValue = trendValue;
     }
 
-    public Float getCalculatedValue() {
+    public TrendValue getCalculatedValue() {
+
         return calculatedValue;
     }
 
+    @Override
+    public void setDelta(Float delta) {
+        this.calculatedValue.setDelta(delta);
+    }
+
+    @Override
     public Float getDelta() {
-        return delta;
+        return this.calculatedValue.getDelta();
     }
 
     public Integer getIndex() {
+
         return indx;
     }
 
     public void setIndex(Integer index) {
-      this.indx = index;
+
+        this.indx = index;
     }
 
-    public void setDelta(Float delta) {
-
-        this.delta = delta;
+    @Override
+    public Macd getMacd() {
+        return this.macd;
     }
 
-    public Trend getShortTrend() {
-        return shortTrend;
-    }
-
-    public void setShortTrend(Trend shortTrend) {
-        this.shortTrend = shortTrend;
-    }
-
-    public Trend getLongTrend() {
-        return longTrend;
-    }
-
-    public void setLongTrend(Trend longTrend) {
-        this.longTrend = longTrend;
+    @Override
+    public void setMacd(Macd macd) {
+        this.macd = macd;
     }
 }

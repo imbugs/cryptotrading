@@ -44,8 +44,8 @@ public class ExponentialMovingAverageCalculator extends MovingAverageCalculator 
         if (previousValue != null) {
 
             final Float ema = (currentRate.getClose() - previousValue.getValue()) * multiplier + previousValue.getValue();
-            this.setValue(ema);
-            this.setDelta(ema -previousValue.getValue());
+            final TrendValue trendValue = new TrendValue(this.getDataProvider().getTradePair(), getIndex(), getTrend(), null, ema, ema -previousValue.getValue());
+            this.setValue(trendValue);
         }
     }
 }

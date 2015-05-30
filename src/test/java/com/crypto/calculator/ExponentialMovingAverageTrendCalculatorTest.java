@@ -101,7 +101,7 @@ public class ExponentialMovingAverageTrendCalculatorTest {
            public TrendValue getTrendValue(Integer index) {
 
                // Return moving average value of index 29, 4th may 2010 :  EMA=23.08  delta = -0.15
-               return new TrendValue(1, tradePair, 29, null, null, 23.08F, -0.15F);
+               return new TrendValue(tradePair, 29, null, null, 23.08F, -0.15F);
            }
 
            @Override
@@ -133,7 +133,7 @@ public class ExponentialMovingAverageTrendCalculatorTest {
 
        // Assert
        // Expected exponential moving average value at index = 30 (5th may 2010) = 22.92 with rounding error of 0.01
-       assertEquals (new Float(22.92F), calculator.getCalculatedValue(), 0.01F);
+       assertEquals (new Float(22.92F), calculator.getCalculatedValue().getValue(), 0.01F);
 
        calculator.calculate();
     }

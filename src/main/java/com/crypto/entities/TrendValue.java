@@ -31,6 +31,10 @@ public class TrendValue {
     @JoinColumn(name="TREND_ID", nullable = true, updatable = true)
     private Trend trend;
 
+    @ManyToOne
+    @JoinColumn(name="MACD_ID", nullable = true, updatable = true)
+    private Macd macd;
+
     @Column(name="VALUE")
     private Float value;
 
@@ -40,18 +44,18 @@ public class TrendValue {
     /**
      * Constructor
      *
-     * @param id        the Id
      * @param tradePair the tradepair
      * @param indx      the index
      * @param trend     the trend of this cryptocoin trend value
+     * @param macd      the macd of this cryptocoin trend value
      * @param value     the value of the trend
      * @param delta     the delta value of trend with respect to the previous trend value with index = indx-1
      */
-    public TrendValue(Integer id, TradePair tradePair, Integer indx, Trend trend, Macd macd, Float value, Float delta) {
-        Id = id;
+    public TrendValue(TradePair tradePair, Integer indx, Trend trend, Macd macd, Float value, Float delta) {
         this.tradePair = tradePair;
         this.indx = indx;
         this.trend = trend;
+        this.macd  = macd;
         this.value = value;
         this.delta = delta;
     }
@@ -85,5 +89,13 @@ public class TrendValue {
 
     public Float getDelta() {
         return delta;
+    }
+
+    public void setValue(Float value) {
+        this.value = value;
+    }
+
+    public void setDelta(Float delta) {
+        this.delta = delta;
     }
 }

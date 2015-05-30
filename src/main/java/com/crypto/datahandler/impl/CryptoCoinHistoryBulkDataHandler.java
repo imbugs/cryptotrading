@@ -65,7 +65,6 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
         }
     }
 
-
     @Override
     public Float getSumOverPeriod(final Integer index, final Integer period) {
         return cryptocoinHistoryDao.getSumCryptoCoinRate(index, period, this.tradePair);

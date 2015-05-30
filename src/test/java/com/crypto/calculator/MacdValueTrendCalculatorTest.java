@@ -31,13 +31,13 @@ public class MacdValueTrendCalculatorTest {
 
             @Override
             public TrendValue getShortTrendValue(Integer index) {
-                return new TrendValue(1, new TradePair(), 100, new Trend(), null, 10F, 1F);
+                return new TrendValue(new TradePair(), 100, new Trend(), null, 10F, 1F);
 
             }
 
             @Override
             public TrendValue getLongTrendValue(Integer index) {
-                return new TrendValue(1, new TradePair(), 100, new Trend(), null, 4F, 1F);
+                return new TrendValue(new TradePair(), 100, new Trend(), null, 4F, 1F);
             }
 
             @Override
@@ -59,11 +59,13 @@ public class MacdValueTrendCalculatorTest {
         // Act
         final Trend shortTrend = new Trend();
         final Trend longTrend = new Trend();
-        final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider, new Integer(100), shortTrend, longTrend);
+        final Macd macd = new Macd(1,shortTrend,longTrend);
+
+        final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider, new Integer(100), macd);
         macdValueCalculator.calculate();
 
         //Assert
-        assertEquals(new Float(6F), macdValueCalculator.getCalculatedValue());
+        assertEquals(new Float(6F), macdValueCalculator.getCalculatedValue().getValue());
         assertEquals(new Float(2F), macdValueCalculator.getDelta());
     }
 }

@@ -3,6 +3,8 @@ package com.crypto.dao;
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.entities.*;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -44,7 +46,7 @@ public interface CryptocoinTrendDao extends Serializable{
      * Stores a trend value
      * @param trendValue the trend value
      */
-    public void storeTrendValue(final TrendValue trendValue);
+   public void storeTrendValue(final TrendValue trendValue);
 
     /**
      * Store the moving average macd value

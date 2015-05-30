@@ -4,6 +4,8 @@ import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.*;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -60,6 +62,7 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void storeTrendValue(TrendValue trendValue) {
         em.persist(trendValue);
     }

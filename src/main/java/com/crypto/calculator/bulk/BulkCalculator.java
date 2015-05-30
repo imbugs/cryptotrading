@@ -6,7 +6,10 @@ import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
 /**
@@ -70,6 +73,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
 
         getCalculator().setIndex(data.getIndex());
         getCalculator().calculate();
+        dataPersister.storeValue(calculator.getCalculatedValue());
     }
 
     public TrendCalculator getCalculator() {

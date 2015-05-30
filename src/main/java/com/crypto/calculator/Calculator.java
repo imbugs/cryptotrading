@@ -1,6 +1,7 @@
 package com.crypto.calculator;
 
 import com.crypto.entities.Trend;
+import com.crypto.entities.TrendValue;
 
 /**
  * A calculator
@@ -18,7 +19,7 @@ public interface Calculator {
      * Get the calculated value
      * @return the calculated value
      */
-    public Float getCalculatedValue();
+    public TrendValue getCalculatedValue();
 
     /**
      * Set the calculated value

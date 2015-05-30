@@ -1,8 +1,6 @@
-
 package com.crypto.calculator;
 
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
-import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
@@ -10,7 +8,6 @@ import java.util.logging.Logger;
 
 /**
  * Moving Average calculator, calculates a moving average calculatedValue of crypto coin data
- *
  * Created by Jan Wicherink on 1-5-15.
  */
 public class MovingAverageCalculator implements TrendCalculator {
@@ -21,18 +18,16 @@ public class MovingAverageCalculator implements TrendCalculator {
 
     private Integer index;
 
-    private Float calculatedValue = null;
-
-    private Float delta = null;
-
     private Trend trend;
 
+    private TrendValue calculatedValue = null;
 
     /**
      * Constructor
+     *
      * @param dataProvider the data provider of this moving average
-     * @param index the index of the moving average
-     * @param trend the trend of this calculator
+     * @param index        the index of the moving average
+     * @param trend        the trend of this calculator
      */
     public MovingAverageCalculator(final MovingAverageDataProvider dataProvider, final Integer index, final Trend trend) {
         this.dataProvider = dataProvider;
@@ -42,6 +37,7 @@ public class MovingAverageCalculator implements TrendCalculator {
 
     /**
      * Constructor
+     *
      * @param dataProvider data provider
      */
     public MovingAverageCalculator(final MovingAverageDataProvider dataProvider) {
@@ -57,25 +53,25 @@ public class MovingAverageCalculator implements TrendCalculator {
     /**
      * Calculate the moving average calculated value and delta of a given trend on the crypto coin exchange rate data
      *
-     * @return the moving average calculatedValue
+     * @return the moving average calculated TrendValue
      */
     public void calculate() {
 
         final Integer period = getTrend().getPeriod();
-        final Float   sum    = this.dataProvider.getSumOverPeriod(this.index, period);
-        this.calculatedValue = sum/period;
+        final Float sum = this.dataProvider.getSumOverPeriod(this.index, period);
+        final Float value = sum / period;
+        Float delta = null;
 
         final Integer previousIndex = this.index - 1;
         final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
 
-        LOG.info("Calculate index : " + this.index.toString());
-
         if (previousValue != null) {
-            this.delta = this.calculatedValue - previousValue.getValue();
+            delta = value - previousValue.getValue();
         }
-        else {
-            this.delta = null;
-        }
+
+        this.calculatedValue = new TrendValue(this.getDataProvider().getTradePair(), this.index, this.trend, null, value, delta);
+
+        LOG.info("Calculated index : " + this.index.toString());
     }
 
     public MovingAverageDataProvider getDataProvider() {
@@ -86,12 +82,12 @@ public class MovingAverageCalculator implements TrendCalculator {
         return index;
     }
 
-    public Float getCalculatedValue() {
-        return calculatedValue;
+    public TrendValue getCalculatedValue() {
+        return this.calculatedValue;
     }
 
     public Float getDelta() {
-        return delta;
+        return calculatedValue.getDelta();
     }
 
     public void setIndex(Integer index) {
@@ -103,14 +99,15 @@ public class MovingAverageCalculator implements TrendCalculator {
     }
 
     public void setTrend(Trend trend) {
-         this.trend = trend;
+        this.trend = trend;
     }
 
-    public void setValue(Float value) {
+    public void setValue(final TrendValue value) {
+
         this.calculatedValue = value;
     }
 
-    public void setDelta(Float delta) {
-        this.delta = delta;
+    public void setDelta(final Float delta) {
+        this.calculatedValue.setDelta(delta);
     }
 }

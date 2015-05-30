@@ -1,5 +1,6 @@
 package com.crypto.calculator;
 
+import com.crypto.entities.Macd;
 import com.crypto.entities.Trend;
 
 /**
@@ -9,11 +10,7 @@ import com.crypto.entities.Trend;
  */
 public interface MacdCalculator extends Calculator{
 
-    public Trend getShortTrend();
+    public Macd getMacd();
 
-    public void setShortTrend(Trend shortTrend);
-
-    public Trend getLongTrend();
-
-    public void setLongTrend(Trend longTrend);
+    public void setMacd(Macd macd);
 }

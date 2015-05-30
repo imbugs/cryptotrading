@@ -112,7 +112,7 @@ public class MovingAverageTrendCalculatorTest {
             public TrendValue getTrendValue(Integer index) {
 
                 if (index == 29) {
-                    return new TrendValue(1, new TradePair(), 29, new Trend(), null, 23.28F, 0.15F);
+                    return new TrendValue(new TradePair(), 29, new Trend(), null, 23.28F, 0.15F);
                 }
                 else {
                     return null;
@@ -139,7 +139,7 @@ public class MovingAverageTrendCalculatorTest {
 
         // Assert
         // Moving Average at index 30, 5th may 2010 = 23.13 with rounding error of 0.01
-        assertEquals(new Float(23.13F), movingAverageCalculator.getCalculatedValue(), 0.01F);
+        assertEquals(new Float(23.13F), movingAverageCalculator.getCalculatedValue().getValue(), 0.01F);
         assertEquals(new Float(-0.15F), movingAverageCalculator.getDelta(), 0.01F);
     }
 }
