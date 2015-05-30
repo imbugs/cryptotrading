@@ -6,7 +6,8 @@ import com.crypto.entities.LimitOrder;
 import com.crypto.entities.SellLimitOrder;
 import com.crypto.entities.Trading;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -15,10 +16,10 @@ import java.util.List;
 
 /**
  * Limit Order Dao
- *
+ * <p/>
  * Created by Jan Wicherink on 3-5-15.
  */
-@Stateful
+@Stateless
 public class LimitOrderDaoImpl implements LimitOrderDao {
 
     private static final long serialVersionUID = -2416786440836108983L;
@@ -28,7 +29,7 @@ public class LimitOrderDaoImpl implements LimitOrderDao {
 
     @Override
     public void persist(LimitOrder order) {
-      em.persist(order);
+        em.persist(order);
     }
 
     @Override

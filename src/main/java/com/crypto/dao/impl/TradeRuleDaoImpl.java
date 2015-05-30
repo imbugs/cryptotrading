@@ -4,7 +4,8 @@ import com.crypto.dao.TradeRuleDao;
 import com.crypto.entities.TradeRule;
 import com.crypto.enums.MarketTrend;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -12,10 +13,10 @@ import java.util.List;
 
 /**
  * Trade rule Dao
- *
+ * <p/>
  * Created by Jan Wicherink on 7-5-15.
  */
-@Stateful
+@Stateless
 public class TradeRuleDaoImpl implements TradeRuleDao {
 
     private static final long serialVersionUID = -7367069861076378951L;

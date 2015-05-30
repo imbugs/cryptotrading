@@ -5,7 +5,8 @@ import com.crypto.dao.TradePairDao;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.TradingSite;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,7 +18,7 @@ import javax.persistence.TypedQuery;
  * <p/>
  * Created by Jan Wicherink on 7-4-2015.
  */
-@Stateful
+@Stateless
 public class TradePairDaoImpl implements TradePairDao {
 
     private static final long serialVersionUID = -8127877891137126595L;

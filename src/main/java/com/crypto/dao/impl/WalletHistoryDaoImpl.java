@@ -2,10 +2,10 @@ package com.crypto.dao.impl;
 
 import com.crypto.dao.WalletHistoryDao;
 import com.crypto.entities.Trading;
-import com.crypto.entities.Wallet;
 import com.crypto.entities.WalletHistory;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -15,7 +15,7 @@ import java.util.List;
  * Wallet history dao implementation
  * Created by jan on 7-5-15.
  */
-@Stateful
+@Stateless
 public class WalletHistoryDaoImpl implements WalletHistoryDao {
 
     private static final long serialVersionUID = -62342003231846814L;

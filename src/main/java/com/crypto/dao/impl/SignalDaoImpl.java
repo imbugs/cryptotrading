@@ -5,7 +5,8 @@ import com.crypto.entities.Signal;
 import com.crypto.entities.TradeRule;
 import com.crypto.entities.Trading;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -13,7 +14,7 @@ import javax.persistence.TypedQuery;
 /**
  * Created by Jan Wicherink on 29-4-15.
  */
-@Stateful
+@Stateless
 public class SignalDaoImpl implements SignalDao {
 
     private static final long serialVersionUID = -3751694320331535266L;

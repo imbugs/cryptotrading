@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Jan Wicherink on 31-3-2015.
  */
 @Entity
-@Table(name="TRADE_PAIR")
+@Table(name="TRADE_PAIRS")
 public class TradePair implements Serializable {
 
     private static final long serialVersionUID = -4363837420737951917L;

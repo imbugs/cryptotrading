@@ -3,18 +3,17 @@ package com.crypto.datahandler.impl;
 import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.dao.TrendDao;
-import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.persister.DataPersister;
+import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateful;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import javax.ejb.*;
+import javax.inject.Singleton;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 /**
@@ -22,16 +21,17 @@ import java.util.List;
  *
  * Created by Jan Wicherink on 9-5-15.
  */
-@ApplicationScoped
+@Stateful
+@LocalBean
 public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider, DataPersister<TrendValue> {
 
-    @Inject
+    @EJB
     private CryptocoinHistoryDao cryptocoinHistoryDao;
 
-    @Inject
+    @EJB
     private CryptocoinTrendDao cryptocoinTrendDao;
 
-    @Inject
+    @EJB
     private TrendDao trendDao;
 
     private Trend trend;
@@ -44,20 +44,9 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     public CryptoCoinHistoryBulkDataHandler() {
     }
 
-    /**
-     * Constructor
-     * @param tradePair tradepair of the bulk data handler
-     * @param trend  the trend for the moving average data provider
-     */
-    public CryptoCoinHistoryBulkDataHandler(final TradePair tradePair, final Trend trend){
-
-        this.tradePair = tradePair;
-        this.trend = trend;
-    }
-
     @Override
     public List<CryptocoinHistory> getAll() {
-        return  cryptocoinHistoryDao.getAll(this.tradePair);
+        return cryptocoinHistoryDao.getAll(this.tradePair);
     }
 
     @Override
@@ -67,7 +56,10 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
 
     @Override
     public void storeValue(TrendValue value) {
-        cryptocoinTrendDao.storeTrendValue(value);
+
+        if (value != null) {
+            cryptocoinTrendDao.storeTrendValue(value);
+        }
     }
 
 
@@ -88,8 +80,20 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
 
     @Override
     public TrendValue getTrendValue(final Integer index) {
-        return cryptocoinTrendDao.getTrendValue(index, this.trend, this.tradePair);
+
+        TrendValue trendValue = null;
+
+        try {
+            trendValue = cryptocoinTrendDao.getTrendValue(index, this.trend, this.tradePair);
+        }
+        catch (NoResultException e) {
+
+            return null;
+        }
+
+        return trendValue;
     }
+
     @Override
     public CryptocoinHistory getLast() {
         return cryptocoinHistoryDao.getLast(this.tradePair);

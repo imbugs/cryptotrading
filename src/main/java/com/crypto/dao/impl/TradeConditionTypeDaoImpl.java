@@ -3,16 +3,17 @@ package com.crypto.dao.impl;
 import com.crypto.dao.TradeConditionTypeDao;
 import com.crypto.entities.TradeConditionType;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  * Trade condition type Dao implementation
- *
+ * <p/>
  * Created by jan on 6-5-15.
  */
-@Stateful
+@Stateless
 public class TradeConditionTypeDaoImpl implements TradeConditionTypeDao {
 
     private static final long serialVersionUID = -4092022727984997669L;
@@ -23,6 +24,6 @@ public class TradeConditionTypeDaoImpl implements TradeConditionTypeDao {
     @Override
     public TradeConditionType getByName(String name) {
 
-       return em.find(TradeConditionType.class, name);
+        return em.find(TradeConditionType.class, name);
     }
 }

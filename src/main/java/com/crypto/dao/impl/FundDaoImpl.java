@@ -6,7 +6,8 @@ import com.crypto.entities.Fund;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.pkey.FundPk;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
 /**
  * Created by jan on 16-4-15.
  */
-@Stateful
+@Stateless
 public class FundDaoImpl implements FundDao {
 
     private static final long serialVersionUID = 5827910951806035912L;
@@ -34,7 +35,7 @@ public class FundDaoImpl implements FundDao {
 
         LOG.info("Get fund, tradepair id: " + tradepair.getId() + " currency: " + currency.getCode());
 
-        final FundPk pk = new FundPk(tradepair,currency);
+        final FundPk pk = new FundPk(tradepair, currency);
 
         return em.find(Fund.class, pk);
     }

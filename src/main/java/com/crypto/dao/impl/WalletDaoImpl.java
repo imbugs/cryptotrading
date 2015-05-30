@@ -4,7 +4,8 @@ import com.crypto.dao.WalletDao;
 import com.crypto.entities.Trading;
 import com.crypto.entities.Wallet;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -14,7 +15,7 @@ import javax.persistence.TypedQuery;
  * <p/>
  * Created by Jan Wicherink on 15-4-15.
  */
-@Stateful
+@Stateless
 public class WalletDaoImpl implements WalletDao {
 
     private static final long serialVersionUID = -2760326770511695578L;
@@ -29,7 +30,7 @@ public class WalletDaoImpl implements WalletDao {
 
     @Override
     public Wallet get(Trading trading) {
-        final TypedQuery <Wallet> query = (TypedQuery<Wallet>) em.createQuery("SELECT w FROM Wallet w WHERE w.trading= :trading");
+        final TypedQuery<Wallet> query = (TypedQuery<Wallet>) em.createQuery("SELECT w FROM Wallet w WHERE w.trading= :trading");
         query.setParameter("trading", trading);
 
         return query.getSingleResult();

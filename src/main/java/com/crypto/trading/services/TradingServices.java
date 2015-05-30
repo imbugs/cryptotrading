@@ -13,6 +13,7 @@ import com.crypto.entities.TradingSite;
 import com.crypto.trading.Utils;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -23,7 +24,7 @@ import javax.ws.rs.Produces;
  * Rest service returning currency
  */
 @Path("/")
-@ApplicationScoped
+@Stateless
 public class TradingServices {
 
     @EJB

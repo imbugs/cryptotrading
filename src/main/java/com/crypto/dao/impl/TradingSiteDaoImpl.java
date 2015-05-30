@@ -3,16 +3,17 @@ package com.crypto.dao.impl;
 import com.crypto.dao.TradingSiteDao;
 import com.crypto.entities.TradingSite;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  * Trading site Dao implementation
- *
+ * <p/>
  * Created by Jan Wicherink on 13-4-2015.
  */
-@Stateful
+@Stateless
 public class TradingSiteDaoImpl implements TradingSiteDao {
 
     private static final long serialVersionUID = 9103982057375624503L;

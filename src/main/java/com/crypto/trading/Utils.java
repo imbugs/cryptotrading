@@ -4,15 +4,14 @@ import com.crypto.calculator.bulk.CryptoCoinHistoryTrendCalculator;
 import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.TradePair;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Utilities for the trading environment and usage for crypto trading
  * Created by Jan Wicherink on 27-5-15.
  */
-@Stateful
+@Stateless
 public class Utils {
 
     @Inject
@@ -23,6 +22,7 @@ public class Utils {
 
     /**
      * Calculate all trend lines for a given trade pair
+     *
      * @param tradePair the trade pair
      */
     public void calculateTrendLines(final TradePair tradePair) {

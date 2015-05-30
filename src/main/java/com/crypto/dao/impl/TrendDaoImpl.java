@@ -4,7 +4,8 @@ import com.crypto.dao.TrendDao;
 import com.crypto.entities.Trend;
 import com.crypto.enums.TrendType;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -12,12 +13,11 @@ import java.util.List;
 
 /**
  * The Trend Dao implementation
- *
+ * <p/>
  * Created by Jan Wicherink on 15-4-15.
  */
-@Stateful
+@Stateless
 public class TrendDaoImpl implements TrendDao {
-
 
     @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
@@ -30,7 +30,7 @@ public class TrendDaoImpl implements TrendDao {
 
     @Override
     public List<Trend> getAllMovingAverageTrends() {
-        final TypedQuery <Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type =:ma");
+        final TypedQuery<Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type =:ma");
         query.setParameter("ma", TrendType.MA);
 
         return query.getResultList();
@@ -46,7 +46,7 @@ public class TrendDaoImpl implements TrendDao {
 
     @Override
     public List<Trend> getAllSmoothingMovingAverageTrends() {
-        final TypedQuery <Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type =:sma");
+        final TypedQuery<Trend> query = (TypedQuery<Trend>) em.createQuery("SELECT t FROM Trend t WHERE t.type =:sma");
         query.setParameter("sma", TrendType.SMA);
 
         return query.getResultList();

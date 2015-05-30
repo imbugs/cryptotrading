@@ -20,6 +20,7 @@ import com.crypto.dao.CurrencyDao;
 import com.crypto.entities.Currency;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.*;
 
@@ -29,7 +30,7 @@ import com.google.gson.Gson;
  * Rest service returning currency
  */
 @Path("/")
-@ApplicationScoped
+@Stateless
 public class CurrencyService {
 
     @EJB

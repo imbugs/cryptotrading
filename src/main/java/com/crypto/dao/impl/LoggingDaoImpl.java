@@ -3,10 +3,11 @@ package com.crypto.dao.impl;
 import com.crypto.dao.LoggingDao;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Logging;
-import com.crypto.enums.LoggingLevel;
 import com.crypto.entities.Trading;
+import com.crypto.enums.LoggingLevel;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 /**
  * Created by Jan Wicherink on 18-4-15.
  */
-@Stateful
+@Stateless
 public class LoggingDaoImpl implements LoggingDao {
 
 
@@ -35,10 +36,10 @@ public class LoggingDaoImpl implements LoggingDao {
     @Override
     public void persist(final Logging logging) {
 
-        LOG.info ("Persisting logging id:" + logging.getIndex());
-        LOG.info ("Level :" + logging.getLevel());
-        LOG.info ("Trading id:" + logging.getTrading().getId());
-        LOG.info ("Timestamp:" + logging.getTimestamp());
+        LOG.info("Persisting logging id:" + logging.getIndex());
+        LOG.info("Level :" + logging.getLevel());
+        LOG.info("Trading id:" + logging.getTrading().getId());
+        LOG.info("Timestamp:" + logging.getTimestamp());
 
         em.persist(logging);
     }
@@ -85,7 +86,7 @@ public class LoggingDaoImpl implements LoggingDao {
         }
 
         LOG.info("Trading id:" + trading.getId());
-        LOG.info ("Level:" + level.toString());
+        LOG.info("Level:" + level.toString());
 
         final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.trading= :trading AND l.level IN (:inClause)");
         query.setParameter("trading", trading);

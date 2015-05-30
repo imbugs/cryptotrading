@@ -4,7 +4,8 @@ import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradeConditionLog;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -15,10 +16,10 @@ import java.util.List;
 
 /**
  * Trade condition log Dao implementation
- *
+ * <p/>
  * Created by Jan Wicherink on 7-5-15.
  */
-@Stateful
+@Stateless
 public class TradeConditionLogDaoImpl implements TradeConditionLogDao {
 
     private static final long serialVersionUID = -1516491277528526382L;

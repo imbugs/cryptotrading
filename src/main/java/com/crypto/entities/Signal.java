@@ -16,7 +16,7 @@ public class Signal {
     @EmbeddedId
     private SignalPk pk;
 
-    @Column(name="TRADE_SIGNAL")
+    @Column(name="SIGNAL")
     @Enumerated(EnumType.STRING)
     private MarketTrend tradeSignal;
 

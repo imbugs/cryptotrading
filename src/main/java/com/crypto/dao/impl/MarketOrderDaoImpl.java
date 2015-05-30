@@ -4,7 +4,8 @@ import com.crypto.dao.MarketOrderDao;
 import com.crypto.entities.MarketOrder;
 import com.crypto.entities.Trading;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -13,12 +14,12 @@ import java.util.List;
 /**
  * Created by Jan Wicherink on 21-4-15.
  */
-@Stateful
+@Stateless
 public class MarketOrderDaoImpl implements MarketOrderDao {
 
     private static final long serialVersionUID = -325191410469027237L;
 
-    @PersistenceContext (unitName = "CryptoDS")
+    @PersistenceContext(unitName = "CryptoDS")
     private EntityManager em;
 
     @Override
@@ -35,10 +36,10 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public MarketOrder getByOrderReference(String orderReferecence) {
-       final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.orderReference= :orderReference");
-       query.setParameter("orderReference", orderReferecence);
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.orderReference= :orderReference");
+        query.setParameter("orderReference", orderReferecence);
 
-       return query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override

@@ -3,17 +3,18 @@ package com.crypto.dao.impl;
 import com.crypto.dao.CurrencyDao;
 import com.crypto.entities.Currency;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  * The curremcy Dao implementation
- *
+ * <p/>
  * Created by Jan Wicherink on 30-3-2015.
  */
 
-@Stateful
+@Stateless
 public class CurrencyDaoImpl implements CurrencyDao {
 
     private static final long serialVersionUID = 9080357979975346857L;
@@ -31,6 +32,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     /**
      * Update an existing currency in the database
+     *
      * @param currency the currency to be updated
      */
     public Currency update(Currency currency) {
@@ -40,6 +42,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     /**
      * Get a currency with a given code from the database
+     *
      * @param code the code of the currency
      * @return the fetched currency with the given code.
      */

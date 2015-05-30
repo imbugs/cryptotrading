@@ -13,7 +13,6 @@ import com.crypto.entities.Trend;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.TrendType;
-import junit.framework.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -28,7 +27,6 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 /**
@@ -61,7 +59,6 @@ public class CryptoCoinHistoryTrendCalculatorTest {
                 .addPackage(CryptoCoinHistoryTrendCalculator.class.getPackage())
                 .addPackage(DataProvider.class.getPackage())
                 .addPackage(DataPersister.class.getPackage())
-                .addPackage(CryptoCoinHistoryBulkDataHandler.class.getPackage())
                 .addPackage(CryptoCoinHistoryBulkDataHandler.class.getPackage())
                 .addPackage(DataProvider.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")

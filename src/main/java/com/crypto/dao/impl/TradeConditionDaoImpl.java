@@ -4,7 +4,7 @@ import com.crypto.dao.TradeConditionDao;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradeRule;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -14,7 +14,7 @@ import java.util.List;
  * Trade condition Dao implementation
  * Created by Jan Wicherink on 6-5-15.
  */
-@Stateful
+@Stateless
 public class TradeConditionDaoImpl implements TradeConditionDao {
 
     private static final long serialVersionUID = -5114145946137731357L;
