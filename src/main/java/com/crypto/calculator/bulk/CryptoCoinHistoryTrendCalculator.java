@@ -60,20 +60,46 @@ public class CryptoCoinHistoryTrendCalculator {
 
 
     /**
-     * Calculate all the trend values for all available trends
+     * Calculate all moving average trend data
      */
-    public void calculate() {
-
+    private void calculateMovingAverageTrends() {
         final List<Trend> trends = this.dataProvider.getAllMovingAverageTrends();
 
         // Calculate for every availble trend the trend value
         for (final Trend trend : trends) {
 
-            LOG.info("Calculator for trend : " + trend.getName());
+            LOG.info("Calculator for MA trend : " + trend.getName());
 
             dataProvider.setTrend(trend);
             maCalculator.getCalculator().setTrend(trend);
             maCalculator.calculate();
         }
+    }
+
+
+    /**
+     * Calculate all exponential moving average trend data
+     */
+    private void calculateExponentialMovingAverageTrends() {
+        final List<Trend> trends = this.dataProvider.getAllExponentialMovingAverageTrends();
+
+        // Calculate for every availble trend the trend value
+        for (final Trend trend : trends) {
+
+            LOG.info("Calculator for EMA trend : " + trend.getName());
+
+            dataProvider.setTrend(trend);
+            maCalculator.getCalculator().setTrend(trend);
+            maCalculator.calculate();
+        }
+    }
+
+
+    /**
+     * Calculate all the trend values for all available trends: MA, EMA and SMA trends
+     */
+    public void calculate() {
+        calculateMovingAverageTrends();
+        calculateExponentialMovingAverageTrends();
     }
 }

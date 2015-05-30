@@ -16,9 +16,9 @@ public class Signal {
     @EmbeddedId
     private SignalPk pk;
 
-    @Column(name="SIGNAL")
+    @Column(name="TRADE_SIGNAL")
     @Enumerated(EnumType.STRING)
-    private MarketTrend signal;
+    private MarketTrend tradeSignal;
 
     @ManyToOne
     @JoinColumn (name="TRADERULE_ID")
@@ -26,14 +26,14 @@ public class Signal {
 
     /**
      * The signal for a bull or bear situation
-     * @param signal the signal type, bull or bear
+     * @param tradeSignal the signal type, bull or bear
      * @param indx the index at which the signal is raised
      * @param tradeRule the traderule responsible for this signal
      * @param trading the trading applicable for this signal
      */
-    public Signal(MarketTrend signal, Integer indx, TradeRule tradeRule, Trading trading) {
+    public Signal(MarketTrend tradeSignal, Integer indx, TradeRule tradeRule, Trading trading) {
         this.pk = new SignalPk(indx,trading);
-        this.signal = signal;
+        this.tradeSignal = tradeSignal;
     }
 
     /**
@@ -43,8 +43,8 @@ public class Signal {
 
     }
 
-    public MarketTrend getSignal() {
-        return signal;
+    public MarketTrend getTradeSignal() {
+        return tradeSignal;
     }
 
     public Integer getIndx() {
