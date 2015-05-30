@@ -11,6 +11,7 @@ import com.crypto.entities.TrendValue;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.ejb.Stateless;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.logging.Logger;
 

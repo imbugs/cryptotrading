@@ -10,6 +10,7 @@ import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
+import org.apache.log4j.Logger;
 
 import javax.ejb.*;
 import javax.inject.Singleton;
@@ -24,6 +25,8 @@ import java.util.List;
 @Stateful
 @LocalBean
 public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider, DataPersister<TrendValue> {
+
+    private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryBulkDataHandler.class.getName());
 
     @EJB
     private CryptocoinHistoryDao cryptocoinHistoryDao;
@@ -86,8 +89,9 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
         try {
             trendValue = cryptocoinTrendDao.getTrendValue(index, this.trend, this.tradePair);
         }
-        catch (NoResultException e) {
+        catch (Exception e) {
 
+            LOG.warn (e.getCause().getMessage());
             return null;
         }
 
