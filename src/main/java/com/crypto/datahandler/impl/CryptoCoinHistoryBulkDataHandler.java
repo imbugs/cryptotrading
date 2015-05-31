@@ -126,4 +126,11 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     public void setTradePair(TradePair tradePair) {
         this.tradePair = tradePair;
     }
+
+    /**
+     * Truncate all cryptocoin trend data
+     */
+    public void truncateTrendValueData() {
+        cryptocoinTrendDao.truncateTable();
+    }
 }

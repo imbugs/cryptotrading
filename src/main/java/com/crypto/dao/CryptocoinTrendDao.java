@@ -61,4 +61,10 @@ public interface CryptocoinTrendDao extends Serializable{
      * @param beforeDate the date before which all data is removed.
      */
     public void deleteBeforeDate(final Date beforeDate);
+
+
+    /**
+     * Truncate table data
+     */
+    public void truncateTable();
 }

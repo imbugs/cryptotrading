@@ -74,7 +74,7 @@ public class CryptoCoinHistoryTrendCalculatorTest {
         tradePair.setId(new Integer(1));
 
         cryptoCoinHistoryTrendCalculator.init(tradePair);
-        cryptoCoinHistoryTrendCalculator.calculate();
+        cryptoCoinHistoryTrendCalculator.recalculate();
 
    //     assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(1), trend, tradePair));
     }

@@ -11,6 +11,7 @@
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.use_sql_comments" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="connection.pool_size" value="1"/>
         </properties>
     </persistence-unit>
 </persistence>

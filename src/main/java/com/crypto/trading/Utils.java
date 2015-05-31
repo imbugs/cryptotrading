@@ -28,7 +28,7 @@ public class Utils {
     public void calculateTrendLines(final TradePair tradePair) {
 
         cryptoCoinHistoryTrendCalculator.init(tradePair);
-        cryptoCoinHistoryTrendCalculator.calculate();
+        cryptoCoinHistoryTrendCalculator.recalculate();
     }
 }
 

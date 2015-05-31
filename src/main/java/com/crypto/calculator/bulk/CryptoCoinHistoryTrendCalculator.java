@@ -99,7 +99,11 @@ public class CryptoCoinHistoryTrendCalculator {
     /**
      * Calculate all the trend values for all available trends: MA, EMA and SMA trends
      */
-    public void calculate() {
+    public void recalculate() {
+
+        // Truncate all data before recalculating
+        this.dataProvider.truncateTrendValueData();
+
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();
     }

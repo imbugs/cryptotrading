@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
+import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -78,6 +79,13 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
 
         final TypedQuery query = (TypedQuery) em.createQuery("DELETE FROM TrendValue t WHERE t.indx IN (SELECT c.pk.indx FROM CryptocoinHistory c WHERE c.timestamp < :timestamp)");
         query.setParameter("timestamp", new Timestamp(beforeDate.getTime()));
+        query.executeUpdate();
+    }
+
+    @Override
+    public void truncateTable() {
+        final TypedQuery query =  (TypedQuery) em.createQuery("DELETE FROM TrendValue");
+
         query.executeUpdate();
     }
 }

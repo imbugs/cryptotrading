@@ -6,6 +6,8 @@ import com.crypto.entities.TradePair;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,7 +22,6 @@ import java.util.logging.Logger;
 
 /**
  * Implementation of te CryptocoinhistoryDao
- * <p/>
  * Created by Jan Wicherink on 13-4-2015.
  */
 @Stateless
@@ -164,17 +165,18 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Float getSumCryptoCoinRate(final Integer index, final Integer period, final TradePair tradePair) {
         LOG.info("Get total sum of cryptocoin currency rate of tradepair : " + tradePair.getId() + " starting with index " + index + " for a period of " + period);
 
         final Integer fromIndex = index - period;
 
-        final TypedQuery<Double> query = (TypedQuery<Double>) em.createQuery("SELECT SUM(c.close) FROM CryptocoinHistory c WHERE c.pk.tradePair= :tradePair AND c.pk.indx <= :index AND c.pk.indx > :fromIndex");
+        final Query query = em.createQuery("SELECT SUM(c.close) FROM CryptocoinHistory c WHERE c.pk.tradePair= :tradePair AND c.pk.indx <= :index AND c.pk.indx > :fromIndex");
         query.setParameter("tradePair", tradePair);
         query.setParameter("index", index);
         query.setParameter("fromIndex", fromIndex);
 
-        return new Float(query.getSingleResult());
+        return new Float((Double) query.getSingleResult());
     }
 
     @Override
