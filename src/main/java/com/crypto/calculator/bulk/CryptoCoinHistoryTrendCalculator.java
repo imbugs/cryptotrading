@@ -30,8 +30,6 @@ public class CryptoCoinHistoryTrendCalculator {
 
     private BulkCalculator<CryptocoinHistory, TrendValue> emaCalculator;
 
-    private TradePair tradePair;
-
     /**
      * Default constructor
      */
@@ -45,14 +43,15 @@ public class CryptoCoinHistoryTrendCalculator {
      * @param tradePair the tradePair of the cryptocoin data
      */
     public void init(final TradePair tradePair) {
+        this.dataProvider.setTradePair(tradePair);
 
         final MovingAverageCalculator maCalculator = new MovingAverageCalculator(this.dataProvider);
-        final ExponentialMovingAverageCalculator emaCalculator = new ExponentialMovingAverageCalculator(this.dataProvider);
+        final Integer startIndex = dataProvider.getStartIndex();
+
+        final ExponentialMovingAverageCalculator emaCalculator = new ExponentialMovingAverageCalculator(this.dataProvider, startIndex);
 
         this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, tradePair);
         this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, tradePair);
-        this.dataProvider.setTradePair(tradePair);
-        this.tradePair = tradePair;
 
         LOG.info("Initialise for tradepair : " + tradePair.getId());
     }
@@ -86,8 +85,8 @@ public class CryptoCoinHistoryTrendCalculator {
             LOG.info("Calculator for EMA trend : " + trend.getName());
 
             dataProvider.setTrend(trend);
-            maCalculator.getCalculator().setTrend(trend);
-            maCalculator.calculate();
+            emaCalculator.getCalculator().setTrend(trend);
+            emaCalculator.calculate();
         }
     }
 

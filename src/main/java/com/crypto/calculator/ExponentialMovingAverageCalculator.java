@@ -12,6 +12,9 @@ import com.crypto.entities.TrendValue;
  */
 public class ExponentialMovingAverageCalculator extends MovingAverageCalculator {
 
+    // the index of the first cyrpto coin history (chronologically)
+    private Integer startIndex;
+
     /**
      * Constructor
      * @param dataProvider data provider for the calculator
@@ -26,26 +29,38 @@ public class ExponentialMovingAverageCalculator extends MovingAverageCalculator 
      * Constructor
      * @param dataProvider the data provider for the calculation
      */
-    public ExponentialMovingAverageCalculator(final MovingAverageDataProvider dataProvider){
+    public ExponentialMovingAverageCalculator(final MovingAverageDataProvider dataProvider, final Integer startIndex){
         super (dataProvider);
+        this.startIndex = startIndex;
     }
 
     /**
-     * Calculate the exponential moving average
+     * Calculate the exponential moving average. Calculating an exponential moving average depends on previously calculated
+     * exponential moving averages. For the first series of exponential moving averages (for the length of the period of the trend)
+     * an moving average in stead of an exponential moving average is calculated. This is to give a head start to the calulcation of
+     * exponential moving average trends.
      */
     public void calculate() {
 
-        final Float multiplier = (2F / (getTrend().getPeriod() + 1));
-        final Integer previousIndex = this.getIndex() - 1;
+        if (this.getIndex() <= getTrend().getPeriod() + this.startIndex) {
+            // Perform a moving average calculation
+            super.calculate();
+        }
+        else {
+            // Perform an exponential moving average calculation
 
-        final TrendValue previousValue = this.getDataProvider().getTrendValue(previousIndex);
-        final CryptocoinHistory currentRate = this.getDataProvider().getValue(this.getIndex());
+            final Float multiplier = (2F / (getTrend().getPeriod() + 1));
+            final Integer previousIndex = this.getIndex() - 1;
 
-        if (previousValue != null) {
+            final TrendValue previousValue = this.getDataProvider().getTrendValue(previousIndex);
+            final CryptocoinHistory currentRate = this.getDataProvider().getValue(this.getIndex());
 
-            final Float ema = (currentRate.getClose() - previousValue.getValue()) * multiplier + previousValue.getValue();
-            final TrendValue trendValue = new TrendValue(this.getDataProvider().getTradePair(), getIndex(), getTrend(), null, ema, ema -previousValue.getValue());
-            this.setValue(trendValue);
+            if (previousValue != null) {
+
+                final Float ema = (currentRate.getClose() - previousValue.getValue()) * multiplier + previousValue.getValue();
+                final TrendValue trendValue = new TrendValue(this.getDataProvider().getTradePair(), getIndex(), getTrend(), null, ema, ema - previousValue.getValue());
+                this.setValue(trendValue);
+            }
         }
     }
 }

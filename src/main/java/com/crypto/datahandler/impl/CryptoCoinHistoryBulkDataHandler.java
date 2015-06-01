@@ -54,6 +54,11 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     }
 
     @Override
+    public Integer getStartIndex() {
+        return cryptocoinHistoryDao.getStartIndex(this.tradePair);
+    }
+
+    @Override
     public CryptocoinHistory getValue(Integer index) {
         return cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(this.tradePair, index);
     }

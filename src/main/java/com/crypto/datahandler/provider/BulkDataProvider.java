@@ -21,6 +21,13 @@ public interface BulkDataProvider<D extends DataIndexProvider> extends DataProvi
      */
     public List<D> getAll();
 
+
+    /**
+     * Get the lowest possible index of a value
+     * @return
+     */
+    public Integer getStartIndex();
+
     /**
      * Get the last value stored (with highest index)
      * @return the last value stored in the database

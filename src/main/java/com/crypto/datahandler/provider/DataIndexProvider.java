@@ -11,5 +11,4 @@ public interface DataIndexProvider {
      * @return the index of a value
      */
     public Integer getIndex();
-
 }
