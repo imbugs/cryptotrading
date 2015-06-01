@@ -8,16 +8,14 @@ import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateful;
-import javax.ejb.Stateless;
+import javax.ejb.*;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.logging.Logger;
 
 /**
  * Cryptcoin history trend calculator, calculates the bulk on a cryptocoin history data
- * <p/>
  * Created by Jan Wicherink on 8-5-15.
  */
 @Stateful
@@ -59,7 +57,6 @@ public class CryptoCoinHistoryTrendCalculator {
         LOG.info("Initialise for tradepair : " + tradePair.getId());
     }
 
-
     /**
      * Calculate all moving average trend data
      */
@@ -77,7 +74,6 @@ public class CryptoCoinHistoryTrendCalculator {
         }
     }
 
-
     /**
      * Calculate all exponential moving average trend data
      */
@@ -94,7 +90,6 @@ public class CryptoCoinHistoryTrendCalculator {
             maCalculator.calculate();
         }
     }
-
 
     /**
      * Calculate all the trend values for all available trends: MA, EMA and SMA trends

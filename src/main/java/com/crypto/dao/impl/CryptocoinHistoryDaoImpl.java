@@ -9,10 +9,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -165,7 +162,6 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Float getSumCryptoCoinRate(final Integer index, final Integer period, final TradePair tradePair) {
         LOG.info("Get total sum of cryptocoin currency rate of tradepair : " + tradePair.getId() + " starting with index " + index + " for a period of " + period);
 
@@ -176,7 +172,16 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
         query.setParameter("index", index);
         query.setParameter("fromIndex", fromIndex);
 
-        return new Float((Double) query.getSingleResult());
+        Double sum;
+
+        try {
+            sum = (Double) query.getSingleResult();
+        }
+        catch (Exception e) {
+            return 0F;
+        }
+
+        return new Float(sum);
     }
 
     @Override

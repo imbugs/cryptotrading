@@ -58,10 +58,10 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
         final List<D> bulkData = dataProvider.getAll();
 
         for (final D data : bulkData) {
-            calculator.setIndex(data.getIndex());
-            calculator.calculate();
+              calculator.setIndex(data.getIndex());
+              calculator.calculate();
 
-            dataPersister.storeValue(calculator.getCalculatedValue());
+              dataPersister.storeValue(calculator.getCalculatedValue());
         }
     }
 

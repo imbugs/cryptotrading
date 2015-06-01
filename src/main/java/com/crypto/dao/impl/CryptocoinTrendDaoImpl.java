@@ -2,6 +2,7 @@ package com.crypto.dao.impl;
 
 import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.*;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -34,7 +35,16 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         query.setParameter("tradePair", tradePair);
         query.setParameter("index", index);
 
-        return query.getSingleResult();
+        TrendValue trendValue;
+
+        try {
+            trendValue = query.getSingleResult();
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        return trendValue;
     }
 
     @Override
@@ -47,8 +57,18 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         query.setParameter("tradePair", tradePair);
         query.setParameter("fromIndex", fromIndex);
         query.setParameter("toIndex", index);
+        query.getSingleResult();
 
-        return new Float(query.getSingleResult());
+        Double sum;
+
+        try {
+            sum = query.getSingleResult();
+        }
+        catch (Exception e) {
+            return 0F;
+        }
+
+        return new Float(sum);
     }
 
     @Override
@@ -59,12 +79,21 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         query.setParameter("tradePair", tradePair);
         query.setParameter("index", index);
 
-        return query.getSingleResult();
+        MacdValue macdValue;
+
+        try {
+            macdValue = query.getSingleResult();
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        return macdValue;
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void storeTrendValue(TrendValue trendValue) {
+
         em.persist(trendValue);
     }
 
@@ -87,5 +116,6 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         final TypedQuery query =  (TypedQuery) em.createQuery("DELETE FROM TrendValue");
 
         query.executeUpdate();
+        em.flush();
     }
 }

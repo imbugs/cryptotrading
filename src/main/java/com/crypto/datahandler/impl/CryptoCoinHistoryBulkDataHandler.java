@@ -13,12 +13,13 @@ import com.crypto.entities.TrendValue;
 import org.apache.log4j.Logger;
 
 import javax.ejb.*;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.NoResultException;
 import java.util.List;
 
 /**
- * Bulk data provider of cryptocoin history data
+ * Bulk data provider of crypto coin history data
  *
  * Created by Jan Wicherink on 9-5-15.
  */
@@ -128,7 +129,7 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     }
 
     /**
-     * Truncate all cryptocoin trend data
+     * Truncate all crypto coin trend data
      */
     public void truncateTrendValueData() {
         cryptocoinTrendDao.truncateTable();
