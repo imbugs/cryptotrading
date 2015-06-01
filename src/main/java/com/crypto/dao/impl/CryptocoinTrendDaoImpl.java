@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.management.Query;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.sql.Timestamp;
@@ -64,7 +65,7 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         try {
             sum = query.getSingleResult();
         }
-        catch (Exception e) {
+        catch (NoResultException e) {
             return 0F;
         }
 
@@ -84,7 +85,7 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         try {
             macdValue = query.getSingleResult();
         }
-        catch (Exception e) {
+        catch (NoResultException e) {
             return null;
         }
 

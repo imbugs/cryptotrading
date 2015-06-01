@@ -177,7 +177,7 @@ public class CryptocoinHistoryDaoImpl implements CryptocoinHistoryDao {
         try {
             sum = (Double) query.getSingleResult();
         }
-        catch (Exception e) {
+        catch (NoResultException e) {
             return 0F;
         }
 
