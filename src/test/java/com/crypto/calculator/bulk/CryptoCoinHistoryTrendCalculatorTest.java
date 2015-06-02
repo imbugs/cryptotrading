@@ -27,11 +27,50 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.TestCase.assertNotNull;
 
 /**
  * Test the bulk CryptoCoinHistoryTrendCalculator
- * Created by Jan Wicherink on 18-5-2015.
+ *
+ * Using the following data table:
+ * Example data taken from : http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages
+ *
+ *
+ * 	Index Date	        Price	10-day MA	10-day EMA
+ *	1     24-Mar--2010	22.27
+ *	2     25-Mar--2010	22.19
+ *	3     26-Mar--2010	22.08
+ *	4     29-Mar--2010	22.17
+ *	5     30-Mar--2010	22.18
+ *	6     31-Mar--2010	22.13
+ *	7     1-Apr--2010	22.23
+ *	8     5-Apr--2010	22.43
+ *	9     6-Apr--2010	22.24
+ *	10    7-Apr--2010	22.29	22.22		22.22
+ *	11    8-Apr--2010	22.15	22.21		22.21
+ *	12    9-Apr--2010	22.39	22.23		22.24
+ *	13    12-Apr--2010	22.38	22.26		22.27
+ *	14    13-Apr--2010	22.61	22.31		22.33
+ *	15    14-Apr--2010	23.36	22.42		22.52
+ *	16    15-Apr--2010	24.05	22.61		22.80
+ *	17    16-Apr--2010	23.75	22.77		22.97
+ *	18    19-Apr--2010	23.83	22.91		23.13
+ *	19    20-Apr--2010	23.95	23.08		23.28
+ *	20    21-Apr--2010	23.63	23.21		23.34
+ *	21    22-Apr--2010	23.82	23.38		23.43
+ *	22    23-Apr--2010	23.87	23.53		23.51
+ *	23    26-Apr--2010	23.65	23.65		23.54
+ *	24    27-Apr--2010	23.19	23.71		23.47
+ *	25    28-Apr--2010	23.10	23.69		23.40
+ *	26    29-Apr--2010	23.33	23.61		23.39
+ *	27    30-Apr--2010	22.68	23.51		23.26
+ *	28    3-May--2010	23.10	23.43		23.23
+ *	29    4-May--2010	22.40	23.28		23.08
+ *	30    5-May--2010	22.17	23.13		22.92
+ *
+ * Created by Jan Wicherink on 2-6-15.
  */
 @RunWith(Arquillian.class)
 @PersistenceTest
@@ -70,12 +109,27 @@ public class CryptoCoinHistoryTrendCalculatorTest {
     public void testCalculation() {
 
         final TradePair tradePair = new TradePair();
-        final Trend trend = new Trend(1, TrendType.MA, 50, null);
+        final Trend maTrend  = new Trend(1, TrendType.MA, 10, null);
+        final Trend emaTrend = new Trend(2, TrendType.EMA, 10, null);
+
         tradePair.setId(new Integer(1));
 
         cryptoCoinHistoryTrendCalculator.init(tradePair);
         cryptoCoinHistoryTrendCalculator.recalculate();
 
-   //     assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(1), trend, tradePair));
+        assertEquals(22.22, cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.22, cryptocoinTrendDao.getTrendValue(new Integer(10), emaTrend, tradePair).getValue(), 0.005);
+
+        assertEquals(22.42, cryptocoinTrendDao.getTrendValue(new Integer(15), maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.52, cryptocoinTrendDao.getTrendValue(new Integer(15), emaTrend, tradePair).getValue(), 0.005);
+
+        assertEquals(23.38, cryptocoinTrendDao.getTrendValue(new Integer(21), maTrend, tradePair).getValue(), 0.005);
+        assertEquals(23.43, cryptocoinTrendDao.getTrendValue(new Integer(21), emaTrend, tradePair).getValue(), 0.005);
+
+        assertEquals(23.61, cryptocoinTrendDao.getTrendValue(new Integer(26), maTrend, tradePair).getValue(), 0.005);
+        assertEquals(23.39, cryptocoinTrendDao.getTrendValue(new Integer(26), emaTrend, tradePair).getValue(), 0.005);
+
+        assertEquals(23.13, cryptocoinTrendDao.getTrendValue(new Integer(30), maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.92, cryptocoinTrendDao.getTrendValue(new Integer(30), emaTrend, tradePair).getValue(), 0.005);
     }
 }
