@@ -56,7 +56,7 @@ public class MacdValueCalculator implements MacdCalculator {
 
         final Float value = shortTrendvalue.getValue() - longTrendvalue.getValue();
 
-        final MacdValue previousMacdValue = this.dataProvider.getValue(this.indx - 1);
+        final MacdValue previousMacdValue = this.dataProvider.getMacdValue(this.indx - 1);
 
         Float delta = null;
 

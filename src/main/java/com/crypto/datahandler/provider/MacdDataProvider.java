@@ -1,6 +1,7 @@
 package com.crypto.datahandler.provider;
 
 import com.crypto.datahandler.provider.DataProvider;
+import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TrendValue;
@@ -10,7 +11,7 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public interface MacdDataProvider extends DataProvider<MacdValue> {
+public interface MacdDataProvider extends DataProvider {
 
     /**
      * Get the short trend value
@@ -28,8 +29,8 @@ public interface MacdDataProvider extends DataProvider<MacdValue> {
 
     /**
      * Get the macd of this moving average provider.
-     *
+     * @param index the index of the Macd value;
      * @return the macd
      */
-    public Macd getMacd();
+    public MacdValue getMacdValue(final Integer index);
 }

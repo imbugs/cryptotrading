@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @param <D> datatype of the dataprovider
  */
-public interface BulkDataProvider<D extends DataIndexProvider> extends DataProvider<D> {
+public interface BulkDataProvider<D extends DataIndexProvider> extends DataProvider {
 
     /**
      * Get all values stored of a given tradepair
@@ -20,7 +20,6 @@ public interface BulkDataProvider<D extends DataIndexProvider> extends DataProvi
      * @return all values stored in the database
      */
     public List<D> getAll();
-
 
     /**
      * Get the lowest possible index of a value
@@ -33,25 +32,4 @@ public interface BulkDataProvider<D extends DataIndexProvider> extends DataProvi
      * @return the last value stored in the database
      */
     public D getLast();
-
-    /**
-     * Get all available moving average trends
-     * @return the moving average trends that are available
-     */
-    public List<Trend> getAllMovingAverageTrends();
-
-    /**
-     * Get all exponential moving average bulk
-     *
-     * @return the moving average bulk
-     */
-    public List<Trend> getAllExponentialMovingAverageTrends();
-
-
-    /**
-     * Get all smoothing moving average bulk
-     *
-     * @return the moving average bulk
-     */
-    public List<Trend> getAllSmoothingMovingAverageTrends();
 }

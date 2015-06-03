@@ -76,7 +76,7 @@ public class ExponentialMovingAverageTrendCalculatorTest {
 
            @Override
            public Float getSumOverPeriod(Integer index, Integer period) {
-               return null;
+               return 10F;
            }
 
            @Override
@@ -128,7 +128,9 @@ public class ExponentialMovingAverageTrendCalculatorTest {
 
        //Act
         final  Trend trend = new Trend(1, TrendType.EMA, 10, null);
-        final ExponentialMovingAverageCalculator calculator = new ExponentialMovingAverageCalculator(dataProvider, 30, trend );
+        final ExponentialMovingAverageCalculator calculator = new ExponentialMovingAverageCalculator(dataProvider, 10);
+        calculator.setTrend(trend);
+        calculator.setIndex(new Integer (29));
         calculator.calculate();
 
        // Assert

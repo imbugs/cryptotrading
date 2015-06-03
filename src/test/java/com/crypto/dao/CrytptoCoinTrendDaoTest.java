@@ -26,6 +26,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test the CryptocoinTrendDao
@@ -143,6 +144,6 @@ public class CrytptoCoinTrendDaoTest {
         catch (Exception e) {
 
         }
-        assertNotNull(trendValue);
+        assertNull(trendValue);
     }
 }

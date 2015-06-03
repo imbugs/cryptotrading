@@ -10,7 +10,16 @@ import com.crypto.entities.TrendValue;
  *
  * Created by Jan Wicherink on 1-5-15.
  */
-public interface MovingAverageDataProvider extends DataProvider<CryptocoinHistory> {
+public interface MovingAverageDataProvider extends DataProvider {
+
+    /**
+     * Get a value at a given index
+     *
+     * @param index the index
+
+     * @return the crypto coin value
+     */
+    public CryptocoinHistory getValue(final Integer index);
 
     /**
      * Get the total sum of exchange rates of the crypto coin over a given period upto an index.

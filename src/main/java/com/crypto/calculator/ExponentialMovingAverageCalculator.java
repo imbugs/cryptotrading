@@ -15,17 +15,7 @@ public class ExponentialMovingAverageCalculator extends MovingAverageCalculator 
     // the index of the first cyrpto coin history (chronologically)
     private Integer startIndex;
 
-    /**
-     * Constructor
-     * @param dataProvider data provider for the calculator
-     * @param index the index of the calculated value
-     * @param trend the trend of the calculation
-     */
-    public ExponentialMovingAverageCalculator(final MovingAverageDataProvider dataProvider, final Integer index, final Trend trend) {
-        super(dataProvider, index, trend);
-    }
-
-    /**
+     /**
      * Constructor
      * @param dataProvider the data provider for the calculation
      */

@@ -19,7 +19,7 @@ public class MacdValueTrendCalculatorTest {
         //Arrange
         final MacdDataProvider dataProvider = new MacdDataProvider() {
             @Override
-            public MacdValue getValue(Integer index) {
+            public MacdValue getMacdValue(Integer index) {
 
                 if (index == 100) {
                     return new MacdValue(100,null,null, 6F, 1F);
@@ -38,11 +38,6 @@ public class MacdValueTrendCalculatorTest {
             @Override
             public TrendValue getLongTrendValue(Integer index) {
                 return new TrendValue(new TradePair(), 100, new Trend(), null, 4F, 1F);
-            }
-
-            @Override
-            public Macd getMacd() {
-                return null;
             }
 
             @Override

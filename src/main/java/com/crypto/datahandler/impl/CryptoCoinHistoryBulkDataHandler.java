@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Stateful
 @LocalBean
-public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider, DataPersister<TrendValue> {
+public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements  BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider, DataPersister<TrendValue> {
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryBulkDataHandler.class.getName());
 
@@ -40,8 +40,6 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
 
     private Trend trend;
 
-    private TradePair tradePair;
-
     /**
      * Default constructor
      */
@@ -49,31 +47,13 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     }
 
     @Override
-    public List<CryptocoinHistory> getAll() {
-        return cryptocoinHistoryDao.getAll(this.tradePair);
-    }
-
-    @Override
-    public Integer getStartIndex() {
-        return cryptocoinHistoryDao.getStartIndex(this.tradePair);
-    }
-
-    @Override
     public CryptocoinHistory getValue(Integer index) {
-        return cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(this.tradePair, index);
-    }
-
-    @Override
-    public void storeValue(TrendValue value) {
-
-        if (value != null) {
-            cryptocoinTrendDao.storeTrendValue(value);
-        }
+        return cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(getTradePair(), index);
     }
 
     @Override
     public Float getSumOverPeriod(final Integer index, final Integer period) {
-        return cryptocoinHistoryDao.getSumCryptoCoinRate(index, period, this.tradePair);
+        return cryptocoinHistoryDao.getSumCryptoCoinRate(index, period, getTradePair());
     }
 
     @Override
@@ -92,7 +72,7 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
         TrendValue trendValue = null;
 
         try {
-            trendValue = cryptocoinTrendDao.getTrendValue(index, this.trend, this.tradePair);
+            trendValue = cryptocoinTrendDao.getTrendValue(index, this.trend, getTradePair());
         }
         catch (Exception e) {
 
@@ -103,35 +83,18 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
         return trendValue;
     }
 
-    @Override
-    public CryptocoinHistory getLast() {
-        return cryptocoinHistoryDao.getLast(this.tradePair);
-    }
-
-    @Override
     public List<Trend> getAllMovingAverageTrends() {
         return trendDao.getAllMovingAverageTrends();
     }
 
-    @Override
     public List<Trend> getAllExponentialMovingAverageTrends() {
         return trendDao.getAllExponentialMovingAverageTrends();
     }
 
-    @Override
     public List<Trend> getAllSmoothingMovingAverageTrends() {
         return trendDao.getAllSmoothingMovingAverageTrends();
     }
 
-    @Override
-    public TradePair getTradePair() {
-        return this.tradePair;
-    }
-
-    @Override
-    public void setTradePair(TradePair tradePair) {
-        this.tradePair = tradePair;
-    }
 
     /**
      * Truncate all crypto coin trend data
@@ -139,4 +102,17 @@ public class CryptoCoinHistoryBulkDataHandler implements BulkDataProvider<Crypto
     public void truncateTrendValueData() {
         cryptocoinTrendDao.truncateTable();
     }
+
+    /**
+     * Store trend value
+     * @param value the value to be stored
+     */
+    @Override
+    public void storeValue(TrendValue value) {
+
+        if (value != null) {
+            cryptocoinTrendDao.storeTrendValue(value);
+        }
+    }
+
 }
