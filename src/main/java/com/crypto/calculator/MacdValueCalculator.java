@@ -1,5 +1,6 @@
 package com.crypto.calculator;
 
+import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.datahandler.provider.MacdDataProvider;
 import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
@@ -18,18 +19,15 @@ public class MacdValueCalculator implements MacdCalculator {
 
     private TrendValue calculatedValue;
 
-    private MacdDataProvider dataProvider;
+    private MacdBulkDataHandler dataProvider;
 
     /**
      * Constructor
      *
      * @param dataProvider the Macd data provider
-     * @param indx         the index of the macd calculatedValue
      */
-    public MacdValueCalculator(final MacdDataProvider dataProvider, final Integer indx, final Macd macd) {
+    public MacdValueCalculator(final MacdBulkDataHandler dataProvider) {
         this.dataProvider = dataProvider;
-        this.indx = indx;
-        this.macd = macd;
     }
 
     /**
@@ -40,7 +38,6 @@ public class MacdValueCalculator implements MacdCalculator {
     }
 
     public void setIndx(Integer indx) {
-
         this.indx = indx;
     }
 

@@ -1,5 +1,6 @@
 package com.crypto.calculator;
 
+import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.datahandler.provider.MacdDataProvider;
 import com.crypto.entities.*;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class MacdValueTrendCalculatorTest {
     public void testMacdValueCalculator() {
 
         //Arrange
-        final MacdDataProvider dataProvider = new MacdDataProvider() {
+        final MacdBulkDataHandler dataProvider = new MacdBulkDataHandler() {
             @Override
             public MacdValue getMacdValue(Integer index) {
 
@@ -56,7 +57,9 @@ public class MacdValueTrendCalculatorTest {
         final Trend longTrend = new Trend();
         final Macd macd = new Macd(1,shortTrend,longTrend);
 
-        final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider, new Integer(100), macd);
+        final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(dataProvider);
+        macdValueCalculator.setIndex(new Integer(100));
+        macdValueCalculator.setMacd(macd);
         macdValueCalculator.calculate();
 
         //Assert

@@ -1,5 +1,6 @@
 package com.crypto.calculator.bulk;
 
+import com.crypto.calculator.Calculator;
 import com.crypto.calculator.TrendCalculator;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.DataIndexProvider;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 public class BulkCalculator <D extends DataIndexProvider, E> {
 
-    private TrendCalculator calculator;
+    private Calculator calculator;
 
     private BulkDataProvider dataProvider;
 
@@ -36,7 +37,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
      * @param calculator
      * @param dataProvider
      */
-    public BulkCalculator(TrendCalculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, TradePair tradePair) {
+    public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, TradePair tradePair) {
         this.calculator = calculator;
         this.dataProvider = dataProvider;
         this.dataPersister = dataPersister;
@@ -76,7 +77,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
         dataPersister.storeValue(calculator.getCalculatedValue());
     }
 
-    public TrendCalculator getCalculator() {
+    public Calculator getCalculator() {
         return calculator;
     }
 
