@@ -7,8 +7,10 @@ import com.crypto.entities.TrendValue;
  * A calculator
  *
  * Created by Jan Wicherink on 8-5-15.
+ *
+ * @param <D> the data type of the calculation of this calculator
  */
-public interface Calculator {
+public interface Calculator <D>{
 
     /**
      * Calculate
@@ -19,7 +21,7 @@ public interface Calculator {
      * Get the calculated value
      * @return the calculated value
      */
-    public TrendValue getCalculatedValue();
+    public D getCalculatedValue();
 
     /**
      * Set the calculated value

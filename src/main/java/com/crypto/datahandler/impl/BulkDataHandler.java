@@ -57,4 +57,18 @@ public class BulkDataHandler {
     public TradePair getTradePair() {
         return tradePair;
     }
+
+    public CryptocoinHistoryDao getCryptocoinHistoryDao() {
+        return cryptocoinHistoryDao;
+    }
+
+    public CryptocoinTrendDao getCryptocoinTrendDao() {
+        return cryptocoinTrendDao;
+    }
+
+    public TrendDao getTrendDao() {
+        return trendDao;
+    }
+
+
 }

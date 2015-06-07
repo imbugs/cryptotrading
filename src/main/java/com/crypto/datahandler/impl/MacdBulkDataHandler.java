@@ -24,20 +24,10 @@ import java.util.List;
 public class MacdBulkDataHandler extends BulkDataHandler implements BulkDataProvider<CryptocoinHistory>, MacdDataProvider, DataPersister<MacdValue> {
 
     @EJB
-    private CryptocoinHistoryDao cryptocoinHistoryDao;
-
-    @EJB
-    private CryptocoinTrendDao cryptocoinTrendDao;
-
-    @EJB
     private MacdDao macdDao;
-
-    @EJB
-    private TrendDao trendDao;
 
     private Macd macd;
 
-    private TradePair tradePair;
 
     /**
      * Default constructor
@@ -54,37 +44,25 @@ public class MacdBulkDataHandler extends BulkDataHandler implements BulkDataProv
         return macdDao.getAll();
     }
 
-
     @Override
     public TrendValue getShortTrendValue(final Integer index) {
 
-       return cryptocoinTrendDao.getTrendValue(index, macd.getShortTrend(), this.tradePair);
+       return this.getCryptocoinTrendDao().getTrendValue(index, macd.getShortTrend(), getTradePair());
     }
 
     @Override
     public TrendValue getLongTrendValue(final Integer index) {
-        return cryptocoinTrendDao.getTrendValue(index, macd.getLongTrend(), this.tradePair);
+        return this.getCryptocoinTrendDao().getTrendValue(index, macd.getLongTrend(), getTradePair());
     }
 
     @Override
     public MacdValue getMacdValue(final Integer index) {
-        return cryptocoinTrendDao.getMacdValue(index, this.macd, this.tradePair);
-    }
-
-    @Override
-    public TradePair getTradePair() {
-
-        return this.tradePair;
-    }
-
-    @Override
-    public void setTradePair(final TradePair tradePair) {
-        this.tradePair = tradePair;
+        return this.getCryptocoinTrendDao().getMacdValue(index, this.macd, getTradePair());
     }
 
     @Override
     public void storeValue(final MacdValue value) {
-        cryptocoinTrendDao.storeMacdValue(value);
+        this.getCryptocoinTrendDao().storeMacdValue(value);
     }
 
     public Macd getMacd() {

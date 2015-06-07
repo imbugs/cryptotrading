@@ -29,15 +29,6 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryBulkDataHandler.class.getName());
 
-    @EJB
-    private CryptocoinHistoryDao cryptocoinHistoryDao;
-
-    @EJB
-    private CryptocoinTrendDao cryptocoinTrendDao;
-
-    @EJB
-    private TrendDao trendDao;
-
     private Trend trend;
 
     /**
@@ -48,12 +39,12 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
 
     @Override
     public CryptocoinHistory getValue(Integer index) {
-        return cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(getTradePair(), index);
+        return this.getCryptocoinHistoryDao().getCryptoCoinHistoryByIndex(getTradePair(), index);
     }
 
     @Override
     public Float getSumOverPeriod(final Integer index, final Integer period) {
-        return cryptocoinHistoryDao.getSumCryptoCoinRate(index, period, getTradePair());
+        return this.getCryptocoinHistoryDao().getSumCryptoCoinRate(index, period, getTradePair());
     }
 
     @Override
@@ -72,7 +63,7 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
         TrendValue trendValue = null;
 
         try {
-            trendValue = cryptocoinTrendDao.getTrendValue(index, this.trend, getTradePair());
+            trendValue = this.getCryptocoinTrendDao().getTrendValue(index, this.trend, getTradePair());
         }
         catch (Exception e) {
 
@@ -84,15 +75,15 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
     }
 
     public List<Trend> getAllMovingAverageTrends() {
-        return trendDao.getAllMovingAverageTrends();
+        return this.getTrendDao().getAllMovingAverageTrends();
     }
 
     public List<Trend> getAllExponentialMovingAverageTrends() {
-        return trendDao.getAllExponentialMovingAverageTrends();
+        return this.getTrendDao().getAllExponentialMovingAverageTrends();
     }
 
     public List<Trend> getAllSmoothingMovingAverageTrends() {
-        return trendDao.getAllSmoothingMovingAverageTrends();
+        return this.getTrendDao().getAllSmoothingMovingAverageTrends();
     }
 
 
@@ -100,7 +91,7 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
      * Truncate all crypto coin trend data
      */
     public void truncateTrendValueData() {
-        cryptocoinTrendDao.truncateTable();
+        this.getCryptocoinTrendDao().truncateTable();
     }
 
     /**
@@ -111,7 +102,7 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
     public void storeValue(TrendValue value) {
 
         if (value != null) {
-            cryptocoinTrendDao.storeTrendValue(value);
+            this.getCryptocoinTrendDao().storeTrendValue(value);
         }
     }
 

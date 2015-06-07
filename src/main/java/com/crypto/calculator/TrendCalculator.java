@@ -1,13 +1,14 @@
 package com.crypto.calculator;
 
 import com.crypto.entities.Trend;
+import com.crypto.entities.TrendValue;
 
 /**
  * A calculator
  *
  * Created by Jan Wicherink on 8-5-15.
  */
-public interface TrendCalculator extends Calculator{
+public interface TrendCalculator extends Calculator <TrendValue>{
 
     /**
      * Set the trend of the calculator

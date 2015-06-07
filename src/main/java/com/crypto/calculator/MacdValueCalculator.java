@@ -1,5 +1,6 @@
 package com.crypto.calculator;
 
+import com.crypto.dao.MacdDao;
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.datahandler.provider.MacdDataProvider;
 import com.crypto.entities.Macd;
@@ -17,7 +18,7 @@ public class MacdValueCalculator implements MacdCalculator {
 
     private Macd macd;
 
-    private TrendValue calculatedValue;
+    private MacdValue calculatedValue;
 
     private MacdBulkDataHandler dataProvider;
 
@@ -27,6 +28,7 @@ public class MacdValueCalculator implements MacdCalculator {
      * @param dataProvider the Macd data provider
      */
     public MacdValueCalculator(final MacdBulkDataHandler dataProvider) {
+
         this.dataProvider = dataProvider;
     }
 
@@ -51,25 +53,27 @@ public class MacdValueCalculator implements MacdCalculator {
         final TrendValue shortTrendvalue = this.dataProvider.getShortTrendValue(this.indx);
         final TrendValue longTrendvalue = this.dataProvider.getLongTrendValue(this.indx);
 
-        final Float value = shortTrendvalue.getValue() - longTrendvalue.getValue();
+        if (shortTrendvalue != null && longTrendvalue != null) {
+            final Float value = shortTrendvalue.getValue() - longTrendvalue.getValue();
 
-        final MacdValue previousMacdValue = this.dataProvider.getMacdValue(this.indx - 1);
+            final MacdValue previousMacdValue = this.dataProvider.getMacdValue(this.indx - 1);
 
-        Float delta = null;
+            Float delta = null;
 
-        if (previousMacdValue != null) {
+            if (previousMacdValue != null) {
 
-            delta = value - previousMacdValue.getValue();
+                delta = value - previousMacdValue.getValue();
+            }
+
+            final MacdValue macdValue = new MacdValue(getIndex(), getMacd(), this.dataProvider.getTradePair(),  value, delta);
+
+            this.calculatedValue = macdValue;
         }
-
-        final TrendValue trendValue = new TrendValue(this.dataProvider.getTradePair(), getIndex(), null, this.macd, value, delta);
-
-        this.calculatedValue = trendValue;
     }
 
-    public TrendValue getCalculatedValue() {
-
-        return calculatedValue;
+    @Override
+    public MacdValue getCalculatedValue() {
+        return this.calculatedValue;
     }
 
     @Override

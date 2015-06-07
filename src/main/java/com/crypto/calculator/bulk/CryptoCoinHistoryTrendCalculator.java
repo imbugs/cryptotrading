@@ -1,16 +1,12 @@
 package com.crypto.calculator.bulk;
 
-import com.crypto.calculator.ExponentialMovingAverageCalculator;
-import com.crypto.calculator.MacdValueCalculator;
-import com.crypto.calculator.MovingAverageCalculator;
-import com.crypto.calculator.TrendCalculator;
+import com.crypto.calculator.*;
 import com.crypto.datahandler.impl.CryptoCoinHistoryBulkDataHandler;
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.entities.*;
 
-import javax.ejb.*;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -51,6 +47,8 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     public void init(final TradePair tradePair) {
         this.dataProvider.setTradePair(tradePair);
+        this.macdDataProvider.setTradePair(tradePair);
+
         final Integer startIndex = dataProvider.getStartIndex();
 
         final MovingAverageCalculator maCalculator = new MovingAverageCalculator(this.dataProvider);
@@ -101,12 +99,13 @@ public class CryptoCoinHistoryTrendCalculator {
     private void calculateMacdTrends() {
         final List<Macd> macds = this.macdDataProvider.getAllMacds();
 
-        // Calculate for every availble trend the trend value
+        // Calculate for every availble macd the macd value
         for (final Macd macd : macds) {
 
-            LOG.info("Calculator for Macd  : " + macd.getId());
+            LOG.info("Calculator for MACD  : " + macd.getId());
 
             this.macdDataProvider.setMacd(macd);
+            ((MacdCalculator) macdCalculator.getCalculator()).setMacd(macd);
             macdCalculator.calculate();
         }
     }
