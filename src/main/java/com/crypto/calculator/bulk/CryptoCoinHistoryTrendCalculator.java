@@ -96,6 +96,25 @@ public class CryptoCoinHistoryTrendCalculator {
         }
     }
 
+
+    /**
+     * Calculate all smoothing moving average trend data
+     */
+    private void calculateSmoothingMovingAverageTrends() {
+        final List<Trend> trends = this.dataProvider.getAllSmoothingMovingAverageTrends();
+
+        // Calculate for every availble trend the trend value
+        for (final Trend trend : trends) {
+
+            LOG.info("Calculator for SMA trend : " + trend.getName());
+
+            dataProvider.setTrend(trend);
+            ((TrendCalculator) emaCalculator.getCalculator()).setTrend(trend);
+            emaCalculator.calculate();
+        }
+    }
+
+
     private void calculateMacdTrends() {
         final List<Macd> macds = this.macdDataProvider.getAllMacds();
 
@@ -120,6 +139,7 @@ public class CryptoCoinHistoryTrendCalculator {
 
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();
+        calculateSmoothingMovingAverageTrends();
         calculateMacdTrends();
     }
 }

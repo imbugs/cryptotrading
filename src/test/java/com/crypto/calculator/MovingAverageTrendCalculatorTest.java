@@ -80,6 +80,11 @@ public class MovingAverageTrendCalculatorTest {
             }
 
             @Override
+            public Float getSumOverPeriod(Integer index, Trend smoothingTrend, Integer period) {
+                return null;
+            }
+
+            @Override
             public Trend getTrend() {
                 return null;
             }
@@ -117,6 +122,11 @@ public class MovingAverageTrendCalculatorTest {
                 else {
                     return null;
                 }
+            }
+
+            @Override
+            public TrendValue getSmoohtingTrendValue(Integer index) {
+                return null;
             }
 
             @Override

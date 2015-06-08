@@ -80,6 +80,11 @@ public class ExponentialMovingAverageTrendCalculatorTest {
            }
 
            @Override
+           public Float getSumOverPeriod(Integer index, Trend smoothingTrend, Integer period) {
+               return null;
+           }
+
+           @Override
            public CryptocoinHistory getValue(Integer index) {
 
                final SimpleDateFormat dateFormat = new SimpleDateFormat(CryptocoinHistory.TIMESTAMP_FORMAT_DATE_AND_TIME);
@@ -102,6 +107,11 @@ public class ExponentialMovingAverageTrendCalculatorTest {
 
                // Return moving average value of index 29, 4th may 2010 :  EMA=23.08  delta = -0.15
                return new TrendValue(tradePair, 29, null, null, 23.08F, -0.15F);
+           }
+
+           @Override
+           public TrendValue getSmoohtingTrendValue(Integer index) {
+               return null;
            }
 
            @Override
