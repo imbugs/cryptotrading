@@ -35,11 +35,11 @@ public interface MovingAverageDataProvider extends DataProvider {
      * Get the total sum of trend values for a smoothing trend over a given period upto an index.
      *
      * @param index the index
-     * @param smoothingTrend the trend of which the sum is taken
+     * @param trend the trend of which the sum is taken
      * @param period the period of which the sum is taken
      * @return the total sum of trend values of a given trend
      */
-    public Float getSumOverPeriod(final Integer index, final Trend smoothingTrend, final Integer period);
+    public Float getSumOverPeriod(final Integer index, final Trend trend, final Integer period);
 
 
     /**

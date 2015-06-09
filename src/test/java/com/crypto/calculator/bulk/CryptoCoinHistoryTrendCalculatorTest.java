@@ -38,7 +38,7 @@ import static junit.framework.TestCase.assertNotNull;
  * Example data taken from : http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages
  * <p/>
  * <p/>
- * Index Date	        Price	10-day MA	10-day EMA
+ * Index Date	        Price	10-day MA	10-day EMA  10=day SMA
  * 1     24-Mar--2010	22.27
  * 2     25-Mar--2010	22.19
  * 3     26-Mar--2010	22.08
@@ -57,9 +57,9 @@ import static junit.framework.TestCase.assertNotNull;
  * 16    15-Apr--2010	24.05	22.61		22.80
  * 17    16-Apr--2010	23.75	22.77		22.97
  * 18    19-Apr--2010	23.83	22.91		23.13
- * 19    20-Apr--2010	23.95	23.08		23.28
- * 20    21-Apr--2010	23.63	23.21		23.34
- * 21    22-Apr--2010	23.82	23.38		23.43
+ * 19    20-Apr--2010	23.95	23.08		23.28          22.597
+ * 20    21-Apr--2010	23.63	23.21		23.34          22.709
+ * 21    22-Apr--2010	23.82	23.38		23.43          22.831
  * 22    23-Apr--2010	23.87	23.53		23.51
  * 23    26-Apr--2010	23.65	23.65		23.54
  * 24    27-Apr--2010	23.19	23.71		23.47
@@ -112,6 +112,8 @@ public class CryptoCoinHistoryTrendCalculatorTest {
         final Trend maTrend = new Trend(1, TrendType.MA, 10, null);
         final Trend emaShortTrend = new Trend(2, TrendType.EMA, 10, null);
         final Trend emaLongTrend = new Trend(3, TrendType.EMA, 20, null);
+        final Trend smaTrend     = new Trend(4, TrendType.SMA, 10, emaShortTrend);
+
         final Macd macd = new Macd(1, emaShortTrend, emaLongTrend);
 
         tradePair.setId(new Integer(1));
@@ -122,15 +124,20 @@ public class CryptoCoinHistoryTrendCalculatorTest {
         assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair));
         assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(10), emaShortTrend, tradePair));
 
-        assertEquals(22.22, cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.22, cryptocoinTrendDao.getTrendValue(new Integer(10), emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(11.11, cryptocoinTrendDao.getTrendValue(new Integer(10), emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(11.11, cryptocoinTrendDao.getMacdValue(new Integer(10), macd, tradePair).getValue(), 0.005);
+        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(new Integer(10), emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(11.11,  cryptocoinTrendDao.getTrendValue(new Integer(10), emaLongTrend, tradePair).getValue(), 0.005);
+        assertEquals(11.11,  cryptocoinTrendDao.getMacdValue(new Integer(10), macd, tradePair).getValue(), 0.005);
 
         assertEquals(22.42, cryptocoinTrendDao.getTrendValue(new Integer(15), maTrend, tradePair).getValue(), 0.005);
         assertEquals(22.52, cryptocoinTrendDao.getTrendValue(new Integer(15), emaShortTrend, tradePair).getValue(), 0.005);
         assertEquals(16.755, cryptocoinTrendDao.getTrendValue(new Integer(15), emaLongTrend, tradePair).getValue(), 0.005);
         assertEquals(5.76, cryptocoinTrendDao.getMacdValue(new Integer(15), macd, tradePair).getValue(), 0.005);
+
+        // SMA value
+        assertEquals(22.597,  cryptocoinTrendDao.getTrendValue(new Integer(19), smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.709,  cryptocoinTrendDao.getTrendValue(new Integer(20), smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.707,  cryptocoinTrendDao.getTrendValue(new Integer(20), smaTrend, tradePair).getValue(), 0.005);
 
         assertEquals(23.38, cryptocoinTrendDao.getTrendValue(new Integer(21), maTrend, tradePair).getValue(), 0.005);
         assertEquals(23.43, cryptocoinTrendDao.getTrendValue(new Integer(21), emaShortTrend, tradePair).getValue(), 0.005);

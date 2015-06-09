@@ -48,8 +48,8 @@ public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements
     }
 
     @Override
-    public Float getSumOverPeriod(Integer index, Trend smoothingTrend, Integer period) {
-        return this.getCryptocoinTrendDao().getSumTrend(index,smoothingTrend,period, getTradePair());
+    public Float getSumOverPeriod(Integer index, Trend trend, Integer period) {
+        return this.getCryptocoinTrendDao().getSumTrend(index,trend, period, getTradePair());
     }
 
     @Override

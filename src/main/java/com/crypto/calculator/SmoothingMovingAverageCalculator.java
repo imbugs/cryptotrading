@@ -58,8 +58,12 @@ public class SmoothingMovingAverageCalculator implements TrendCalculator {
      */
     public void calculate() {
 
+        // Get the period of the SMA trend
         final Integer period = getTrend().getPeriod();
-        Float sum = this.dataProvider.getSumOverPeriod(this.index, this.trend.getSmoothingTrend(), period);
+        // Get the trend that is being smoothed
+        final Trend smoothingTrend = getTrend().getSmoothingTrend();
+
+        Float sum = this.dataProvider.getSumOverPeriod(this.index, smoothingTrend, period);
         final Float value = sum / period;
         Float delta = null;
 
