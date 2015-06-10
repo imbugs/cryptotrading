@@ -34,6 +34,7 @@ public class Signal {
     public Signal(MarketTrend tradeSignal, Integer indx, TradeRule tradeRule, Trading trading) {
         this.pk = new SignalPk(indx,trading);
         this.tradeSignal = tradeSignal;
+        this.tradeRule = tradeRule;
     }
 
     /**

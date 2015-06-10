@@ -56,14 +56,13 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
      */
     public void calculate () {
 
-        final List<D> bulkData = dataProvider.getAll();
+        this.dataProvider.getAll().stream().forEach( (data) -> {
 
-        for (final D data : bulkData) {
-              calculator.setIndex(data.getIndex());
+              calculator.setIndex(((D)data).getIndex());
               calculator.calculate();
 
               dataPersister.storeValue(calculator.getCalculatedValue());
-        }
+        });
     }
 
     /**
@@ -74,6 +73,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
 
         getCalculator().setIndex(data.getIndex());
         getCalculator().calculate();
+
         dataPersister.storeValue(calculator.getCalculatedValue());
     }
 

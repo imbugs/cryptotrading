@@ -3,15 +3,18 @@ package com.crypto.calculator.bulk;
 import com.crypto.calculator.*;
 import com.crypto.datahandler.impl.CryptoCoinHistoryBulkDataHandler;
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
-import com.crypto.entities.*;
+import com.crypto.entities.CryptocoinHistory;
+import com.crypto.entities.MacdValue;
+import com.crypto.entities.TradePair;
+import com.crypto.entities.TrendValue;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
  * Cryptcoin history trend calculator, calculates the bulk on a cryptocoin history data
+ *
  * Created by Jan Wicherink on 8-5-15.
  */
 @Stateful
@@ -41,7 +44,7 @@ public class CryptoCoinHistoryTrendCalculator {
     }
 
     /**
-     * Initialises the trend calculator
+     * Initialises the trend calculator.
      *
      * @param tradePair the tradePair of the cryptocoin data
      */
@@ -65,70 +68,65 @@ public class CryptoCoinHistoryTrendCalculator {
     }
 
     /**
-     * Calculate all moving average trend data
+     * Calculate all moving average trend data.
      */
     private void calculateMovingAverageTrends() {
-        final List<Trend> trends = this.dataProvider.getAllMovingAverageTrends();
 
-        // Calculate for every availble trend the trend value
-        for (final Trend trend : trends) {
+        this.dataProvider.getAllMovingAverageTrends().stream().forEach((trend) -> {
 
             LOG.info("Calculator for MA trend : " + trend.getName());
-
             dataProvider.setTrend(trend);
             ((TrendCalculator) maCalculator.getCalculator()).setTrend(trend);
             maCalculator.calculate();
-        }
+        });
     }
 
     /**
-     * Calculate all exponential moving average trend data
+     * Calculate all exponential moving average trend data.
      */
     private void calculateExponentialMovingAverageTrends() {
-        final List<Trend> trends = this.dataProvider.getAllExponentialMovingAverageTrends();
 
-        // Calculate for every availble trend the trend value
-        for (final Trend trend : trends) {
+        this.dataProvider.getAllExponentialMovingAverageTrends().stream().forEach((trend) -> {
 
             LOG.info("Calculator for EMA trend : " + trend.getName());
 
             dataProvider.setTrend(trend);
             ((TrendCalculator) emaCalculator.getCalculator()).setTrend(trend);
             emaCalculator.calculate();
-        }
+        });
     }
 
 
     /**
-     * Calculate all smoothing moving average trend data
+     * Calculate all smoothing moving average trend data.
      */
     private void calculateSmoothingMovingAverageTrends() {
-        final List<Trend> trends = this.dataProvider.getAllSmoothingMovingAverageTrends();
 
-        // Calculate for every availble trend the trend value
-        for (final Trend trend : trends) {
+        this.dataProvider.getAllSmoothingMovingAverageTrends().stream().forEach((trend) -> {
 
             LOG.info("Calculator for SMA trend : " + trend.getName());
 
             dataProvider.setTrend(trend);
             ((TrendCalculator) smaCalculator.getCalculator()).setTrend(trend);
             smaCalculator.calculate();
-        }
+        });
     }
 
 
+    /**
+     * Calculate all Macd trends.
+     */
     private void calculateMacdTrends() {
-        final List<Macd> macds = this.macdDataProvider.getAllMacds();
 
-        // Calculate for every availble macd the macd value
-        for (final Macd macd : macds) {
+        this.macdDataProvider.getAllMacds().stream().forEach((macd) -> {
 
+            // Calculate for every availble macd the macd value
             LOG.info("Calculator for MACD  : " + macd.getId());
 
             this.macdDataProvider.setMacd(macd);
             ((MacdCalculator) macdCalculator.getCalculator()).setMacd(macd);
             macdCalculator.calculate();
-        }
+        });
     }
 
     /**

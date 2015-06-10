@@ -58,7 +58,7 @@ public class MovingAverageCalculator implements TrendCalculator {
     public void calculate() {
 
         final Integer period = getTrend().getPeriod();
-        Float sum = this.dataProvider.getSumOverPeriod(this.index, period);
+        final Float sum = this.dataProvider.getSumOverPeriod(this.index, period);
         final Float value = sum / period;
         Float delta = null;
 

@@ -2,6 +2,7 @@ package com.crypto.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a trading by the cryptocoin trader
@@ -64,6 +65,13 @@ public class Trading implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name = "TRADE_PAIR_ID", nullable=false, updatable=false)
     private TradePair tradePair;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="TRADE_RULES_FOR_TRADING",
+            joinColumns={@JoinColumn(name="TRADING_ID", referencedColumnName="ID")},
+            inverseJoinColumns={@JoinColumn(name="TRADE_RULE_ID", referencedColumnName="ID")})
+    private List<TradeRule> tradeRules;
 
     /**
      * Default constructor
@@ -191,5 +199,9 @@ public class Trading implements Serializable {
 
     public void setTradePair(TradePair tradePair) {
         this.tradePair = tradePair;
+    }
+
+    public List<TradeRule> getTradeRules() {
+        return tradeRules;
     }
 }

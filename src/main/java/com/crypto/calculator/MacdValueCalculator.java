@@ -76,12 +76,10 @@ public class MacdValueCalculator implements MacdCalculator {
         return this.calculatedValue;
     }
 
-    @Override
-    public void setDelta(Float delta) {
+       public void setDelta(Float delta) {
         this.calculatedValue.setDelta(delta);
     }
 
-    @Override
     public Float getDelta() {
         return this.calculatedValue.getDelta();
     }

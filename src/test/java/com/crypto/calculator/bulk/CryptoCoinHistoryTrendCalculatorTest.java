@@ -108,6 +108,7 @@ public class CryptoCoinHistoryTrendCalculatorTest {
     @UsingDataSet("datasets/it_test_dataset_23.xml")
     public void testCalculation() {
 
+        // Arrange
         final TradePair tradePair = new TradePair();
         final Trend maTrend = new Trend(1, TrendType.MA, 10, null);
         final Trend emaShortTrend = new Trend(2, TrendType.EMA, 10, null);
@@ -118,9 +119,12 @@ public class CryptoCoinHistoryTrendCalculatorTest {
 
         tradePair.setId(new Integer(1));
 
+        // Act
         cryptoCoinHistoryTrendCalculator.init(tradePair);
         cryptoCoinHistoryTrendCalculator.recalculate();
 
+
+        // Assert
         assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair));
         assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(10), emaShortTrend, tradePair));
 

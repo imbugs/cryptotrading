@@ -24,24 +24,10 @@ public interface Calculator <D>{
     public D getCalculatedValue();
 
     /**
-     * Set the calculated value
-     * @param delta the difference with the precious value at index -1
-     */
-    public void setDelta(final Float delta);
-
-    /**
-     * Get the delta value
-     * @return the delta value
-     */
-    public Float getDelta();
-
-
-    /**
      * Get the index of the value being calculated
      * @return the index of the value calculated
      */
     public Integer getIndex();
-
 
     /**
      * Set the index of the value being calculated
