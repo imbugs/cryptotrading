@@ -1,13 +1,11 @@
 package com.crypto.calculator;
 
-import com.crypto.dao.CryptocoinHistoryDao;
-import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.dao.SignalDao;
 import com.crypto.dao.TradeConditionDao;
 import com.crypto.entities.*;
 import com.crypto.enums.MarketTrend;
-import com.crypto.tradecondition.ConditionEvaluator;
-import com.crypto.tradecondition.ConditionEvaluatorFactory;
+import com.crypto.tradecondition.ConditionDispatcher;
+import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -71,10 +69,9 @@ public class SignalCalculator implements Calculator<Signal>{
 
         for (TradeCondition tradeCondition : tradeConditions) {
 
-            ConditionEvaluatorFactory factory = new ConditionEvaluatorFactory(tradeCondition);
-            ConditionEvaluator evaluator = factory.getConditionEvaluator();
+            ConditionDispatcher dispatcher = new ConditionDispatcher(this.index, tradeCondition, this.trading.getTradePair());
 
-            if (! evaluator.evaluate(this.index, tradeCondition) ) {
+            if (! dispatcher.evaluate() ) {
                 // No need to further evaluate, since one condition is already false
                 return false;
             }

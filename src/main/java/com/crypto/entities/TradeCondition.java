@@ -54,7 +54,7 @@ public class TradeCondition {
     private Integer period;
 
     @Column(name = "PREVIOUS")
-    private Integer previous;
+    private Boolean previous;
 
     @Column(name = "LOGICAL_OPERATOR")
     @Enumerated(EnumType.STRING)
@@ -81,7 +81,7 @@ public class TradeCondition {
      * @param logicalOperator    logical operator
      * @param enabled            true when the trade condition is active
      */
-    public TradeCondition(Integer id, TradeRule tradeRule, TradeConditionType tradeConditionType, Macd macd, Trend trend, Macd reference_macd, Trend reference_trend, Float percentage, Float percentage_limit, Float rate, Integer period, Integer previous, LogicalOperator logicalOperator, Boolean enabled) {
+    public TradeCondition(Integer id, TradeRule tradeRule, TradeConditionType tradeConditionType, Macd macd, Trend trend, Macd reference_macd, Trend reference_trend, Float percentage, Float percentage_limit, Float rate, Integer period, Boolean previous, LogicalOperator logicalOperator, Boolean enabled) {
         Id = id;
         this.tradeRule = tradeRule;
         this.tradeConditionType = tradeConditionType;
@@ -149,7 +149,7 @@ public class TradeCondition {
         return period;
     }
 
-    public Integer getPrevious() {
+    public Boolean getPrevious() {
         return previous;
     }
 
