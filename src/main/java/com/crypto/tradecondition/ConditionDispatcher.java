@@ -27,11 +27,14 @@ public class ConditionDispatcher {
 
     private TradePair tradePair;
 
-    public ConditionDispatcher(final Integer index, final TradeCondition tradeCondition, final TradePair tradePair) {
+    private Boolean log = false;
+
+    public ConditionDispatcher(final Integer index, final TradeCondition tradeCondition, final TradePair tradePair, final Boolean log) {
 
         this.index = index;
         this.tradeCondition = tradeCondition;
         this.tradePair = tradePair;
+        this.log = log;
     }
 
     public Boolean evaluate () {

@@ -1,86 +1,77 @@
 package com.crypto.tradecondition.evaluator;
 
-import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.MacdValue;
-import com.crypto.entities.TradeCondition;
-import com.crypto.entities.TradePair;
+import com.crypto.entities.TradeConditionLog;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.function.Predicate;
 
 /**
  * Evaluates if a Macd is positive at a given index
- *
+ * <p/>
  * Created by Jan WIcherink on 12-6-15.
  */
 @Stateless
-public class MacdPositive implements ConditionEvaluator {
-
-    @EJB
-    private CryptocoinTrendDao cryptocoinTrendDao;
-
-    private Integer index;
-
-    private TradeCondition tradeCondition;
-
-    private TradePair tradePair;
+public class MacdPositive extends Evaluator implements ConditionEvaluator {
 
     /**
      * Default constructor
      */
-    public MacdPositive () {
+    public MacdPositive() {
     }
 
 
     /**
      * Checks the condition if a Macd is positive at a given index
+     *
      * @return true when the condition is true
      */
-    public Boolean evaluate () {
+    public Boolean evaluate() {
 
         Integer offset;
         Integer period;
+        Boolean evaluation = false;
 
 
-        if (this.tradeCondition.getPrevious()) {
+        if (getTradeCondition().getPrevious()) {
             offset = 0;
-            period = this.tradeCondition.getPeriod() + 1;
-        }
-        else {
+            period = getTradeCondition().getPeriod() + 1;
+        } else {
             offset = 1;
-            period = this.tradeCondition.getPeriod();
+            period = getTradeCondition().getPeriod();
         }
 
-        for (Integer indx = index+1; index< index + offset; indx++) {
+        for (Integer indx = getIndex() - period + 1; getIndex() < getIndex() + offset; indx++) {
 
-            MacdValue macdValue = cryptocoinTrendDao.getMacdValue(index,tradeCondition.getMacd(), tradePair);
+            MacdValue currentMacdValue = getMacdValue();
+
+            if (currentMacdValue == null) {
+                return false;
+            }
+
+            if (getLog()) {
+                // TODO:  change getIndex in getIndx()
+                TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), getIndex(), getTradeCondition(), getTrading());
+                tradeConditionLog.setMacdValue(currentMacdValue.getValue());
+
+                getTradeConditionLogDao().persist(tradeConditionLog);
+            }
+
+            // Macd must be positive
+            Predicate<MacdValue> macdMustBePositive = (p) -> {
+                return p.getValue() > 0;
+            };
+
+            evaluation = macdMustBePositive.test(currentMacdValue);
+
+            if (!evaluateExpression(evaluation, getTradeCondition().getLogicalOperator())) {
+                return evaluation;
+            }
         }
 
-        return false;
+        return evaluation;
     }
 
-    public Integer getIndex() {
-        return index;
-    }
 
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public TradeCondition getTradeCondition() {
-        return tradeCondition;
-    }
-
-    public void setTradeCondition(TradeCondition tradeCondition) {
-        this.tradeCondition = tradeCondition;
-    }
-
-    public TradePair getTradePair() {
-        return tradePair;
-    }
-
-    public void setTradePair(TradePair tradePair) {
-        this.tradePair = tradePair;
-    }
 }
 

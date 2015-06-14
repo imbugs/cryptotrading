@@ -105,6 +105,22 @@ public class TradeConditionLog {
         this.threshold = threshold;
     }
 
+
+    /**
+     * Constructor
+     * @param index the primary index of this log
+     * @param indx the secondary index of this log
+     * @param  tradeCondition the trade condition
+     * @param trading the tradling of this log
+     */
+    public TradeConditionLog(Integer index, Integer indx,TradeCondition tradeCondition, Trading trading) {
+        this.trading = trading;
+        this.index = index;
+        this.indx = indx;
+        this.tradeCondition = tradeCondition;
+    }
+
+
     /**
      * Default constructor
      */
@@ -170,5 +186,9 @@ public class TradeConditionLog {
 
     public TradeConditionType getTradeConditionType() {
         return tradeConditionType;
+    }
+
+    public void setMacdValue(Float macdValue) {
+        this.macdValue = macdValue;
     }
 }
