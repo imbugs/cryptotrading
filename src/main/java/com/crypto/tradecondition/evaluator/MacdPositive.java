@@ -50,8 +50,7 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator {
             }
 
             if (getLog()) {
-                // TODO:  change getIndex in getIndx()
-                TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), getIndex(), getTradeCondition(), getTrading());
+                TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setMacdValue(currentMacdValue.getValue());
 
                 getTradeConditionLogDao().persist(tradeConditionLog);
