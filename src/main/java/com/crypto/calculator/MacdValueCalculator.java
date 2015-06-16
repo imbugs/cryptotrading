@@ -1,8 +1,6 @@
 package com.crypto.calculator;
 
-import com.crypto.dao.MacdDao;
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
-import com.crypto.datahandler.provider.MacdDataProvider;
 import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TrendValue;

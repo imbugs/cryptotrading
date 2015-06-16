@@ -1,6 +1,8 @@
 package com.crypto.calculator.bulk;
 
 import com.crypto.calculator.*;
+import com.crypto.calculator.MacdCalculator;
+import com.crypto.calculator.MacdValueCalculator;
 import com.crypto.datahandler.impl.CryptoCoinHistoryBulkDataHandler;
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.entities.CryptocoinHistory;

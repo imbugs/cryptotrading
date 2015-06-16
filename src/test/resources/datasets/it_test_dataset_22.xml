@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <currencies CODE="DLR" DESCRIPTION="Dollars" SYMBOL="$"   DTYPE="CUR"/>
+    <currencies CODE="BTC" DESCRIPTION="Bitcoin" SYMBOL="BTC" DTYPE="CRC"/>
+    <trading_sites CODE="BTCE" DESCRIPTION="BTC-e" URL="www.btc-e.com"/>
+    <trade_pairs ID="1"  TRADING_SITE_CODE="BTCE" CURRENCY_CODE="DLR" CRYPTO_CURRENCY_CODE="BTC" TRANSACTION_FEE="0.1"/>
+    <trends ID="1" TREND_TYPE="MA"  PERIOD="2"/>
+    <cryptocoin_history INDX="1" TIMESTAMP="2014-04-14 12:00:00"  TRADE_PAIR_ID="1" OPEN="200" LOW="200" CLOSE="200" VOLUME="1000" />
+    <cryptocoin_history INDX="2" TIMESTAMP="2014-04-14 12:01:00"  TRADE_PAIR_ID="1" OPEN="210" LOW="210" CLOSE="210" VOLUME="1100" />
+    <cryptocoin_history INDX="3" TIMESTAMP="2014-04-14 12:02:00"  TRADE_PAIR_ID="1" OPEN="220" LOW="210" CLOSE="220" VOLUME="1100" />
+    <cryptocoin_history INDX="4" TIMESTAMP="2014-04-14 12:03:00"  TRADE_PAIR_ID="1" OPEN="230" LOW="230" CLOSE="230" VOLUME="1100" />
+    <cryptocoin_history INDX="5" TIMESTAMP="2014-04-14 12:04:00"  TRADE_PAIR_ID="1" OPEN="240" LOW="240" CLOSE="240" VOLUME="1100" />
+    <cryptocoin_history INDX="6" TIMESTAMP="2014-04-14 12:05:00"  TRADE_PAIR_ID="1" OPEN="250" LOW="250" CLOSE="250" VOLUME="1100" />
+    <cryptocoin_history INDX="7" TIMESTAMP="2014-04-14 12:06:00"  TRADE_PAIR_ID="1" OPEN="260" LOW="260" CLOSE="260" VOLUME="1000" />
+    <cryptocoin_history INDX="8" TIMESTAMP="2014-04-14 12:07:00"  TRADE_PAIR_ID="1" OPEN="270" LOW="270" CLOSE="270" VOLUME="1100" />
+    <cryptocoin_history INDX="9" TIMESTAMP="2014-04-14 12:08:00"  TRADE_PAIR_ID="1" OPEN="280" LOW="280" CLOSE="280" VOLUME="1100" />
+    <cryptocoin_history INDX="10" TIMESTAMP="2014-04-14 12:09:00" TRADE_PAIR_ID="1" OPEN="290" LOW="290" CLOSE="290" VOLUME="1100" />
+
+</dataset>

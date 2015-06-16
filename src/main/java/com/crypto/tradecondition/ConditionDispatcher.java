@@ -5,6 +5,7 @@ import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradePair;
+import com.crypto.entities.Trading;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.MacdPositive;
 
@@ -25,15 +26,15 @@ public class ConditionDispatcher {
 
     private Integer index;
 
-    private TradePair tradePair;
+    private Trading trading;
 
     private Boolean log = false;
 
-    public ConditionDispatcher(final Integer index, final TradeCondition tradeCondition, final TradePair tradePair, final Boolean log) {
+    public ConditionDispatcher(final Integer index, final Trading trading, final TradeCondition tradeCondition, final Boolean log) {
 
         this.index = index;
+        this.trading = trading;
         this.tradeCondition = tradeCondition;
-        this.tradePair = tradePair;
         this.log = log;
     }
 
@@ -41,17 +42,16 @@ public class ConditionDispatcher {
 
         Boolean evaluation = false;
 
-        switch (tradeCondition.getTradeConditionType().getName()) {
+        switch (this.tradeCondition.getTradeConditionType().getName()) {
             case "MACD_POSITIVE":
 
                 macdPositive.setIndex(index);
-                macdPositive.setTradePair(tradePair);
+                macdPositive.setTrading(trading);
                 macdPositive.setTradeCondition(tradeCondition);
 
                 evaluation =  macdPositive.evaluate();
                 break;
         }
-
         return evaluation;
     }
 }

@@ -6,6 +6,10 @@ import com.crypto.entities.*;
 import com.crypto.enums.LogicalOperator;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import java.io.Serializable;
 
 import static com.crypto.enums.LogicalOperator.*;
 
@@ -14,21 +18,15 @@ import static com.crypto.enums.LogicalOperator.*;
  *
  * Created by Jan Wicherink on 14-6-15.
  */
-public class Evaluator {
-    @EJB
-    private CryptocoinTrendDao cryptocoinTrendDao;
-
-    @EJB
-    private TradeConditionLogDao tradeConditionLogDao;
+public class Evaluator{
 
     private Integer index;
 
-    private TradeCondition tradeCondition;
-
     private Trading trading;
 
-    private Boolean log;
+    private TradeCondition tradeCondition;
 
+    private Boolean log;
 
     /**
      * Default constructor
@@ -53,10 +51,6 @@ public class Evaluator {
         this.tradeCondition = tradeCondition;
     }
 
-    public TradePair getTradePair() {
-        return trading.getTradePair();
-    }
-
     public Boolean getLog() {
         return log;
     }
@@ -64,16 +58,6 @@ public class Evaluator {
     public void setLog(Boolean log) {
         this.log = log;
     }
-
-    /**
-     * Get a Macd value
-     *
-     * @return the macd value
-     */
-    public MacdValue getMacdValue () {
-        return cryptocoinTrendDao.getMacdValue(index,tradeCondition.getMacd(), this.getTradePair());
-    }
-
 
     /**
      * Evaluate an expression with multiple logical operators/
@@ -94,7 +78,7 @@ public class Evaluator {
         return trading;
     }
 
-    public TradeConditionLogDao getTradeConditionLogDao() {
-        return tradeConditionLogDao;
+    public void setTrading(Trading trading) {
+        this.trading = trading;
     }
 }

@@ -1,7 +1,6 @@
 package com.crypto.calculator;
 
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
-import com.crypto.datahandler.provider.MacdDataProvider;
 import com.crypto.entities.*;
 import org.junit.Test;
 

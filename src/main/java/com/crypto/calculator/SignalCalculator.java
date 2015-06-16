@@ -1,5 +1,6 @@
 package com.crypto.calculator;
 
+import com.crypto.calculator.Calculator;
 import com.crypto.dao.SignalDao;
 import com.crypto.dao.TradeConditionDao;
 import com.crypto.entities.*;
@@ -17,7 +18,7 @@ import java.util.List;
  * Created by Jan Wicherink on 9-6-15.
  */
 @Stateless
-public class SignalCalculator implements Calculator<Signal>{
+public class SignalCalculator implements Calculator<Signal> {
 
     @EJB
     private SignalDao signalDao;
@@ -58,6 +59,7 @@ public class SignalCalculator implements Calculator<Signal>{
 
     /**
      * Checks whether if all of the conditions of a traderule are true.
+     *
      * @param tradeRule
      * @return
      */
@@ -69,8 +71,9 @@ public class SignalCalculator implements Calculator<Signal>{
 
         for (TradeCondition tradeCondition : tradeConditions) {
 
-            ConditionDispatcher dispatcher = new ConditionDispatcher(this.index, tradeCondition, this.trading.getTradePair(), this.log);
+            final ConditionDispatcher dispatcher = new ConditionDispatcher(this.index, this.trading, tradeCondition, this.log);
 
+            // Evaluate the condition
             if (! dispatcher.evaluate() ) {
                 // No need to further evaluate, since one condition is already false
                 return false;
@@ -108,6 +111,7 @@ public class SignalCalculator implements Calculator<Signal>{
            tradeRules = this.trading.getTradeRules();
        }
 
+       // Check all conditions of all the active trade rules
        tradeRules.forEach( (tradeRule) -> {
 
            final Boolean conditionsTrue= checkConditions(tradeRule);

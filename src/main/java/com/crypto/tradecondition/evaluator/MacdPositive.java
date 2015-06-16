@@ -1,25 +1,42 @@
 package com.crypto.tradecondition.evaluator;
 
+import com.crypto.dao.CryptocoinTrendDao;
+import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeConditionLog;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
  * Evaluates if a Macd is positive at a given index
- * <p/>
- * Created by Jan WIcherink on 12-6-15.
+ *
+ * Created by Jan Wicherink on 12-6-15.
  */
 @Stateless
-public class MacdPositive extends Evaluator implements ConditionEvaluator {
+public class MacdPositive extends Evaluator implements ConditionEvaluator, Serializable {
+
+    private static final long serialVersionUID = 3523938793517562905L;
+
+    @EJB
+    private CryptocoinTrendDao cryptocoinTrendDao;
+
+    @EJB
+    private TradeConditionLogDao tradeConditionLogDao;
+
 
     /**
-     * Default constructor
+     * Defauult constructor.
      */
-    public MacdPositive() {
+    public MacdPositive () {
+
     }
 
+     private MacdValue getMacdValue() {
+        return cryptocoinTrendDao.getMacdValue(getIndex(), getTradeCondition().getMacd(), this.getTrading().getTradePair());
+    }
 
     /**
      * Checks the condition if a Macd is positive at a given index
@@ -31,7 +48,6 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator {
         Integer offset;
         Integer period;
         Boolean evaluation = false;
-
 
         if (getTradeCondition().getPrevious()) {
             offset = 0;
@@ -53,7 +69,7 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator {
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setMacdValue(currentMacdValue.getValue());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                this.tradeConditionLogDao.persist(tradeConditionLog);
             }
 
             // Macd must be positive
@@ -70,7 +86,4 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator {
 
         return evaluation;
     }
-
-
 }
-
