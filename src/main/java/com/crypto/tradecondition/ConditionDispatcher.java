@@ -45,21 +45,17 @@ public class ConditionDispatcher {
 
         Boolean evaluation = false;
 
+        macdPositive.setIndex(index);
+        macdPositive.setTrading(trading);
+        macdPositive.setTradeCondition(tradeCondition);
+
         switch (this.tradeCondition.getTradeConditionType().getName()) {
             case "MACD_POSITIVE":
-
-                macdPositive.setIndex(index);
-                macdPositive.setTrading(trading);
-                macdPositive.setTradeCondition(tradeCondition);
 
                 evaluation =  macdPositive.evaluate();
                 break;
 
             case "MACD_NEGATIVE":
-
-                macdNegative.setIndex(index);
-                macdNegative.setTrading(trading);
-                macdNegative.setTradeCondition(tradeCondition);
 
                 evaluation =  macdNegative.evaluate();
                 break;

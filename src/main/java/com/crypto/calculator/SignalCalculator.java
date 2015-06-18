@@ -65,8 +65,6 @@ public class SignalCalculator implements Calculator<Signal> {
      */
     private Boolean checkConditions(final TradeRule tradeRule) {
 
-        Boolean conditionsTrue=false;
-
         List<TradeCondition> tradeConditions = this.tradeConditionDao.getAllActiveTradeConditionsOfTradeRule(tradeRule);
 
         for (TradeCondition tradeCondition : tradeConditions) {

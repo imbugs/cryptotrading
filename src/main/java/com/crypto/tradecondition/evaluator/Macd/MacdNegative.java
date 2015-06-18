@@ -6,7 +6,7 @@ import javax.ejb.Stateful;
 import java.util.function.Predicate;
 
 /**
- * Evaluates if a Macd is positive at a given index
+ * Evaluates if a Macd is negative a given index
  *
  * Created by Jan Wicherink on 12-6-15.
  */
@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 public class MacdNegative extends MacdEvaluator {
 
     /**
-     * Default constructor.
+     *  Default constructor.
      */
     public MacdNegative() {
         super ();
