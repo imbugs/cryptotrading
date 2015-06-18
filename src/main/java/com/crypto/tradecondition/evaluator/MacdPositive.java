@@ -6,17 +6,17 @@ import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeConditionLog;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
  * Evaluates if a Macd is positive at a given index
- *
+ * <p/>
  * Created by Jan Wicherink on 12-6-15.
  */
-@Stateless
-public class MacdPositive extends Evaluator implements ConditionEvaluator, Serializable {
+@Stateful
+public class MacdPositive extends Evaluator implements Serializable {
 
     private static final long serialVersionUID = 3523938793517562905L;
 
@@ -26,16 +26,15 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator, Seria
     @EJB
     private TradeConditionLogDao tradeConditionLogDao;
 
-
     /**
      * Defauult constructor.
      */
-    public MacdPositive () {
+    public MacdPositive() {
 
     }
 
-     private MacdValue getMacdValue() {
-        return cryptocoinTrendDao.getMacdValue(getIndex(), getTradeCondition().getMacd(), this.getTrading().getTradePair());
+    private MacdValue getMacdValue(final Integer index) {
+        return cryptocoinTrendDao.getMacdValue(index, getTradeCondition().getMacd(), this.getTrading().getTradePair());
     }
 
     /**
@@ -49,17 +48,9 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator, Seria
         Integer period;
         Boolean evaluation = false;
 
-        if (getTradeCondition().getPrevious()) {
-            offset = 0;
-            period = getTradeCondition().getPeriod() + 1;
-        } else {
-            offset = 1;
-            period = getTradeCondition().getPeriod();
-        }
+        for (Integer indx = getIndex() - getTradeCondition().getPeriod() + 1; indx <= getIndex(); indx++) {
 
-        for (Integer indx = getIndex() - period + 1; getIndex() < getIndex() + offset; indx++) {
-
-            MacdValue currentMacdValue = getMacdValue();
+            MacdValue currentMacdValue = getMacdValue(indx);
 
             if (currentMacdValue == null) {
                 return false;
@@ -83,7 +74,6 @@ public class MacdPositive extends Evaluator implements ConditionEvaluator, Seria
                 return evaluation;
             }
         }
-
         return evaluation;
     }
 }

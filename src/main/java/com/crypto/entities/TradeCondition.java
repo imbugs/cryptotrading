@@ -53,9 +53,6 @@ public class TradeCondition {
     @Column(name = "PERIOD")
     private Integer period;
 
-    @Column(name = "PREVIOUS")
-    private Boolean previous;
-
     @Column(name = "LOGICAL_OPERATOR")
     @Enumerated(EnumType.STRING)
     private LogicalOperator logicalOperator;
@@ -81,7 +78,7 @@ public class TradeCondition {
      * @param logicalOperator    logical operator
      * @param enabled            true when the trade condition is active
      */
-    public TradeCondition(Integer id, TradeRule tradeRule, TradeConditionType tradeConditionType, Macd macd, Trend trend, Macd reference_macd, Trend reference_trend, Float percentage, Float percentage_limit, Float rate, Integer period, Boolean previous, LogicalOperator logicalOperator, Boolean enabled) {
+    public TradeCondition(Integer id, TradeRule tradeRule, TradeConditionType tradeConditionType, Macd macd, Trend trend, Macd reference_macd, Trend reference_trend, Float percentage, Float percentage_limit, Float rate, Integer period, LogicalOperator logicalOperator, Boolean enabled) {
         Id = id;
         this.tradeRule = tradeRule;
         this.tradeConditionType = tradeConditionType;
@@ -93,7 +90,6 @@ public class TradeCondition {
         this.percentage_limit = percentage_limit;
         this.rate = rate;
         this.period = period;
-        this.previous = previous;
         this.logicalOperator = logicalOperator;
         this.enabled = enabled;
     }
@@ -149,15 +145,23 @@ public class TradeCondition {
         return period;
     }
 
-    public Boolean getPrevious() {
-        return previous;
-    }
-
-    public LogicalOperator getLogicalOperator() {
+      public LogicalOperator getLogicalOperator() {
         return logicalOperator;
     }
 
     public Boolean getEnabled() {
         return enabled;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
+
+    public void setLogicalOperator(LogicalOperator logicalOperator) {
+        this.logicalOperator = logicalOperator;
     }
 }

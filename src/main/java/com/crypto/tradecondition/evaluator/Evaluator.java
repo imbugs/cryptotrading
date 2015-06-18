@@ -26,7 +26,7 @@ public class Evaluator{
 
     private TradeCondition tradeCondition;
 
-    private Boolean log;
+    private Boolean log = false;
 
     /**
      * Default constructor
@@ -44,10 +44,11 @@ public class Evaluator{
     }
 
     public TradeCondition getTradeCondition() {
-        return tradeCondition;
+
+        return this.tradeCondition;
     }
 
-    public void setTradeCondition(TradeCondition tradeCondition) {
+    public void setTradeCondition(final TradeCondition tradeCondition) {
         this.tradeCondition = tradeCondition;
     }
 
@@ -75,7 +76,7 @@ public class Evaluator{
     }
 
     public Trading getTrading() {
-        return trading;
+        return this.trading;
     }
 
     public void setTrading(Trading trading) {

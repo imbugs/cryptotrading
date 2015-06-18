@@ -2,6 +2,8 @@ package com.crypto.tradecondition.evaluator;
 
 import com.crypto.entities.TradeCondition;
 
+import java.io.Serializable;
+
 /**
  * Condition evaluator
  *
