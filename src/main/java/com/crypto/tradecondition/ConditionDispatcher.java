@@ -1,16 +1,11 @@
 package com.crypto.tradecondition;
 
-import com.crypto.dao.CryptocoinHistoryDao;
-import com.crypto.dao.CryptocoinTrendDao;
-import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeCondition;
-import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
-import com.crypto.tradecondition.evaluator.ConditionEvaluator;
-import com.crypto.tradecondition.evaluator.MacdPositive;
+import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
+import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
 /**
  * Dispatches a condition evaluation
@@ -20,7 +15,10 @@ import javax.ejb.Stateless;
 public class ConditionDispatcher {
 
     @EJB
-    MacdPositive macdPositive;
+    private MacdPositive macdPositive;
+
+    @EJB
+    private MacdNegative macdNegative;
 
     private TradeCondition tradeCondition;
 
@@ -38,6 +36,11 @@ public class ConditionDispatcher {
         this.log = log;
     }
 
+    /**
+     * Evaluate a trade condition
+     *
+      * @return true when the condition is true at a given index, false otherwise
+     */
     public Boolean evaluate () {
 
         Boolean evaluation = false;
@@ -50,6 +53,15 @@ public class ConditionDispatcher {
                 macdPositive.setTradeCondition(tradeCondition);
 
                 evaluation =  macdPositive.evaluate();
+                break;
+
+            case "MACD_NEGATIVE":
+
+                macdNegative.setIndex(index);
+                macdNegative.setTrading(trading);
+                macdNegative.setTradeCondition(tradeCondition);
+
+                evaluation =  macdNegative.evaluate();
                 break;
         }
         return evaluation;
