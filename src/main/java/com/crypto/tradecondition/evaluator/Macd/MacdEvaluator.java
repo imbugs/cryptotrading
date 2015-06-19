@@ -22,22 +22,12 @@ public class MacdEvaluator extends Evaluator implements ConditionEvaluator, Seri
 
     private static final long serialVersionUID = 3523938793517562905L;
 
-    @EJB
-    private CryptocoinTrendDao cryptocoinTrendDao;
-
-    @EJB
-    private TradeConditionLogDao tradeConditionLogDao;
-
     private Predicate<MacdValue> expression;
 
     /**
      * Default constructor
      */
     public MacdEvaluator() {
-    }
-
-    private MacdValue getMacdValue(final Integer index) {
-        return cryptocoinTrendDao.getMacdValue(index, getTradeCondition().getMacd(), this.getTrading().getTradePair());
     }
 
     /**
@@ -61,7 +51,7 @@ public class MacdEvaluator extends Evaluator implements ConditionEvaluator, Seri
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setMacdValue(currentMacdValue.getValue());
 
-                this.tradeConditionLogDao.persist(tradeConditionLog);
+                getTradeConditionLogDao().persist(tradeConditionLog);
             }
 
             evaluation = expression.test(currentMacdValue);

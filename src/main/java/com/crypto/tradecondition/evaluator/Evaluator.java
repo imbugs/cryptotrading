@@ -6,6 +6,7 @@ import com.crypto.entities.*;
 import com.crypto.enums.LogicalOperator;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -18,7 +19,15 @@ import static com.crypto.enums.LogicalOperator.*;
  *
  * Created by Jan Wicherink on 14-6-15.
  */
+@Stateful
 public class Evaluator{
+
+    @EJB
+    private CryptocoinTrendDao cryptocoinTrendDao;
+
+    @EJB
+    private TradeConditionLogDao tradeConditionLogDao;
+
 
     private Integer index;
 
@@ -33,6 +42,43 @@ public class Evaluator{
      */
     public Evaluator () {
 
+    }
+
+    /**
+     * Get a Macd value.
+     * @param index the index of the macd value.
+     * @return the macd value.
+     */
+    public MacdValue getMacdValue(final Integer index) {
+        return cryptocoinTrendDao.getMacdValue(index, getTradeCondition().getMacd(), this.getTrading().getTradePair());
+    }
+
+    /**
+     * Get a trend value.
+     * @param index the index of the trend value.
+     * @return the trend value.
+     */
+    public TrendValue getTrendValue(final Integer index) {
+        return cryptocoinTrendDao.getTrendValue(index, getTradeCondition().getTrend(), this.getTrading().getTradePair());
+    }
+
+    /**
+     * Evaluate an expression with multiple logical operators, in case and AND operator is used, all values in the expression
+     * must comply to the expression to make the expression true.
+     *
+     * In case an OR operator is used, only one value in the range of values must comply to the
+     * expression to make the expression true.
+     *
+     * @param expression the expression
+     * @param logicalOperator the logical operator
+     * @return the evaluation
+     */
+    public Boolean evaluateExpression (final Boolean expression, final LogicalOperator logicalOperator) {
+        switch (logicalOperator) {
+            case AND : return (expression);
+            case OR :  return (! expression);
+        }
+        return false;
     }
 
     public Integer getIndex() {
@@ -60,26 +106,16 @@ public class Evaluator{
         this.log = log;
     }
 
-    /**
-     * Evaluate an expression with multiple logical operators/
-     *
-     * @param expression the expression
-     * @param logicalOperator the logical operator
-     * @return the evaluation
-     */
-    public Boolean evaluateExpression (final Boolean expression, final LogicalOperator logicalOperator) {
-        switch (logicalOperator) {
-            case AND : return (expression);
-            case OR :  return (! expression);
-        }
-        return false;
-    }
-
     public Trading getTrading() {
         return this.trading;
     }
 
+
     public void setTrading(Trading trading) {
         this.trading = trading;
+    }
+
+    public TradeConditionLogDao getTradeConditionLogDao() {
+        return tradeConditionLogDao;
     }
 }

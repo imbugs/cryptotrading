@@ -192,4 +192,8 @@ public class TradeConditionLog {
     public void setMacdValue(Float macdValue) {
         this.macdValue = macdValue;
     }
+
+    public void setTrendValue(Float trendValue) {
+        this.trendValue = trendValue;
+    }
 }
