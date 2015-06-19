@@ -3,6 +3,7 @@ package com.crypto.tradecondition.evaluator.TrendChange;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.entities.TrendValue;
+import com.crypto.enums.LogicalOperator;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
@@ -18,18 +19,22 @@ import java.util.function.Predicate;
 @Stateful
 public class TrendChangeEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
+    private static final long serialVersionUID = 1;
+
     private Predicate<TrendValue> expression;
 
     /**
      * Default constructor
      */
     public TrendChangeEvaluator() {
-
     }
 
     @Override
     public Boolean evaluate() {
         Boolean evaluation = false;
+
+        // Force AND logical operator, all values must comply with expression
+        this.getTradeCondition().setLogicalOperator(LogicalOperator.AND);
 
         // Check if the expression is true for values in range   indx-period-1 to indx
         Integer start  = getIndex() - getTradeCondition().getPeriod() + 1;

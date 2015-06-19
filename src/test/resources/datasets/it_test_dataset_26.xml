@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <currencies CODE="DLR" DESCRIPTION="Dollars" SYMBOL="$"   DTYPE="CUR"/>
+    <currencies CODE="BTC" DESCRIPTION="Bitcoin" SYMBOL="BTC" DTYPE="CRC"/>
+    <trading_sites CODE="BTCE" DESCRIPTION="BTC-e" URL="www.btc-e.com"/>
+    <trade_pairs ID="1" TRADING_SITE_CODE="BTCE" CURRENCY_CODE="DLR" CRYPTO_CURRENCY_CODE="BTC" TRANSACTION_FEE="0.1"/>
+    <trends ID="1" TREND_TYPE="EMA"  PERIOD="50"/>
+    <macd ID="1" SHORT_TREND_ID="1" LONG_TREND_ID="1"/>
+    <cryptocoin_trends ID="1" TRADE_PAIR_ID="1"  INDX="1"  TREND_ID="1" MACD_ID="1" VALUE="1" DELTA="1"  TYPE="TREND"/>
+    <cryptocoin_trends ID="2" TRADE_PAIR_ID="1"  INDX="2"  TREND_ID="1" MACD_ID="1" VALUE="2" DELTA="1"  TYPE="TREND"/>
+    <cryptocoin_trends ID="3" TRADE_PAIR_ID="1"  INDX="3"  TREND_ID="1" MACD_ID="1" VALUE="3" DELTA="1"  TYPE="TREND"/>
+    <cryptocoin_trends ID="4" TRADE_PAIR_ID="1"  INDX="4"  TREND_ID="1" MACD_ID="1" VALUE="4" DELTA="1"  TYPE="TREND"/>
+    <cryptocoin_trends ID="5" TRADE_PAIR_ID="1"  INDX="5"  TREND_ID="1" MACD_ID="1" VALUE="3" DELTA="-1" TYPE="TREND"/>
+    <cryptocoin_trends ID="6" TRADE_PAIR_ID="1"  INDX="6"  TREND_ID="1" MACD_ID="1" VALUE="2" DELTA="-1" TYPE="TREND"/>
+    <cryptocoin_trends ID="7" TRADE_PAIR_ID="1"  INDX="7"  TREND_ID="1" MACD_ID="1" VALUE="1" DELTA="-1" TYPE="TREND"/>
+</dataset>
