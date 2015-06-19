@@ -196,4 +196,8 @@ public class TradeConditionLog {
     public void setTrendValue(Float trendValue) {
         this.trendValue = trendValue;
     }
+
+    public void setExchangeRate(Float exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
 }

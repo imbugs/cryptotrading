@@ -9,14 +9,14 @@ import java.util.function.Predicate;
 
 /**
  * Evaluates a positive trend change
- *
+ * <p/>
  * Created by Jan Wicherink on 19-6-15.
  */
 @Stateful
-public class PosTrendChange extends TrendChangeEvaluator{
+public class PosTrendChange extends TrendChangeEvaluator {
 
-    public PosTrendChange () {
-       super();
+    public PosTrendChange() {
+        super();
 
         Predicate<TrendValue> expression = (p) -> p.getDelta() >= 0;
 

@@ -5,6 +5,8 @@ import com.crypto.entities.Trading;
 import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
+import com.crypto.tradecondition.evaluator.TrendChange.NegTrendChange;
+import com.crypto.tradecondition.evaluator.TrendChange.PosTrendChange;
 
 import javax.ejb.EJB;
 
@@ -22,6 +24,12 @@ public class ConditionDispatcher {
 
     @EJB
     private MacdNegative macdNegative;
+
+    @EJB
+    private PosTrendChange posTrendChange;
+
+    @EJB
+    private NegTrendChange negTrendChange;
 
     private TradeCondition tradeCondition;
 
@@ -42,9 +50,9 @@ public class ConditionDispatcher {
     /**
      * Evaluate a trade condition
      *
-      * @return true when the condition is true at a given index, false otherwise
+     * @return true when the condition is true at a given index, false otherwise
      */
-    public Boolean evaluate () throws RuntimeException {
+    public Boolean evaluate() throws RuntimeException {
 
         Boolean evaluation = false;
 
@@ -54,14 +62,23 @@ public class ConditionDispatcher {
 
         switch (this.tradeCondition.getTradeConditionType()) {
             case MACD_POSITIVE:
-                evaluation =  macdPositive.evaluate();
+                evaluation = macdPositive.evaluate();
                 break;
 
             case MACD_NEGATIVE:
-                evaluation =  macdNegative.evaluate();
+                evaluation = macdNegative.evaluate();
                 break;
 
-            default : throw (new RuntimeException("Not implemented trade condition"));
+            case POS_TREND_CHANGE:
+                evaluation = negTrendChange.evaluate();
+                break;
+
+            case NEG_TREND_CHANGE:
+                evaluation = negTrendChange.evaluate();
+                break;
+
+            default:
+                throw (new RuntimeException("Not implemented trade condition"));
         }
         return evaluation;
     }

@@ -1,43 +1,37 @@
-package com.crypto.tradecondition.evaluator.Macd;
+package com.crypto.tradecondition.evaluator.Trend;
 
-import com.crypto.dao.CryptocoinTrendDao;
-import com.crypto.dao.TradeConditionLogDao;
-import com.crypto.entities.MacdValue;
+import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradeConditionLog;
+import com.crypto.entities.TrendValue;
+import com.crypto.enums.LogicalOperator;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.io.Serializable;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
- * Evaluates if a Macd is positive at a given index
+ * Evaluates the crypto coin exchange rate against a trend
  * <p/>
- * Created by Jan Wicherink on 12-6-15.
+ * Created by Jan Wicherink on 19-6-15.
  */
 @Stateful
-public class MacdEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
+public class TrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
-    private static final long serialVersionUID = 3523938793517562905L;
+    long serialVersionUID = 1;
 
-    private Predicate<MacdValue> expression;
+    private BiPredicate<CryptocoinHistory, TrendValue> expression;
 
     /**
      * Default constructor
      */
-    public MacdEvaluator() {
+    public TrendEvaluator() {
     }
 
-
-    /**
-     * Checks the condition of a Macd at a given index is trye for all values (AND condition), or just for any one of the values (OR condition)
-     *
-     * @return true when the condition is true
-     */
+    @Override
     public Boolean evaluate() {
-
         Boolean evaluation = false;
 
         // Check if the expression is true for values in range indx-period-1 to indx
@@ -46,29 +40,32 @@ public class MacdEvaluator extends Evaluator implements ConditionEvaluator, Seri
 
         for (Integer indx = start; indx <= end; indx++) {
 
-            MacdValue currentMacdValue = getMacdValue(indx);
+            final TrendValue currentTrendValue = getTrendValue(indx);
+            final CryptocoinHistory currentCryptocoinHistory = getCryptoCoinHistory(indx);
 
-            if (currentMacdValue == null) {
+            if (currentTrendValue == null) {
                 return false;
             }
 
             if (getLog()) {
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
-                tradeConditionLog.setMacdValue(currentMacdValue.getValue());
+                tradeConditionLog.setTrendValue(currentTrendValue.getValue());
+                tradeConditionLog.setExchangeRate(currentCryptocoinHistory.getClose());
 
                 getTradeConditionLogDao().persist(tradeConditionLog);
             }
 
-            evaluation = expression.test(currentMacdValue);
+            evaluation = expression.test(currentCryptocoinHistory, currentTrendValue);
 
             if (!evaluateExpression(evaluation, getTradeCondition().getLogicalOperator())) {
                 return evaluation;
             }
         }
+
         return evaluation;
     }
 
-    public void setExpression(Predicate<MacdValue> expression) {
+    public void setExpression(BiPredicate<CryptocoinHistory, TrendValue> expression) {
         this.expression = expression;
     }
 }

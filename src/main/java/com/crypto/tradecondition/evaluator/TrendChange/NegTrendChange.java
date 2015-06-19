@@ -7,13 +7,13 @@ import java.util.function.Predicate;
 
 /**
  * Evaluates a negative trend change
- *
+ * <p/>
  * Created by Jan Wicherink on 19-6-15.
  */
 @Stateful
-public class NegTrendChange extends TrendChangeEvaluator{
+public class NegTrendChange extends TrendChangeEvaluator {
 
-    public NegTrendChange () {
+    public NegTrendChange() {
         super();
 
         Predicate<TrendValue> expression = (p) -> p.getDelta() <= 0;

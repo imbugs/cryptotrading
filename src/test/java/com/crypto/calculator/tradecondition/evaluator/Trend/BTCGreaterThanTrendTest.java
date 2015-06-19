@@ -1,7 +1,8 @@
-package com.crypto.calculator.tradecondition.evaluator.TrendChange;
+package com.crypto.calculator.tradecondition.evaluator.Trend;
 
 import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.TradeConditionLogDao;
+import com.crypto.dao.TradePairDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
 import com.crypto.datahandler.provider.DataIndexProvider;
@@ -13,8 +14,8 @@ import com.crypto.enums.TradeConditionType;
 import com.crypto.enums.TrendType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
-import com.crypto.tradecondition.evaluator.TrendChange.NegTrendChange;
-import com.crypto.tradecondition.evaluator.TrendChange.PosTrendChange;
+import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
+import com.crypto.tradecondition.evaluator.Trend.BTCGreaterThanTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -30,19 +31,23 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
-import static junit.framework.TestCase.assertFalse;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 /**
+ * Crypto coin history closing greater than trend test
  * Created by Jan Wicherink on 19-6-15.
  */
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class NegTrendChangeTest {
+public class BTCGreaterThanTrendTest {
 
     @Inject
-    private NegTrendChange negTrendChange;
+    private BTCGreaterThanTrend btcGreaterThanTrend;
+
+    @Inject
+    private TradePairDao tradePairDao;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -56,7 +61,7 @@ public class NegTrendChangeTest {
                 .addPackage((LoggingLevel.class).getPackage())
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addPackage(DataIndexProvider.class.getPackage())
-                .addPackage(PosTrendChange.class.getPackage())
+                .addPackage(BTCGreaterThanTrend.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -64,47 +69,53 @@ public class NegTrendChangeTest {
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_26.xml")
-    public void testNegTrendChange() {
+    @UsingDataSet("datasets/it_test_dataset_27.xml")
+    public void testBTCGreaterThanTrend() {
 
         //Arrange
         final TradingSite tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
         final Currency currency = new Currency("EUR", "Euro", "&euro");
         final CryptoCurrency cryptoCurrency = new CryptoCurrency("BTC", "Bitcoin", "BTC");
-        final TradePair tradePair = new TradePair(1, tradingSite, currency, cryptoCurrency, 0.01F);
+        final TradePair tradePair = tradePairDao.get(1);
         final Trading trading = new Trading();
         trading.setTradePair(tradePair);
 
         final TradeRule tradeRule = new TradeRule();
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_TREND_CHANGE, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_GT_TREND, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
-        negTrendChange.setTrading(trading);
-        negTrendChange.setTradeCondition(tradeCondition);
+        btcGreaterThanTrend.setTrading(trading);
+        btcGreaterThanTrend.setTradeCondition(tradeCondition);
 
-        // Index = 7, period = 3
-        negTrendChange.setIndex(7);
-        tradeCondition.setPeriod(3);
-
-        assertTrue(negTrendChange.evaluate());
-
-        // Index = 6, period = 3
-        negTrendChange.setIndex(6);
-        tradeCondition.setPeriod(3);
-
-        assertFalse(negTrendChange.evaluate());
-
-        // Index = 6, period = 2
-        negTrendChange.setIndex(6);
-        tradeCondition.setPeriod(2);
-
-        assertTrue(negTrendChange.evaluate());
-
-        // Index = 5, period = 1
-        negTrendChange.setIndex(5);
+        // Index = 1, period = 1
+        btcGreaterThanTrend.setIndex(1);
         tradeCondition.setPeriod(1);
 
-        assertTrue(negTrendChange.evaluate());
+        // Act
+        assertFalse(btcGreaterThanTrend.evaluate());
+
+        // Index = 2, period = 1
+        btcGreaterThanTrend.setIndex(2);
+        tradeCondition.setPeriod(1);
+
+        // Act
+        assertTrue(btcGreaterThanTrend.evaluate());
+
+        // Index = 3, period = 3
+        btcGreaterThanTrend.setIndex(3);
+        tradeCondition.setPeriod(3);
+
+        // Act
+        assertFalse(btcGreaterThanTrend.evaluate());
+
+        // Index = 3, period = 3
+        btcGreaterThanTrend.setIndex(3);
+        tradeCondition.setPeriod(3);
+        tradeCondition.setLogicalOperator(LogicalOperator.OR);
+
+        // Act
+        assertTrue(btcGreaterThanTrend.evaluate());
+
     }
 }

@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 /**
  * Evaluates a trend change
- *
+ * <p/>
  * Created by Jan Wicherink on 19-6-15.
  */
 @Stateful
@@ -37,8 +37,8 @@ public class TrendChangeEvaluator extends Evaluator implements ConditionEvaluato
         this.getTradeCondition().setLogicalOperator(LogicalOperator.AND);
 
         // Check if the expression is true for values in range   indx-period-1 to indx
-        Integer start  = getIndex() - getTradeCondition().getPeriod() + 1;
-        Integer end    = getIndex();
+        Integer start = getIndex() - getTradeCondition().getPeriod() + 1;
+        Integer end = getIndex();
 
         for (Integer indx = start; indx <= end; indx++) {
 
@@ -63,7 +63,7 @@ public class TrendChangeEvaluator extends Evaluator implements ConditionEvaluato
         }
 
         // Check if the expression is false for values in range indx- (2 * period) - 1 to indx - period
-        start = getIndex() - (2 * getTradeCondition().getPeriod())  + 1;
+        start = getIndex() - (2 * getTradeCondition().getPeriod()) + 1;
         end = getIndex() - getTradeCondition().getPeriod();
 
         for (Integer indx = start; indx <= end; indx++) {
@@ -82,7 +82,7 @@ public class TrendChangeEvaluator extends Evaluator implements ConditionEvaluato
             }
 
             // Negate the expression
-            evaluation = ! expression.test(currentTrendValue);
+            evaluation = expression.negate().test(currentTrendValue);
 
             if (!evaluateExpression(evaluation, getTradeCondition().getLogicalOperator())) {
                 return evaluation;

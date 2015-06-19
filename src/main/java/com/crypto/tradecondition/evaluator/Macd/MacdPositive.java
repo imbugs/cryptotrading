@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 /**
  * Evaluates if a Macd is positive at a given index
- *
+ * <p/>
  * Created by Jan Wicherink on 12-6-15.
  */
 @Stateful
@@ -17,7 +17,7 @@ public class MacdPositive extends MacdEvaluator {
      * Default constructor.
      */
     public MacdPositive() {
-        super ();
+        super();
 
         Predicate<MacdValue> expression = (p) -> p.getValue() > 0;
 

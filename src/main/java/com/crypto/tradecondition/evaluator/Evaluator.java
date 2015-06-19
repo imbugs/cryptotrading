@@ -1,5 +1,6 @@
 package com.crypto.tradecondition.evaluator;
 
+import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.entities.*;
@@ -16,11 +17,14 @@ import static com.crypto.enums.LogicalOperator.*;
 
 /**
  * Evaluator, evaluates a condition.
- *
+ * <p/>
  * Created by Jan Wicherink on 14-6-15.
  */
 @Stateful
-public class Evaluator{
+public class Evaluator {
+
+    @EJB
+    private CryptocoinHistoryDao cryptocoinHistoryDao;
 
     @EJB
     private CryptocoinTrendDao cryptocoinTrendDao;
@@ -40,12 +44,23 @@ public class Evaluator{
     /**
      * Default constructor
      */
-    public Evaluator () {
+    public Evaluator() {
 
     }
 
     /**
+     * Get cryptocoin history at given index.
+     *
+     * @param index the index
+     * @return the cryptocoin history at a given index.
+     */
+    public CryptocoinHistory getCryptoCoinHistory(final Integer index) {
+        return cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(getTrading().getTradePair(), index);
+    }
+
+    /**
      * Get a Macd value.
+     *
      * @param index the index of the macd value.
      * @return the macd value.
      */
@@ -55,6 +70,7 @@ public class Evaluator{
 
     /**
      * Get a trend value.
+     *
      * @param index the index of the trend value.
      * @return the trend value.
      */
@@ -65,18 +81,20 @@ public class Evaluator{
     /**
      * Evaluate an expression with multiple logical operators, in case and AND operator is used, all values in the expression
      * must comply to the expression to make the expression true.
-     *
+     * <p/>
      * In case an OR operator is used, only one value in the range of values must comply to the
      * expression to make the expression true.
      *
-     * @param expression the expression
+     * @param expression      the expression
      * @param logicalOperator the logical operator
      * @return the evaluation
      */
-    public Boolean evaluateExpression (final Boolean expression, final LogicalOperator logicalOperator) {
+    public Boolean evaluateExpression(final Boolean expression, final LogicalOperator logicalOperator) {
         switch (logicalOperator) {
-            case AND : return (expression);
-            case OR :  return (! expression);
+            case AND:
+                return (expression);
+            case OR:
+                return (!expression);
         }
         return false;
     }
