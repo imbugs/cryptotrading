@@ -9,6 +9,7 @@ import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.LogicalOperator;
+import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
@@ -75,11 +76,9 @@ public class MacdNegativeTest {
         trading.setTradePair(tradePair);
 
         final TradeRule tradeRule = new TradeRule();
-        final TradeConditionType tradeConditionType = new TradeConditionType("MACDPOS", "Macd Positive", null);
         final Macd macd = new Macd(1, new Trend(), new Trend());
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, tradeConditionType, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
-
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         macdNegative.setTrading(trading);
         macdNegative.setTradeCondition(tradeCondition);

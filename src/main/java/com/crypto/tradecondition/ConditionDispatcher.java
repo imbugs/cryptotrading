@@ -2,10 +2,13 @@ package com.crypto.tradecondition;
 
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.Trading;
+import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
 
 import javax.ejb.EJB;
+
+import static com.crypto.enums.TradeConditionType.*;
 
 /**
  * Dispatches a condition evaluation
@@ -41,7 +44,7 @@ public class ConditionDispatcher {
      *
       * @return true when the condition is true at a given index, false otherwise
      */
-    public Boolean evaluate () {
+    public Boolean evaluate () throws RuntimeException {
 
         Boolean evaluation = false;
 
@@ -49,16 +52,16 @@ public class ConditionDispatcher {
         macdPositive.setTrading(trading);
         macdPositive.setTradeCondition(tradeCondition);
 
-        switch (this.tradeCondition.getTradeConditionType().getName()) {
-            case "MACD_POSITIVE":
-
+        switch (this.tradeCondition.getTradeConditionType()) {
+            case MACD_POSITIVE:
                 evaluation =  macdPositive.evaluate();
                 break;
 
-            case "MACD_NEGATIVE":
-
+            case MACD_NEGATIVE:
                 evaluation =  macdNegative.evaluate();
                 break;
+
+            default : throw (new RuntimeException("Not implemented trade condition"));
         }
         return evaluation;
     }

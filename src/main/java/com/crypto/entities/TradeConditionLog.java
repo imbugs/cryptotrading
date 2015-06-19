@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import com.crypto.enums.TradeConditionExpression;
+import com.crypto.enums.TradeConditionType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -41,8 +42,8 @@ public class TradeConditionLog {
     @JoinColumn(name="TRADE_CONDITION_ID", nullable = false)
     private TradeCondition tradeCondition;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "TYPE", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "TYPE", nullable = false)
     private TradeConditionType tradeConditionType;
 
     @Column(name="MACD_VALUE")

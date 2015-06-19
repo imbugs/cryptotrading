@@ -1,6 +1,7 @@
 package com.crypto.entities;
 
 import com.crypto.enums.LogicalOperator;
+import com.crypto.enums.TradeConditionType;
 
 import javax.persistence.*;
 
@@ -21,8 +22,8 @@ public class TradeCondition {
     @JoinColumn(name = "TRADE_RULE_ID", nullable = false)
     private TradeRule tradeRule;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "TYPE", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "TYPE", nullable = false)
     private TradeConditionType tradeConditionType;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -74,7 +75,6 @@ public class TradeCondition {
      * @param percentage_limit   percentage limit
      * @param rate               trading bitcoin rate
      * @param period             period to which the tradecondition belongs
-     * @param previous           previous value
      * @param logicalOperator    logical operator
      * @param enabled            true when the trade condition is active
      */
