@@ -137,7 +137,6 @@ public class ConditionDispatcher {
                 throw (new RuntimeException("Not implemented trade condition"));
         }
 
-
         return evaluator.evaluate();
     }
 }

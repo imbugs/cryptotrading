@@ -200,4 +200,8 @@ public class TradeConditionLog {
     public void setExchangeRate(Float exchangeRate) {
         this.exchangeRate = exchangeRate;
     }
+
+    public void setPercentage(Float percentage) {
+        this.percentage = percentage;
+    }
 }
