@@ -164,4 +164,8 @@ public class TradeCondition {
     public void setLogicalOperator(LogicalOperator logicalOperator) {
         this.logicalOperator = logicalOperator;
     }
+
+    public void setPercentage(Float percentage) {
+        this.percentage = percentage;
+    }
 }

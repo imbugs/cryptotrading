@@ -5,6 +5,10 @@ import com.crypto.entities.Trading;
 import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
+import com.crypto.tradecondition.evaluator.PercentageTrend.BTCGreaterThanPercentageTrend;
+import com.crypto.tradecondition.evaluator.PercentageTrend.BTCLessThanPercentageTrend;
+import com.crypto.tradecondition.evaluator.Trend.BTCGreaterThanTrend;
+import com.crypto.tradecondition.evaluator.Trend.BTCLessThanTrend;
 import com.crypto.tradecondition.evaluator.TrendChange.NegTrendChange;
 import com.crypto.tradecondition.evaluator.TrendChange.PosTrendChange;
 
@@ -30,6 +34,18 @@ public class ConditionDispatcher {
 
     @EJB
     private NegTrendChange negTrendChange;
+
+    @EJB
+    private BTCGreaterThanTrend btcGreaterThanTrend;
+
+    @EJB
+    private BTCLessThanTrend btcLessThanTrend;
+
+    @EJB
+    private BTCGreaterThanPercentageTrend btcGreaterThanPercentageTrend;
+
+    @EJB
+    private BTCLessThanPercentageTrend btcLessThanPercentageTrend;
 
     private TradeCondition tradeCondition;
 
@@ -75,6 +91,22 @@ public class ConditionDispatcher {
 
             case NEG_TREND_CHANGE:
                 evaluation = negTrendChange.evaluate();
+                break;
+
+            case BTC_GT_RATE:
+                evaluation = btcGreaterThanTrend.evaluate();
+                break;
+
+            case BTC_LT_RATE:
+                evaluation = btcLessThanTrend.evaluate();
+                break;
+
+            case BTC_GT_PERC_TREND:
+                evaluation = btcGreaterThanPercentageTrend.evaluate();
+                break;
+
+            case BTC_LT_PERC_TREND:
+                evaluation = btcLessThanPercentageTrend.evaluate();
                 break;
 
             default:

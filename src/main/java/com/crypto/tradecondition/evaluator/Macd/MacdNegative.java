@@ -19,7 +19,7 @@ public class MacdNegative extends MacdEvaluator {
     public MacdNegative() {
         super();
 
-        Predicate<MacdValue> expression = (p) -> p.getValue() < 0;
+        Predicate<MacdValue> expression = (m) -> m.getValue() < 0;
 
         this.setExpression(expression);
     }
