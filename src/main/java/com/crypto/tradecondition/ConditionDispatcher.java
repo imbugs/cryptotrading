@@ -7,6 +7,8 @@ import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
 import com.crypto.tradecondition.evaluator.MacdChange.MacdNegChange;
 import com.crypto.tradecondition.evaluator.MacdChange.MacdPosChange;
+import com.crypto.tradecondition.evaluator.MacdGradualChange.MacdDecrease;
+import com.crypto.tradecondition.evaluator.MacdGradualChange.MacdIncrease;
 import com.crypto.tradecondition.evaluator.PercentageTrend.BTCGreaterThanPercentageTrend;
 import com.crypto.tradecondition.evaluator.PercentageTrend.BTCLessThanPercentageTrend;
 import com.crypto.tradecondition.evaluator.Trend.BTCGreaterThanTrend;
@@ -15,6 +17,8 @@ import com.crypto.tradecondition.evaluator.TrendChange.NegTrendChange;
 import com.crypto.tradecondition.evaluator.TrendChange.PosTrendChange;
 import com.crypto.tradecondition.evaluator.TrendDelta.NegTrend;
 import com.crypto.tradecondition.evaluator.TrendDelta.PosTrend;
+import com.crypto.tradecondition.evaluator.TrendGradualChange.TrendDecrease;
+import com.crypto.tradecondition.evaluator.TrendGradualChange.TrendIncrease;
 
 import javax.ejb.EJB;
 
@@ -60,6 +64,18 @@ public class ConditionDispatcher {
 
     @EJB
     private NegTrend negTrend;
+
+    @EJB
+    private MacdIncrease macdIncrease;
+
+    @EJB
+    private MacdDecrease macdDecrease;
+
+    @EJB
+    private TrendIncrease trendIncrease;
+
+    @EJB
+    private TrendDecrease trendDecrease;
 
 
     private TradeCondition tradeCondition;
@@ -131,6 +147,22 @@ public class ConditionDispatcher {
 
             case NEG_TREND:
                 evaluator = negTrend;
+                break;
+
+            case MACD_DECREASE:
+                evaluator = macdDecrease;
+                break;
+
+            case MACD_INCREASE:
+                evaluator = macdIncrease;
+                break;
+
+            case TREND_INCREASE:
+                evaluator = trendIncrease;
+                break;
+
+            case TREND_DECREASE:
+                evaluator = trendDecrease;
                 break;
 
             default:

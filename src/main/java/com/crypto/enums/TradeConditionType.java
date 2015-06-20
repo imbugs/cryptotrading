@@ -23,6 +23,7 @@ public enum TradeConditionType {
     TREND_DIFF_GT_PERC("Trendverschil tussen <b>%s</b> en <b>%s </b> moet groter zijn dan <b>%3.2f</b> procent van trend <b>%s</b> voor een periode van <b>%d</b>"), // Trend difference must be a percentage of reference Trend
     MACD_DIFF_LT_PERC("Verschil tussen MACD <b>%s</b> en MACD <b>%s </b> moet kleiner zijn dan <b>%3.2f</b> procent van MACD <b>%s</b> voor een periode van <b>%d</b>"), //MACD difference must be less then a percentage of reference MACD
     TREND_DIFF_LT_PERC("Trendverschil tussen <b>%s</b> en <b>%s </b> moet kleiner zijn dan <b>%3.2f</b> procent van trend <b>%s</b> voor een periode van <b>%d</b>"),  // Trend difference must be less then a percentage of reference Trend
+    TREND_INCREASE("Tussen <b>%3.2f en %3.2f procent</b> stijging van trend <b>%s</b> in een periode van <b>%d</b>"), // Gradual trend decrease over given period
     TREND_DECREASE("Tussen <b>%3.2f en %3.2f procent</b> daling van trend <b>%s</b> in een periode van <b>%d</b>"), // Gradual trend decrease over given period
     POS_TREND_CHANGE("Positieve trendverandering voor trend <b>%s</b> in een periode van <b>%d</b>"),  // Positive trend change
     NEG_TREND_CHANGE("Negatieve trendverandering voor trend <b>%s</b> in een periode van <b>%d</b>"), //Negative trend change
@@ -46,4 +47,6 @@ public enum TradeConditionType {
         this.messageFormat = messageFormat;
     }
 
+    public class TREND_INCREASE {
+    }
 }
