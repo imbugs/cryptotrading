@@ -73,9 +73,6 @@ public class BTCLessThanTrendTest {
     public void testBTCGreaterThanTrend() {
 
         //Arrange
-        final TradingSite tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
-        final Currency currency = new Currency("EUR", "Euro", "&euro");
-        final CryptoCurrency cryptoCurrency = new CryptoCurrency("BTC", "Bitcoin", "BTC");
         final TradePair tradePair = tradePairDao.get(1);
         final Trading trading = new Trading();
         trading.setTradePair(tradePair);
@@ -83,7 +80,7 @@ public class BTCLessThanTrendTest {
         final TradeRule tradeRule = new TradeRule();
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_GT_TREND, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_LT_TREND, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         btcLessThanTrend.setTrading(trading);
         btcLessThanTrend.setTradeCondition(tradeCondition);

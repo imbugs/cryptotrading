@@ -8,12 +8,6 @@ import com.crypto.enums.LogicalOperator;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import java.io.Serializable;
-
-import static com.crypto.enums.LogicalOperator.*;
 
 /**
  * Evaluator, evaluates a condition.
@@ -21,7 +15,7 @@ import static com.crypto.enums.LogicalOperator.*;
  * Created by Jan Wicherink on 14-6-15.
  */
 @Stateful
-public class Evaluator {
+public abstract class Evaluator implements ConditionEvaluator {
 
     @EJB
     private CryptocoinHistoryDao cryptocoinHistoryDao;
@@ -31,7 +25,6 @@ public class Evaluator {
 
     @EJB
     private TradeConditionLogDao tradeConditionLogDao;
-
 
     private Integer index;
 
@@ -46,6 +39,16 @@ public class Evaluator {
      */
     public Evaluator() {
 
+    }
+
+    /**
+     * Verifies if the correct trade condition is used with the correct trade condition evaluator.
+     */
+    public void verifyImplementation() {
+        if (!getTradeCondition().getTradeConditionType().equals(getImplementedTradeConditionType())) {
+
+            throw new RuntimeException("Mismatch between tradecondition and implementation of evaluator:" + getTradeCondition().getTradeConditionType().toString());
+        }
     }
 
     /**
@@ -127,7 +130,6 @@ public class Evaluator {
     public Trading getTrading() {
         return this.trading;
     }
-
 
     public void setTrading(Trading trading) {
         this.trading = trading;

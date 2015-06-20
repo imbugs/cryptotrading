@@ -13,7 +13,6 @@ import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.MacdChange.MacdNegChange;
-import com.crypto.tradecondition.evaluator.MacdChange.MacdPosChange;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -78,7 +77,7 @@ public class MacdNegChangeTest {
         final TradeRule tradeRule = new TradeRule();
         final Macd macd = new Macd(1, new Trend(), new Trend());
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.NEG_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         macdNegChange.setTrading(trading);
         macdNegChange.setTradeCondition(tradeCondition);

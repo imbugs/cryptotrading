@@ -1,6 +1,7 @@
 package com.crypto.tradecondition.evaluator.MacdChange;
 
 import com.crypto.entities.MacdValue;
+import com.crypto.enums.TradeConditionType;
 
 import javax.ejb.Stateful;
 import java.util.function.BiPredicate;
@@ -21,6 +22,11 @@ public class MacdNegChange extends MacdChangeEvaluator {
         BiPredicate<MacdValue, MacdValue> expression = (p, c) -> p.getValue() > 0 && c.getValue() <= 0;
 
         this.setExpression(expression);
+    }
+
+    @Override
+    public TradeConditionType getImplementedTradeConditionType() {
+        return TradeConditionType.NEG_MACD_CHANGE;
     }
 }
 

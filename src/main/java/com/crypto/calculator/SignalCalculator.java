@@ -69,7 +69,7 @@ public class SignalCalculator implements Calculator<Signal> {
 
         for (TradeCondition tradeCondition : tradeConditions) {
 
-            final ConditionDispatcher dispatcher = new ConditionDispatcher(this.index, this.trading, tradeCondition, this.log);
+            final ConditionDispatcher dispatcher = new ConditionDispatcher(this.index, this.trading, tradeCondition);
 
             // Evaluate the condition
             if (! dispatcher.evaluate() ) {

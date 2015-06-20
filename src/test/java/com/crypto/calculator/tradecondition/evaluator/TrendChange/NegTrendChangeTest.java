@@ -78,7 +78,7 @@ public class NegTrendChangeTest {
         final TradeRule tradeRule = new TradeRule();
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_TREND_CHANGE, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.NEG_TREND_CHANGE, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         negTrendChange.setTrading(trading);
         negTrendChange.setTradeCondition(tradeCondition);

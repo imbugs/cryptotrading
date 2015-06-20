@@ -9,7 +9,6 @@ import com.crypto.tradecondition.evaluator.Evaluator;
 import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 /**
  * Evaluates if a Macd is from positive to negative or visa versa, ie goes through zero.
@@ -17,7 +16,7 @@ import java.util.function.Predicate;
  * Created by Jan Wicherink on 12-6-15.
  */
 @Stateful
-public class MacdChangeEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
+public abstract class MacdChangeEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 3523938793517562905L;
 
@@ -37,6 +36,8 @@ public class MacdChangeEvaluator extends Evaluator implements ConditionEvaluator
      */
     public Boolean evaluate() {
 
+        verifyImplementation();
+
         Boolean evaluation = false;
 
         // Check if the expression is true for values in range indx-period-1 to indx
@@ -48,7 +49,7 @@ public class MacdChangeEvaluator extends Evaluator implements ConditionEvaluator
 
         for (Integer indx = start; indx <= end; indx++) {
 
-            MacdValue previousMacdValue = getMacdValue(indx-1);
+            MacdValue previousMacdValue = getMacdValue(indx - 1);
             MacdValue currentMacdValue = getMacdValue(indx);
 
             if (previousMacdValue == null || currentMacdValue == null) {

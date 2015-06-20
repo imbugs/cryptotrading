@@ -2,19 +2,21 @@ package com.crypto.tradecondition;
 
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.Trading;
-import com.crypto.enums.TradeConditionType;
+import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
+import com.crypto.tradecondition.evaluator.MacdChange.MacdNegChange;
+import com.crypto.tradecondition.evaluator.MacdChange.MacdPosChange;
 import com.crypto.tradecondition.evaluator.PercentageTrend.BTCGreaterThanPercentageTrend;
 import com.crypto.tradecondition.evaluator.PercentageTrend.BTCLessThanPercentageTrend;
 import com.crypto.tradecondition.evaluator.Trend.BTCGreaterThanTrend;
 import com.crypto.tradecondition.evaluator.Trend.BTCLessThanTrend;
 import com.crypto.tradecondition.evaluator.TrendChange.NegTrendChange;
 import com.crypto.tradecondition.evaluator.TrendChange.PosTrendChange;
+import com.crypto.tradecondition.evaluator.TrendDelta.NegTrend;
+import com.crypto.tradecondition.evaluator.TrendDelta.PosTrend;
 
 import javax.ejb.EJB;
-
-import static com.crypto.enums.TradeConditionType.*;
 
 /**
  * Dispatches a condition evaluation
@@ -47,20 +49,30 @@ public class ConditionDispatcher {
     @EJB
     private BTCLessThanPercentageTrend btcLessThanPercentageTrend;
 
+    @EJB
+    private MacdPosChange macdPosChange;
+
+    @EJB
+    private MacdNegChange macdNegChange;
+
+    @EJB
+    private PosTrend posTrend;
+
+    @EJB
+    private NegTrend negTrend;
+
+
     private TradeCondition tradeCondition;
 
     private Integer index;
 
     private Trading trading;
 
-    private Boolean log = false;
-
-    public ConditionDispatcher(final Integer index, final Trading trading, final TradeCondition tradeCondition, final Boolean log) {
+    public ConditionDispatcher(final Integer index, final Trading trading, final TradeCondition tradeCondition) {
 
         this.index = index;
         this.trading = trading;
         this.tradeCondition = tradeCondition;
-        this.log = log;
     }
 
     /**
@@ -70,48 +82,62 @@ public class ConditionDispatcher {
      */
     public Boolean evaluate() throws RuntimeException {
 
-        Boolean evaluation = false;
+        ConditionEvaluator evaluator;
 
-        macdPositive.setIndex(index);
-        macdPositive.setTrading(trading);
-        macdPositive.setTradeCondition(tradeCondition);
-
-        switch (this.tradeCondition.getTradeConditionType()) {
+         switch (this.tradeCondition.getTradeConditionType()) {
             case MACD_POSITIVE:
-                evaluation = macdPositive.evaluate();
+                evaluator = macdPositive;
                 break;
 
             case MACD_NEGATIVE:
-                evaluation = macdNegative.evaluate();
+                evaluator = macdNegative;
                 break;
 
             case POS_TREND_CHANGE:
-                evaluation = negTrendChange.evaluate();
+                evaluator= negTrendChange;
                 break;
 
             case NEG_TREND_CHANGE:
-                evaluation = negTrendChange.evaluate();
+                evaluator = negTrendChange;
                 break;
 
             case BTC_GT_RATE:
-                evaluation = btcGreaterThanTrend.evaluate();
+                evaluator = btcGreaterThanTrend;
                 break;
 
             case BTC_LT_RATE:
-                evaluation = btcLessThanTrend.evaluate();
+                evaluator = btcLessThanTrend;
                 break;
 
             case BTC_GT_PERC_TREND:
-                evaluation = btcGreaterThanPercentageTrend.evaluate();
+                evaluator= btcGreaterThanPercentageTrend;
                 break;
 
             case BTC_LT_PERC_TREND:
-                evaluation = btcLessThanPercentageTrend.evaluate();
+                evaluator = btcLessThanPercentageTrend;
+                break;
+
+            case POS_MACD_CHANGE:
+                evaluator = macdPosChange;
+                break;
+
+            case NEG_MACD_CHANGE:
+                evaluator = macdNegChange;
+                break;
+
+            case POS_TREND:
+                evaluator = posTrend;
+                break;
+
+            case NEG_TREND:
+                evaluator = negTrend;
                 break;
 
             default:
                 throw (new RuntimeException("Not implemented trade condition"));
         }
-        return evaluation;
+
+
+        return evaluator.evaluate();
     }
 }

@@ -1,6 +1,7 @@
 package com.crypto.tradecondition.evaluator.PercentageTrend;
 
 import com.crypto.entities.CryptocoinHistory;
+import com.crypto.enums.TradeConditionType;
 
 import javax.ejb.Stateful;
 import java.util.function.BiPredicate;
@@ -21,6 +22,11 @@ public class BTCLessThanPercentageTrend extends PercentageTrendEvaluator {
         BiPredicate<CryptocoinHistory, Float> expression = (c, l) -> c.getClose() < l;
 
         this.setExpression(expression);
+    }
+
+    @Override
+    public TradeConditionType getImplementedTradeConditionType() {
+        return TradeConditionType.BTC_LT_PERC_TREND;
     }
 }
 

@@ -16,9 +16,9 @@ import java.util.function.BiPredicate;
  * Created by Jan Wicherink on 19-6-15.
  */
 @Stateful
-public class PercentageTrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
+public abstract class PercentageTrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
-    long serialVersionUID = 1;
+    private static final long serialVersionUID = 1;
 
     private BiPredicate<CryptocoinHistory, Float> expression;
 
@@ -30,6 +30,9 @@ public class PercentageTrendEvaluator extends Evaluator implements ConditionEval
 
     @Override
     public Boolean evaluate() {
+
+        verifyImplementation();
+
         Boolean evaluation = false;
 
         // Check if the expression is true for values in range indx-period-1 to indx

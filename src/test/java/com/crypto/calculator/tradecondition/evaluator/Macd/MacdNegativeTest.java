@@ -65,7 +65,7 @@ public class MacdNegativeTest {
 
     @Test
     @UsingDataSet("datasets/it_test_dataset_24.xml")
-    public void testMacdPositive() {
+    public void testMacdNegative() {
 
         //Arrange
         final TradingSite tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
@@ -78,7 +78,7 @@ public class MacdNegativeTest {
         final TradeRule tradeRule = new TradeRule();
         final Macd macd = new Macd(1, new Trend(), new Trend());
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.MACD_NEGATIVE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         macdNegative.setTrading(trading);
         macdNegative.setTradeCondition(tradeCondition);

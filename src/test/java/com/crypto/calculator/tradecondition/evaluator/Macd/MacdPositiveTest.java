@@ -13,7 +13,6 @@ import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
-import junit.framework.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -30,8 +29,6 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 import static junit.framework.Assert.assertFalse;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -80,7 +77,7 @@ public class MacdPositiveTest {
         final TradeRule tradeRule = new TradeRule();
         final Macd macd = new Macd(1, new Trend(), new Trend());
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.NEG_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.MACD_POSITIVE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         macdPositive.setTrading(trading);
         macdPositive.setTradeCondition(tradeCondition);

@@ -3,14 +3,12 @@ package com.crypto.tradecondition.evaluator.Trend;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.entities.TrendValue;
-import com.crypto.enums.LogicalOperator;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
 import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 /**
  * Evaluates the crypto coin exchange rate against a trend
@@ -18,9 +16,9 @@ import java.util.function.Predicate;
  * Created by Jan Wicherink on 19-6-15.
  */
 @Stateful
-public class TrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
+public abstract class TrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
-    long serialVersionUID = 1;
+    private static final long serialVersionUID = 1;
 
     private BiPredicate<CryptocoinHistory, TrendValue> expression;
 
@@ -32,6 +30,9 @@ public class TrendEvaluator extends Evaluator implements ConditionEvaluator, Ser
 
     @Override
     public Boolean evaluate() {
+
+        verifyImplementation();
+
         Boolean evaluation = false;
 
         // Check if the expression is true for values in range indx-period-1 to indx

@@ -1,8 +1,7 @@
-package com.crypto.calculator.tradecondition.evaluator.TrendPercentage;
+package com.crypto.calculator.tradecondition.evaluator.TrendDelta;
 
 import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.TradeConditionLogDao;
-import com.crypto.dao.TradePairDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
 import com.crypto.datahandler.provider.DataIndexProvider;
@@ -14,7 +13,7 @@ import com.crypto.enums.TradeConditionType;
 import com.crypto.enums.TrendType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
-import com.crypto.tradecondition.evaluator.PercentageTrend.BTCLessThanPercentageTrend;
+import com.crypto.tradecondition.evaluator.TrendDelta.PosTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -30,23 +29,21 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
-import static junit.framework.Assert.assertFalse;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 /**
- * Crypto coin history closing greater than trend test
+ * Test postiive trend.
+ *
  * Created by Jan Wicherink on 19-6-15.
  */
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.NONE)
 @CleanupUsingScript("sql/cleanup.sql")
-public class BTCLessThanTrendPercentageTest {
+public class PosTrendTest {
 
     @Inject
-    private BTCLessThanPercentageTrend btcLessThanPercentageTrend;
-
-    @Inject
-    private TradePairDao tradePairDao;
+    private PosTrend posTrend;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -60,7 +57,7 @@ public class BTCLessThanTrendPercentageTest {
                 .addPackage((LoggingLevel.class).getPackage())
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addPackage(DataIndexProvider.class.getPackage())
-                .addPackage(BTCLessThanPercentageTrend.class.getPackage())
+                .addPackage(PosTrend.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -68,61 +65,47 @@ public class BTCLessThanTrendPercentageTest {
     }
 
     @Test
-    @UsingDataSet("datasets/it_test_dataset_27.xml")
-    public void testBTCLessThanPercentageTrend() {
+    @UsingDataSet("datasets/it_test_dataset_25.xml")
+    public void testPositiveTrend() {
 
         //Arrange
-        final TradePair tradePair = tradePairDao.get(1);
+        final TradingSite tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
+        final Currency currency = new Currency("EUR", "Euro", "&euro");
+        final CryptoCurrency cryptoCurrency = new CryptoCurrency("BTC", "Bitcoin", "BTC");
+        final TradePair tradePair = new TradePair(1, tradingSite, currency, cryptoCurrency, 0.01F);
         final Trading trading = new Trading();
         trading.setTradePair(tradePair);
 
         final TradeRule tradeRule = new TradeRule();
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_LT_PERC_TREND, null, trend, null, null, 60F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_TREND, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
-        btcLessThanPercentageTrend.setTrading(trading);
-        btcLessThanPercentageTrend.setTradeCondition(tradeCondition);
-
-        // Index = 1, period = 1
-        btcLessThanPercentageTrend.setIndex(7);
-        tradeCondition.setPeriod(1);
-        tradeCondition.setPercentage(60F);
-
-        // Act
-        assertFalse(btcLessThanPercentageTrend.evaluate());
+        posTrend.setTrading(trading);
+        posTrend.setTradeCondition(tradeCondition);
 
         // Index = 1, period = 1
-        btcLessThanPercentageTrend.setIndex(7);
+        posTrend.setIndex(1);
         tradeCondition.setPeriod(1);
-        tradeCondition.setPercentage(59F);
 
-        // Act
-        assertFalse(btcLessThanPercentageTrend.evaluate());
+        assertFalse(posTrend.evaluate());
 
-        // Index = 1, period = 1
-        btcLessThanPercentageTrend.setIndex(7);
+        // Index = 7, period = 1
+        posTrend.setIndex(7);
         tradeCondition.setPeriod(1);
-        tradeCondition.setPercentage(61F);
 
-        // Act
-        assertTrue(btcLessThanPercentageTrend.evaluate());
+        assertTrue(posTrend.evaluate());
 
-        // Index = 8, period = 2
-        btcLessThanPercentageTrend.setIndex(8);
-        tradeCondition.setPeriod(2);
-        tradeCondition.setPercentage(60F);
-
-        // Act
-        assertFalse(btcLessThanPercentageTrend.evaluate());
-
-        // Index = 8, period = 2
-        btcLessThanPercentageTrend.setIndex(9);
+        // Index = 7, period = 3
+        posTrend.setIndex(7);
         tradeCondition.setPeriod(3);
-        tradeCondition.setPercentage(71F);
-        tradeCondition.setLogicalOperator(LogicalOperator.OR);
 
-        // Act
-        assertTrue(btcLessThanPercentageTrend.evaluate());
+        assertTrue(posTrend.evaluate());
+
+        // Index = 6, period = 3
+        posTrend.setIndex(6);
+        tradeCondition.setPeriod(3);
+
+        assertFalse(posTrend.evaluate());
     }
 }

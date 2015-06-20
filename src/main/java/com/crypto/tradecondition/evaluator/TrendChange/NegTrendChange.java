@@ -1,6 +1,7 @@
 package com.crypto.tradecondition.evaluator.TrendChange;
 
 import com.crypto.entities.TrendValue;
+import com.crypto.enums.TradeConditionType;
 
 import javax.ejb.Stateful;
 import java.util.function.Predicate;
@@ -19,5 +20,10 @@ public class NegTrendChange extends TrendChangeEvaluator {
         Predicate<TrendValue> expression = (p) -> p.getDelta() <= 0;
 
         this.setExpression(expression);
+    }
+
+    @Override
+    public TradeConditionType getImplementedTradeConditionType() {
+        return TradeConditionType.NEG_TREND_CHANGE;
     }
 }

@@ -15,7 +15,6 @@ import com.crypto.enums.TrendType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.PercentageTrend.BTCGreaterThanPercentageTrend;
-import com.crypto.tradecondition.evaluator.Trend.BTCGreaterThanTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -73,9 +72,6 @@ public class BTCGreaterThanTrendPercentageTest {
     public void testBTCGreaterThanPercentageTrend() {
 
         //Arrange
-        final TradingSite tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
-        final Currency currency = new Currency("EUR", "Euro", "&euro");
-        final CryptoCurrency cryptoCurrency = new CryptoCurrency("BTC", "Bitcoin", "BTC");
         final TradePair tradePair = tradePairDao.get(1);
         final Trading trading = new Trading();
         trading.setTradePair(tradePair);
@@ -83,7 +79,7 @@ public class BTCGreaterThanTrendPercentageTest {
         final TradeRule tradeRule = new TradeRule();
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
-        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_GT_TREND, null, trend, null, null, 60F, 0F, 0F, 1, LogicalOperator.AND, true);
+        final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_GT_PERC_TREND, null, trend, null, null, 60F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         btcGreaterThanPercentageTrend.setTrading(trading);
         btcGreaterThanPercentageTrend.setTradeCondition(tradeCondition);

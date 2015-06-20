@@ -1,8 +1,6 @@
 package com.crypto.tradecondition.evaluator;
 
-import com.crypto.entities.TradeCondition;
-
-import java.io.Serializable;
+import com.crypto.enums.TradeConditionType;
 
 /**
  * Condition evaluator
@@ -17,4 +15,11 @@ public interface ConditionEvaluator {
      * @return true when the trade condition is true, false otherwise
      */
     public Boolean evaluate();
+
+    /**
+     * Get the implemented trade condition type by the evaluator
+     *
+     * @return the trade condition type implemented.
+     */
+    public TradeConditionType getImplementedTradeConditionType();
 }
