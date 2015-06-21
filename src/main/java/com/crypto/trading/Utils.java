@@ -2,14 +2,10 @@ package com.crypto.trading;
 
 import com.crypto.calculator.bulk.CryptoCoinHistoryTrendCalculator;
 import com.crypto.dao.CryptocoinTrendDao;
-import com.crypto.entities.TradePair;
-import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
+import com.crypto.entities.Trading;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 /**
  * Utilities for the trading environment and usage for crypto trading
@@ -27,11 +23,11 @@ public class Utils {
     /**
      * Calculate all trend lines for a given trade pair
      *
-     * @param tradePair the trade pair
+     * @param trading the trading.
      */
-    public void calculateTrendLines(final TradePair tradePair) {
+    public void calculateTrendLines(final Trading trading) {
 
-        cryptoCoinHistoryTrendCalculator.init(tradePair);
+        cryptoCoinHistoryTrendCalculator.init(trading);
         cryptoCoinHistoryTrendCalculator.recalculate();
     }
 }

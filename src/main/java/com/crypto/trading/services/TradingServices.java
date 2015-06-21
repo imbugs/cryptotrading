@@ -6,19 +6,14 @@ package com.crypto.trading.services;
  * Created by Jan Wicherink on 27-5-15.
  */
 
-import com.crypto.dao.TradePairDao;
-import com.crypto.dao.TradingSiteDao;
-import com.crypto.entities.TradePair;
-import com.crypto.entities.TradingSite;
+import com.crypto.dao.TradingDao;
+import com.crypto.entities.Trading;
 import com.crypto.trading.Utils;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 
 /**
  * Rest service returning currency
@@ -31,10 +26,7 @@ public class TradingServices {
     private Utils utils;
 
     @EJB
-    private TradePairDao tradePairDao;
-
-    @EJB
-    private TradingSiteDao tradingSiteDao;
+    private TradingDao tradingDao;
 
     /**
      * Recalculates all the trendlines and signals of a trading
@@ -43,10 +35,8 @@ public class TradingServices {
     @Path("/recalculate/")
     public void recalculate() {
 
-        final TradingSite tradingSite = tradingSiteDao.get("KRAKEN");
+        final Trading trading = tradingDao.get(1);
 
-        final TradePair tradePair = tradePairDao.getTradePairOfTradingSite(tradingSite);
-
-        utils.calculateTrendLines(tradePair);
+        utils.calculateTrendLines(trading);
     }
 }

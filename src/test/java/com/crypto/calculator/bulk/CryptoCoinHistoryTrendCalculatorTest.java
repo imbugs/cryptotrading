@@ -7,10 +7,7 @@ import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.datahandler.impl.CryptoCoinHistoryBulkDataHandler;
 import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataProvider;
-import com.crypto.entities.CryptocoinHistory;
-import com.crypto.entities.Macd;
-import com.crypto.entities.TradePair;
-import com.crypto.entities.Trend;
+import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.TrendType;
@@ -109,6 +106,7 @@ public class CryptoCoinHistoryTrendCalculatorTest {
     public void testCalculation() {
 
         // Arrange
+        final Trading trading = new Trading();
         final TradePair tradePair = new TradePair();
         final Trend maTrend = new Trend(1, TrendType.MA, 10, null);
         final Trend emaShortTrend = new Trend(2, TrendType.EMA, 10, null);
@@ -117,46 +115,47 @@ public class CryptoCoinHistoryTrendCalculatorTest {
 
         final Macd macd = new Macd(1, emaShortTrend, emaLongTrend);
 
-        tradePair.setId(new Integer(1));
+        tradePair.setId(1);
+        trading.setTradePair(tradePair);
 
         // Act
-        cryptoCoinHistoryTrendCalculator.init(tradePair);
+        cryptoCoinHistoryTrendCalculator.init(trading);
         cryptoCoinHistoryTrendCalculator.recalculate();
 
 
         // Assert
-        assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair));
-        assertNotNull(cryptocoinTrendDao.getTrendValue(new Integer(10), emaShortTrend, tradePair));
+        assertNotNull(cryptocoinTrendDao.getTrendValue(10, maTrend, tradePair));
+        assertNotNull(cryptocoinTrendDao.getTrendValue(10, emaShortTrend, tradePair));
 
-        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(new Integer(10), maTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(new Integer(10), emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(11.11,  cryptocoinTrendDao.getTrendValue(new Integer(10), emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(11.11,  cryptocoinTrendDao.getMacdValue(new Integer(10), macd, tradePair).getValue(), 0.005);
+        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(10, maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(10, emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(11.11,  cryptocoinTrendDao.getTrendValue(10, emaLongTrend, tradePair).getValue(), 0.005);
+        assertEquals(11.11,  cryptocoinTrendDao.getMacdValue(10, macd, tradePair).getValue(), 0.005);
 
-        assertEquals(22.42, cryptocoinTrendDao.getTrendValue(new Integer(15), maTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.52, cryptocoinTrendDao.getTrendValue(new Integer(15), emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(16.755, cryptocoinTrendDao.getTrendValue(new Integer(15), emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(5.76, cryptocoinTrendDao.getMacdValue(new Integer(15), macd, tradePair).getValue(), 0.005);
+        assertEquals(22.42, cryptocoinTrendDao.getTrendValue(15, maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.52, cryptocoinTrendDao.getTrendValue(15, emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(16.755, cryptocoinTrendDao.getTrendValue(15, emaLongTrend, tradePair).getValue(), 0.005);
+        assertEquals(5.76, cryptocoinTrendDao.getMacdValue(15, macd, tradePair).getValue(), 0.005);
 
         // SMA value
-        assertEquals(22.597,  cryptocoinTrendDao.getTrendValue(new Integer(19), smaTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.709,  cryptocoinTrendDao.getTrendValue(new Integer(20), smaTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.707,  cryptocoinTrendDao.getTrendValue(new Integer(20), smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.597,  cryptocoinTrendDao.getTrendValue(19, smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.709,  cryptocoinTrendDao.getTrendValue(20, smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.707,  cryptocoinTrendDao.getTrendValue(20, smaTrend, tradePair).getValue(), 0.005);
 
-        assertEquals(23.38, cryptocoinTrendDao.getTrendValue(new Integer(21), maTrend, tradePair).getValue(), 0.005);
-        assertEquals(23.43, cryptocoinTrendDao.getTrendValue(new Integer(21), emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.79, cryptocoinTrendDao.getTrendValue(new Integer(21), emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(0.63, cryptocoinTrendDao.getMacdValue(new Integer(21), macd, tradePair).getValue(), 0.005);
+        assertEquals(23.38, cryptocoinTrendDao.getTrendValue(21, maTrend, tradePair).getValue(), 0.005);
+        assertEquals(23.43, cryptocoinTrendDao.getTrendValue(21, emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.79, cryptocoinTrendDao.getTrendValue(21, emaLongTrend, tradePair).getValue(), 0.005);
+        assertEquals(0.63, cryptocoinTrendDao.getMacdValue(21, macd, tradePair).getValue(), 0.005);
 
-        assertEquals(23.61, cryptocoinTrendDao.getTrendValue(new Integer(26), maTrend, tradePair).getValue(), 0.005);
-        assertEquals(23.39, cryptocoinTrendDao.getTrendValue(new Integer(26), emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(23.03, cryptocoinTrendDao.getTrendValue(new Integer(26), emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(0.36, cryptocoinTrendDao.getMacdValue(new Integer(26), macd, tradePair).getValue(), 0.005);
+        assertEquals(23.61, cryptocoinTrendDao.getTrendValue(26, maTrend, tradePair).getValue(), 0.005);
+        assertEquals(23.39, cryptocoinTrendDao.getTrendValue(26, emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(23.03, cryptocoinTrendDao.getTrendValue(26, emaLongTrend, tradePair).getValue(), 0.005);
+        assertEquals(0.36, cryptocoinTrendDao.getMacdValue(26, macd, tradePair).getValue(), 0.005);
 
-        assertEquals(23.13, cryptocoinTrendDao.getTrendValue(new Integer(30), maTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.92, cryptocoinTrendDao.getTrendValue(new Integer(30), emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.875, cryptocoinTrendDao.getTrendValue(new Integer(30), emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(0.04, cryptocoinTrendDao.getMacdValue(new Integer(30), macd, tradePair).getValue(), 0.005);
+        assertEquals(23.13, cryptocoinTrendDao.getTrendValue(30, maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.92, cryptocoinTrendDao.getTrendValue(30, emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.875, cryptocoinTrendDao.getTrendValue(30, emaLongTrend, tradePair).getValue(), 0.005);
+        assertEquals(0.04, cryptocoinTrendDao.getMacdValue(30, macd, tradePair).getValue(), 0.005);
 
 
     }
