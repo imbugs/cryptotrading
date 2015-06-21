@@ -1,10 +1,13 @@
 package com.crypto.calculator.bulk;
 
 import com.crypto.calculator.Calculator;
+import com.crypto.calculator.SignalCalculator;
 import com.crypto.calculator.TrendCalculator;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.datahandler.persister.DataPersister;
+import com.crypto.datahandler.provider.SignalDataProvider;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
