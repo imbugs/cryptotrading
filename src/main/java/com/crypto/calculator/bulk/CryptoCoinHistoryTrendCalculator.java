@@ -24,8 +24,6 @@ public class CryptoCoinHistoryTrendCalculator {
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryTrendCalculator.class.getName());
 
-    private Trading trading;
-
     @EJB
     private CryptoCoinHistoryBulkDataHandler dataProvider;
 
@@ -67,14 +65,13 @@ public class CryptoCoinHistoryTrendCalculator {
         final ExponentialMovingAverageCalculator emaCalculator = new ExponentialMovingAverageCalculator(this.dataProvider, startIndex);
         final SmoothingMovingAverageCalculator smaCalculator = new SmoothingMovingAverageCalculator(this.dataProvider);
         final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(this.macdDataProvider);
-        final SignalCalculator signalCalculator = new SignalCalculator(this.signalDataProvider, this.trading);
+        final SignalCalculator signalCalculator = new SignalCalculator(this.signalDataProvider, trading);
 
         this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
         this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
         this.smaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(smaCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
         this.macdCalculator = new BulkCalculator<CryptocoinHistory, MacdValue>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading.getTradePair());
         this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalDataProvider, this.signalDataProvider, trading.getTradePair());
-
 
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
     }
@@ -155,11 +152,12 @@ public class CryptoCoinHistoryTrendCalculator {
 
         // Truncate all data before recalculating
         this.dataProvider.truncateTrendValueData();
-
+/*
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();
         calculateSmoothingMovingAverageTrends();
         calculateMacdTrends();
+  */
         calculateSignals ();
     }
 }

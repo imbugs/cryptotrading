@@ -39,6 +39,7 @@ public class BulkDataHandler {
     }
 
     public List<CryptocoinHistory> getAll() {
+
         return cryptocoinHistoryDao.getAll(this.tradePair);
     }
 

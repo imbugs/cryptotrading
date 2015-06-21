@@ -110,7 +110,7 @@ public class ConditionDispatcher {
                 break;
 
             case POS_TREND_CHANGE:
-                evaluator= negTrendChange;
+                evaluator= posTrendChange;
                 break;
 
             case NEG_TREND_CHANGE:

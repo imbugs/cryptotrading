@@ -1,30 +1,21 @@
 package com.crypto.calculator.bulk;
 
 import com.crypto.calculator.Calculator;
-import com.crypto.calculator.SignalCalculator;
 import com.crypto.calculator.TrendCalculator;
-import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.DataIndexProvider;
-import com.crypto.datahandler.persister.DataPersister;
-import com.crypto.datahandler.provider.SignalDataProvider;
-import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
-
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import java.util.List;
 
 /**
  * Generic bulk calculator, calculates moving averages, smoothing moving averages, macdś etc. in bulk
  * for cryptocoin histories
  *
  * @param <D> Datatype of the bulkcalculator,maybe TrendValue or CryptocoinHistory
- *
- * Created by Jan Wicherink on 9-5-15.
+ *            <p/>
+ *            Created by Jan Wicherink on 9-5-15.
  */
-public class BulkCalculator <D extends DataIndexProvider, E> {
+public class BulkCalculator<D extends DataIndexProvider, E> {
 
     private Calculator calculator;
 
@@ -43,6 +34,7 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
     public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, TradePair tradePair) {
         this.calculator = calculator;
         this.dataProvider = dataProvider;
+        this.dataProvider.setTradePair(tradePair);
         this.dataPersister = dataPersister;
         this.tradePair = tradePair;
     }
@@ -50,21 +42,23 @@ public class BulkCalculator <D extends DataIndexProvider, E> {
     /**
      * Default constructor
      */
-    public BulkCalculator () {
+    public BulkCalculator() {
 
     }
 
     /**
      * Calculate in bulk all of the available cryptocoin history data.
      */
-    public void calculate () {
+    public void calculate() {
 
-        this.dataProvider.getAll().stream().forEach( (data) -> {
+        this.dataProvider.getAll().stream().forEach((data) -> {
 
-              calculator.setIndex(((D)data).getIndex());
-              calculator.calculate();
+            calculator.setIndex(((D) data).getIndex());
+            calculator.calculate();
 
-              dataPersister.storeValue(calculator.getCalculatedValue());
+            if (calculator.getCalculatedValue() != null) {
+                dataPersister.storeValue(calculator.getCalculatedValue());
+            }
         });
     }
 

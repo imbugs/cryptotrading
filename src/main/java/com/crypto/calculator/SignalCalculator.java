@@ -57,7 +57,7 @@ public class SignalCalculator implements Calculator<Signal> {
      * @param alternate alternate bull and bear signals. After a bull a bear must follow and visa versa.
      * @param trading   the trading for which the singals are calculated.
      */
-    public void SignalCalculator(final Boolean log, final Boolean alternate, final Trading trading) {
+    public SignalCalculator(final Boolean log, final Boolean alternate, final Trading trading) {
         this.log = log;
         this.alternate = alternate;
         this.trading = trading;
@@ -66,8 +66,8 @@ public class SignalCalculator implements Calculator<Signal> {
     /**
      * Checks whether if all of the conditions of a traderule are true.
      *
-     * @param tradeRule
-     * @return
+     * @param tradeRule the trade rule of the trade conditions
+     * @return true when the conditions are met, false otherwise
      */
     private Boolean checkConditions(final TradeRule tradeRule) {
 
@@ -83,7 +83,6 @@ public class SignalCalculator implements Calculator<Signal> {
                 return false;
             }
         }
-        ;
 
         return true;
     }
