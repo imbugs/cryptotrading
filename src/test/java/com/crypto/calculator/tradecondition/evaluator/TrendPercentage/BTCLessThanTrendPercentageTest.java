@@ -5,6 +5,8 @@ import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.dao.TradePairDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
@@ -43,7 +45,7 @@ import static junit.framework.TestCase.assertTrue;
 public class BTCLessThanTrendPercentageTest {
 
     @Inject
-    private BTCLessThanPercentageTrend btcLessThanPercentageTrend;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     @Inject
     private TradePairDao tradePairDao;
@@ -63,6 +65,9 @@ public class BTCLessThanTrendPercentageTest {
                 .addPackage(BTCLessThanPercentageTrend.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
@@ -81,13 +86,18 @@ public class BTCLessThanTrendPercentageTest {
 
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_LT_PERC_TREND, null, trend, null, null, 60F, 0F, 0F, 1, LogicalOperator.AND, true);
 
+        signalBulkDataHandler.setTrend(trend);
+        signalBulkDataHandler.setTradePair(tradePair);
+
+        final BTCLessThanPercentageTrend btcLessThanPercentageTrend = new BTCLessThanPercentageTrend(signalBulkDataHandler);
+
         btcLessThanPercentageTrend.setTrading(trading);
         btcLessThanPercentageTrend.setTradeCondition(tradeCondition);
 
         // Index = 1, period = 1
         btcLessThanPercentageTrend.setIndex(7);
         tradeCondition.setPeriod(1);
-        tradeCondition.setPercentage(60F);
+        tradeCondition.setPercentage(59F);
 
         // Act
         assertFalse(btcLessThanPercentageTrend.evaluate());

@@ -1,11 +1,10 @@
 package com.crypto.datahandler.impl;
 
-import com.crypto.calculator.SignalCalculator;
 import com.crypto.dao.SignalDao;
 import com.crypto.dao.TradeConditionDao;
+import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.BulkDataProvider;
-import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.datahandler.provider.SignalDataProvider;
 import com.crypto.entities.*;
 import org.apache.log4j.Logger;
@@ -17,7 +16,7 @@ import java.util.List;
 
 /**
  * Bulk data provider of data for signal calculations
- *
+ * <p/>
  * Created by Jan Wicherink on 9-5-15.
  */
 @Stateful
@@ -32,8 +31,13 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
     @EJB
     private TradeConditionDao tradeConditionDao;
 
+    @EJB
+    private TradeConditionLogDao tradeConditionLogDao;
 
     private Trend trend;
+
+    private Macd macd;
+
 
     /**
      * Default constructor
@@ -43,6 +47,11 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
 
     @Override
     public CryptocoinHistory getValue(Integer index) {
+
+        if (getTradePair() == null) {
+            throw new RuntimeException("TradePair undefined");
+        }
+
         return this.getCryptocoinHistoryDao().getCryptoCoinHistoryByIndex(getTradePair(), index);
     }
 
@@ -57,7 +66,7 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
     }
 
     @Override
-    public List<TradeCondition> getAllTradeConditions(TradeRule tradeRule) {
+    public List<TradeCondition> getAllTradeConditions(final TradeRule tradeRule) {
 
         return this.tradeConditionDao.getAllActiveTradeConditionsOfTradeRule(tradeRule);
     }
@@ -68,33 +77,71 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
     }
 
     @Override
+    public void saveLog(TradeConditionLog conditionLog) {
+        tradeConditionLogDao.persist(conditionLog);
+    }
+
+    @Override
     public TrendValue getTrendValue(final Integer index) {
 
-        TrendValue trendValue = null;
+        if (getTradePair() == null) {
+            throw new RuntimeException("TradePair undefined");
+        }
+
+        TrendValue trendValue;
 
         try {
             trendValue = this.getCryptocoinTrendDao().getTrendValue(index, this.trend, getTradePair());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
-            LOG.warn (e.getCause().getMessage());
+            LOG.warn(e.getCause().getMessage());
             return null;
         }
 
         return trendValue;
     }
 
+    @Override
+    public MacdValue getMacdValue(final Integer index) {
+
+        if (getTradePair() == null) {
+            throw new RuntimeException("TradePair undefined");
+        }
+
+        MacdValue macdValue;
+
+        try {
+            macdValue = this.getCryptocoinTrendDao().getMacdValue(index, this.macd, getTradePair());
+        } catch (Exception e) {
+
+            LOG.warn(e.getCause().getMessage());
+            return null;
+        }
+
+        return macdValue;
+    }
+
+    @Override
+    public Macd getMacd() {
+        return this.macd;
+    }
+
+    @Override
+    public void setMacd(Macd macd) {
+        this.macd = macd;
+    }
 
     /**
      * Truncate all signal data
      */
     public void truncateSignalData() {
-          // TODO: Implement
+        // TODO: Implement
 
     }
 
     /**
      * Store trend value
+     *
      * @param value the value to be stored
      */
     @Override

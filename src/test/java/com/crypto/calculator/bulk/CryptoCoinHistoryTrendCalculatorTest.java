@@ -122,7 +122,6 @@ public class CryptoCoinHistoryTrendCalculatorTest {
         cryptoCoinHistoryTrendCalculator.init(trading);
         cryptoCoinHistoryTrendCalculator.recalculate();
 
-
         // Assert
         assertNotNull(cryptocoinTrendDao.getTrendValue(10, maTrend, tradePair));
         assertNotNull(cryptocoinTrendDao.getTrendValue(10, emaShortTrend, tradePair));

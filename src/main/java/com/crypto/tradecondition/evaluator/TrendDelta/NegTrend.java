@@ -1,9 +1,9 @@
 package com.crypto.tradecondition.evaluator.TrendDelta;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.TrendValue;
 import com.crypto.enums.TradeConditionType;
 
-import javax.ejb.Stateful;
 import java.util.function.Predicate;
 
 /**
@@ -11,13 +11,17 @@ import java.util.function.Predicate;
  * <p/>
  * Created by Jan Wicherink on 19-6-15.
  */
-@Stateful
 public class NegTrend extends TrendDeltaEvaluator {
 
-    public NegTrend() {
-        super();
+    /**
+     * Constructor
+     *
+     * @param signalBulkDataHandler the signal evaluator data provider
+     */
+    public NegTrend(final SignalBulkDataHandler signalBulkDataHandler) {
+        super(signalBulkDataHandler);
 
-        Predicate<TrendValue> expression = (p) -> p.getDelta() <= 0;
+        final Predicate<TrendValue> expression = (p) -> p.getDelta() <= 0;
 
         this.setExpression(expression);
     }

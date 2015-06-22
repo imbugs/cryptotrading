@@ -1,12 +1,12 @@
 package com.crypto.tradecondition.evaluator.Trend;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.entities.TrendValue;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.BiPredicate;
 
@@ -15,7 +15,6 @@ import java.util.function.BiPredicate;
  * <p/>
  * Created by Jan Wicherink on 19-6-15.
  */
-@Stateful
 public abstract class TrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 1;
@@ -23,9 +22,11 @@ public abstract class TrendEvaluator extends Evaluator implements ConditionEvalu
     private BiPredicate<CryptocoinHistory, TrendValue> expression;
 
     /**
-     * Default constructor
+     * Constructor
+     * @param signalBulkDataHandler the signal data provider.
      */
-    public TrendEvaluator() {
+    public TrendEvaluator(final SignalBulkDataHandler signalBulkDataHandler) {
+        super (signalBulkDataHandler);
     }
 
     @Override
@@ -53,7 +54,7 @@ public abstract class TrendEvaluator extends Evaluator implements ConditionEvalu
                 tradeConditionLog.setTrendValue(currentTrendValue.getValue());
                 tradeConditionLog.setExchangeRate(currentCryptocoinHistory.getClose());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             evaluation = expression.test(currentCryptocoinHistory, currentTrendValue);

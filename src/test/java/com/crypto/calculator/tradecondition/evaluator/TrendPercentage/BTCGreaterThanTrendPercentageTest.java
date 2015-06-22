@@ -5,6 +5,8 @@ import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.dao.TradePairDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
@@ -43,7 +45,7 @@ import static junit.framework.TestCase.assertTrue;
 public class BTCGreaterThanTrendPercentageTest {
 
     @Inject
-    private BTCGreaterThanPercentageTrend btcGreaterThanPercentageTrend;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     @Inject
     private TradePairDao tradePairDao;
@@ -63,6 +65,9 @@ public class BTCGreaterThanTrendPercentageTest {
                 .addPackage(BTCGreaterThanPercentageTrend.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
@@ -80,6 +85,11 @@ public class BTCGreaterThanTrendPercentageTest {
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_GT_PERC_TREND, null, trend, null, null, 60F, 0F, 0F, 1, LogicalOperator.AND, true);
+
+        signalBulkDataHandler.setTrend(trend);
+        signalBulkDataHandler.setTradePair(tradePair);
+
+        final BTCGreaterThanPercentageTrend btcGreaterThanPercentageTrend = new BTCGreaterThanPercentageTrend(signalBulkDataHandler);
 
         btcGreaterThanPercentageTrend.setTrading(trading);
         btcGreaterThanPercentageTrend.setTradeCondition(tradeCondition);
@@ -108,14 +118,6 @@ public class BTCGreaterThanTrendPercentageTest {
         // Act
         assertFalse(btcGreaterThanPercentageTrend.evaluate());
 
-        // Index = 1, period = 1
-        btcGreaterThanPercentageTrend.setIndex(7);
-        tradeCondition.setPeriod(1);
-        tradeCondition.setPercentage(60F);
-
-        // Act
-        assertFalse(btcGreaterThanPercentageTrend.evaluate());
-
         // Index = 8, period = 2
         btcGreaterThanPercentageTrend.setIndex(8);
         tradeCondition.setPeriod(2);
@@ -126,7 +128,7 @@ public class BTCGreaterThanTrendPercentageTest {
 
         // Index = 8, period = 2
         btcGreaterThanPercentageTrend.setIndex(9);
-        tradeCondition.setPeriod(3);
+        tradeCondition.setPeriod(2);
         tradeCondition.setPercentage(60F);
         tradeCondition.setLogicalOperator(LogicalOperator.OR);
 

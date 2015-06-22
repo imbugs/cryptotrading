@@ -1,5 +1,6 @@
 package com.crypto.tradecondition.evaluator.MacdGradualChange;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradeConditionLog;
@@ -7,7 +8,6 @@ import com.crypto.enums.LogicalOperator;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.BiPredicate;
 
@@ -16,7 +16,6 @@ import java.util.function.BiPredicate;
  * <p/>
  * Created by Jan Wicherink on 12-6-15.
  */
-@Stateful
 public abstract class MacdGradualChangeEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 3523938793517562905L;
@@ -24,11 +23,12 @@ public abstract class MacdGradualChangeEvaluator extends Evaluator implements Co
     private BiPredicate<TradeCondition, Float> expression;
 
     /**
-     * Default constructor
+     * Constructor
+     * @param signalBulkDataHandler the signal data provider
      */
-    public MacdGradualChangeEvaluator() {
+    public MacdGradualChangeEvaluator(final SignalBulkDataHandler signalBulkDataHandler) {
+        super (signalBulkDataHandler);
     }
-
 
     /**
      * Checks the condition of a Macd at a given index is trye for all values (AND condition), or just for any one of the values (OR condition)
@@ -68,7 +68,7 @@ public abstract class MacdGradualChangeEvaluator extends Evaluator implements Co
                 tradeConditionLog.setMacdValue(currentMacdValue.getValue());
                 tradeConditionLog.setPercentage(growthPercentage);
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             evaluation = expression.test(getTradeCondition(), growthPercentage);

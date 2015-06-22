@@ -1,18 +1,21 @@
 package com.crypto.tradecondition.evaluator.TrendGradualChange;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.TradeCondition;
 import com.crypto.enums.TradeConditionType;
 
-import javax.ejb.Stateful;
 import java.util.function.BiPredicate;
 
-@Stateful
 public class TrendDecrease extends TrendGradualChangeEvaluator {
 
-    public TrendDecrease() {
-        super();
+    /**
+     * Constructor
+     * @param signalBulkDataHandler the signal evaluator data provider
+     */
+    public TrendDecrease(final SignalBulkDataHandler signalBulkDataHandler) {
+        super(signalBulkDataHandler);
 
-        BiPredicate<TradeCondition, Float> expression = (t, p) -> (- p) > t.getPercentage() && (- p) < t.getPercentage_limit() && p < 0;
+        final BiPredicate<TradeCondition, Float> expression = (t, p) -> (- p) > t.getPercentage() && (- p) < t.getPercentage_limit() && p < 0;
 
         this.setExpression(expression);
     }

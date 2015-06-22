@@ -1,12 +1,12 @@
 package com.crypto.tradecondition.evaluator.PercentageTrend;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.entities.TrendValue;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.BiPredicate;
 
@@ -15,7 +15,6 @@ import java.util.function.BiPredicate;
  * <p/>
  * Created by Jan Wicherink on 19-6-15.
  */
-@Stateful
 public abstract class PercentageTrendEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 1;
@@ -23,9 +22,11 @@ public abstract class PercentageTrendEvaluator extends Evaluator implements Cond
     private BiPredicate<CryptocoinHistory, Float> expression;
 
     /**
-     * Default constructor
+     * Constructor
+     * @param signalBulkDataHandler the signal data provider.
      */
-    public PercentageTrendEvaluator() {
+    public PercentageTrendEvaluator(final SignalBulkDataHandler signalBulkDataHandler) {
+        super(signalBulkDataHandler);
     }
 
     @Override
@@ -42,20 +43,20 @@ public abstract class PercentageTrendEvaluator extends Evaluator implements Cond
         for (Integer indx = start; indx <= end; indx++) {
 
             final TrendValue currentTrendValue = getTrendValue(indx);
-            final Float trendLimit = currentTrendValue.getValue() * getTradeCondition().getPercentage() / 100;
-
-            final CryptocoinHistory currentCryptocoinHistory = getCryptoCoinHistory(indx);
 
             if (currentTrendValue == null) {
                 return false;
             }
+
+            final Float trendLimit = currentTrendValue.getValue() * getTradeCondition().getPercentage() / 100;
+            final CryptocoinHistory currentCryptocoinHistory = getCryptoCoinHistory(indx);
 
             if (getLog()) {
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setTrendValue(currentTrendValue.getValue());
                 tradeConditionLog.setExchangeRate(currentCryptocoinHistory.getClose());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             evaluation = expression.test(currentCryptocoinHistory, trendLimit);

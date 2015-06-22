@@ -4,6 +4,8 @@ import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
@@ -13,7 +15,6 @@ import com.crypto.enums.TradeConditionType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.MacdGradualChange.MacdDecrease;
-import com.crypto.tradecondition.evaluator.MacdGradualChange.MacdIncrease;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -42,7 +43,7 @@ import static junit.framework.TestCase.assertTrue;
 public class MacdDecreaseTest {
 
     @Inject
-    private MacdDecrease macdDecrease;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -59,6 +60,9 @@ public class MacdDecreaseTest {
                 .addPackage(MacdDecrease.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
@@ -79,6 +83,11 @@ public class MacdDecreaseTest {
         final Macd macd = new Macd(1, new Trend(), new Trend());
 
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.MACD_DECREASE, macd, null, null, null, 34F, 101F, 0F, 1, LogicalOperator.AND, true);
+
+        signalBulkDataHandler.setMacd(macd);
+        signalBulkDataHandler.setTradePair(tradePair);
+
+        final MacdDecrease macdDecrease = new MacdDecrease(signalBulkDataHandler);
 
         macdDecrease.setTrading(trading);
         macdDecrease.setTradeCondition(tradeCondition);

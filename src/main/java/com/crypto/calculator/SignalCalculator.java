@@ -1,6 +1,6 @@
 package com.crypto.calculator;
 
-import com.crypto.datahandler.provider.SignalDataProvider;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.Signal;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradeRule;
@@ -19,7 +19,7 @@ import java.util.List;
 @Stateless
 public class SignalCalculator implements Calculator<Signal> {
 
-    private SignalDataProvider signalDataProvider;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     private Boolean log = false;
 
@@ -36,30 +36,17 @@ public class SignalCalculator implements Calculator<Signal> {
     /**
      * Default constructor
      */
-    public SignalCalculator () {
+    public SignalCalculator() {
 
     }
 
     /**
      * Constructor
      *
-     * @param signalDataProvider the data provider for signal calculations.
+     * @param signalBulkDataHandler the data provider for signal calculations.
      */
-    public SignalCalculator(final SignalDataProvider signalDataProvider, Trading trading) {
-        this.signalDataProvider = signalDataProvider;
-        this.trading = trading;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param log       log the calculations of the signal calculator.
-     * @param alternate alternate bull and bear signals. After a bull a bear must follow and visa versa.
-     * @param trading   the trading for which the singals are calculated.
-     */
-    public SignalCalculator(final Boolean log, final Boolean alternate, final Trading trading) {
-        this.log = log;
-        this.alternate = alternate;
+    public SignalCalculator(final SignalBulkDataHandler signalBulkDataHandler, Trading trading) {
+        this.signalBulkDataHandler = signalBulkDataHandler;
         this.trading = trading;
     }
 
@@ -71,11 +58,11 @@ public class SignalCalculator implements Calculator<Signal> {
      */
     private Boolean checkConditions(final TradeRule tradeRule) {
 
-        List<TradeCondition> tradeConditions = signalDataProvider.getAllTradeConditions(tradeRule);
+        List<TradeCondition> tradeConditions = signalBulkDataHandler.getAllTradeConditions(tradeRule);
 
         for (TradeCondition tradeCondition : tradeConditions) {
 
-            final ConditionDispatcher dispatcher = new ConditionDispatcher(this.index, this.trading, tradeCondition);
+            final ConditionDispatcher dispatcher = new ConditionDispatcher(this.signalBulkDataHandler, this.index, this.trading, tradeCondition);
 
             // Evaluate the condition
             if (!dispatcher.evaluate()) {
@@ -95,7 +82,7 @@ public class SignalCalculator implements Calculator<Signal> {
 
         if (this.alternate) {
 
-            previousSignal = signalDataProvider.getLastSignal(this.trading);
+            previousSignal = signalBulkDataHandler.getLastSignal(this.trading);
 
             if (previousSignal == null) {
                 tradeRules = this.trading.getTradeRules();
@@ -112,19 +99,23 @@ public class SignalCalculator implements Calculator<Signal> {
             tradeRules = this.trading.getTradeRules();
         }
 
-        // Check all conditions of all the active trade rules
-        tradeRules.forEach((tradeRule) -> {
 
-            final Boolean conditionsTrue = checkConditions(tradeRule);
+        if (tradeRules != null && tradeRules.size() > 0) {
 
-            if (conditionsTrue && tradeRule.getMarketTrend().equals(MarketTrend.BULL)) {
-                this.calculatedValue = new Signal(MarketTrend.BULL, this.index, tradeRule, this.trading);
-            }
+            // Check all conditions of all the active trade rules
+            tradeRules.forEach((tradeRule) -> {
 
-            if (conditionsTrue && tradeRule.getMarketTrend().equals(MarketTrend.BEAR)) {
-                this.calculatedValue = new Signal(MarketTrend.BEAR, this.index, tradeRule, this.trading);
-            }
-        });
+                final Boolean conditionsTrue = checkConditions(tradeRule);
+
+                if (conditionsTrue && tradeRule.getMarketTrend().equals(MarketTrend.BULL)) {
+                    this.calculatedValue = new Signal(MarketTrend.BULL, this.index, tradeRule, this.trading);
+                }
+
+                if (conditionsTrue && tradeRule.getMarketTrend().equals(MarketTrend.BEAR)) {
+                    this.calculatedValue = new Signal(MarketTrend.BEAR, this.index, tradeRule, this.trading);
+                }
+            });
+        }
     }
 
     @Override

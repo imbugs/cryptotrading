@@ -1,21 +1,20 @@
 package com.crypto.tradecondition.evaluator.TrendChange;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.entities.TrendValue;
 import com.crypto.enums.LogicalOperator;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
  * Evaluates a trend change
- * <p/>
+ *
  * Created by Jan Wicherink on 19-6-15.
  */
-@Stateful
 public abstract class TrendChangeEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 1;
@@ -23,9 +22,11 @@ public abstract class TrendChangeEvaluator extends Evaluator implements Conditio
     private Predicate<TrendValue> expression;
 
     /**
-     * Default constructor
+     * Constructor
+     * @param signalBulkDataHandler the signal data provider.
      */
-    public TrendChangeEvaluator() {
+    public TrendChangeEvaluator(final SignalBulkDataHandler signalBulkDataHandler) {
+        super (signalBulkDataHandler);
     }
 
     @Override
@@ -46,7 +47,7 @@ public abstract class TrendChangeEvaluator extends Evaluator implements Conditio
 
             TrendValue currentTrendValue = getTrendValue(indx);
 
-            if (currentTrendValue == null) {
+            if (currentTrendValue == null || currentTrendValue.getDelta() == null) {
                 return false;
             }
 
@@ -54,7 +55,7 @@ public abstract class TrendChangeEvaluator extends Evaluator implements Conditio
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setTrendValue(currentTrendValue.getValue());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             evaluation = expression.test(currentTrendValue);
@@ -72,7 +73,7 @@ public abstract class TrendChangeEvaluator extends Evaluator implements Conditio
 
             TrendValue currentTrendValue = getTrendValue(indx);
 
-            if (currentTrendValue == null) {
+            if (currentTrendValue == null || currentTrendValue.getDelta() == null) {
                 return false;
             }
 
@@ -80,7 +81,7 @@ public abstract class TrendChangeEvaluator extends Evaluator implements Conditio
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setTrendValue(currentTrendValue.getValue());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             // Negate the expression

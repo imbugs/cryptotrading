@@ -1,8 +1,9 @@
 package com.crypto.tradecondition;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.Trading;
-import com.crypto.tradecondition.evaluator.ConditionEvaluator;
+import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.Macd.MacdNegative;
 import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
 import com.crypto.tradecondition.evaluator.MacdChange.MacdNegChange;
@@ -20,8 +21,6 @@ import com.crypto.tradecondition.evaluator.TrendDelta.PosTrend;
 import com.crypto.tradecondition.evaluator.TrendGradualChange.TrendDecrease;
 import com.crypto.tradecondition.evaluator.TrendGradualChange.TrendIncrease;
 
-import javax.ejb.EJB;
-
 /**
  * Dispatches a condition evaluation
  * <p/>
@@ -29,54 +28,7 @@ import javax.ejb.EJB;
  */
 public class ConditionDispatcher {
 
-    @EJB
-    private MacdPositive macdPositive;
-
-    @EJB
-    private MacdNegative macdNegative;
-
-    @EJB
-    private PosTrendChange posTrendChange;
-
-    @EJB
-    private NegTrendChange negTrendChange;
-
-    @EJB
-    private BTCGreaterThanTrend btcGreaterThanTrend;
-
-    @EJB
-    private BTCLessThanTrend btcLessThanTrend;
-
-    @EJB
-    private BTCGreaterThanPercentageTrend btcGreaterThanPercentageTrend;
-
-    @EJB
-    private BTCLessThanPercentageTrend btcLessThanPercentageTrend;
-
-    @EJB
-    private MacdPosChange macdPosChange;
-
-    @EJB
-    private MacdNegChange macdNegChange;
-
-    @EJB
-    private PosTrend posTrend;
-
-    @EJB
-    private NegTrend negTrend;
-
-    @EJB
-    private MacdIncrease macdIncrease;
-
-    @EJB
-    private MacdDecrease macdDecrease;
-
-    @EJB
-    private TrendIncrease trendIncrease;
-
-    @EJB
-    private TrendDecrease trendDecrease;
-
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     private TradeCondition tradeCondition;
 
@@ -84,8 +36,17 @@ public class ConditionDispatcher {
 
     private Trading trading;
 
-    public ConditionDispatcher(final Integer index, final Trading trading, final TradeCondition tradeCondition) {
+    /**
+     * Constructor
+     *
+     * @param signalBulkDataHandler the signal bulk data provider.
+     * @param index                 the index
+     * @param trading               the trading
+     * @param tradeCondition        the trade condition
+     */
+    public ConditionDispatcher(final SignalBulkDataHandler signalBulkDataHandler, final Integer index, final Trading trading, final TradeCondition tradeCondition) {
 
+        this.signalBulkDataHandler = signalBulkDataHandler;
         this.index = index;
         this.trading = trading;
         this.tradeCondition = tradeCondition;
@@ -98,76 +59,97 @@ public class ConditionDispatcher {
      */
     public Boolean evaluate() throws RuntimeException {
 
-        ConditionEvaluator evaluator;
+        Evaluator evaluator;
 
-         switch (this.tradeCondition.getTradeConditionType()) {
+        switch (this.tradeCondition.getTradeConditionType()) {
             case MACD_POSITIVE:
-                evaluator = macdPositive;
+                evaluator = new MacdPositive(signalBulkDataHandler);
+                signalBulkDataHandler.setMacd(tradeCondition.getMacd());
                 break;
 
             case MACD_NEGATIVE:
-                evaluator = macdNegative;
+                evaluator = new MacdNegative(signalBulkDataHandler);
+                signalBulkDataHandler.setMacd(tradeCondition.getMacd());
                 break;
 
             case POS_TREND_CHANGE:
-                evaluator= posTrendChange;
+                evaluator = new PosTrendChange(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case NEG_TREND_CHANGE:
-                evaluator = negTrendChange;
+                evaluator = new NegTrendChange(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
-            case BTC_GT_RATE:
-                evaluator = btcGreaterThanTrend;
+            case BTC_GT_TREND:
+                evaluator = new BTCGreaterThanTrend(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
-            case BTC_LT_RATE:
-                evaluator = btcLessThanTrend;
+            case BTC_LT_TREND:
+                evaluator = new BTCLessThanTrend(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case BTC_GT_PERC_TREND:
-                evaluator= btcGreaterThanPercentageTrend;
+                evaluator = new BTCGreaterThanPercentageTrend(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case BTC_LT_PERC_TREND:
-                evaluator = btcLessThanPercentageTrend;
+                evaluator = new BTCLessThanPercentageTrend(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case POS_MACD_CHANGE:
-                evaluator = macdPosChange;
+                evaluator = new MacdPosChange(signalBulkDataHandler);
+                signalBulkDataHandler.setMacd(tradeCondition.getMacd());
                 break;
 
             case NEG_MACD_CHANGE:
-                evaluator = macdNegChange;
+                evaluator = new MacdNegChange(signalBulkDataHandler);
+                signalBulkDataHandler.setMacd(tradeCondition.getMacd());
                 break;
 
             case POS_TREND:
-                evaluator = posTrend;
+                evaluator = new PosTrend(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case NEG_TREND:
-                evaluator = negTrend;
+                evaluator = new NegTrend(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case MACD_DECREASE:
-                evaluator = macdDecrease;
+                evaluator = new MacdDecrease(signalBulkDataHandler);
+                signalBulkDataHandler.setMacd(tradeCondition.getMacd());
                 break;
 
             case MACD_INCREASE:
-                evaluator = macdIncrease;
+                evaluator = new MacdIncrease(signalBulkDataHandler);
+                signalBulkDataHandler.setMacd(tradeCondition.getMacd());
                 break;
 
             case TREND_INCREASE:
-                evaluator = trendIncrease;
+                evaluator = new TrendIncrease(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             case TREND_DECREASE:
-                evaluator = trendDecrease;
+                evaluator = new TrendDecrease(signalBulkDataHandler);
+                signalBulkDataHandler.setTrend(tradeCondition.getTrend());
                 break;
 
             default:
                 throw (new RuntimeException("Not implemented trade condition"));
         }
+
+        signalBulkDataHandler.setTradePair(trading.getTradePair());
+
+        evaluator.setTradeCondition(this.tradeCondition);
+        evaluator.setIndex(this.index);
 
         return evaluator.evaluate();
     }

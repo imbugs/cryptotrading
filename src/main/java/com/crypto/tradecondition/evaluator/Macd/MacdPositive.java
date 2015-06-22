@@ -1,9 +1,9 @@
 package com.crypto.tradecondition.evaluator.Macd;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.MacdValue;
 import com.crypto.enums.TradeConditionType;
 
-import javax.ejb.Stateful;
 import java.util.function.Predicate;
 
 /**
@@ -11,14 +11,15 @@ import java.util.function.Predicate;
  * <p/>
  * Created by Jan Wicherink on 12-6-15.
  */
-@Stateful
 public class MacdPositive extends MacdEvaluator {
 
     /**
-     * Default constructor.
+     * Constructor
+     *
+     * @param signalBulkDataHandler the signal evaluator data provider
      */
-    public MacdPositive() {
-        super();
+    public MacdPositive(final SignalBulkDataHandler signalBulkDataHandler) {
+        super(signalBulkDataHandler);
 
         Predicate<MacdValue> expression = (m) -> m.getValue() > 0;
 

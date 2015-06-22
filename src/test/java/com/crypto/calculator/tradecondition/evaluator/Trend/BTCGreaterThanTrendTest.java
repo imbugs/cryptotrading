@@ -5,6 +5,8 @@ import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.dao.TradePairDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
@@ -14,7 +16,6 @@ import com.crypto.enums.TradeConditionType;
 import com.crypto.enums.TrendType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
-import com.crypto.tradecondition.evaluator.Macd.MacdPositive;
 import com.crypto.tradecondition.evaluator.Trend.BTCGreaterThanTrend;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -44,7 +45,7 @@ import static junit.framework.TestCase.assertTrue;
 public class BTCGreaterThanTrendTest {
 
     @Inject
-    private BTCGreaterThanTrend btcGreaterThanTrend;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     @Inject
     private TradePairDao tradePairDao;
@@ -64,6 +65,9 @@ public class BTCGreaterThanTrendTest {
                 .addPackage(BTCGreaterThanTrend.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
@@ -84,6 +88,11 @@ public class BTCGreaterThanTrendTest {
         final Trend trend = new Trend(1, TrendType.EMA, 50, null);
 
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_GT_TREND, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+
+        signalBulkDataHandler.setTrend(trend);
+        signalBulkDataHandler.setTradePair(tradePair);
+
+        final BTCGreaterThanTrend btcGreaterThanTrend = new BTCGreaterThanTrend(signalBulkDataHandler);
 
         btcGreaterThanTrend.setTrading(trading);
         btcGreaterThanTrend.setTradeCondition(tradeCondition);

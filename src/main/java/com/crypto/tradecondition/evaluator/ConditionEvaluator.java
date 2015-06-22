@@ -1,5 +1,6 @@
 package com.crypto.tradecondition.evaluator;
 
+import com.crypto.entities.TradeConditionLog;
 import com.crypto.enums.TradeConditionType;
 
 /**
@@ -22,4 +23,10 @@ public interface ConditionEvaluator {
      * @return the trade condition type implemented.
      */
     public TradeConditionType getImplementedTradeConditionType();
+
+    /**
+     * Saves a trade condition log
+     * @param tradeConditionLog the trade condition log.
+     */
+    public void saveLog (TradeConditionLog tradeConditionLog);
 }

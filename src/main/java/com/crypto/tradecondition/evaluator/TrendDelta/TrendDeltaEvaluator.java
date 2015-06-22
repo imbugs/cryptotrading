@@ -1,21 +1,20 @@
 package com.crypto.tradecondition.evaluator.TrendDelta;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.entities.TrendValue;
 import com.crypto.enums.LogicalOperator;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
  * Evaluates a trend developement, using delta values with respect to previous values.
- * <p/>
+ *
  * Created by Jan Wicherink on 19-6-15.
  */
-@Stateful
 public abstract class TrendDeltaEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 1;
@@ -23,9 +22,12 @@ public abstract class TrendDeltaEvaluator extends Evaluator implements Condition
     private Predicate<TrendValue> expression;
 
     /**
-     * Default constructor
+     * Constructor.
+     *
+     * @param signalBulkDataHandler the signal data provider.
      */
-    public TrendDeltaEvaluator() {
+    public TrendDeltaEvaluator(final SignalBulkDataHandler signalBulkDataHandler) {
+        super(signalBulkDataHandler);
     }
 
     @Override
@@ -54,7 +56,7 @@ public abstract class TrendDeltaEvaluator extends Evaluator implements Condition
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setTrendValue(currentTrendValue.getValue());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             evaluation = expression.test(currentTrendValue);

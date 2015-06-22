@@ -4,14 +4,10 @@ import com.crypto.calculator.*;
 import com.crypto.datahandler.impl.CryptoCoinHistoryBulkDataHandler;
 import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.datahandler.impl.SignalBulkDataHandler;
-import com.crypto.datahandler.persister.DataPersister;
-import com.crypto.datahandler.provider.BulkDataProvider;
-import com.crypto.datahandler.provider.SignalDataProvider;
 import com.crypto.entities.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -31,7 +27,7 @@ public class CryptoCoinHistoryTrendCalculator {
     private MacdBulkDataHandler macdDataProvider;
 
     @EJB
-    private SignalBulkDataHandler signalDataProvider;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     private BulkCalculator<CryptocoinHistory, TrendValue> maCalculator;
 
@@ -65,13 +61,13 @@ public class CryptoCoinHistoryTrendCalculator {
         final ExponentialMovingAverageCalculator emaCalculator = new ExponentialMovingAverageCalculator(this.dataProvider, startIndex);
         final SmoothingMovingAverageCalculator smaCalculator = new SmoothingMovingAverageCalculator(this.dataProvider);
         final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(this.macdDataProvider);
-        final SignalCalculator signalCalculator = new SignalCalculator(this.signalDataProvider, trading);
+        final SignalCalculator signalCalculator = new SignalCalculator(this.signalBulkDataHandler, trading);
 
         this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
         this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
         this.smaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(smaCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
         this.macdCalculator = new BulkCalculator<CryptocoinHistory, MacdValue>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading.getTradePair());
-        this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalDataProvider, this.signalDataProvider, trading.getTradePair());
+        this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading.getTradePair());
 
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
     }
@@ -151,8 +147,9 @@ public class CryptoCoinHistoryTrendCalculator {
     public void recalculate() {
 
         // Truncate all data before recalculating
-        this.dataProvider.truncateTrendValueData();
 /*
+        this.dataProvider.truncateTrendValueData();
+
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();
         calculateSmoothingMovingAverageTrends();

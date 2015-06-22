@@ -1,20 +1,19 @@
 package com.crypto.tradecondition.evaluator.Macd;
 
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.TradeConditionLog;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 
-import javax.ejb.Stateful;
 import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
  * Evaluates if a Macd is positive at a given index
- * <p/>
+ *
  * Created by Jan Wicherink on 12-6-15.
  */
-@Stateful
 public abstract class MacdEvaluator extends Evaluator implements ConditionEvaluator, Serializable {
 
     private static final long serialVersionUID = 3523938793517562905L;
@@ -22,9 +21,11 @@ public abstract class MacdEvaluator extends Evaluator implements ConditionEvalua
     private Predicate<MacdValue> expression;
 
     /**
-     * Default constructor
+     * Constructor
+     * @param signalBulkDataHandler the signal evaluator data provider
      */
-    public MacdEvaluator() {
+    public MacdEvaluator(final SignalBulkDataHandler signalBulkDataHandler) {
+        super(signalBulkDataHandler);
     }
 
     /**
@@ -54,7 +55,7 @@ public abstract class MacdEvaluator extends Evaluator implements ConditionEvalua
                 TradeConditionLog tradeConditionLog = new TradeConditionLog(getIndex(), indx, getTradeCondition(), getTrading());
                 tradeConditionLog.setMacdValue(currentMacdValue.getValue());
 
-                getTradeConditionLogDao().persist(tradeConditionLog);
+                saveLog(tradeConditionLog);
             }
 
             evaluation = expression.test(currentMacdValue);

@@ -4,12 +4,15 @@ import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.TradeConditionLogDao;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.LogicalOperator;
 import com.crypto.enums.TradeConditionType;
+import com.crypto.enums.TrendType;
 import com.crypto.tradecondition.evaluator.ConditionEvaluator;
 import com.crypto.tradecondition.evaluator.Evaluator;
 import com.crypto.tradecondition.evaluator.MacdChange.MacdPosChange;
@@ -41,7 +44,7 @@ import static junit.framework.TestCase.assertTrue;
 public class MacdPosChangeTest {
 
     @Inject
-    private MacdPosChange macdPosChange;
+    private SignalBulkDataHandler signalBulkDataHandler;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -58,6 +61,8 @@ public class MacdPosChangeTest {
                 .addPackage(MacdPosChange.class.getPackage())
                 .addPackage(Evaluator.class.getPackage())
                 .addPackage(ConditionEvaluator.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }
@@ -75,9 +80,15 @@ public class MacdPosChangeTest {
         trading.setTradePair(tradePair);
 
         final TradeRule tradeRule = new TradeRule();
-        final Macd macd = new Macd(1, new Trend(), new Trend());
+        final Trend trend = new Trend(1, TrendType.MA, 2, null);
+        final Macd macd = new Macd(1, trend, trend);
 
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
+
+        signalBulkDataHandler.setMacd(macd);
+        signalBulkDataHandler.setTradePair(tradePair);
+
+        final MacdPosChange macdPosChange = new MacdPosChange(signalBulkDataHandler);
 
         macdPosChange.setTrading(trading);
         macdPosChange.setTradeCondition(tradeCondition);
