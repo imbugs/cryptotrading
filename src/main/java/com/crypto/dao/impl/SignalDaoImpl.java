@@ -24,6 +24,7 @@ public class SignalDaoImpl implements SignalDao {
 
     @Override
     public void persist(Signal signal) {
+
         em.persist(signal);
     }
 

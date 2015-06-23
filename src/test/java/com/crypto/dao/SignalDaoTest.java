@@ -2,6 +2,8 @@ package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.Signal;
 import com.crypto.entities.TradeRule;
@@ -52,8 +54,30 @@ public class SignalDaoTest {
                 .addPackage(CryptocoinHistoryDaoImpl.class.getPackage())
                 .addPackage(MovingAverageCalculator.class.getPackage())
                 .addPackage(WithdrawalPk.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_19.xml")
+    public void testPersist() {
+
+        final Trading trading = new Trading();
+        trading.setId(1);
+
+        final TradeRule tradeRule = new TradeRule(1, MarketTrend.BEAR, MarketTrend.BEAR, "Bear market", true);
+
+        final Signal signal = new Signal(MarketTrend.BEAR, 1, tradeRule, trading);
+
+        signalDao.persist(signal);
+
+        final Signal persistedSignal = signalDao.get(1, tradeRule,trading);
+
+        assertNotNull(persistedSignal);
+
+        assertEquals(persistedSignal, signal);
     }
 
     @Test

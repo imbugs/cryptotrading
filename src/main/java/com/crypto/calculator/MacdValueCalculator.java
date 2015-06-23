@@ -59,7 +59,6 @@ public class MacdValueCalculator implements MacdCalculator {
             Float delta = null;
 
             if (previousMacdValue != null) {
-
                 delta = value - previousMacdValue.getValue();
             }
 
