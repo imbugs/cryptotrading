@@ -85,7 +85,7 @@ public class TrendIncreaseTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.TREND_INCREASE, null, trend, null, null, 34F, 101F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setTrend(trend);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final TrendIncrease trendIncrease = new TrendIncrease(signalBulkDataHandler);
 

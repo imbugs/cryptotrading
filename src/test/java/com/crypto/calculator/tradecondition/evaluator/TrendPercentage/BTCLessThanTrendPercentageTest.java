@@ -87,7 +87,7 @@ public class BTCLessThanTrendPercentageTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.BTC_LT_PERC_TREND, null, trend, null, null, 60F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setTrend(trend);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final BTCLessThanPercentageTrend btcLessThanPercentageTrend = new BTCLessThanPercentageTrend(signalBulkDataHandler);
 

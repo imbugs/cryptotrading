@@ -86,7 +86,7 @@ public class NegTrendChangeTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.NEG_TREND_CHANGE, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setTrend(trend);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final NegTrendChange negTrendChange = new NegTrendChange(signalBulkDataHandler);
 

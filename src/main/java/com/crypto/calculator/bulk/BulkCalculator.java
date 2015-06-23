@@ -6,6 +6,7 @@ import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.DataIndexProvider;
 import com.crypto.entities.TradePair;
+import com.crypto.entities.Trading;
 
 /**
  * Generic bulk calculator, calculates moving averages, smoothing moving averages, macdś etc. in bulk
@@ -31,10 +32,10 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
      * @param calculator
      * @param dataProvider
      */
-    public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, TradePair tradePair) {
+    public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, Trading trading) {
         this.calculator = calculator;
         this.dataProvider = dataProvider;
-        this.dataProvider.setTradePair(tradePair);
+        this.dataProvider.setTrading(trading);
         this.dataPersister = dataPersister;
         this.tradePair = tradePair;
     }

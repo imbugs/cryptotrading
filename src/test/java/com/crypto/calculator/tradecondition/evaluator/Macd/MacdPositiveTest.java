@@ -86,7 +86,7 @@ public class MacdPositiveTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.MACD_POSITIVE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setMacd(macd);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final MacdPositive macdPositive = new MacdPositive(signalBulkDataHandler);
 

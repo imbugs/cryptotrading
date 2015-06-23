@@ -146,7 +146,7 @@ public class ConditionDispatcher {
                 throw (new RuntimeException("Not implemented trade condition"));
         }
 
-        signalBulkDataHandler.setTradePair(trading.getTradePair());
+        signalBulkDataHandler.setTrading(trading);
 
         evaluator.setTradeCondition(this.tradeCondition);
         evaluator.setIndex(this.index);

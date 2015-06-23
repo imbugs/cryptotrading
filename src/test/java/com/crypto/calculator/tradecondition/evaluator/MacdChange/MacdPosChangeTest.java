@@ -86,7 +86,7 @@ public class MacdPosChangeTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_MACD_CHANGE, macd, null, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setMacd(macd);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final MacdPosChange macdPosChange = new MacdPosChange(signalBulkDataHandler);
 

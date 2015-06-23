@@ -1,10 +1,7 @@
 package com.crypto.calculator;
 
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
-import com.crypto.entities.CryptocoinHistory;
-import com.crypto.entities.TradePair;
-import com.crypto.entities.Trend;
-import com.crypto.entities.TrendValue;
+import com.crypto.entities.*;
 import com.crypto.enums.TrendType;
 import org.junit.Test;
 
@@ -136,7 +133,7 @@ public class MovingAverageTrendCalculatorTest {
             }
 
             @Override
-            public void setTradePair(TradePair tradePair) {
+            public void setTrading (Trading trading) {
 
             }
         };

@@ -52,8 +52,8 @@ public class CryptoCoinHistoryTrendCalculator {
      * @param trading the trading
      */
     public void init(final Trading trading) {
-        this.dataProvider.setTradePair(trading.getTradePair());
-        this.macdDataProvider.setTradePair(trading.getTradePair());
+        this.dataProvider.setTrading(trading);
+        this.macdDataProvider.setTrading(trading);
 
         final Integer startIndex = dataProvider.getStartIndex();
 
@@ -63,11 +63,11 @@ public class CryptoCoinHistoryTrendCalculator {
         final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(this.macdDataProvider);
         final SignalCalculator signalCalculator = new SignalCalculator(this.signalBulkDataHandler, trading);
 
-        this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
-        this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
-        this.smaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(smaCalculator, this.dataProvider, this.dataProvider, trading.getTradePair());
-        this.macdCalculator = new BulkCalculator<CryptocoinHistory, MacdValue>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading.getTradePair());
-        this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading.getTradePair());
+        this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, trading);
+        this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, trading);
+        this.smaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(smaCalculator, this.dataProvider, this.dataProvider, trading);
+        this.macdCalculator = new BulkCalculator<CryptocoinHistory, MacdValue>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading);
+        this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading);
 
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
     }
@@ -147,14 +147,14 @@ public class CryptoCoinHistoryTrendCalculator {
     public void recalculate() {
 
         // Truncate all data before recalculating
-/*
+
         this.dataProvider.truncateTrendValueData();
+        this.signalBulkDataHandler.truncateSignalData();
 
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();
         calculateSmoothingMovingAverageTrends();
         calculateMacdTrends();
-  */
         calculateSignals ();
     }
 }

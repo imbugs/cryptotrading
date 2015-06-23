@@ -3,6 +3,8 @@ package com.crypto.dao;
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinTrendDaoImpl;
 import com.crypto.dao.impl.MacdDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.CrytptocoinHistoryPk;
@@ -56,6 +58,8 @@ public class CrytptoCoinTrendDaoTest {
                 .addPackage(MacdDaoImpl.class.getPackage())
                 .addPackage((TrendValue.class).getPackage())
                 .addPackage(MovingAverageDataProvider.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

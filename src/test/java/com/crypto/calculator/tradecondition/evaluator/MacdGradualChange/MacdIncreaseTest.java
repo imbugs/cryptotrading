@@ -85,7 +85,7 @@ public class MacdIncreaseTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.MACD_INCREASE, macd, null, null, null, 34F, 101F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setMacd(macd);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final MacdIncrease macdIncrease = new MacdIncrease(signalBulkDataHandler);
 

@@ -85,7 +85,7 @@ public class MacdDecreaseTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.MACD_DECREASE, macd, null, null, null, 34F, 101F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setMacd(macd);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final MacdDecrease macdDecrease = new MacdDecrease(signalBulkDataHandler);
 

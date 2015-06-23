@@ -87,7 +87,7 @@ public class PosTrendTest {
         final TradeCondition tradeCondition = new TradeCondition(1, tradeRule, TradeConditionType.POS_TREND, null, trend, null, null, 0F, 0F, 0F, 1, LogicalOperator.AND, true);
 
         signalBulkDataHandler.setTrend(trend);
-        signalBulkDataHandler.setTradePair(tradePair);
+        signalBulkDataHandler.setTrading(trading);
 
         final PosTrend posTrend = new PosTrend(signalBulkDataHandler);
 

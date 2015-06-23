@@ -35,4 +35,11 @@ public interface SignalDao extends Serializable{
      * @return the last signal
      */
     public Signal getLast (final Trading trading);
+
+
+    /**
+     * Delete all signal data of trading.
+     * @param trading the trading of which the signal data is to be removed.
+     */
+    public void truncateSignalData(final Trading trading);
 }

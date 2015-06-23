@@ -131,7 +131,7 @@ public class ExponentialMovingAverageTrendCalculatorTest {
             }
 
             @Override
-            public void setTradePair(TradePair tradePair) {
+            public void setTrading(Trading trading) {
 
             }
         };

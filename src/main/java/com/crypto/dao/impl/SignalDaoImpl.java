@@ -6,7 +6,6 @@ import com.crypto.entities.TradeRule;
 import com.crypto.entities.Trading;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -47,5 +46,14 @@ public class SignalDaoImpl implements SignalDao {
         query.setParameter("trading", trading);
 
         return query.getSingleResult();
+    }
+
+    @Override
+    public void truncateSignalData(Trading trading) {
+
+        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("DELETE FROM Signal s WHERE s.pk.trading = :trading");
+        query.setParameter("trading", trading);
+
+        query.executeUpdate();
     }
 }

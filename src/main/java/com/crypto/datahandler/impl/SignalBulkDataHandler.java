@@ -48,8 +48,8 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
     @Override
     public CryptocoinHistory getValue(Integer index) {
 
-        if (getTradePair() == null) {
-            throw new RuntimeException("TradePair undefined");
+        if (getTrading() == null) {
+            throw new RuntimeException("Trading undefined");
         }
 
         return this.getCryptocoinHistoryDao().getCryptoCoinHistoryByIndex(getTradePair(), index);
@@ -135,7 +135,7 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
      * Truncate all signal data
      */
     public void truncateSignalData() {
-        // TODO: Implement
+        signalDao.truncateSignalData(getTrading());
 
     }
 

@@ -2,6 +2,8 @@ package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.WalletHistoryDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.Trading;
 import com.crypto.entities.WalletHistory;
@@ -50,6 +52,8 @@ public class WalletHistoryDaoTest {
                 .addPackage(CrytptocoinHistoryPk.class.getPackage())
                 .addPackage(MovingAverageCalculator.class.getPackage())
                 .addPackage(DataProvider.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

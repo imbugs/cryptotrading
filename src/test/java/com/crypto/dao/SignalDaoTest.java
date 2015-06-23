@@ -56,6 +56,8 @@ public class SignalDaoTest {
                 .addPackage(WithdrawalPk.class.getPackage())
                 .addPackage(SignalBulkDataHandler.class.getPackage())
                 .addPackage(DataPersister.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

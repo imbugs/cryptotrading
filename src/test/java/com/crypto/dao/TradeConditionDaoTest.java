@@ -2,6 +2,8 @@ package com.crypto.dao;
 
 import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
+import com.crypto.datahandler.impl.SignalBulkDataHandler;
+import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradeRule;
@@ -50,6 +52,8 @@ public class TradeConditionDaoTest {
                 .addPackage(CryptocoinHistoryDaoImpl.class.getPackage())
                 .addPackage(MovingAverageCalculator.class.getPackage())
                 .addPackage(WithdrawalPk.class.getPackage())
+                .addPackage(SignalBulkDataHandler.class.getPackage())
+                .addPackage(DataPersister.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

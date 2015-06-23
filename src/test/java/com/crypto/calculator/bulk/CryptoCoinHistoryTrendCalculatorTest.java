@@ -107,7 +107,11 @@ public class CryptoCoinHistoryTrendCalculatorTest {
 
         // Arrange
         final Trading trading = new Trading();
+        trading.setId(1);
         final TradePair tradePair = new TradePair();
+        tradePair.setId(1);
+        trading.setTradePair(tradePair);
+
         final Trend maTrend = new Trend(1, TrendType.MA, 10, null);
         final Trend emaShortTrend = new Trend(2, TrendType.EMA, 10, null);
         final Trend emaLongTrend = new Trend(3, TrendType.EMA, 20, null);

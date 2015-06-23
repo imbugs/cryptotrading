@@ -7,6 +7,7 @@ import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
+import com.crypto.entities.Trading;
 import com.crypto.entities.TrendValue;
 
 import javax.ejb.EJB;
@@ -28,7 +29,7 @@ public class BulkDataHandler {
     @EJB
     private TrendDao trendDao;
 
-    private TradePair tradePair;
+    private Trading trading;
 
 
     /**
@@ -40,23 +41,20 @@ public class BulkDataHandler {
 
     public List<CryptocoinHistory> getAll() {
 
-        return cryptocoinHistoryDao.getAll(this.tradePair);
+        return cryptocoinHistoryDao.getAll(this.trading.getTradePair());
     }
 
     public Integer getStartIndex() {
-        return cryptocoinHistoryDao.getStartIndex(this.tradePair);
+        return cryptocoinHistoryDao.getStartIndex(this.trading.getTradePair());
     }
 
     public CryptocoinHistory getLast() {
-        return cryptocoinHistoryDao.getLast(this.tradePair);
+        return cryptocoinHistoryDao.getLast(this.trading.getTradePair());
     }
 
-    public void setTradePair(TradePair tradePair) {
-        this.tradePair = tradePair;
-    }
 
     public TradePair getTradePair() {
-        return tradePair;
+        return this.trading.getTradePair();
     }
 
     public CryptocoinHistoryDao getCryptocoinHistoryDao() {
@@ -71,5 +69,11 @@ public class BulkDataHandler {
         return trendDao;
     }
 
+    public Trading getTrading() {
+        return trading;
+    }
 
+    public void setTrading(Trading trading) {
+        this.trading = trading;
+    }
 }
