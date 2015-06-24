@@ -68,7 +68,7 @@ public class SmoothingMovingAverageCalculator implements TrendCalculator {
         Float delta = null;
 
         final Integer previousIndex = this.index - 1;
-        final TrendValue previousValue = this.dataProvider.getSmoohtingTrendValue(previousIndex);
+        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
 
         if (previousValue != null) {
             delta = value - previousValue.getValue();

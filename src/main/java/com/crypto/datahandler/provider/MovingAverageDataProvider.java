@@ -52,15 +52,6 @@ public interface MovingAverageDataProvider extends DataProvider {
 
 
     /**
-     * Get a trend value of a smoothing trend at a given index
-     *
-     * @param index the index of the smoothing trend value
-     * @return the smoothing trend value
-     */
-    public TrendValue getSmoohtingTrendValue (final Integer index);
-
-
-    /**
      * Get the trend of this moving average data provider
      * @return
      */

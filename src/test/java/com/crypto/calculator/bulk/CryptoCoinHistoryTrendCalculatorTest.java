@@ -115,7 +115,7 @@ public class CryptoCoinHistoryTrendCalculatorTest {
         final Trend maTrend = new Trend(1, TrendType.MA, 10, null);
         final Trend emaShortTrend = new Trend(2, TrendType.EMA, 10, null);
         final Trend emaLongTrend = new Trend(3, TrendType.EMA, 20, null);
-        final Trend smaTrend     = new Trend(4, TrendType.SMA, 10, emaShortTrend);
+        final Trend smaTrend = new Trend(4, TrendType.SMA, 10, emaShortTrend);
 
         final Macd macd = new Macd(1, emaShortTrend, emaLongTrend);
 
@@ -130,36 +130,39 @@ public class CryptoCoinHistoryTrendCalculatorTest {
         assertNotNull(cryptocoinTrendDao.getTrendValue(10, maTrend, tradePair));
         assertNotNull(cryptocoinTrendDao.getTrendValue(10, emaShortTrend, tradePair));
 
-        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(10, maTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.22,  cryptocoinTrendDao.getTrendValue(10, emaShortTrend, tradePair).getValue(), 0.005);
-        assertEquals(11.11,  cryptocoinTrendDao.getTrendValue(10, emaLongTrend, tradePair).getValue(), 0.005);
-        assertEquals(11.11,  cryptocoinTrendDao.getMacdValue(10, macd, tradePair).getValue(), 0.005);
+        assertEquals(22.22, cryptocoinTrendDao.getTrendValue(10, maTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.22, cryptocoinTrendDao.getTrendValue(10, emaShortTrend, tradePair).getValue(), 0.005);
+        assertEquals(11.11, cryptocoinTrendDao.getTrendValue(10, emaLongTrend, tradePair).getValue(), 0.005);
+        // Macd = short trend value - long trend value = 22,22 - 11, 11 = 11, 11
+        assertEquals(11.11, cryptocoinTrendDao.getMacdValue(10, macd, tradePair).getValue(), 0.005);
 
         assertEquals(22.42, cryptocoinTrendDao.getTrendValue(15, maTrend, tradePair).getValue(), 0.005);
         assertEquals(22.52, cryptocoinTrendDao.getTrendValue(15, emaShortTrend, tradePair).getValue(), 0.005);
         assertEquals(16.755, cryptocoinTrendDao.getTrendValue(15, emaLongTrend, tradePair).getValue(), 0.005);
+        // Macd = short trend value - long trend value = 22,52 - 16,755 = 5,77
         assertEquals(5.76, cryptocoinTrendDao.getMacdValue(15, macd, tradePair).getValue(), 0.005);
 
         // SMA value
-        assertEquals(22.597,  cryptocoinTrendDao.getTrendValue(19, smaTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.709,  cryptocoinTrendDao.getTrendValue(20, smaTrend, tradePair).getValue(), 0.005);
-        assertEquals(22.707,  cryptocoinTrendDao.getTrendValue(20, smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.597, cryptocoinTrendDao.getTrendValue(19, smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.709, cryptocoinTrendDao.getTrendValue(20, smaTrend, tradePair).getValue(), 0.005);
+        assertEquals(22.707, cryptocoinTrendDao.getTrendValue(20, smaTrend, tradePair).getValue(), 0.005);
 
         assertEquals(23.38, cryptocoinTrendDao.getTrendValue(21, maTrend, tradePair).getValue(), 0.005);
         assertEquals(23.43, cryptocoinTrendDao.getTrendValue(21, emaShortTrend, tradePair).getValue(), 0.005);
         assertEquals(22.79, cryptocoinTrendDao.getTrendValue(21, emaLongTrend, tradePair).getValue(), 0.005);
+        // Macd = short trend value - long trend value = 23,43 - 22,79 = 5,77
         assertEquals(0.63, cryptocoinTrendDao.getMacdValue(21, macd, tradePair).getValue(), 0.005);
 
         assertEquals(23.61, cryptocoinTrendDao.getTrendValue(26, maTrend, tradePair).getValue(), 0.005);
         assertEquals(23.39, cryptocoinTrendDao.getTrendValue(26, emaShortTrend, tradePair).getValue(), 0.005);
         assertEquals(23.03, cryptocoinTrendDao.getTrendValue(26, emaLongTrend, tradePair).getValue(), 0.005);
+        // Macd = short trend value - long trend value = 23,39 - 23,03 = 0,36
         assertEquals(0.36, cryptocoinTrendDao.getMacdValue(26, macd, tradePair).getValue(), 0.005);
 
         assertEquals(23.13, cryptocoinTrendDao.getTrendValue(30, maTrend, tradePair).getValue(), 0.005);
         assertEquals(22.92, cryptocoinTrendDao.getTrendValue(30, emaShortTrend, tradePair).getValue(), 0.005);
         assertEquals(22.875, cryptocoinTrendDao.getTrendValue(30, emaLongTrend, tradePair).getValue(), 0.005);
+        // Macd = short trend value - long trend value = 22,92 - 22,875 = 0,045
         assertEquals(0.04, cryptocoinTrendDao.getMacdValue(30, macd, tradePair).getValue(), 0.005);
-
-
     }
 }

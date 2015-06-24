@@ -74,11 +74,6 @@ public class SmoothingMovingAverageCalculatorTest {
             }
 
             @Override
-            public TrendValue getSmoohtingTrendValue(Integer index) {
-                return null;
-            }
-
-            @Override
             public Trend getTrend() {
                 return smaTrend;
             }

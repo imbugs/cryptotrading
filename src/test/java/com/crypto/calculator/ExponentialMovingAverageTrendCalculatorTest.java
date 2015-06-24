@@ -110,11 +110,6 @@ public class ExponentialMovingAverageTrendCalculatorTest {
             }
 
             @Override
-            public TrendValue getSmoohtingTrendValue(Integer index) {
-                return null;
-            }
-
-            @Override
             public Trend getTrend() {
                 return null;
             }

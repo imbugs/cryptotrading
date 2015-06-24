@@ -122,11 +122,6 @@ public class MovingAverageTrendCalculatorTest {
             }
 
             @Override
-            public TrendValue getSmoohtingTrendValue(Integer index) {
-                return null;
-            }
-
-            @Override
             public TradePair getTradePair() {
 
                 return null;
