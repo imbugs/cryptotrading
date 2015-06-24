@@ -28,9 +28,9 @@ public interface LoggingDao {
     public Logging get (final Integer index);
 
     /**
-     * Get all logging of a trading
-     * @param trading the trading
-     * @return the list of loggings of a trading
+     * Get all logging of a util
+     * @param trading the util
+     * @return the list of loggings of a util
      */
     public List<Logging> getAll(final Trading trading, final LoggingLevel level);
 

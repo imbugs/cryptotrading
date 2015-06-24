@@ -59,7 +59,7 @@ public class CryptocoinHistory implements Serializable, DataIndexProvider {
      * @param low       the lowest exchange rate
      * @param high      the highest exchange rate
      * @param close     the closing exchange rate
-     * @param volume    the volume of the trading
+     * @param volume    the volume of the util
      */
     public CryptocoinHistory(Integer indx, Timestamp timestamp, TradePair tradePair, Float open, Float low, Float high, Float close, Long volume) {
 

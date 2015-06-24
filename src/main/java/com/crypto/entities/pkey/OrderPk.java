@@ -24,7 +24,7 @@ public class OrderPk implements Serializable{
      * Constructor
      *
      * @param index the index
-     * @param trading the trading
+     * @param trading the util
      */
     public OrderPk(Integer index, Trading trading) {
         this.index = index;

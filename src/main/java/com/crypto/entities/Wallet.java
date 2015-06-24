@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * The wallet containing coins and cryptocoins intended for trading.
+ * The wallet containing coins and cryptocoins intended for util.
  *
  * Created by Jan Wicherink on 31-3-2015.
  */
@@ -15,7 +15,7 @@ public class Wallet implements Serializable{
 
     private static final long serialVersionUID = -2028307033146190019L;
 
-    // The trading of this wallet
+    // The util of this wallet
     @Id
     @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name="TRADING_ID")
@@ -52,7 +52,7 @@ public class Wallet implements Serializable{
 
     /**
      * Wallet constructor
-     * @param trading the trading
+     * @param trading the util
      * @param coins the coins in the wallet
      * @param cryptoCoins the cryptocoins in the wallet
      * @param currency the currency of the coins
@@ -85,7 +85,7 @@ public class Wallet implements Serializable{
     }
 
     /**
-     * Determine the maximum amount of cryptocoins that can be used in a trading
+     * Determine the maximum amount of cryptocoins that can be used in a util
      * @param maxTradingCryptoCoinsPerc
      * @return the maximum number of crypto coins
      */
@@ -95,9 +95,9 @@ public class Wallet implements Serializable{
     }
 
     /**
-     * Determine the maximum number of coins available for trading
+     * Determine the maximum number of coins available for util
      * @param maxTradingCoinsPerc
-     * @return the maximum number of coins for trading.
+     * @return the maximum number of coins for util.
      */
     public Float determineMaxTradingCoins ( Float maxTradingCoinsPerc) {
 

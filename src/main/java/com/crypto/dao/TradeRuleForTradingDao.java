@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Trade rule for trading DAO.
+ * Trade rule for util DAO.
  *
  * Created by Jan Wicherink on 7-5-15.
  */

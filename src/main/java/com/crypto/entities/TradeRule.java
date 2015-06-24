@@ -5,7 +5,7 @@ import com.crypto.enums.MarketTrend;
 import javax.persistence.*;
 
 /**
- * Trade rule, a rule for trading
+ * Trade rule, a rule for util
  *
  * Created by Jan Wicherink on 29-4-2015.
  */

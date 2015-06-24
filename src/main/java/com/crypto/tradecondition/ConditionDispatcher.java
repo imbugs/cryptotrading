@@ -41,7 +41,7 @@ public class ConditionDispatcher {
      *
      * @param signalBulkDataHandler the signal bulk data provider.
      * @param index                 the index
-     * @param trading               the trading
+     * @param trading               the util
      * @param tradeCondition        the trade condition
      */
     public ConditionDispatcher(final SignalBulkDataHandler signalBulkDataHandler, final Integer index, final Trading trading, final TradeCondition tradeCondition) {

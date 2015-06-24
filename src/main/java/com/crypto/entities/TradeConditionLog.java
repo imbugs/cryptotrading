@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Trade condition log, contains the evaluation of a trade condition at a given index for a given trading.
+ * Trade condition log, contains the evaluation of a trade condition at a given index for a given util.
  * The expression property determines if the trade condition has become TRUE or is FALSE
  *
  * Created by Jan Wicherink on 7-5-15.

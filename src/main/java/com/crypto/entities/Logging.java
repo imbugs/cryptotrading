@@ -1,5 +1,8 @@
 package com.crypto.entities;
 
+
+import com.crypto.enums.LoggingLevel;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -31,16 +34,16 @@ public class Logging {
     /**
      * Constructor
      * @param timestamp timestamp of the logging
-     * @param trading the trading the logging concerns
+     * @param trading the util the logging concerns
      * @param index the index of the logging
-     * @param level the logging leve
+     * @param level the logging level
      * @param messsage the logging message
      */
-    public Logging(Timestamp timestamp, Trading trading, Integer index, String level, String messsage) {
+    public Logging(Timestamp timestamp, Trading trading, Integer index, LoggingLevel level, String messsage) {
         this.timestamp = timestamp;
         this.trading = trading;
         this.index = index;
-        this.level = level;
+        this.level = level.name();
         this.messsage = messsage;
     }
 

@@ -3,7 +3,7 @@ package com.crypto.entities;
 import javax.persistence.*;
 
 /**
- * Trade rule for trading entity
+ * Trade rule for util entity
  * Created by jan on 21-6-15.
  */
 @Entity

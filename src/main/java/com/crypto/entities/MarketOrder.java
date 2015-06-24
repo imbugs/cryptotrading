@@ -45,7 +45,7 @@ public class MarketOrder {
      * Constructor
      * @param index the index of the order
      * @param orderReference our order reference of the order
-     * @param trading the trading
+     * @param trading the util
      * @param timestamp the timestamp of the order
      * @param exchangeRate the exchange rate at which to sell or buy
      * @param fee the fee to be payed

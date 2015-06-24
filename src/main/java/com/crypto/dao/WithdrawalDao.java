@@ -16,7 +16,7 @@ public interface WithdrawalDao extends Serializable{
 
     /**
      * Get a withdrawal
-     * @param trading the trading of the withdrawal
+     * @param trading the util of the withdrawal
      * @param currency the currency of the withdrawal
      * @return the withdrawal
      */
@@ -30,8 +30,8 @@ public interface WithdrawalDao extends Serializable{
 
 
     /**
-     * Get the witdrawals of a trading
-     * @param trading the trading
+     * Get the witdrawals of a util
+     * @param trading the util
      * @return
      */
     public List<Withdrawal> getWithdrawalsOfTrading(final Trading trading);

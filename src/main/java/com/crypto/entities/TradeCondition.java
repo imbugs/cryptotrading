@@ -73,7 +73,7 @@ public class TradeCondition {
      * @param reference_trend    reference to a reference trend
      * @param percentage         percentage
      * @param percentage_limit   percentage limit
-     * @param rate               trading bitcoin rate
+     * @param rate               util bitcoin rate
      * @param period             period to which the tradecondition belongs
      * @param logicalOperator    logical operator
      * @param enabled            true when the trade condition is active

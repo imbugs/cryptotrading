@@ -29,7 +29,7 @@ public class Signal {
      * @param tradeSignal the signal type, bull or bear
      * @param indx the index at which the signal is raised
      * @param tradeRule the traderule responsible for this signal
-     * @param trading the trading applicable for this signal
+     * @param trading the util applicable for this signal
      */
     public Signal(MarketTrend tradeSignal, Integer indx, TradeRule tradeRule, Trading trading) {
         this.pk = new SignalPk(indx,trading);

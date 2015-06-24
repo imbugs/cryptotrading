@@ -28,8 +28,8 @@ public class WithdrawalPk implements Serializable {
 
     /**
      * Constructor
-     * @param trading trading
-     * @param currency currency of the trading
+     * @param trading util
+     * @param currency currency of the util
      */
     public WithdrawalPk(Trading trading, Currency currency) {
         this.trading = trading;

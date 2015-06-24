@@ -18,7 +18,7 @@ public interface DataProvider {
     public TradePair getTradePair();
 
     /**
-     * Set the trading
+     * Set the util
      */
     public void setTrading(final Trading trading
     );

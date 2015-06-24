@@ -23,7 +23,7 @@ public interface SignalDao extends Serializable{
      * Get a signal
      * @param indx the index of the signal
      * @param tradeRule the trade rule of the signal
-     * @param trading the trading of the signal
+     * @param trading the util of the signal
      * @return the signal
      */
     public Signal get (final Integer indx, final TradeRule tradeRule, final Trading trading);
@@ -31,15 +31,15 @@ public interface SignalDao extends Serializable{
 
     /**
      * Get the last signal
-     * @param trading the trading of the signal
+     * @param trading the util of the signal
      * @return the last signal
      */
     public Signal getLast (final Trading trading);
 
 
     /**
-     * Delete all signal data of trading.
-     * @param trading the trading of which the signal data is to be removed.
+     * Delete all signal data of util.
+     * @param trading the util of which the signal data is to be removed.
      */
     public void truncateSignalData(final Trading trading);
 }

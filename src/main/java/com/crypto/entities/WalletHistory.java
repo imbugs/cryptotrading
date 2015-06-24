@@ -46,7 +46,7 @@ public class WalletHistory {
     /**
      * Construncto
      * @param timestamp timestamp of the history
-     * @param trading trading of the wallet history
+     * @param trading util of the wallet history
      * @param coins  number of coins
      * @param cryptoCoins number of cryptocoins
      * @param currency currencty of the coins

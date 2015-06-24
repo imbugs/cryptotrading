@@ -22,10 +22,10 @@ public interface WalletHistoryDao extends Serializable{
 
 
     /**
-     * Get last wallet history of a trading
+     * Get last wallet history of a util
      *
-     * @param trading the trading
-     * @return last wallet history of the trading
+     * @param trading the util
+     * @return last wallet history of the util
      */
     public WalletHistory getLast(final Trading trading);
 

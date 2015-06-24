@@ -27,7 +27,7 @@ public class FundHistory {
 
     /**
      * Constructor
-     * @param trading the trading
+     * @param trading the util
      * @param currency the currency of the fund history
      * @param coins the coins of the fund history
      */

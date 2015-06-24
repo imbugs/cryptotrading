@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Entity trade pair, defines a pair of currency and crypto currency for trading
+ * Entity trade pair, defines a pair of currency and crypto currency for util
  *
  * Created by Jan Wicherink on 31-3-2015.
  */

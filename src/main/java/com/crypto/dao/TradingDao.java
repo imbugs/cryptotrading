@@ -14,9 +14,9 @@ import java.util.List;
 public interface TradingDao extends Serializable {
 
     /**
-     * Get a trading
-     * @param Id the id of the trading
-     * @return the trading
+     * Get a util
+     * @param Id the id of the util
+     * @return the util
      */
     public Trading get(final Integer Id);
 
@@ -33,15 +33,15 @@ public interface TradingDao extends Serializable {
     public List<Trading> getActiveTradings();
 
     /**
-     * Get active tradings of a trading site
-     * @param tradingSite the trading site
-     * @return all active tradings of a trading site
+     * Get active tradings of a util site
+     * @param tradingSite the util site
+     * @return all active tradings of a util site
      */
     public List<Trading> getActiveTradingsOfTradingSite (final TradingSite tradingSite);
 
     /**
-     * Update a trading
-     * @param trading the trading to be updated.
+     * Update a util
+     * @param trading the util to be updated.
      */
     public void update (final Trading trading);
 }

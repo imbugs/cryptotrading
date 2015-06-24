@@ -77,7 +77,7 @@ public class LoggingDaoTest {
         final Calendar calendar = Calendar.getInstance();
         final Timestamp timestamp = new Timestamp(calendar.getTime().getTime());
 
-        final Logging logging = new Logging(timestamp, trading, 1, LoggingLevel.INFO.toString(), "LOGGING1");
+        final Logging logging = new Logging(timestamp, trading, 1, LoggingLevel.INFO, "LOGGING1");
 
         loggingDao.persist(logging);
 

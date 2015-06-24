@@ -42,7 +42,7 @@ public interface MarketOrderDao extends Serializable{
     /**
      * Get the last sell before a given index
      * @param beforeIndex the index
-     * @param trading the trading
+     * @param trading the util
      * @return market order of the last sell
      */
     public MarketOrder getLastSell (final Integer beforeIndex, final Trading trading);
@@ -50,47 +50,47 @@ public interface MarketOrderDao extends Serializable{
     /**
      * Get the last buy before a given index
      * @param beforeIndex the index
-     * @param trading the trading
+     * @param trading the util
      * @return market order of the last buy
      */
     public MarketOrder getLastBuy (final Integer beforeIndex, final Trading trading);
 
 
     /**
-     * Get the open orders of a given trading
-     * @param trading the trading
-     * @return the open order of a trading
+     * Get the open orders of a given util
+     * @param trading the util
+     * @return the open order of a util
      */
     public List<MarketOrder> getOpenOrders (final Trading trading);
 
 
     /**
-     * Get the open manually created sell orders of a given trading
-     * @param trading the trading
-     * @return the open manually created sell orders of a trading
+     * Get the open manually created sell orders of a given util
+     * @param trading the util
+     * @return the open manually created sell orders of a util
      */
     public List<MarketOrder> getOpenManualSellOrders (final Trading trading);
 
 
     /**
-     * Get the open manually created buy orders of a given trading
-     * @param trading the trading
-     * @return the open manually created buy orders of a trading
+     * Get the open manually created buy orders of a given util
+     * @param trading the util
+     * @return the open manually created buy orders of a util
      */
     public List<MarketOrder> getOpenManualBuyOrders (final Trading trading);
 
     /**
-     * Get the open orders with retry status of a given trading
-     * @param trading the trading
-     * @return the open orders with retry status of a trading
+     * Get the open orders with retry status of a given util
+     * @param trading the util
+     * @return the open orders with retry status of a util
      */
     public List<MarketOrder> getRetryOrders (final Trading trading);
 
 
     /**
-     * Get all orders of a  given trading
-     * @param trading the trading
-     * @return the orders of a trading
+     * Get all orders of a  given util
+     * @param trading the util
+     * @return the orders of a util
      */
     public List<MarketOrder> getAll (final Trading trading);
 

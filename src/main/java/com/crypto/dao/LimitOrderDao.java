@@ -24,7 +24,7 @@ public interface LimitOrderDao extends Serializable {
     /**
      * Get the limit orders with status open
      *
-     * @param trading the trading of the limit orders
+     * @param trading the util of the limit orders
      * @return the open limit orders
      */
     public List<LimitOrder> getOpenLimitOrders(final Trading trading);
@@ -33,7 +33,7 @@ public interface LimitOrderDao extends Serializable {
     /**
      * Get the total number of open limit orders
      *
-     * @param trading the trading of the limit orders
+     * @param trading the util of the limit orders
      * @return the total number of open limit orders
      */
     public Long getNumberOfOpenLimitOrders(final Trading trading);
@@ -43,7 +43,7 @@ public interface LimitOrderDao extends Serializable {
      * Get the last sell order before a given index
      *
      * @param beforeIndex the index
-     * @param trading   the trading of the last sell
+     * @param trading   the util of the last sell
      * @return the last limit sell order before a given timestamp
      */
     public SellLimitOrder getLastSell(final Integer beforeIndex, final Trading trading);
@@ -53,7 +53,7 @@ public interface LimitOrderDao extends Serializable {
      * Get the last buy order before a given timestamp
      *
      * @param beforeIndex the index
-     * @param trading   the trading of the last sell
+     * @param trading   the util of the last sell
      * @return the last limit buy order before a given timestamp
      */
     public BuyLimitOrder getLastBuy(final Integer beforeIndex, final Trading trading);
@@ -62,7 +62,7 @@ public interface LimitOrderDao extends Serializable {
      * Get the last sell before a given timestamp
      *
      * @param timestamp the timestamp
-     * @param trading the trading of the last sell
+     * @param util the util of the last sell
      * @return the last limit order before a given timestamp
      */
 

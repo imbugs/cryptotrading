@@ -1,29 +1,25 @@
-package com.crypto.trading;
+package com.crypto.util;
 
 import com.crypto.calculator.bulk.CryptoCoinHistoryTrendCalculator;
-import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.Trading;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 
 /**
- * Utilities for the trading environment and usage for crypto trading
+ * Utilities for the util environment and usage for crypto util
  * Created by Jan Wicherink on 27-5-15.
  */
-@Stateful
+@Stateless
 public class Utils {
 
     @EJB
     private CryptoCoinHistoryTrendCalculator cryptoCoinHistoryTrendCalculator;
 
-    @EJB
-    private CryptocoinTrendDao cryptocoinTrendDao;
-
     /**
      * Calculate all trend lines for a given trade pair
      *
-     * @param trading the trading.
+     * @param trading the util.
      */
     public void calculateTrendLines(final Trading trading) {
 

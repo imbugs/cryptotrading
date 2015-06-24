@@ -49,7 +49,7 @@ public class CryptoCoinHistoryTrendCalculator {
     /**
      * Initialises the trend calculator.
      *
-     * @param trading the trading
+     * @param trading the util
      */
     public void init(final Trading trading) {
         this.dataProvider.setTrading(trading);

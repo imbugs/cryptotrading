@@ -20,7 +20,7 @@ public interface WalletDao extends Serializable {
 
     /**
      * Get the wallet
-     * @param trading the trading of the wallet
+     * @param trading the util of the wallet
      * @return the wallet
      */
     public Wallet get (final Trading trading);

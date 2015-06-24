@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Represents a trading by the cryptocoin trader
+ * Represents a util by the cryptocoin trader
  * Created by Jan Wicherink on 31-3-2015.
  */
 @Entity
@@ -18,38 +18,38 @@ public class Trading implements Serializable {
     @Column (name = "ID")
     private Integer id;
 
-    // the minimum crypto coins accepted for trading
+    // the minimum crypto coins accepted for util
     @Column (name = "MIN_TRADING_CRYPTOCURRENCY")
     private Float minTradingCryptoCurrency;
 
-    // the maximum percentage to be used while trading coins
+    // the maximum percentage to be used while util coins
     @Column (name = "MAX_TRADING_COINS_PERC")
     private Float maxTradingCoinsPerc;
 
-    // The maximum percentage to be used while trading crypto coins
+    // The maximum percentage to be used while util crypto coins
     @Column (name = "MAX_TRADING_CRYPTOCOINS_PERC")
     private Float maxTradingCryptoCoinsPerc;
 
-    // The percentage to be refunded to the wallets when an trading has taken place
+    // The percentage to be refunded to the wallets when an util has taken place
     @Column (name = "REFUND_PERC")
     private Float refundPercentage;
 
-    // Check on bad buying situations while trading
+    // Check on bad buying situations while util
     @Column (name = "CHECK_BAD_BUY")
     private Boolean checkBadBuy;
 
-    // Check on bad selling situations while trading
+    // Check on bad selling situations while util
     @Column (name = "CHECK_BAD_SELL")
     private Boolean checkBadSell;
 
     @Column (name = "CHECK_BAD_SELL_WALLET")
     private Boolean checkBadSellWallet;
 
-    // The minimum profit desired when trading
+    // The minimum profit desired when util
     @Column (name = "MIN_PROFIT_PERCENTAGE")
     private Float minProfitPercentage;
 
-    // Boolean indicating if the trading is enabled (active) or disabled (inactive)
+    // Boolean indicating if the util is enabled (active) or disabled (inactive)
     @Column (name = "ENABLED")
     private Boolean enabled;
 
@@ -61,7 +61,7 @@ public class Trading implements Serializable {
     @Column (name = "RETRIES")
     private Integer retries;
 
-    // The trading pair.
+    // The util pair.
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name = "TRADE_PAIR_ID", nullable=false, updatable=false)
     private TradePair tradePair;

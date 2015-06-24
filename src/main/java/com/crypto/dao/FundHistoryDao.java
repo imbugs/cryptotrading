@@ -18,8 +18,8 @@ public interface FundHistoryDao extends Serializable{
     public void persist (final FundHistory fundHistory);
 
     /**
-     * Get all fund histories of a trading
-     * @param trading the trading
+     * Get all fund histories of a util
+     * @param trading the util
      * @return the fund histories
      */
     public List<FundHistory> getAll(final Trading trading);

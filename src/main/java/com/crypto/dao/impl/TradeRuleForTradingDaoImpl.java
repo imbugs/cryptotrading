@@ -13,7 +13,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * Trade rule for trading Dao
+ * Trade rule for util Dao
  * <p/>
  * Created by Jan Wicherink on 7-5-15.
  */

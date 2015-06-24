@@ -74,10 +74,10 @@ public interface SignalDataProvider extends DataProvider {
     public List<TradeCondition> getAllTradeConditions(final TradeRule tradeRule);
 
     /**
-     * Get the last trading signal.
+     * Get the last util signal.
      *
-     * @param trading the trading.
-     * @return the last signal of the trading.
+     * @param trading the util.
+     * @return the last signal of the util.
      */
     public Signal getLastSignal(final Trading trading);
 

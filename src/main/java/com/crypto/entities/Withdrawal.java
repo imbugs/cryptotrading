@@ -25,7 +25,7 @@ public class Withdrawal {
     /**
      * Constructor
      *
-     * @param trading  the trading
+     * @param trading  the util
      * @param coins    number of coins of the withdrawal
      * @param currency the currency of the coins that are withdrawn
      */
@@ -51,5 +51,14 @@ public class Withdrawal {
 
     public Currency getCurrency() {
         return pk.getCurrency();
+    }
+
+
+    /**
+     * Add coins to the current coins
+     * @param coins coins to be added.
+     */
+    public void addCoins (final Float coins) {
+        this.coins += coins;
     }
 }

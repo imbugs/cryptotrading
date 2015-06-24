@@ -5,7 +5,7 @@ import com.crypto.entities.pkey.FundPk;
 import javax.persistence.*;
 
 /**
- * The fund represents the funding of a trading
+ * The fund represents the funding of a util
  * Created by Jan Wicherink on 16-4-15.
  */
 @Entity

@@ -19,7 +19,7 @@ public class WalletHistoryPk implements Serializable {
     @Column(name="TIMESTAMP")
     private Timestamp timestamp;
 
-    // The trading of this wallet
+    // The util of this wallet
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="TRADING_ID")
     private Trading trading;
@@ -27,7 +27,7 @@ public class WalletHistoryPk implements Serializable {
     /**
      * Constructor
      * @param timestamp timestamp
-     * @param trading trading
+     * @param trading util
      */
     public WalletHistoryPk(Timestamp timestamp, Trading trading) {
         this.timestamp = timestamp;

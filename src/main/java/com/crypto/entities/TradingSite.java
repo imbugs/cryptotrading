@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A crypto coin trading site
+ * A crypto coin util site
  *
  * Created by Jan Wicherink on 7-4-2015.
  */

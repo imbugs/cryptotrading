@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crypto.trading.services;
+package com.crypto.services;
 
 import com.crypto.dao.CurrencyDao;
 import com.crypto.entities.Currency;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 import com.google.gson.Gson;
 
@@ -31,6 +31,7 @@ import com.google.gson.Gson;
  */
 @Path("/")
 @Stateless
+@Produces(MediaType.APPLICATION_JSON)
 public class CurrencyService {
 
     @EJB
