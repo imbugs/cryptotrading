@@ -17,6 +17,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Dumping data for table `TRADING_SITES`
 --
 
-INSERT INTO `TRADING_SITES` (`CODE`, `DESCRIPTION`, `URL`) VALUES('BTCE', 'Btc-e', 'www.btc-e.com');
-INSERT INTO `TRADING_SITES` (`CODE`, `DESCRIPTION`, `URL`) VALUES('KRAKEN', 'Kraken', 'www.kraken.com');
-INSERT INTO `TRADING_SITES` (`CODE`, `DESCRIPTION`, `URL`) VALUES('BITSTAMP', 'Bitstamp', 'www.bitstamp.net');
+  INSERT INTO `TRADING_SITES` (`CODE`, `DESCRIPTION`, `URL`) VALUES('BTCE', 'Btc-e', 'www.btc-e.com');
+  INSERT INTO `TRADING_SITES` (`CODE`, `DESCRIPTION`, `URL`) VALUES('KRAKEN', 'Kraken', 'www.kraken.com');
+  INSERT INTO `TRADING_SITES` (`CODE`, `DESCRIPTION`, `URL`) VALUES('BITSTAMP', 'Bitstamp', 'www.bitstamp.net');

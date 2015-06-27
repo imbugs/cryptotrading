@@ -6,8 +6,10 @@ import com.crypto.datahandler.impl.MacdBulkDataHandler;
 import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.entities.*;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import java.util.logging.Logger;
 
 /**
@@ -19,6 +21,9 @@ import java.util.logging.Logger;
 public class CryptoCoinHistoryTrendCalculator {
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryTrendCalculator.class.getName());
+
+    @Resource
+    ManagedExecutorService executor;
 
     @EJB
     private CryptoCoinHistoryBulkDataHandler dataProvider;
@@ -134,11 +139,10 @@ public class CryptoCoinHistoryTrendCalculator {
         });
     }
 
+    private void calculateSignals() {
 
-    private void  calculateSignals () {
-
-       signalCalculator.calculate();
-   }
+        signalCalculator.calculate();
+    }
 
 
     /**
@@ -147,9 +151,24 @@ public class CryptoCoinHistoryTrendCalculator {
     public void recalculate() {
 
         // Truncate all data before recalculating
-
         this.dataProvider.truncateTrendValueData();
         this.signalBulkDataHandler.truncateSignalData();
+/*
+        // Run in parallel, ma calculation, ema calculation and sma calculation
+        CompletableFuture maCalculation = CompletableFuture.runAsync( () -> calculateMovingAverageTrends(), this.executor);
+
+        CompletableFuture emaCalculation = CompletableFuture.runAsync( () -> calculateExponentialMovingAverageTrends(), this.executor);
+
+        CompletableFuture smaCalculation = CompletableFuture.runAsync( () ->  calculateSmoothingMovingAverageTrends(), this.executor);
+
+        // Start Macd calculation after completion of ma calucation, ema calculation and sma calculation
+        CompletableFuture macdCalculation = CompletableFuture.allOf(maCalculation,emaCalculation, smaCalculation)
+                .thenRun(() -> calculateMacdTrends());
+
+        // Start signal calculation after completion of macd calculation.
+        CompletableFuture calSignals = CompletableFuture.allOf(macdCalculation).thenRun( () ->  calculateSignals());
+
+  */
 
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();

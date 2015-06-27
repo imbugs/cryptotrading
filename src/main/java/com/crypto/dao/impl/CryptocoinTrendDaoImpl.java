@@ -2,13 +2,8 @@ package com.crypto.dao.impl;
 
 import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.entities.*;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.enterprise.context.ApplicationScoped;
-import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -69,7 +64,11 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
             return 0F;
         }
 
-        return new Float(sum);
+        if (sum != null) {
+            return new Float(sum);
+        }
+
+        return null;
     }
 
     @Override
