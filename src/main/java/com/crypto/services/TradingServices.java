@@ -33,7 +33,7 @@ public class TradingServices {
     private TradingDao tradingDao;
 
     /**
-     * Recalculates all the trendlines and signals of a util
+     * Recalculates all the trendlines and signals of a util.
      */
     @POST
     @Path("/recalculate/")
