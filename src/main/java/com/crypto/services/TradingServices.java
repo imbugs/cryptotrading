@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Rest service returning currency
@@ -36,7 +37,7 @@ public class TradingServices {
      */
     @POST
     @Path("/recalculate/")
-    public void recalculate() {
+    public void recalculate() throws ExecutionException, InterruptedException {
 
         final Trading trading = tradingDao.get(1);
 

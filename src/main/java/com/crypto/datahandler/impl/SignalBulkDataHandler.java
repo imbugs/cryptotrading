@@ -9,9 +9,7 @@ import com.crypto.datahandler.provider.SignalDataProvider;
 import com.crypto.entities.*;
 import org.apache.log4j.Logger;
 
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateful;
+import javax.ejb.*;
 import java.util.List;
 
 /**
@@ -21,6 +19,7 @@ import java.util.List;
  */
 @Stateful
 @LocalBean
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataProvider<CryptocoinHistory>, SignalDataProvider, DataPersister<Signal> {
 
     private static final Logger LOG = Logger.getLogger(SignalBulkDataHandler.class.getName());
@@ -150,5 +149,12 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
         if (value != null) {
             this.signalDao.persist(value);
         }
+    }
+
+    /**
+     * Commit open transactions;
+     */
+    public void commit() {
+      signalDao.commit();
     }
 }

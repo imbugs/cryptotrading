@@ -5,6 +5,7 @@ import com.crypto.entities.Trading;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Utilities for the util environment and usage for crypto util
@@ -21,7 +22,7 @@ public class Utils {
      *
      * @param trading the util.
      */
-    public void calculateTrendLines(final Trading trading) {
+    public void calculateTrendLines(final Trading trading) throws ExecutionException, InterruptedException {
 
         cryptoCoinHistoryTrendCalculator.init(trading);
         cryptoCoinHistoryTrendCalculator.recalculate();

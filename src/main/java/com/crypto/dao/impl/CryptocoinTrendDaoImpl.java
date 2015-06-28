@@ -118,4 +118,9 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
         query.executeUpdate();
         em.flush();
     }
+
+    @Override
+    public void commit() {
+        em.flush();
+    }
 }

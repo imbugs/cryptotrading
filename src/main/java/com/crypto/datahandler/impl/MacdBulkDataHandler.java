@@ -1,17 +1,15 @@
 package com.crypto.datahandler.impl;
 
-import com.crypto.dao.CryptocoinHistoryDao;
-import com.crypto.dao.CryptocoinTrendDao;
 import com.crypto.dao.MacdDao;
-import com.crypto.dao.TrendDao;
 import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.MacdDataProvider;
-import com.crypto.entities.*;
+import com.crypto.entities.CryptocoinHistory;
+import com.crypto.entities.Macd;
+import com.crypto.entities.MacdValue;
+import com.crypto.entities.TrendValue;
 
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateful;
+import javax.ejb.*;
 import java.util.List;
 
 /**
@@ -21,6 +19,7 @@ import java.util.List;
  */
 @Stateful
 @LocalBean
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 public class MacdBulkDataHandler extends BulkDataHandler implements BulkDataProvider<CryptocoinHistory>, MacdDataProvider, DataPersister<MacdValue> {
 
     @EJB

@@ -1,21 +1,17 @@
 package com.crypto.datahandler.impl;
 
-import com.crypto.dao.CryptocoinHistoryDao;
-import com.crypto.dao.CryptocoinTrendDao;
-import com.crypto.dao.TrendDao;
 import com.crypto.datahandler.persister.DataPersister;
 import com.crypto.datahandler.provider.BulkDataProvider;
 import com.crypto.datahandler.provider.MovingAverageDataProvider;
 import com.crypto.entities.CryptocoinHistory;
-import com.crypto.entities.TradePair;
 import com.crypto.entities.Trend;
 import com.crypto.entities.TrendValue;
 import org.apache.log4j.Logger;
 
-import javax.ejb.*;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.persistence.NoResultException;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
 /**
@@ -25,6 +21,7 @@ import java.util.List;
  */
 @Stateful
 @LocalBean
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 public class CryptoCoinHistoryBulkDataHandler extends BulkDataHandler implements  BulkDataProvider<CryptocoinHistory>, MovingAverageDataProvider, DataPersister<TrendValue> {
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryBulkDataHandler.class.getName());

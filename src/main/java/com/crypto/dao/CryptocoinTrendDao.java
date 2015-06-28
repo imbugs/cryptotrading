@@ -1,10 +1,7 @@
 package com.crypto.dao;
 
-import com.crypto.calculator.MovingAverageCalculator;
 import com.crypto.entities.*;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -67,4 +64,10 @@ public interface CryptocoinTrendDao extends Serializable{
      * Truncate table data
      */
     public void truncateTable();
+
+    /**
+     *  Commit all open transactions
+     *
+     */
+    public void commit();
 }

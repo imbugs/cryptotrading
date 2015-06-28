@@ -63,20 +63,26 @@ public class SmoothingMovingAverageCalculator implements TrendCalculator {
         // Get the trend that is being smoothed
         final Trend smoothingTrend = getTrend().getSmoothingTrend();
 
-        Float sum = this.dataProvider.getSumOverPeriod(this.index, smoothingTrend, period);
-        final Float value = sum / period;
-        Float delta = null;
+        if (period != null && smoothingTrend != null) {
 
-        final Integer previousIndex = this.index - 1;
-        final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
+            final Float sum = this.dataProvider.getSumOverPeriod(this.index, smoothingTrend, period);
 
-        if (previousValue != null) {
-            delta = value - previousValue.getValue();
+            if (sum != null) {
+                final Float value = sum / period;
+                Float delta = null;
+
+                final Integer previousIndex = this.index - 1;
+                final TrendValue previousValue = this.dataProvider.getTrendValue(previousIndex);
+
+                if (previousValue != null) {
+                    delta = value - previousValue.getValue();
+                }
+
+                this.calculatedValue = new TrendValue(this.getDataProvider().getTradePair(), this.index, this.trend, null, value, delta);
+
+                LOG.info("Calculated index : " + this.index.toString());
+            }
         }
-
-        this.calculatedValue = new TrendValue(this.getDataProvider().getTradePair(), this.index, this.trend, null, value, delta);
-
-        LOG.info("Calculated index : " + this.index.toString());
     }
 
     public MovingAverageDataProvider getDataProvider() {

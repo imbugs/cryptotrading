@@ -25,6 +25,8 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import java.util.concurrent.ExecutionException;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
@@ -103,7 +105,7 @@ public class CryptoCoinHistoryTrendCalculatorTest {
 
     @Test
     @UsingDataSet("datasets/it_test_dataset_23.xml")
-    public void testCalculation() {
+    public void testCalculation() throws ExecutionException, InterruptedException {
 
         // Arrange
         final Trading trading = new Trading();

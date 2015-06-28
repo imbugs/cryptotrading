@@ -42,4 +42,10 @@ public interface SignalDao extends Serializable{
      * @param trading the util of which the signal data is to be removed.
      */
     public void truncateSignalData(final Trading trading);
+
+
+    /**
+     * Commit the current transactions.
+     */
+    public void commit();
 }

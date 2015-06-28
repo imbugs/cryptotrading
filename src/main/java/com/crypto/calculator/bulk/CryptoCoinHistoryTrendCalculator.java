@@ -9,7 +9,11 @@ import com.crypto.entities.*;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.concurrent.ManagedExecutorService;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 /**
@@ -18,12 +22,13 @@ import java.util.logging.Logger;
  * Created by Jan Wicherink on 8-5-15.
  */
 @Stateful
+@TransactionAttribute(value = TransactionAttributeType.REQUIRES_NEW)
 public class CryptoCoinHistoryTrendCalculator {
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryTrendCalculator.class.getName());
 
     @Resource
-    ManagedExecutorService executor;
+    private ManagedExecutorService executor;
 
     @EJB
     private CryptoCoinHistoryBulkDataHandler dataProvider;
@@ -74,6 +79,7 @@ public class CryptoCoinHistoryTrendCalculator {
         this.macdCalculator = new BulkCalculator<CryptocoinHistory, MacdValue>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading);
         this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading);
 
+
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
     }
 
@@ -82,13 +88,20 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateMovingAverageTrends() {
 
-        this.dataProvider.getAllMovingAverageTrends().stream().forEach((trend) -> {
+        try {
 
-            LOG.info("Calculator for MA trend : " + trend.getName());
-            dataProvider.setTrend(trend);
-            ((TrendCalculator) maCalculator.getCalculator()).setTrend(trend);
-            maCalculator.calculate();
-        });
+            this.dataProvider.getAllMovingAverageTrends().stream().forEach((trend) -> {
+
+                LOG.info("Calculator for MA trend : " + trend.getName());
+                dataProvider.setTrend(trend);
+                ((TrendCalculator) maCalculator.getCalculator()).setTrend(trend);
+                maCalculator.calculate();
+            });
+
+            dataProvider.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -96,14 +109,20 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateExponentialMovingAverageTrends() {
 
-        this.dataProvider.getAllExponentialMovingAverageTrends().stream().forEach((trend) -> {
+        try {
+            this.dataProvider.getAllExponentialMovingAverageTrends().stream().forEach((trend) -> {
 
-            LOG.info("Calculator for EMA trend : " + trend.getName());
+                LOG.info("Calculator for EMA trend : " + trend.getName());
 
-            dataProvider.setTrend(trend);
-            ((TrendCalculator) emaCalculator.getCalculator()).setTrend(trend);
-            emaCalculator.calculate();
-        });
+                dataProvider.setTrend(trend);
+                ((TrendCalculator) emaCalculator.getCalculator()).setTrend(trend);
+                emaCalculator.calculate();
+            });
+
+            dataProvider.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -112,14 +131,23 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateSmoothingMovingAverageTrends() {
 
-        this.dataProvider.getAllSmoothingMovingAverageTrends().stream().forEach((trend) -> {
+     /*
+        try {
+            this.dataProvider.getAllSmoothingMovingAverageTrends().stream().forEach((trend) -> {
 
-            LOG.info("Calculator for SMA trend : " + trend.getName());
+                LOG.info("Calculator for SMA trend : " + trend.getName());
 
-            dataProvider.setTrend(trend);
-            ((TrendCalculator) smaCalculator.getCalculator()).setTrend(trend);
-            smaCalculator.calculate();
-        });
+                dataProvider.setTrend(trend);
+                ((TrendCalculator) smaCalculator.getCalculator()).setTrend(trend);
+                smaCalculator.calculate();
+            });
+
+            dataProvider.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+     */
     }
 
 
@@ -128,52 +156,62 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateMacdTrends() {
 
-        this.macdDataProvider.getAllMacds().stream().forEach((macd) -> {
+        try {
+            this.macdDataProvider.getAllMacds().stream().forEach((macd) -> {
+                // Calculate for every availble macd the macd value
+                LOG.info("Calculator for MACD  : " + macd.getId());
 
-            // Calculate for every availble macd the macd value
-            LOG.info("Calculator for MACD  : " + macd.getId());
-
-            this.macdDataProvider.setMacd(macd);
-            ((MacdCalculator) macdCalculator.getCalculator()).setMacd(macd);
-            macdCalculator.calculate();
-        });
+                this.macdDataProvider.setMacd(macd);
+                ((MacdCalculator) macdCalculator.getCalculator()).setMacd(macd);
+                macdCalculator.calculate();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Calculate the signals.
+     */
     private void calculateSignals() {
 
-        signalCalculator.calculate();
+        try {
+            signalCalculator.calculate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     /**
-     * Calculate all the trend values for all available trends: MA, EMA and SMA trends
+     * Calculate all the trend values for all available trends: MA, EMA and SMA trends, next calculate Macd's and
+     * finally calculate the signals.
      */
-    public void recalculate() {
+    public void recalculate() throws ExecutionException, InterruptedException {
 
         // Truncate all data before recalculating
         this.dataProvider.truncateTrendValueData();
         this.signalBulkDataHandler.truncateSignalData();
-/*
+
+        dataProvider.commit();
+        signalBulkDataHandler.commit();
+
         // Run in parallel, ma calculation, ema calculation and sma calculation
-        CompletableFuture maCalculation = CompletableFuture.runAsync( () -> calculateMovingAverageTrends(), this.executor);
+        final CompletableFuture maCalculation = CompletableFuture.runAsync(() -> calculateMovingAverageTrends(), this.executor);
 
-        CompletableFuture emaCalculation = CompletableFuture.runAsync( () -> calculateExponentialMovingAverageTrends(), this.executor);
+        final CompletableFuture emaCalculation = CompletableFuture.runAsync(() -> calculateExponentialMovingAverageTrends(), this.executor);
 
-        CompletableFuture smaCalculation = CompletableFuture.runAsync( () ->  calculateSmoothingMovingAverageTrends(), this.executor);
+        final CompletableFuture smaCalculation = CompletableFuture.runAsync(() -> calculateSmoothingMovingAverageTrends(), this.executor);
 
         // Start Macd calculation after completion of ma calucation, ema calculation and sma calculation
-        CompletableFuture macdCalculation = CompletableFuture.allOf(maCalculation,emaCalculation, smaCalculation)
-                .thenRun(() -> calculateMacdTrends());
+        final CompletableFuture macdCalculation = CompletableFuture.allOf(maCalculation, emaCalculation, smaCalculation)
+                .thenRunAsync(() -> calculateMacdTrends());
 
+ /*
         // Start signal calculation after completion of macd calculation.
-        CompletableFuture calSignals = CompletableFuture.allOf(macdCalculation).thenRun( () ->  calculateSignals());
+        final CompletableFuture calcSignals = CompletableFuture.allOf(macdCalculation)
+                .thenRunAsync(() -> calculateSignals(), this.executor);
 
-  */
-
-        calculateMovingAverageTrends();
-        calculateExponentialMovingAverageTrends();
-        calculateSmoothingMovingAverageTrends();
-        calculateMacdTrends();
-        calculateSignals ();
+ */
     }
 }

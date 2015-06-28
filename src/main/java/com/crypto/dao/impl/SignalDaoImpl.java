@@ -56,4 +56,9 @@ public class SignalDaoImpl implements SignalDao {
 
         query.executeUpdate();
     }
+
+    @Override
+    public void commit() {
+        em.flush();
+    }
 }
