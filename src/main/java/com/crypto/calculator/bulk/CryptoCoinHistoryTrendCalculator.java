@@ -9,8 +9,6 @@ import com.crypto.entities.*;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -169,7 +167,6 @@ public class CryptoCoinHistoryTrendCalculator {
     /**
      * Calculate the signals.
      */
-    @TransactionAttribute(value = TransactionAttributeType.REQUIRES_NEW)
     private void calculateSignals() {
 
         try {
