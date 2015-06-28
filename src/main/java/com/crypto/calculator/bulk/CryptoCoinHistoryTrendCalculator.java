@@ -70,11 +70,11 @@ public class CryptoCoinHistoryTrendCalculator {
         final MacdValueCalculator macdValueCalculator = new MacdValueCalculator(this.macdDataProvider);
         final SignalCalculator signalCalculator = new SignalCalculator(this.signalBulkDataHandler, trading);
 
-        this.maCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(maCalculator, this.dataProvider, this.dataProvider, trading);
-        this.emaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(emaCalculator, this.dataProvider, this.dataProvider, trading);
-        this.smaCalculator = new BulkCalculator<CryptocoinHistory, TrendValue>(smaCalculator, this.dataProvider, this.dataProvider, trading);
-        this.macdCalculator = new BulkCalculator<CryptocoinHistory, MacdValue>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading);
-        this.signalCalculator = new BulkCalculator<CryptocoinHistory, Signal>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading);
+        this.maCalculator = new BulkCalculator<>(maCalculator, this.dataProvider, this.dataProvider, trading);
+        this.emaCalculator = new BulkCalculator<>(emaCalculator, this.dataProvider, this.dataProvider, trading);
+        this.smaCalculator = new BulkCalculator<>(smaCalculator, this.dataProvider, this.dataProvider, trading);
+        this.macdCalculator = new BulkCalculator<>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading);
+        this.signalCalculator = new BulkCalculator<>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading);
 
 
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
@@ -86,7 +86,6 @@ public class CryptoCoinHistoryTrendCalculator {
     private void calculateMovingAverageTrends() {
 
         try {
-
             this.dataProvider.getAllMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for MA trend : " + trend.getName());
@@ -187,25 +186,21 @@ public class CryptoCoinHistoryTrendCalculator {
         this.dataProvider.truncateTrendValueData();
         this.signalBulkDataHandler.truncateSignalData();
 
-        dataProvider.commit();
-        signalBulkDataHandler.commit();
+        // Run in parallel, ma calculation, ema calculation
+        final CompletableFuture maCalculation = CompletableFuture.runAsync(this::calculateMovingAverageTrends, this.executor);
 
-        // Run in parallel, ma calculation, ema calculation and sma calculation
-        final CompletableFuture maCalculation = CompletableFuture.runAsync(() -> calculateMovingAverageTrends(), this.executor);
+        final CompletableFuture emaCalculation = CompletableFuture.runAsync(this::calculateExponentialMovingAverageTrends, this.executor);
 
-        final CompletableFuture emaCalculation = CompletableFuture.runAsync(() -> calculateExponentialMovingAverageTrends(), this.executor);
-
-             // Start Sma  calculation after completion of ma calucation, ema calculation and sma calculation
+             // Start Sma calculation after completion of ma calucation, ema calculation
         final CompletableFuture smaCalculation = CompletableFuture.allOf(maCalculation, emaCalculation)
-                .thenRunAsync(() -> calculateSmoothingMovingAverageTrends());
+                .thenRunAsync(this::calculateSmoothingMovingAverageTrends);
 
-        // Start Macd calculation after completion of ma calucation, ema calculation and sma calculation
+        // Start Macd calculation after completion of ma calucation, ema calculation
         final CompletableFuture macdCalculation = CompletableFuture.allOf(maCalculation, emaCalculation)
-                .thenRunAsync(() -> calculateMacdTrends());
+                .thenRunAsync(this::calculateMacdTrends);
 
         // Start signal calculation after completion of macd calculation and sma calculation.
-        final CompletableFuture calcSignals = CompletableFuture.allOf(smaCalculation, macdCalculation)
-                .thenRunAsync(() -> calculateSignals(), this.executor);
-
+        CompletableFuture.allOf(smaCalculation, macdCalculation)
+                .thenRunAsync(this::calculateSignals, this.executor);
     }
 }
