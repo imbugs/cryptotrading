@@ -22,7 +22,6 @@ import java.util.logging.Logger;
  * Created by Jan Wicherink on 8-5-15.
  */
 @Stateful
-@TransactionAttribute(value = TransactionAttributeType.REQUIRES_NEW)
 public class CryptoCoinHistoryTrendCalculator {
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryTrendCalculator.class.getName());
@@ -131,7 +130,6 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateSmoothingMovingAverageTrends() {
 
-     /*
         try {
             this.dataProvider.getAllSmoothingMovingAverageTrends().stream().forEach((trend) -> {
 
@@ -146,8 +144,6 @@ public class CryptoCoinHistoryTrendCalculator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-     */
     }
 
 
@@ -173,6 +169,7 @@ public class CryptoCoinHistoryTrendCalculator {
     /**
      * Calculate the signals.
      */
+    @TransactionAttribute(value = TransactionAttributeType.REQUIRES_NEW)
     private void calculateSignals() {
 
         try {
@@ -201,17 +198,17 @@ public class CryptoCoinHistoryTrendCalculator {
 
         final CompletableFuture emaCalculation = CompletableFuture.runAsync(() -> calculateExponentialMovingAverageTrends(), this.executor);
 
-        final CompletableFuture smaCalculation = CompletableFuture.runAsync(() -> calculateSmoothingMovingAverageTrends(), this.executor);
+             // Start Sma  calculation after completion of ma calucation, ema calculation and sma calculation
+        final CompletableFuture smaCalculation = CompletableFuture.allOf(maCalculation, emaCalculation)
+                .thenRunAsync(() -> calculateSmoothingMovingAverageTrends());
 
         // Start Macd calculation after completion of ma calucation, ema calculation and sma calculation
-        final CompletableFuture macdCalculation = CompletableFuture.allOf(maCalculation, emaCalculation, smaCalculation)
+        final CompletableFuture macdCalculation = CompletableFuture.allOf(maCalculation, emaCalculation)
                 .thenRunAsync(() -> calculateMacdTrends());
 
- /*
-        // Start signal calculation after completion of macd calculation.
-        final CompletableFuture calcSignals = CompletableFuture.allOf(macdCalculation)
+        // Start signal calculation after completion of macd calculation and sma calculation.
+        final CompletableFuture calcSignals = CompletableFuture.allOf(smaCalculation, macdCalculation)
                 .thenRunAsync(() -> calculateSignals(), this.executor);
 
- */
     }
 }

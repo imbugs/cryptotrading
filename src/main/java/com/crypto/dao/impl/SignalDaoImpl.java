@@ -24,7 +24,11 @@ public class SignalDaoImpl implements SignalDao {
     @Override
     public void persist(Signal signal) {
 
-        em.persist(signal);
+        final Signal persistedSignal = em.find(Signal.class, signal.getPk());
+
+        if (persistedSignal == null) {
+            em.persist(signal);
+        }
     }
 
     @Override

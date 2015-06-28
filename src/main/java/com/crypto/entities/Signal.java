@@ -59,4 +59,8 @@ public class Signal {
     public Trading getTrading() {
         return pk.getTrading();
     }
+
+    public SignalPk getPk() {
+        return pk;
+    }
 }

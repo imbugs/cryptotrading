@@ -135,13 +135,12 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
      */
     public void truncateSignalData() {
         signalDao.truncateSignalData(getTrading());
-
     }
 
     /**
-     * Store trend value
+     * Store a signal. Signals may be duplicate when condition evaluations render the same signal.
      *
-     * @param value the value to be stored
+     * @param value the signlal to be stored
      */
     @Override
     public void storeValue(final Signal value) {
@@ -155,6 +154,6 @@ public class SignalBulkDataHandler extends BulkDataHandler implements BulkDataPr
      * Commit open transactions;
      */
     public void commit() {
-      signalDao.commit();
+        signalDao.commit();
     }
 }

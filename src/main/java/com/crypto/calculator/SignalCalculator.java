@@ -99,11 +99,10 @@ public class SignalCalculator implements Calculator<Signal> {
             tradeRules = this.trading.getTradeRules();
         }
 
-
         if (tradeRules != null && tradeRules.size() > 0) {
 
             // Check all conditions of all the active trade rules
-            tradeRules.forEach((tradeRule) -> {
+            tradeRules.forEach( tradeRule -> {
 
                 final Boolean conditionsTrue = checkConditions(tradeRule);
 

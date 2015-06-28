@@ -66,7 +66,7 @@ public class Trading implements Serializable {
     @JoinColumn (name = "TRADE_PAIR_ID", nullable=false, updatable=false)
     private TradePair tradePair;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name="TRADE_RULES_FOR_TRADING",
             joinColumns={@JoinColumn(name="TRADING_ID", referencedColumnName="ID")},
