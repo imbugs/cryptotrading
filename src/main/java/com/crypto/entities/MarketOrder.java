@@ -48,18 +48,16 @@ public class MarketOrder {
      * @param trading the util
      * @param timestamp the timestamp of the order
      * @param exchangeRate the exchange rate at which to sell or buy
-     * @param fee the fee to be payed
      * @param status the status of the order
      * @param retryCount the number of retries to execute this order
      * @param manuallyCreated indicator if the order was manually created
      */
-    public MarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, MarketOrderStatus status, Integer retryCount, Boolean manuallyCreated) {
+    public MarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, MarketOrderStatus status, Integer retryCount, Boolean manuallyCreated) {
         OrderPk orderPk = new OrderPk(index,trading);
         this.pk = orderPk;
         this.orderReference = orderReference;
         this.timestamp = timestamp;
         this.exchangeRate = exchangeRate;
-        this.fee = fee;
         this.status = status;
         this.retryCount = retryCount;
         this.manuallyCreated = manuallyCreated;

@@ -125,4 +125,8 @@ public class CryptocoinHistory implements Serializable, DataIndexProvider {
     public void setVolume(Long volume) {
         this.volume = volume;
     }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
 }

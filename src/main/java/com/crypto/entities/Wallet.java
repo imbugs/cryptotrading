@@ -99,7 +99,7 @@ public class Wallet implements Serializable{
      * @param maxTradingCoinsPerc
      * @return the maximum number of coins for util.
      */
-    public Float determineMaxTradingCoins ( Float maxTradingCoinsPerc) {
+    public Float determineMaxTradingCoins (final Float maxTradingCoinsPerc) {
 
         return this.coins * maxTradingCoinsPerc/ 100;
     }

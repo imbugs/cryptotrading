@@ -46,7 +46,4 @@ public enum TradeConditionType {
     TradeConditionType(final String messageFormat) {
         this.messageFormat = messageFormat;
     }
-
-    public class TREND_INCREASE {
-    }
 }

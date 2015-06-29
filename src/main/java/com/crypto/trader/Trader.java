@@ -1,13 +1,15 @@
 package com.crypto.trader;
 
-import com.crypto.dao.WalletDao;
-import com.crypto.dao.WithdrawalDao;
+import com.crypto.dao.*;
 import com.crypto.entities.*;
 import com.crypto.enums.LoggingLevel;
+import com.crypto.enums.MarketOrderStatus;
 import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +23,17 @@ public abstract class Trader implements TradeCryptoCoins {
 
     @EJB
     private WalletDao walletDao;
+
+    @EJB
+    private FundDao fundDao;
+
+    @EJB
+    private FundHistoryDao fundHistoryDao;
+
+
+    @EJB
+    private MarketOrderDao marketOrderDao;
+
 
     private Integer sinceIndex;
 
@@ -37,11 +50,11 @@ public abstract class Trader implements TradeCryptoCoins {
      * Constructor.
      *
      * @param sinceIndex the start index to start trading.
-     * @param funds the funds used for trading.
-     * @param wallet the wallet of the trading.
-     * @param trading the trading.
+     * @param funds      the funds used for trading.
+     * @param wallet     the wallet of the trading.
+     * @param trading    the trading.
      */
-    public Trader (final Integer sinceIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
+    public Trader(final Integer sinceIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
         this.sinceIndex = sinceIndex;
         this.funds = funds;
         this.wallet = wallet;
@@ -49,9 +62,107 @@ public abstract class Trader implements TradeCryptoCoins {
         this.logger = logger;
     }
 
+
     /**
-     * Refund the wallet when it's empty.
+     * Create a sell market order
+     * @param cryptocoinHistory the cryptocoin history for which a sell order is to be created.
+     * @return the market sell order.
      */
+    public SellMarketOrder createSellMarketOrder(final CryptocoinHistory cryptocoinHistory) {
+
+        if (this.wallet.getCryptoCoins() == 0F) {
+            return null;
+        }
+
+        Float maxTradingCryptoCoins = this.wallet.determineMaxTradingCryptoCoins(this.trading.getMaxTradingCryptoCoinsPerc());
+        maxTradingCryptoCoins -= getCryptoCoinsOfOpenSellOrders();
+
+        if (maxTradingCryptoCoins <= 0F) {
+            return null;
+        }
+
+        Float amountOfCryptoCoins;
+
+        if (this.wallet.getCryptoCoins() < maxTradingCryptoCoins) {
+            amountOfCryptoCoins = this.wallet.getCryptoCoins();
+        } else {
+            amountOfCryptoCoins = maxTradingCryptoCoins;
+        }
+
+        // Round down to five decimals
+        amountOfCryptoCoins = new Float(Math.floor(amountOfCryptoCoins * 100000)) / 100000F;
+
+        SellMarketOrder sellMarketOrder =
+                new SellMarketOrder(
+                        cryptocoinHistory.getIndex(),
+                        "",    // TODO : Order reference
+                        this.trading,
+                        cryptocoinHistory.getTimestamp(),
+                        cryptocoinHistory.getClose(),
+                        MarketOrderStatus.OPEN,
+                        3,  // TODO  retry count
+                        false,
+                        amountOfCryptoCoins);
+
+        sellMarketOrder.calculateFee();
+
+        return sellMarketOrder;
+    }
+
+
+    public BuyMarketOrder createBuyMarketOrder(final CryptocoinHistory cryptocoinHistory) {
+
+        if (this.wallet.getCoins() == 0F) {
+             // There's nothing to buy, check if the wallet can be refunded.
+
+            refundWallet();
+
+            if (this.wallet.getCoins() == 0F) {
+                // Refunding failed.
+
+                return null;
+            }
+        }
+
+        Float maxTradingCoins = this.wallet.determineMaxTradingCoins(this.trading.getMaxTradingCoinsPerc());
+        maxTradingCoins -= getCoinsOfOpenBuyOrders();
+
+        if (maxTradingCoins <= 0F) {
+            return null;
+        }
+
+        Float amountOfCoins;
+
+        if (this.wallet.getCoins() < maxTradingCoins) {
+            amountOfCoins = this.wallet.getCoins();
+        } else {
+            amountOfCoins = maxTradingCoins;
+        }
+
+        // Round down to two decimals
+        amountOfCoins = new Float(Math.floor(amountOfCoins * 100)) / 100F;
+
+        BuyMarketOrder buyMarketOrder =
+                new BuyMarketOrder(
+                        cryptocoinHistory.getIndex(),
+                        "",    // TODO : Order reference
+                        this.trading,
+                        cryptocoinHistory.getTimestamp(),
+                        cryptocoinHistory.getClose(),
+                        MarketOrderStatus.OPEN,
+                        3,  // TODO  retry count
+                        false,
+                        amountOfCoins);
+
+        buyMarketOrder.calculateFee();
+
+        return buyMarketOrder;
+    }
+
+        /**
+         * Refund the wallet when it's empty.
+         */
+
     protected void refundWallet() {
 
         final Float percentage = this.trading.getRefundPercentage();
@@ -62,33 +173,32 @@ public abstract class Trader implements TradeCryptoCoins {
         final Float walletCryptoCoins = (percentage / 100) * fundCryptoCoins;
 
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null,"Availiable fund coins: " + fundCoins);
-            logger.LOG(trading, LoggingLevel.DEBUG, null,"Availiable fund cryptocoins: " + fundCryptoCoins);
-            logger.LOG(trading, LoggingLevel.DEBUG, null,"Wallet coins : " + wallet.getCoins());
-            logger.LOG(trading, LoggingLevel.DEBUG, null,"Wallet crypto coins : " + wallet.getCryptoCoins());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund coins: " + fundCoins);
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund cryptocoins: " + fundCryptoCoins);
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet coins : " + wallet.getCoins());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet crypto coins : " + wallet.getCryptoCoins());
         }
 
         Float coinsToBeWithdrawn = walletCoins - alreadyWithdrawn(this.trading.getTradePair().getCurrency());
-        coinsToBeWithdrawn = new Float (Math.floor((coinsToBeWithdrawn * 100) /100));
+        coinsToBeWithdrawn = new Float(Math.floor((coinsToBeWithdrawn * 100)) / 100);
 
         if (coinsToBeWithdrawn > 0) {
-           // Add the funding to the wallet
-           this.wallet.addCoins(new Float(coinsToBeWithdrawn));
+            // Add the funding to the wallet
+            this.wallet.addCoins(new Float(coinsToBeWithdrawn));
 
-           // Register the withdrawal from the funding.
-           withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
+            // Register the withdrawal from the funding.
+            withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
 
-           if (isLoggingEnabled()) {
-               logger.LOG(trading, LoggingLevel.DEBUG, null, "'Refund coins: " + walletCoins);
-           }
-        }
-        else {
+            if (isLoggingEnabled()) {
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "'Refund coins: " + walletCoins);
+            }
+        } else {
             logger.LOG(trading, LoggingLevel.DEBUG, null, "'No withdrawal of coins possible");
         }
 
 
         Float cryptoCoinsToBeWithdrawn = walletCryptoCoins - alreadyWithdrawn(this.trading.getTradePair().getCryptoCurrency());
-        cryptoCoinsToBeWithdrawn = new Float (Math.floor((cryptoCoinsToBeWithdrawn * 100) /100));
+        cryptoCoinsToBeWithdrawn = new Float(Math.floor((cryptoCoinsToBeWithdrawn * 10000)) / 10000);
 
         if (cryptoCoinsToBeWithdrawn > 0) {
             // Add the funding to the wallet
@@ -98,18 +208,131 @@ public abstract class Trader implements TradeCryptoCoins {
             withdraw(this.wallet.getCryptoCurrency(), cryptoCoinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "'Refund crypto coins: " + walletCryptoCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund crypto coins: " + walletCryptoCoins);
             }
-        }
-        else {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "'No withdrawal of crypto coins possible");
+        } else {
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "No withdrawal of crypto coins possible");
         }
 
         saveWallet();
     }
 
     /**
+     * Get total number of coins currently in open buy orders.
+     *
+     * @return the amount of coins in orders.
+     */
+    public Float getCoinsOfOpenBuyOrders() {
+
+        Float total = 0F;
+
+        for (final MarketOrder order : (List<MarketOrder>) marketOrderDao.getOpenOrders(this.trading).stream().filter((o) -> o instanceof BuyMarketOrder)) {
+            total += ((BuyMarketOrder) order).getCoins();
+        }
+
+        return total;
+
+    }
+
+
+    /**
+     * Get the total number of cryptocoins currently in open sell orders.
+     *
+     * @return the amount of crypto coins in orders.
+     */
+    public Float getCryptoCoinsOfOpenSellOrders() {
+
+        Float total = 0F;
+
+        for (final MarketOrder order : (List<MarketOrder>) marketOrderDao.getOpenOrders(this.trading).stream().filter((o) -> o instanceof SellMarketOrder)) {
+            total += ((SellMarketOrder) order).getCryptoCoins();
+        }
+        return total;
+    }
+
+    /**
+     * Process all withdrawals and subtract the witdrawal from the fund
+     * After updating the funds, remove the withdrawals, to allow for new withdrawals
+     */
+    public void processWithdrawals() {
+
+        if (isLoggingEnabled()) {
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Reset withdrawals.");
+        }
+
+        withdrawalDao.getAll().forEach((withdrawal) -> {
+                    writeOffFunding(withdrawal);
+                    withdrawalDao.remove(withdrawal);
+                }
+        );
+    }
+
+
+    /**
+     * Restore earned coins to funding.
+     *
+     * @param coins the coins earned.
+     */
+    protected void restoreToFund(final Float coins) {
+
+        if (isLoggingEnabled()) {
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Restore coins : " + coins.toString());
+        }
+
+        Fund fund = funds.get(trading.getTradePair().getCurrency().getCode());
+        fund.addCoins(coins);
+
+        saveFund(fund);
+    }
+
+
+    /**
+     * Write off the witdrawal from the funding.
+     *
+     * @param withdrawal the withdrawal to be written off.
+     */
+    public void writeOffFunding(final Withdrawal withdrawal) {
+
+        final Iterator it = this.funds.entrySet().iterator();
+
+        while (it.hasNext()) {
+
+            Map.Entry entry = (Map.Entry) it.next();
+
+            if (entry.getKey().equals(withdrawal.getCurrency().getCode())) {
+
+                final Fund fund = ((Fund) entry.getValue());
+                fund.subtractCoins(withdrawal.getCoins());
+
+                saveFund(fund);
+            }
+        }
+    }
+
+
+    /**
+     * Persist a fund and it's history.
+     *
+     * @param fund the fund to be persisted.
+     */
+    public void saveFund(final Fund fund) {
+        if (fund.getCoins() < 0) {
+            fund.setCoins(0F);
+        }
+
+        fundDao.perist(fund);
+
+        final FundHistory fundHistory = new FundHistory(this.trading, fund.getCurrency(), fund.getCoins());
+
+        fundHistoryDao.persist(fundHistory);
+    }
+
+
+    /**
+
+    /**
      * Get funding from the available funds.
+     *
      * @param currency the currency seekd as a funding
      * @return the available amount of currency, null when no funding is found.
      */
@@ -129,29 +352,29 @@ public abstract class Trader implements TradeCryptoCoins {
      * Register a Withdrawal of currency from the funding.
      *
      * @param currency the currency.
-     * @param coins the amout of coins withdrawn.
+     * @param coins    the amout of coins withdrawn.
      */
-    public void withdraw(final Currency currency, Float coins) {
-       Withdrawal withdrawal = withdrawalDao.get(trading, currency);
+    public void withdraw(final Currency currency, final Float coins) {
+        Withdrawal withdrawal = withdrawalDao.get(trading, currency);
 
-       if (withdrawal == null) {
-           withdrawal = new Withdrawal(trading, coins, currency);
-           withdrawalDao.persist(withdrawal);
-       }
-       else {
-           // Add the addition withdrawal
-           withdrawal.addCoins(coins);
-           withdrawalDao.update(withdrawal);
-       }
+        if (withdrawal == null) {
+            withdrawal = new Withdrawal(trading, coins, currency);
+            withdrawalDao.persist(withdrawal);
+        } else {
+            // Add the addition withdrawal
+            withdrawal.addCoins(coins);
+            withdrawalDao.update(withdrawal);
+        }
     }
 
 
     /**
      * Get the amount of currency already withdrawn from the funding.
+     *
      * @param currency the currency
      * @return the amount of currency already withdrawn.
      */
-    private Float alreadyWithdrawn (final Currency currency) {
+    private Float alreadyWithdrawn(final Currency currency) {
 
         final Withdrawal withdrawal = withdrawalDao.get(this.trading, currency);
 
@@ -164,9 +387,8 @@ public abstract class Trader implements TradeCryptoCoins {
     /**
      * Save the wallet.
      */
-    private void saveWallet () {
+    private void saveWallet() {
 
         walletDao.persist(this.wallet);
-
     }
 }

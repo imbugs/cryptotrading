@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import java.sql.Timestamp;
 
 /**
+ * A buy market order, buying crypto coins with coins.
+ *
  * Created by jan on 19-4-15.
  */
 @Entity
@@ -18,8 +20,8 @@ public class BuyMarketOrder extends MarketOrder {
     @Column(name="COINS")
     private Float coins;
 
-    public BuyMarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, Float fee, MarketOrderStatus status, Integer retryCount, Boolean manuallyCreated, Float coins) {
-        super(index, orderReference, trading, timestamp, exchangeRate, fee, status, retryCount, manuallyCreated);
+    public BuyMarketOrder(Integer index, String orderReference, Trading trading, Timestamp timestamp, Float exchangeRate, MarketOrderStatus status, Integer retryCount, Boolean manuallyCreated, Float coins) {
+        super(index, orderReference, trading, timestamp, exchangeRate, status, retryCount, manuallyCreated);
         this.coins = coins;
     }
 
@@ -39,6 +41,11 @@ public class BuyMarketOrder extends MarketOrder {
         setFee(fee);
     }
 
+    /**
+     * Get the number of crypto coins that were bought with the given coins.
+     *
+     * @return the number of cryptocoins bought.
+     */
     public Float getCryptoCoins () {
 
         return (this.getCoins() - getFee()) / getExchangeRate();
