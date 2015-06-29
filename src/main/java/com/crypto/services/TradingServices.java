@@ -36,7 +36,7 @@ public class TradingServices {
      * Recalculates all the trendlines and signals of a util.
      */
     @POST
-    @Path("/recalculate/")
+    @Path("/recalculateInParallel/")
     public void recalculate() throws ExecutionException, InterruptedException {
 
         final Trading trading = tradingDao.get(1);

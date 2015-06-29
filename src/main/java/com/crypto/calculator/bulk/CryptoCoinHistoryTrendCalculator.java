@@ -178,9 +178,9 @@ public class CryptoCoinHistoryTrendCalculator {
 
     /**
      * Calculate all the trend values for all available trends: MA, EMA and SMA trends, next calculate Macd's and
-     * finally calculate the signals.
+     * finally calculate the signals. Calculation performed in parallel.
      */
-    public void recalculate() throws ExecutionException, InterruptedException {
+    public void recalculateInParallel() throws ExecutionException, InterruptedException {
 
         // Truncate all data before recalculating
         this.dataProvider.truncateTrendValueData();
@@ -191,7 +191,7 @@ public class CryptoCoinHistoryTrendCalculator {
 
         final CompletableFuture emaCalculation = CompletableFuture.runAsync(this::calculateExponentialMovingAverageTrends, this.executor);
 
-             // Start Sma calculation after completion of ma calucation, ema calculation
+        // Start Sma calculation after completion of ma calucation, ema calculation
         final CompletableFuture smaCalculation = CompletableFuture.allOf(maCalculation, emaCalculation)
                 .thenRunAsync(this::calculateSmoothingMovingAverageTrends);
 
@@ -202,5 +202,23 @@ public class CryptoCoinHistoryTrendCalculator {
         // Start signal calculation after completion of macd calculation and sma calculation.
         CompletableFuture.allOf(smaCalculation, macdCalculation)
                 .thenRunAsync(this::calculateSignals, this.executor);
+    }
+
+    /**
+     * Calculate all the trend values for all available trends: MA, EMA and SMA trends, next calculate Macd's and
+     * finally calculate the signals. Calculation performed sequentially..
+     */
+    public void recalculate() {
+
+        // Truncate all data before recalculating
+        this.dataProvider.truncateTrendValueData();
+        this.signalBulkDataHandler.truncateSignalData();
+
+        // Run in parallel, ma calculation, ema calculation
+        calculateMovingAverageTrends();
+        calculateExponentialMovingAverageTrends();
+        calculateSmoothingMovingAverageTrends();
+        calculateMacdTrends();
+        calculateSignals();
     }
 }

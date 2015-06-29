@@ -25,7 +25,7 @@ public class Utils {
     public void calculateTrendLines(final Trading trading) throws ExecutionException, InterruptedException {
 
         cryptoCoinHistoryTrendCalculator.init(trading);
-        cryptoCoinHistoryTrendCalculator.recalculate();
+        cryptoCoinHistoryTrendCalculator.recalculateInParallel();
     }
 }
 
