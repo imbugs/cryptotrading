@@ -214,7 +214,7 @@ public class CryptoCoinHistoryTrendCalculator {
         this.dataProvider.truncateTrendValueData();
         this.signalBulkDataHandler.truncateSignalData();
 
-        // Run in parallel, ma calculation, ema calculation
+        // Run sequentially
         calculateMovingAverageTrends();
         calculateExponentialMovingAverageTrends();
         calculateSmoothingMovingAverageTrends();

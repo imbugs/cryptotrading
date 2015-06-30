@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by jan on 24-6-15.
+ * Created by Jan Wicherink on 24-6-15.
  */
 @Stateful
 public abstract class Trader implements TradeCryptoCoins {
@@ -30,10 +30,8 @@ public abstract class Trader implements TradeCryptoCoins {
     @EJB
     private FundHistoryDao fundHistoryDao;
 
-
     @EJB
     private MarketOrderDao marketOrderDao;
-
 
     private Integer sinceIndex;
 
@@ -45,6 +43,14 @@ public abstract class Trader implements TradeCryptoCoins {
     private Trading trading;
 
     private Logger logger;
+
+
+    /**
+     * Default constructor.
+     */
+    public Trader () {
+
+    }
 
     /**
      * Constructor.
