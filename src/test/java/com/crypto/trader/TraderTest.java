@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by Jan Wicherink on 29-6-15.
@@ -116,6 +117,46 @@ public class TraderTest {
         assertEquals(22.20F, sellMarketOrder.getFee(), 0.01F);
     }
 
+
+    /**
+     * Test creation of sell market order.
+     */
+    @Test
+    public void testCreateSellMarketOrderWithMaxCryptoCoinsPercentageOfTenPercent() {
+
+        // Arrange
+        this.trading.setMaxTradingCryptoCoinsPerc(10F);
+
+        // Act
+        SellMarketOrder sellMarketOrder = trader.createSellMarketOrder(cryptocoinHistory);
+
+        //Assert
+        assertNotNull(sellMarketOrder);
+
+        assertEquals(22.20F, sellMarketOrder.getExchangeRate(), 0.01F);
+        assertEquals(10F, sellMarketOrder.getCryptoCoins(), 0.01F);
+        assertEquals(219.78F, sellMarketOrder.getCoins(), 0.01F);
+        assertEquals(2.220F, sellMarketOrder.getFee(), 0.01F);
+    }
+
+
+    /**
+     * Test creation of sell market order with no cryptocoins available
+     */
+    @Test
+    public void testCreateSellMarketOrderWithNoCryptoCoins() {
+
+        // Arrange
+        this.trading.setMaxTradingCryptoCoinsPerc(0F);
+
+        // Act
+        SellMarketOrder sellMarketOrder = trader.createSellMarketOrder(cryptocoinHistory);
+
+        //Assert
+        assertNull(sellMarketOrder);
+    }
+
+
     /**
      * Test creation of buy market order.
      */
@@ -123,6 +164,7 @@ public class TraderTest {
     public void testCreateBuyMarketOrder() {
 
         // Arrange
+
         // Act
         BuyMarketOrder buyMarketOrder = trader.createBuyMarketOrder(cryptocoinHistory);
 
@@ -131,9 +173,48 @@ public class TraderTest {
 
         assertEquals(22.20F, buyMarketOrder.getExchangeRate(), 0.01F);
         assertEquals(100F, buyMarketOrder.getCoins(), 0.01F);
-        assertEquals(4.4594F, buyMarketOrder.getCryptoCoins(), 0.01F);
+        assertEquals(4.4594F, buyMarketOrder.getCryptoCoins(), 0.0001F);
         assertEquals(1F, buyMarketOrder.getFee(), 0.01F);
     }
+
+
+    /**
+     * Test creation of buy market order with only 10% of coins.
+     */
+    @Test
+    public void testCreateBuyMarketOrderWithMaxCoinsPercentageOfTenPercent() {
+
+        // Arrange
+        this.trading.setMaxTradingCoinsPerc(10F);
+
+        // Act
+        BuyMarketOrder buyMarketOrder = trader.createBuyMarketOrder(cryptocoinHistory);
+
+        //Assert
+        assertNotNull(buyMarketOrder);
+
+        assertEquals(22.20F, buyMarketOrder.getExchangeRate(), 0.01F);
+        assertEquals(10F, buyMarketOrder.getCoins(), 0.01F);
+        assertEquals(0.44594F, buyMarketOrder.getCryptoCoins(), 0.0001F);
+        assertEquals(0.1F, buyMarketOrder.getFee(), 0.01F);
+    }
+
+    /**
+     * Test creation of buy market order with no coins available.
+     */
+    @Test
+    public void testCreateBuyMarketOrderWithNoCoins() {
+
+        // Arrange
+        this.trading.setMaxTradingCoinsPerc(0F);
+
+        // Act
+        BuyMarketOrder buyMarketOrder = trader.createBuyMarketOrder(cryptocoinHistory);
+
+        //Assert
+        assertNull(buyMarketOrder);
+    }
+
 }
 
 
