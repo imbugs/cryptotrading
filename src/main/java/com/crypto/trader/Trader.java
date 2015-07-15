@@ -11,12 +11,13 @@ import javax.ejb.Stateful;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jan Wicherink on 24-6-15.
  */
 @Stateful
-public abstract class Trader implements TradeCryptoCoins {
+public class Trader {
 
     @EJB
     private WithdrawalDao withdrawalDao;
@@ -44,13 +45,13 @@ public abstract class Trader implements TradeCryptoCoins {
 
     private Logger logger;
 
-
     /**
      * Default constructor.
      */
-    public Trader () {
+    public Trader() {
 
     }
+
 
     /**
      * Constructor.
@@ -232,7 +233,7 @@ public abstract class Trader implements TradeCryptoCoins {
 
         Float total = 0F;
 
-        for (final MarketOrder order : (List<MarketOrder>) marketOrderDao.getOpenOrders(this.trading).stream().filter((o) -> o instanceof BuyMarketOrder)) {
+        for (final MarketOrder order : (List<MarketOrder>) marketOrderDao.getOpenOrders(this.trading).stream().filter((o) -> o instanceof BuyMarketOrder).collect(Collectors.toList())) {
             total += ((BuyMarketOrder) order).getCoins();
         }
 
@@ -250,7 +251,7 @@ public abstract class Trader implements TradeCryptoCoins {
 
         Float total = 0F;
 
-        for (final MarketOrder order : (List<MarketOrder>) marketOrderDao.getOpenOrders(this.trading).stream().filter((o) -> o instanceof SellMarketOrder)) {
+        for (final MarketOrder order : (List<MarketOrder>) marketOrderDao.getOpenOrders(this.trading).stream().filter((o) -> o instanceof SellMarketOrder).collect(Collectors.toList())) {
             total += ((SellMarketOrder) order).getCryptoCoins();
         }
         return total;
@@ -396,5 +397,33 @@ public abstract class Trader implements TradeCryptoCoins {
     private void saveWallet() {
 
         walletDao.persist(this.wallet);
+    }
+
+    public Boolean badSellTrade(CryptocoinHistory cryptocoinHistory) {
+        return trading.getCheckBadSell();
+    }
+
+    public Boolean badBuyTrade(CryptocoinHistory cryptocoinHistory) {
+        return trading.getCheckBadBuy();
+    }
+
+    public Boolean isLoggingEnabled() {
+        return trading.getLogging();
+    }
+
+    public void setSinceIndex(Integer sinceIndex) {
+        this.sinceIndex = sinceIndex;
+    }
+
+    public void setFunds(Map<Currency, Fund> funds) {
+        this.funds = funds;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public void setTrading(Trading trading) {
+        this.trading = trading;
     }
 }

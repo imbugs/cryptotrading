@@ -11,6 +11,7 @@ import com.crypto.entities.Trading;
 import com.crypto.entities.pkey.WithdrawalPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.MarketTrend;
+import com.crypto.trader.TradeCryptoCoins;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -58,6 +59,7 @@ public class SignalDaoTest {
                 .addPackage(DataPersister.class.getPackage())
                 .addPackage(SignalBulkDataHandler.class.getPackage())
                 .addPackage(DataPersister.class.getPackage())
+                .addPackage(TradeCryptoCoins.class.getPackage())
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
     }

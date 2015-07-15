@@ -33,7 +33,7 @@ public class SellMarketOrder extends MarketOrder {
 
         final Float feePercentage = this.getPk().getTrading().getTradePair().getTransactionFee();
 
-        final Float value = getExchangeRate() * this.getCryptoCoins() - getFee();
+        final Float value = getExchangeRate() * this.getCryptoCoins();
 
         final Float fee = value * feePercentage / 100;
 
