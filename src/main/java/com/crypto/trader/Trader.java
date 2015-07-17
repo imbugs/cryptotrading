@@ -34,6 +34,7 @@ public class Trader {
     @EJB
     private MarketOrderDao marketOrderDao;
 
+
     private Integer sinceIndex;
 
     // key value pairs of funds, key = currency code
@@ -72,6 +73,7 @@ public class Trader {
 
     /**
      * Create a sell market order
+     *
      * @param cryptocoinHistory the cryptocoin history for which a sell order is to be created.
      * @return the market sell order.
      */
@@ -120,7 +122,7 @@ public class Trader {
     public BuyMarketOrder createBuyMarketOrder(final CryptocoinHistory cryptocoinHistory) {
 
         if (this.wallet.getCoins() == 0F) {
-             // There's nothing to buy, check if the wallet can be refunded.
+            // There's nothing to buy, check if the wallet can be refunded.
 
             refundWallet();
 
@@ -166,9 +168,9 @@ public class Trader {
         return buyMarketOrder;
     }
 
-        /**
-         * Refund the wallet when it's empty.
-         */
+    /**
+     * Refund the wallet when it's empty.
+     */
 
     protected void refundWallet() {
 
@@ -336,8 +338,7 @@ public class Trader {
 
 
     /**
-
-    /**
+     * /**
      * Get funding from the available funds.
      *
      * @param currency the currency seekd as a funding
@@ -399,6 +400,67 @@ public class Trader {
         walletDao.persist(this.wallet);
     }
 
+
+    /**
+     * Update the wallet afer a market order has been created
+     *
+     * @param marketOrder the market order.
+     */
+    protected void updateWallet(final MarketOrder marketOrder) {
+
+        String message;
+
+        if (marketOrder != null) {
+
+            Float coins = getWallet().getCoins();
+            Float cryptoCoins = getWallet().getCryptoCoins();
+
+            if (getLogging()) {
+                message = "Update wallet current cryptocoins:" + cryptoCoins;
+                logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
+            }
+
+            if (marketOrder instanceof SellMarketOrder) {
+                // Crypto coins taken from wallet
+
+                cryptoCoins = cryptoCoins - ((SellMarketOrder) marketOrder).getCryptoCoins();
+                coins = 0F;
+
+                if (getLogging()) {
+                    message = "Subtracted cryptocoins :" + ((SellMarketOrder) marketOrder).getCryptoCoins();
+                    logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
+
+                    message = "New wallet cryptocoins :" + cryptoCoins;
+                    logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
+
+                    // Coins restored to fund and withdrawals removed from fund
+                    restoreToFund( ((SellMarketOrder) marketOrder).getCoins());
+                    processWithdrawals();
+                }
+            }
+
+
+            if (marketOrder instanceof BuyMarketOrder) {
+                // Crypto coins added to wallet
+
+                cryptoCoins = cryptoCoins + ((BuyMarketOrder) marketOrder).getCryptoCoins();
+                coins = coins - ((BuyMarketOrder) marketOrder).getCoins();
+
+                if (getLogging()) {
+                    message = "Added cryptocoins :" + ((BuyMarketOrder) marketOrder).getCryptoCoins();
+                    logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
+
+                    message = "New wallet cryptocoins :" + cryptoCoins;
+                    logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
+                }
+            }
+
+            getWallet().setCoins(coins);
+            getWallet().setCryptoCoins(cryptoCoins);
+            getWallet().setExchangeRate(marketOrder.getExchangeRate());
+        }
+    }
+
     public Boolean badSellTrade(CryptocoinHistory cryptocoinHistory) {
         return trading.getCheckBadSell();
     }
@@ -425,5 +487,41 @@ public class Trader {
 
     public void setTrading(Trading trading) {
         this.trading = trading;
+    }
+
+    public WithdrawalDao getWithdrawalDao() {
+        return withdrawalDao;
+    }
+
+    public WalletDao getWalletDao() {
+        return walletDao;
+    }
+
+    public FundDao getFundDao() {
+        return fundDao;
+    }
+
+    public FundHistoryDao getFundHistoryDao() {
+        return fundHistoryDao;
+    }
+
+    public MarketOrderDao getMarketOrderDao() {
+        return marketOrderDao;
+    }
+
+    public Trading getTrading() {
+        return trading;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public Integer getSinceIndex() {
+        return sinceIndex;
+    }
+
+    public Boolean getLogging() {
+        return getTrading().getLogging();
     }
 }

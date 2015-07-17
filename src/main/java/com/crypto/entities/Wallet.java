@@ -136,4 +136,16 @@ public class Wallet implements Serializable{
     public Float getExchangeRate() {
         return exchangeRate;
     }
+
+    public void setCoins(Float coins) {
+        this.coins = coins;
+    }
+
+    public void setCryptoCoins(Float cryptoCoins) {
+        this.cryptoCoins = cryptoCoins;
+    }
+
+    public void setExchangeRate(Float exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
 }

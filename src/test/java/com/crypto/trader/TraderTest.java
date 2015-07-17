@@ -177,7 +177,6 @@ public class TraderTest {
         assertEquals(1F, buyMarketOrder.getFee(), 0.01F);
     }
 
-
     /**
      * Test creation of buy market order with only 10% of coins.
      */
@@ -216,5 +215,3 @@ public class TraderTest {
     }
 
 }
-
-
