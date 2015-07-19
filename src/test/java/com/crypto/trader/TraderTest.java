@@ -11,6 +11,7 @@ import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.WithdrawalPk;
 import com.crypto.enums.LoggingLevel;
+import com.crypto.enums.MarketOrderStatus;
 import com.crypto.util.Logger;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -27,14 +28,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by Jan Wicherink on 29-6-15.
@@ -45,7 +46,7 @@ import static org.junit.Assert.assertNull;
 @CleanupUsingScript("sql/cleanup.sql")
 public class TraderTest {
 
-    @Inject
+    @EJB
     private Trader trader;
 
     @Deployment
@@ -75,6 +76,7 @@ public class TraderTest {
     TradePair tradePair;
     Trading trading;
     Wallet wallet;
+    Map<Currency, Fund> funds;
     CryptocoinHistory cryptocoinHistory;
 
     @Before
@@ -88,8 +90,19 @@ public class TraderTest {
 
         wallet = new Wallet(trading, 100F, 100F, currency, cryptoCurrency, 100F);
 
+        Fund currencyFund = new Fund(tradePair, 1000F, currency);
+        Fund cryptoCurrencyFund = new Fund(tradePair, 1000F, cryptoCurrency);
+
+        funds = new HashMap<>();
+        funds.put(currency, currencyFund);
+        funds.put(cryptoCurrency, cryptoCurrencyFund);
+
+        trader.setFunds(funds);
         trader.setWallet(wallet);
         trader.setTrading(trading);
+
+        Logger logger = new Logger();
+        trader.setLogger(logger);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
@@ -214,4 +227,25 @@ public class TraderTest {
         assertNull(buyMarketOrder);
     }
 
+
+    @Test
+    public void testUpdateWallet() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
+        Timestamp timestamp = Timestamp.valueOf(date);
+
+        SellMarketOrder sellOrder = new SellMarketOrder(100, "Out order", this.trading, timestamp, 20F, MarketOrderStatus.OPEN, 2, false, 78F);
+        sellOrder.calculateFee();
+
+        assertEquals(15.6F, sellOrder.getFee(), 0.01F);
+        assertEquals(100F, wallet.getCoins(), 0.01F);
+        assertEquals(100F, wallet.getCryptoCoins(), 0.01F);
+
+        trader.updateWallet(sellOrder);
+
+        // Profit must have been restored to funds.
+        assertEquals(0F, wallet.getCoins(), 0.01F);
+        assertEquals(22F, wallet.getCryptoCoins(), 0.01F);
+    }
 }

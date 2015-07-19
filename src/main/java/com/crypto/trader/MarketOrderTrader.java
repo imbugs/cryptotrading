@@ -31,6 +31,14 @@ public class MarketOrderTrader extends Trader {
 
 
     /**
+     * Default constructor
+     */
+    public MarketOrderTrader () {
+        super();
+    }
+
+
+    /**
      * Constructor
      *
      * @param sinceIndex since index for trading

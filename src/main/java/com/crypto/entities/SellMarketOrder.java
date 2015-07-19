@@ -46,9 +46,8 @@ public class SellMarketOrder extends MarketOrder {
      */
     public Float getCoins() {
 
-        return (this.getCryptoCoins() * getExchangeRate()) - getFee();
+        return (this.getCryptoCoins() * getExchangeRate() - getFee());
     }
-
 
     public Float getCryptoCoins () {
         return this.cryptoCoins;

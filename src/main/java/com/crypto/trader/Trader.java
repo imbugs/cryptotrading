@@ -34,7 +34,6 @@ public class Trader {
     @EJB
     private MarketOrderDao marketOrderDao;
 
-
     private Integer sinceIndex;
 
     // key value pairs of funds, key = currency code
@@ -288,7 +287,7 @@ public class Trader {
             logger.LOG(trading, LoggingLevel.DEBUG, null, "Restore coins : " + coins.toString());
         }
 
-        Fund fund = funds.get(trading.getTradePair().getCurrency().getCode());
+        Fund fund = funds.get(trading.getTradePair().getCurrency());
         fund.addCoins(coins);
 
         saveFund(fund);
@@ -406,7 +405,7 @@ public class Trader {
      *
      * @param marketOrder the market order.
      */
-    protected void updateWallet(final MarketOrder marketOrder) {
+    public void updateWallet(final MarketOrder marketOrder) {
 
         String message;
 
@@ -434,7 +433,7 @@ public class Trader {
                     logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
 
                     // Coins restored to fund and withdrawals removed from fund
-                    restoreToFund( ((SellMarketOrder) marketOrder).getCoins());
+                    restoreToFund(((SellMarketOrder) marketOrder).getCoins());
                     processWithdrawals();
                 }
             }
@@ -523,5 +522,9 @@ public class Trader {
 
     public Boolean getLogging() {
         return getTrading().getLogging();
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
     }
 }
