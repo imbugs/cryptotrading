@@ -242,10 +242,16 @@ public class TraderTest {
         assertEquals(100F, wallet.getCoins(), 0.01F);
         assertEquals(100F, wallet.getCryptoCoins(), 0.01F);
 
+        assertEquals(1000F, trader.getFunds().get(currency).getCoins(), 0.01F);
+        assertEquals(1000F, trader.getFunds().get(cryptoCurrency).getCoins(), 0.01F);
+
         trader.updateWallet(sellOrder);
 
         // Profit must have been restored to funds.
         assertEquals(0F, wallet.getCoins(), 0.01F);
         assertEquals(22F, wallet.getCryptoCoins(), 0.01F);
+
+        assertEquals(2544.4F, trader.getFunds().get(currency).getCoins(), 0.01F);
+        assertEquals(1000F, trader.getFunds().get(cryptoCurrency).getCoins(), 0.01F);
     }
 }

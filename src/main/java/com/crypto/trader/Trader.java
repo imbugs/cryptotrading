@@ -61,6 +61,8 @@ public class Trader {
      * @param wallet     the wallet of the trading.
      * @param trading    the trading.
      */
+
+
     public Trader(final Integer sinceIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
         this.sinceIndex = sinceIndex;
         this.funds = funds;
@@ -526,5 +528,9 @@ public class Trader {
 
     public void setLogger(Logger logger) {
         this.logger = logger;
+    }
+
+    public Map<Currency, Fund> getFunds() {
+        return funds;
     }
 }

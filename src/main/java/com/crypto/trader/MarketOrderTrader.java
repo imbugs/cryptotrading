@@ -33,7 +33,7 @@ public class MarketOrderTrader extends Trader {
     /**
      * Default constructor
      */
-    public MarketOrderTrader () {
+    public MarketOrderTrader() {
         super();
     }
 
@@ -78,40 +78,42 @@ public class MarketOrderTrader extends Trader {
      */
     public Boolean badSellTrade(final CryptocoinHistory cryptocoinHistory) {
 
-        final MarketOrder marketOrder = getMarketOrderDao().getLastBuy(cryptocoinHistory.getIndex(), getTrading());
+        if (getTrading().getCheckBadSell()) {
 
-        if (marketOrder != null) {
+            final MarketOrder marketOrder = getMarketOrderDao().getLastBuy(cryptocoinHistory.getIndex(), getTrading());
 
-            final Float lastExchangeRate = marketOrder.getExchangeRate();
-            Float profitPercentage = getTrading().getMinProfitPercentage();
+            if (marketOrder != null) {
 
-            if (profitPercentage > 0) {
+                final Float lastExchangeRate = marketOrder.getExchangeRate();
+                Float minProfitPercentage = getTrading().getMinProfitPercentage();
 
-                if (getTrading().getCheckBadSellWallet()) {
-                    // Bad sell when the total wallet history value decreases
+                if (minProfitPercentage > 0) {
 
-                    return walletValueDecreases(cryptocoinHistory);
-                } else {
-                    // Bad sell when the profit is less that the profit percentage based on selling against current exchange rate
+                    if (getTrading().getCheckBadSellWallet()) {
+                        // Bad sell when the total wallet history value decreases
 
-                    profitPercentage += getTrading().getTradePair().getTransactionFee();
+                        return walletValueDecreases(cryptocoinHistory);
+                    } else {
+                        // Bad sell when the profit is less that the profit percentage based on selling against current exchange rate
 
-                    Float minExchangeRate = lastExchangeRate * (100 + profitPercentage) / 100;
+                        minProfitPercentage += getTrading().getTradePair().getTransactionFee();
 
-                    if (cryptocoinHistory.getClose() <= minExchangeRate) {
-                        return true;
+                        Float minExchangeRate = lastExchangeRate * (100 + minProfitPercentage) / 100;
+
+                        if (cryptocoinHistory.getClose() <= minExchangeRate) {
+                            return true;
+                        }
                     }
-                }
-            } else {
-                if (getTrading().getCheckBadSellWallet()) {
+                } else {
+                    if (getTrading().getCheckBadSellWallet()) {
 
-                    return walletValueDecreases(cryptocoinHistory);
-                }
-                else {
-                    final Float effectiveRate = (100- getTrading().getTradePair().getTransactionFee()) / 100 * cryptocoinHistory.getClose();
+                        return walletValueDecreases(cryptocoinHistory);
+                    } else {
+                        final Float effectiveRate = (100 - getTrading().getTradePair().getTransactionFee()) / 100 * cryptocoinHistory.getClose();
 
-                    if (effectiveRate <= lastExchangeRate) {
-                        return true;
+                        if (effectiveRate <= lastExchangeRate) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -122,24 +124,26 @@ public class MarketOrderTrader extends Trader {
 
     /**
      * Checks if a buy is a bad buy, this is the case when the current rate is higher than the last sell.
+     *
      * @param cryptocoinHistory
      * @return
      */
-    public Boolean badBuyTrade (CryptocoinHistory cryptocoinHistory) {
+    public Boolean badBuyTrade(CryptocoinHistory cryptocoinHistory) {
 
-        final MarketOrder marketOrder= getMarketOrderDao().getLastSell(cryptocoinHistory.getIndex(), getTrading());
+        if (getTrading().getCheckBadBuy()) {
 
-        if (marketOrder != null) {
+            final MarketOrder marketOrder = getMarketOrderDao().getLastSell(cryptocoinHistory.getIndex(), getTrading());
 
+            if (marketOrder != null) {
 
-            final Float lastExchangeRate = marketOrder.getExchangeRate();
-            final Float effectiveRate = (100 + getTrading().getTradePair().getTransactionFee()) /100 * cryptocoinHistory.getClose();
+                final Float lastExchangeRate = marketOrder.getExchangeRate();
+                final Float effectiveRate = (100 + getTrading().getTradePair().getTransactionFee()) / 100 * cryptocoinHistory.getClose();
 
-            if (effectiveRate > lastExchangeRate) {
-                return true;
+                if (effectiveRate > lastExchangeRate) {
+                    return true;
+                }
             }
         }
-
         return false;
     }
 
@@ -150,7 +154,7 @@ public class MarketOrderTrader extends Trader {
      * @param cryptocoinHistory the current cryptocoin history
      * @return the market order.
      */
-    private MarketOrder checkCurrentSignalForOrderCreation (CryptocoinHistory cryptocoinHistory) {
+    private MarketOrder checkCurrentSignalForOrderCreation(CryptocoinHistory cryptocoinHistory) {
 
         MarketOrder marketOrder = null;
 
@@ -158,26 +162,28 @@ public class MarketOrderTrader extends Trader {
 
         for (TradeRule tradeRule : getTrading().getTradeRules()) {
 
-            final Signal signal = signalDao.get(index,tradeRule, getTrading());
+            final Signal signal = signalDao.get(index, tradeRule, getTrading());
 
             if (signal != null && signal.getTradeSignal().equals(MarketTrend.BULL)) {
-                if (! badBuyTrade(cryptocoinHistory)) {
+                if (!badBuyTrade(cryptocoinHistory)) {
                     marketOrder = createBuyMarketOrder(cryptocoinHistory);
                 }
             }
 
             if (signal != null && signal.getTradeSignal().equals(MarketTrend.BEAR)) {
-                if (! badBuyTrade(cryptocoinHistory)) {
+                if (!badBuyTrade(cryptocoinHistory)) {
                     marketOrder = createSellMarketOrder(cryptocoinHistory);
                 }
             }
-        };
+        }
+        ;
         return marketOrder;
     }
 
 
     /**
      * Trade at given crypto currency index
+     *
      * @param cryptocoinHistory the current cryptocoin history
      */
     public void tradeAtIndex(final CryptocoinHistory cryptocoinHistory) {
@@ -187,10 +193,10 @@ public class MarketOrderTrader extends Trader {
         if (marketOrder != null) {
 
             if (marketOrder instanceof BuyMarketOrder) {
-               if (((BuyMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
-                   getMarketOrderDao().persist(marketOrder);
-                   updateWallet(marketOrder);
-               }
+                if (((BuyMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
+                    getMarketOrderDao().persist(marketOrder);
+                    updateWallet(marketOrder);
+                }
             }
 
             if (marketOrder instanceof SellMarketOrder) {
@@ -206,7 +212,7 @@ public class MarketOrderTrader extends Trader {
     /**
      * Trade with all available crypto coin histories.
      */
-    public void trade () {
+    public void trade() {
 
         final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistorySinceIndex(getTrading().getTradePair(), getSinceIndex());
 
