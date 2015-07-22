@@ -2,8 +2,7 @@ package com.crypto.trader;
 
 import com.crypto.calculator.Calculator;
 import com.crypto.calculator.bulk.CryptoCoinHistoryTrendCalculator;
-import com.crypto.dao.MacdDao;
-import com.crypto.dao.WithdrawalDao;
+import com.crypto.dao.*;
 import com.crypto.dao.impl.CryptocoinHistoryDaoImpl;
 import com.crypto.datahandler.impl.SignalBulkDataHandler;
 import com.crypto.datahandler.persister.DataPersister;
@@ -33,7 +32,9 @@ import javax.ejb.EJB;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -49,6 +50,26 @@ public class MarketOrderTraderTest {
 
     @EJB
     private MarketOrderTrader trader;
+
+    @EJB
+    private MarketOrderDao marketOrderDao;
+
+    @EJB
+    private CurrencyDao currencyDao;
+
+    @EJB
+    private TradingDao tradingDao;
+
+    @EJB
+    private TradeRuleDao tradeRuleDao;
+
+    @EJB
+    private FundDao fundDao;
+
+    @EJB
+    private
+    TradePairDao tradePairDao;
+
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -80,8 +101,10 @@ public class MarketOrderTraderTest {
     Map<Currency, Fund> funds;
     CryptocoinHistory cryptocoinHistory;
 
-    @Before
-    public void setup() {
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_7.xml")
+    public void testBadBuy() {
 
         tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
         currency = new Currency("EUR", "Euro", "&euro");
@@ -104,17 +127,6 @@ public class MarketOrderTraderTest {
 
         Logger logger = new Logger();
         trader.setLogger(logger);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
-        Timestamp timestamp = Timestamp.valueOf(date);
-
-        cryptocoinHistory = new CryptocoinHistory(new Integer(30), timestamp, tradePair, 22.17F, 22.18F, 22.19F, 22.20F, 500L);
-    }
-
-    @Test
-    @UsingDataSet("datasets/it_test_dataset_7.xml")
-    public void testBadBuy() {
 
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         final LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
@@ -141,6 +153,28 @@ public class MarketOrderTraderTest {
     @Test
     @UsingDataSet("datasets/it_test_dataset_7.xml")
     public void testBadSell() {
+
+        tradingSite = new TradingSite("KRAKEN", "Kraken", "www.kraken.com");
+        currency = new Currency("EUR", "Euro", "&euro");
+        cryptoCurrency = new CryptoCurrency("BTC", "Bitcoin", "BTC");
+        tradePair = new TradePair(1, tradingSite, currency, cryptoCurrency, 1F);
+        trading = new Trading(1, 10F, 100F, 100F, 100F, false, false, false, 10F, true, true, 2, tradePair);
+
+        wallet = new Wallet(trading, 100F, 10F, currency, cryptoCurrency, 100F);
+
+        Fund currencyFund = new Fund(tradePair, 1000F, currency);
+        Fund cryptoCurrencyFund = new Fund(tradePair, 1000F, cryptoCurrency);
+
+        funds = new HashMap<>();
+        funds.put(currency, currencyFund);
+        funds.put(cryptoCurrency, cryptoCurrencyFund);
+
+        trader.setFunds(funds);
+        trader.setWallet(wallet);
+        trader.setTrading(trading);
+
+        Logger logger = new Logger();
+        trader.setLogger(logger);
 
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         final LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
@@ -176,5 +210,61 @@ public class MarketOrderTraderTest {
 
         cryptocoinHistory.setClose(112F);
         assertFalse(trader.badSellTrade(cryptocoinHistory));
+    }
+
+    @Test
+    @UsingDataSet("datasets/it_test_dataset_32.xml")
+    public void testTradeAtIndex() {
+
+        currency = currencyDao.get("DLR");
+        cryptoCurrency = (CryptoCurrency) currencyDao.get("BTC");
+        assertNotNull(currency);
+        assertNotNull(cryptoCurrency);
+
+        tradePair = tradePairDao.get(1);
+        assertNotNull(tradePair);
+
+        // trading = new Trading(1, 10F, 100F, 100F, 100F, false, false, false, 10F, true, true, 2, tradePair);
+        trading = tradingDao.get(1);
+        assertNotNull(trading);
+
+        wallet = new Wallet(trading, 100F, 10F, currency, cryptoCurrency, 100F);
+
+        Fund currencyFund = fundDao.get(tradePair, currency);
+        Fund cryptoCurrencyFund = fundDao.get(tradePair, cryptoCurrency);
+
+        assertNotNull (cryptoCurrencyFund);
+        assertNotNull (currencyFund);
+
+        funds = new HashMap<>();
+        funds.put(currency, currencyFund);
+        funds.put(cryptoCurrency, cryptoCurrencyFund);
+
+        trader.setFunds(funds);
+        trader.setWallet(wallet);
+        trader.setTrading(trading);
+
+        Logger logger = new Logger();
+        trader.setLogger(logger);
+
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        final LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
+        final Timestamp timestamp = Timestamp.valueOf(date);
+        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(100, timestamp, tradePair, 222F, 222F, 222F, 222F, 100L);
+
+        trading.setCheckBadSellWallet(false);
+        trading.setCheckBadSell(true);
+        trading.setCheckBadBuy(true);
+        trading.setMinProfitPercentage(10F);
+
+        final MarketOrder lastSellOrder = marketOrderDao.getLastSell(1000, trading);
+
+        assertEquals(new Integer(6), lastSellOrder.getIndex());
+
+        trader.tradeAtIndex(cryptocoinHistory);
+
+        final MarketOrder sellOrder = marketOrderDao.getLastSell(1000, trading);
+
+        assertEquals(new Integer(7), lastSellOrder.getIndex());
     }
 }

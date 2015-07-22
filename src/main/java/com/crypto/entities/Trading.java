@@ -204,4 +204,8 @@ public class Trading implements Serializable {
     public List<TradeRule> getTradeRules() {
         return tradeRules;
     }
+
+    public void setTradeRules(List<TradeRule> tradeRules) {
+        this.tradeRules = tradeRules;
+    }
 }

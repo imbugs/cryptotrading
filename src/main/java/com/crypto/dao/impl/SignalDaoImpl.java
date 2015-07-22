@@ -7,6 +7,7 @@ import com.crypto.entities.Trading;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -40,7 +41,16 @@ public class SignalDaoImpl implements SignalDao {
         query.setParameter("tradeRule", tradeRule);
         query.setParameter("indx", indx);
 
-        return query.getSingleResult();
+        Signal signal;
+
+        try {
+            signal = query.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+
+        return signal;
     }
 
     @Override
@@ -49,7 +59,16 @@ public class SignalDaoImpl implements SignalDao {
         final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.pk.trading = :trading AND s.pk.index = (SELECT MAX(s2.pk.index) FROM Signal s2 WHERE s2.pk.trading = :trading)");
         query.setParameter("trading", trading);
 
-        return query.getSingleResult();
+        Signal signal;
+
+        try {
+            signal = query.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+
+        return signal;
     }
 
     @Override
