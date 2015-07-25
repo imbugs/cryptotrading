@@ -11,6 +11,7 @@ import com.crypto.entities.*;
 import com.crypto.entities.pkey.WithdrawalPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.MarketOrderStatus;
+import com.crypto.enums.MarketTrend;
 import com.crypto.util.Logger;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -67,8 +68,10 @@ public class MarketOrderTraderTest {
     private FundDao fundDao;
 
     @EJB
-    private
-    TradePairDao tradePairDao;
+    private TradePairDao tradePairDao;
+
+    @EJB
+    private SignalDao signalDao;
 
 
     @Deployment
@@ -99,7 +102,6 @@ public class MarketOrderTraderTest {
     Trading trading;
     Wallet wallet;
     Map<Currency, Fund> funds;
-    CryptocoinHistory cryptocoinHistory;
 
 
     @Test
@@ -228,7 +230,7 @@ public class MarketOrderTraderTest {
         trading = tradingDao.get(1);
         assertNotNull(trading);
 
-        wallet = new Wallet(trading, 100F, 10F, currency, cryptoCurrency, 100F);
+        wallet = new Wallet(trading, 1000F, 1000F, currency, cryptoCurrency, 100F);
 
         Fund currencyFund = fundDao.get(tradePair, currency);
         Fund cryptoCurrencyFund = fundDao.get(tradePair, cryptoCurrency);
@@ -247,24 +249,32 @@ public class MarketOrderTraderTest {
         Logger logger = new Logger();
         trader.setLogger(logger);
 
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        final LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
-        final Timestamp timestamp = Timestamp.valueOf(date);
-        final CryptocoinHistory cryptocoinHistory = new CryptocoinHistory(100, timestamp, tradePair, 222F, 222F, 222F, 222F, 100L);
-
         trading.setCheckBadSellWallet(false);
-        trading.setCheckBadSell(true);
-        trading.setCheckBadBuy(true);
-        trading.setMinProfitPercentage(10F);
+        trading.setCheckBadSell(false);
+        trading.setCheckBadBuy(false);
+        trading.setMinProfitPercentage(1F);
 
-        final MarketOrder lastSellOrder = marketOrderDao.getLastSell(1000, trading);
+        MarketOrder lastBuyOrder = marketOrderDao.getLastBuy(10, trading);
 
-        assertEquals(new Integer(6), lastSellOrder.getIndex());
+        assertEquals(new Integer(5), lastBuyOrder.getIndex());
 
-        trader.tradeAtIndex(cryptocoinHistory);
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        final LocalDateTime dateBuy = LocalDateTime.parse("2015-04-21 12:00:07", formatter);
+        final Timestamp timestampBuy = Timestamp.valueOf(dateBuy);
+        final CryptocoinHistory cryptocoinHistoryBuy = new CryptocoinHistory(7, timestampBuy, tradePair, 100F, 100F, 100F, 100F, 100L);
+       // trader.tradeAtIndex(cryptocoinHistory);
 
-        final MarketOrder sellOrder = marketOrderDao.getLastSell(1000, trading);
+        lastBuyOrder = trader.checkCurrentSignalForOrderCreation(cryptocoinHistoryBuy);
+        assertEquals(new Integer(7), lastBuyOrder.getIndex());
 
-        assertEquals(new Integer(7), lastSellOrder.getIndex());
+        //lastBuyOrder = marketOrderDao.getLastBuy(10, trading);
+
+        final LocalDateTime dateSell = LocalDateTime.parse("2015-04-21 12:00:08", formatter);
+        final Timestamp timestampSell = Timestamp.valueOf(dateBuy);
+        final CryptocoinHistory cryptocoinHistorySell = new CryptocoinHistory(8, timestampSell, tradePair, 222F, 222F, 222F, 222F, 100L);
+
+        final MarketOrder lastSellOrder = trader.checkCurrentSignalForOrderCreation(cryptocoinHistorySell);
+        assertEquals(new Integer(8), lastSellOrder.getIndex());
+
     }
 }

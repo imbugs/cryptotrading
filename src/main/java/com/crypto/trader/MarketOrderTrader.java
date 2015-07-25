@@ -154,7 +154,7 @@ public class MarketOrderTrader extends Trader {
      * @param cryptocoinHistory the current cryptocoin history
      * @return the market order.
      */
-    private MarketOrder checkCurrentSignalForOrderCreation(CryptocoinHistory cryptocoinHistory) {
+    public MarketOrder checkCurrentSignalForOrderCreation(CryptocoinHistory cryptocoinHistory) {
 
         MarketOrder marketOrder = null;
 
@@ -171,12 +171,11 @@ public class MarketOrderTrader extends Trader {
             }
 
             if (signal != null && signal.getTradeSignal().equals(MarketTrend.BEAR)) {
-                if (!badBuyTrade(cryptocoinHistory)) {
+                if (!badSellTrade(cryptocoinHistory)) {
                     marketOrder = createSellMarketOrder(cryptocoinHistory);
                 }
             }
         }
-        ;
         return marketOrder;
     }
 

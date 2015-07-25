@@ -129,7 +129,6 @@ public class Trader {
 
             if (this.wallet.getCoins() == 0F) {
                 // Refunding failed.
-
                 return null;
             }
         }
