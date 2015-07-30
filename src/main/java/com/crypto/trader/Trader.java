@@ -120,6 +120,12 @@ public class Trader {
     }
 
 
+    /**
+     * Create a buy market order.
+     *
+     * @param cryptocoinHistory the current crypto currency history.
+     * @return the market order.
+     */
     public BuyMarketOrder createBuyMarketOrder(final CryptocoinHistory cryptocoinHistory) {
 
         if (this.wallet.getCoins() == 0F) {
@@ -193,7 +199,7 @@ public class Trader {
 
         if (coinsToBeWithdrawn > 0) {
             // Add the funding to the wallet
-            this.wallet.addCoins(new Float(coinsToBeWithdrawn));
+            this.wallet.addCoins(coinsToBeWithdrawn);
 
             // Register the withdrawal from the funding.
             withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
@@ -211,7 +217,7 @@ public class Trader {
 
         if (cryptoCoinsToBeWithdrawn > 0) {
             // Add the funding to the wallet
-            this.wallet.addCryptoCoins(new Float(cryptoCoinsToBeWithdrawn));
+            this.wallet.addCryptoCoins(cryptoCoinsToBeWithdrawn);
 
             // Register the withdrawal from the funding.
             withdraw(this.wallet.getCryptoCurrency(), cryptoCoinsToBeWithdrawn);

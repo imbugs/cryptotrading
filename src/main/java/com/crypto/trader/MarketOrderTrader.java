@@ -4,7 +4,6 @@ import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.SignalDao;
 import com.crypto.dao.WalletHistoryDao;
 import com.crypto.entities.*;
-import com.crypto.enums.MarketTrend;
 import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
@@ -74,7 +73,7 @@ public class MarketOrderTrader extends Trader {
      * Checks if a sell is a bad sell, when the current cryptocoin currency rate is lower than the last buy price
      * taking into account the trading fee.
      *
-     * @param cryptocoinHistory
+     * @param cryptocoinHistory crypto coins history.
      */
     public Boolean badSellTrade(final CryptocoinHistory cryptocoinHistory) {
 
@@ -125,8 +124,8 @@ public class MarketOrderTrader extends Trader {
     /**
      * Checks if a buy is a bad buy, this is the case when the current rate is higher than the last sell.
      *
-     * @param cryptocoinHistory
-     * @return
+     * @param cryptocoinHistory crypto coins history.
+     * @return true when a bad buy situations occurs.
      */
     public Boolean badBuyTrade(CryptocoinHistory cryptocoinHistory) {
 
@@ -156,27 +155,32 @@ public class MarketOrderTrader extends Trader {
      */
     public MarketOrder checkCurrentSignalForOrderCreation(CryptocoinHistory cryptocoinHistory) {
 
-        MarketOrder marketOrder = null;
-
         final Integer index = cryptocoinHistory.getIndex();
 
         for (TradeRule tradeRule : getTrading().getTradeRules()) {
 
             final Signal signal = signalDao.get(index, tradeRule, getTrading());
 
-            if (signal != null && signal.getTradeSignal().equals(MarketTrend.BULL)) {
-                if (!badBuyTrade(cryptocoinHistory)) {
-                    marketOrder = createBuyMarketOrder(cryptocoinHistory);
-                }
-            }
+            if (signal != null) {
 
-            if (signal != null && signal.getTradeSignal().equals(MarketTrend.BEAR)) {
-                if (!badSellTrade(cryptocoinHistory)) {
-                    marketOrder = createSellMarketOrder(cryptocoinHistory);
+                switch (signal.getTradeSignal()) {
+
+                    case BULL:
+                        if (!badBuyTrade(cryptocoinHistory)) {
+                            return createBuyMarketOrder(cryptocoinHistory);
+                        }
+                        break;
+
+                    case BEAR:
+                        if (!badSellTrade(cryptocoinHistory)) {
+                            return createSellMarketOrder(cryptocoinHistory);
+                        }
+                        break;
                 }
             }
         }
-        return marketOrder;
+
+        return null;
     }
 
 

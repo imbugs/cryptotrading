@@ -10,8 +10,6 @@ import com.crypto.datahandler.provider.DataProvider;
 import com.crypto.entities.*;
 import com.crypto.entities.pkey.WithdrawalPk;
 import com.crypto.enums.LoggingLevel;
-import com.crypto.enums.MarketOrderStatus;
-import com.crypto.enums.MarketTrend;
 import com.crypto.util.Logger;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -25,7 +23,6 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,9 +30,7 @@ import javax.ejb.EJB;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -230,13 +225,15 @@ public class MarketOrderTraderTest {
         trading = tradingDao.get(1);
         assertNotNull(trading);
 
+        assertNotNull(trading.getTradeRules());
+
         wallet = new Wallet(trading, 1000F, 1000F, currency, cryptoCurrency, 100F);
 
         Fund currencyFund = fundDao.get(tradePair, currency);
         Fund cryptoCurrencyFund = fundDao.get(tradePair, cryptoCurrency);
 
-        assertNotNull (cryptoCurrencyFund);
-        assertNotNull (currencyFund);
+        assertNotNull(cryptoCurrencyFund);
+        assertNotNull(currencyFund);
 
         funds = new HashMap<>();
         funds.put(currency, currencyFund);
@@ -253,6 +250,9 @@ public class MarketOrderTraderTest {
         trading.setCheckBadSell(false);
         trading.setCheckBadBuy(false);
         trading.setMinProfitPercentage(1F);
+        trading.setMaxTradingCoinsPerc(100F);
+        trading.setMaxTradingCryptoCoinsPerc(100F);
+        trading.setMinTradingCryptoCurrency(1F);
 
         MarketOrder lastBuyOrder = marketOrderDao.getLastBuy(10, trading);
 
@@ -262,19 +262,28 @@ public class MarketOrderTraderTest {
         final LocalDateTime dateBuy = LocalDateTime.parse("2015-04-21 12:00:07", formatter);
         final Timestamp timestampBuy = Timestamp.valueOf(dateBuy);
         final CryptocoinHistory cryptocoinHistoryBuy = new CryptocoinHistory(7, timestampBuy, tradePair, 100F, 100F, 100F, 100F, 100L);
-       // trader.tradeAtIndex(cryptocoinHistory);
 
         lastBuyOrder = trader.checkCurrentSignalForOrderCreation(cryptocoinHistoryBuy);
+
+        assertEquals(new Integer(7), lastBuyOrder.getIndex());
+        assertTrue(lastBuyOrder instanceof BuyMarketOrder);
+
+        trader.tradeAtIndex(cryptocoinHistoryBuy);
+        lastBuyOrder = marketOrderDao.getLastBuy(10, trading);
+
         assertEquals(new Integer(7), lastBuyOrder.getIndex());
 
-        //lastBuyOrder = marketOrderDao.getLastBuy(10, trading);
-
         final LocalDateTime dateSell = LocalDateTime.parse("2015-04-21 12:00:08", formatter);
-        final Timestamp timestampSell = Timestamp.valueOf(dateBuy);
+        final Timestamp timestampSell = Timestamp.valueOf(dateSell);
         final CryptocoinHistory cryptocoinHistorySell = new CryptocoinHistory(8, timestampSell, tradePair, 222F, 222F, 222F, 222F, 100L);
 
-        final MarketOrder lastSellOrder = trader.checkCurrentSignalForOrderCreation(cryptocoinHistorySell);
+        MarketOrder lastSellOrder = trader.checkCurrentSignalForOrderCreation(cryptocoinHistorySell);
         assertEquals(new Integer(8), lastSellOrder.getIndex());
+        assertTrue(lastSellOrder instanceof SellMarketOrder);
 
+        trader.tradeAtIndex(cryptocoinHistorySell);
+        lastSellOrder = marketOrderDao.getLastSell(10, trading);
+
+        assertEquals(new Integer(8), lastSellOrder.getIndex());
     }
 }
