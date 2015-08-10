@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Login</title>
+    <link type="text/css" rel="stylesheet" media="all" href="css/style.css?I" />
+
+    <script language="javascript" type="text/javascript" src="md5.js"></script>
+
+    <script type="text/javascript">
+        function Check(theform)
+        {
+            if( theform.j_username.value == '') {
+                alert( "Voer uw account in! \n");
+                return false;
+            }
+
+            if( theform.j_password.value == '') {
+                alert( "Voer uw wachtwoord in! \n");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+<div align="center">
+    <form id="loginForm" name="loginForm" method="get" action="j_security_check" onSubmit="return Check(this)">
+        <table width="300" border="0" align="center" cellpadding="2" cellspacing="0">
+            <tr>
+                <td width="112"><strong>Account</strong></td>
+                <td width="188"><input name="j_username" type="text" id="username"  size="30" value=""></td>
+            </tr>
+            <tr>
+                <td><b>Wachtwoord</b></td>
+                <td><input name="j_password" type="password" id="password" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><input type="submit" name="Submit" value="Login" /></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
