@@ -3,8 +3,6 @@
     <title>Login</title>
     <link type="text/css" rel="stylesheet" media="all" href="css/style.css?I" />
 
-    <script language="javascript" type="text/javascript" src="md5.js"></script>
-
     <script type="text/javascript">
         function Check(theform)
         {
@@ -24,7 +22,7 @@
 
 <body>
 <div align="center">
-    <form id="loginForm" name="loginForm" method="get" action="j_security_check" onSubmit="return Check(this)">
+    <form id="loginForm" name="loginForm" method="post" action="j_security_check" onSubmit="return Check(this)">
         <table width="300" border="0" align="center" cellpadding="2" cellspacing="0">
             <tr>
                 <td width="112"><strong>Account</strong></td>
