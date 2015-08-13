@@ -1,4 +1,4 @@
 <jboss-web>
     <context-root>crypto-trading</context-root>
-    <security-domain>jboss-web-policy</security-domain>
+    <security-domain>other</security-domain>
 </jboss-web>

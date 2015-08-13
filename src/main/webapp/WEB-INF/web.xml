@@ -16,8 +16,9 @@
         </web-resource-collection>
 
         <auth-constraint>
-          <role-name>SuperUser</role-name>
+          <role-name>User</role-name>
         </auth-constraint>
+
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
@@ -33,7 +34,7 @@
     </login-config>
 
     <security-role>
-        <role-name>SuperUser</role-name>
+        <role-name>User</role-name>
     </security-role>
 
 </web-app>
