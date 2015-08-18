@@ -7,19 +7,20 @@ package com.crypto.services;
  */
 
 import com.crypto.dao.TradingDao;
+import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
 import com.crypto.util.Utils;
+import com.google.gson.Gson;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Rest service returning currency
+ * Rest service returning trading information
  */
 @Path("/")
 @Stateless
@@ -33,13 +34,41 @@ public class TradingServices {
     private TradingDao tradingDao;
 
     /**
+     * Get the current trading (site and coin versus crypto coins)
+     * @return the current trading
+     */
+    @GET
+    @Path("/getTrading/")
+    @Produces("application/json")
+    public String getCurrenetTrading () {
+
+       final List<Trading> tradings = tradingDao.getAll();
+
+       if (tradings.get(0) != null) {
+
+           TradePair tradePair = tradings.get(0).getTradePair();
+           String tradingSiteTitle = tradePair.getTradingSite().getDescription() +
+                                     " (" + tradePair.getCryptoCurrency().getDescription() + "/"
+                                          + tradePair.getCurrency().getDescription() + ")";
+
+           final Gson gson = new Gson();
+           final String jsonString = gson.toJson(tradingSiteTitle);
+
+           return jsonString;
+       }
+       else {
+           throw new NotFoundException("Current Trading not found");
+       }
+    }
+
+    /**
      * Recalculates all the trendlines and signals of a util.
      */
     @POST
     @Path("/recalculateInParallel/")
     public void recalculate() throws ExecutionException, InterruptedException {
 
-        final Trading trading = tradingDao.get(1);
+        final Trading trading = tradingDao.get(0);
 
         utils.calculateTrendLines(trading);
     }

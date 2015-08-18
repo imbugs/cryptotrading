@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cryptotrading Places</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajax('rest/getTrading', {
+                dataType: 'json',
+                data: {},
+                type: 'GET',
+                success: function (data) {
+                    $('#name').html(data);
+                }
+            });
+
+        }); // document ready
+
+        $(document).ready(function () {
+            $('#getEuro').click(function (event) {
+                event.preventDefault();
+
+                $.ajax('rest/currency/EUR', {
+                    dataType: 'json',
+                    data: {},
+                    type: 'POST',
+                    success: function (data) {
+                        $('#result').text(data.description);
+                    }
+                })
+                        .error(function () {
+                            console.log("error");
+                        });
+            });
+        }); // (document).ready
+
+
+    </script>
+</head>
+<body>
+
+<div align="center"><h1>Crypto trading places (Handel)</h1></div>
+
+<div align="center">
+    <h3><div id="name"/></h3>
+</div>
+
+<form name="theForm">
+    <fieldset>
+        <input type="submit" id="getEuro" value="Get EURO"/>
+        <span id="result"></span>
+    </fieldset>
+</form>
+
+</body>
+</html>
