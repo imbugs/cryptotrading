@@ -14,44 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crypto.services;
+package com.crypto.services.rest;
 
-import com.crypto.dao.CurrencyDao;
-import com.crypto.entities.Currency;
+import com.crypto.dao.ParameterDao;
+import com.crypto.entities.Parameter;
+import com.google.gson.Gson;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import com.google.gson.Gson;
-
 /**
- * Rest service returning currency
+ * Rest service returning parameters
  */
 @Path("/")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
-public class CurrencyService {
+public class ParameterService {
 
     @EJB
-    private CurrencyDao currencyDao;
+    private ParameterDao parameterDao;
 
     @POST
-    @Path("/currency/{code}")
+    @Path("/parameter/{name}")
     @Produces("application/json")
-    public String getCurrency(@PathParam("code") String code) {
+    public String getParameter(@PathParam("name") String name) {
 
-        final Currency currency = currencyDao.get(code);
+        final Parameter parameter = parameterDao.get(name);
 
-        if (currency != null) {
+        if (parameter != null) {
 
             final Gson gson = new Gson();
-            final String jsonString = gson.toJson(currency);
+            final String jsonString = gson.toJson(parameter);
 
             return jsonString;
         } else {
-            throw new NotFoundException("Currency not found: " + code);
+            throw new NotFoundException("Parameter not found: " + parameter);
         }
     }
 }

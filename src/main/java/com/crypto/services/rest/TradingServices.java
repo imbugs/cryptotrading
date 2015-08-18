@@ -1,7 +1,7 @@
-package com.crypto.services;
+package com.crypto.services.rest;
 
 /**
- * Delivers services for using the util crypto util environment
+ * Delivers rest for using the util crypto util environment
  *
  * Created by Jan Wicherink on 27-5-15.
  */

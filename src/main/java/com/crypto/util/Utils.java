@@ -8,7 +8,8 @@ import javax.ejb.Stateless;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Utilities for the util environment and usage for crypto util
+ * Utilities
+ *
  * Created by Jan Wicherink on 27-5-15.
  */
 @Stateless
