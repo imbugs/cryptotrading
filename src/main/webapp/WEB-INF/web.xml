@@ -2,10 +2,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
+    <welcome-file-list>
+        <welcome-file>ctp.html</welcome-file>
+    </welcome-file-list>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>All Resources</web-resource-name>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/ctp.html</url-pattern>
             <http-method>DELETE</http-method>
             <http-method>PUT</http-method>
             <http-method>HEAD</http-method>
