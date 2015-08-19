@@ -27,19 +27,17 @@
 
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
-            <button type="button" class="btn btn-primary"> Grafiek </button>
-            <button type="button" class="btn btn-primary"> Wallet </button>
-            <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders </button>
+            <button type="button" class="btn btn-primary"> Grafiek</button>
+            <button type="button" class="btn btn-primary"> Wallet</button>
+            <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders</button>
         </div>
     </div>
 
     <div ng-show="showOrders" align="center">
-           <h4>Market Orders</h4>
+        <h4>Market Orders</h4>
 
 
     </div>
-
-
 </div>
 
 </body>
@@ -51,26 +49,33 @@
 
         $scope.showOrders = false;
 
+        // get trading site as text
         $http.get('rest/getTradingAsStringText').
                 success(function (data) {
                     $scope.tradingAsText = data;
                 });
 
+        // get current crypto trading rate
         $http.get('rest/currentCryptoRate').
                 success(function (data) {
                     $scope.currentRate = data;
                 });
 
+        // get trading
         $http.get('rest/getTrading').
                 success(function (data) {
                     $scope.trading = data;
                 });
 
+        // Get all market orders
         $scope.getOrders = function () {
             $scope.showOrders = true;
 
+            $http.get('rest/marketOrders', {params: {trading: $scope.trading}}).
+                    success(function (data) {
+                        $scope.marketOrders = data;
+                    });
         }
-
     });
 </script>
 </html>
