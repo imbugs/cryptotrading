@@ -38,7 +38,7 @@ public class ParameterService {
 
     @POST
     @Path("/parameter/{name}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public String getParameter(@PathParam("name") String name) {
 
         final Parameter parameter = parameterDao.get(name);

@@ -20,16 +20,26 @@
 
     <div align="center">
         <h3>
-            {{trading}}
+            {{tradingAsText}} : {{currentRate}}
         </h3>
+
     </div>
 
-    <form name="theForm">
-        <fieldset>
-            <input type="submit" id="getEuro" value="Get EURO"/>
-            <span id="result"></span>
-        </fieldset>
-    </form>
+    <div align="center">
+        <div class="btn-group btn-toolbar" role="group">
+            <button type="button" class="btn btn-primary"> Grafiek </button>
+            <button type="button" class="btn btn-primary"> Wallet </button>
+            <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders </button>
+        </div>
+    </div>
+
+    <div ng-show="showOrders" align="center">
+           <h4>Market Orders</h4>
+
+
+    </div>
+
+
 </div>
 
 </body>
@@ -39,10 +49,28 @@
 
     app.controller("cryptoTradingController", function ($scope, $http) {
 
+        $scope.showOrders = false;
+
+        $http.get('rest/getTradingAsStringText').
+                success(function (data) {
+                    $scope.tradingAsText = data;
+                });
+
+        $http.get('rest/currentCryptoRate').
+                success(function (data) {
+                    $scope.currentRate = data;
+                });
+
         $http.get('rest/getTrading').
-                success(function(data) {
+                success(function (data) {
                     $scope.trading = data;
                 });
+
+        $scope.getOrders = function () {
+            $scope.showOrders = true;
+
+        }
+
     });
 </script>
 </html>

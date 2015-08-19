@@ -31,7 +31,6 @@ import com.google.gson.Gson;
  */
 @Path("/")
 @Stateless
-@Produces(MediaType.APPLICATION_JSON)
 public class CurrencyService {
 
     @EJB
@@ -39,7 +38,7 @@ public class CurrencyService {
 
     @POST
     @Path("/currency/{code}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public String getCurrency(@PathParam("code") String code) {
 
         final Currency currency = currencyDao.get(code);

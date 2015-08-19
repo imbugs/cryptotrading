@@ -6,6 +6,7 @@ import com.crypto.entities.CryptocoinHistory;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
 import com.google.gson.Gson;
+import com.sun.media.jfxmedia.Media;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -20,7 +21,6 @@ import java.util.List;
  */
 @Path("/")
 @Stateless
-@Produces(MediaType.APPLICATION_JSON)
 public class CryptoCoinHistoryService {
 
     @EJB
@@ -30,8 +30,8 @@ public class CryptoCoinHistoryService {
     private CryptocoinHistoryDao cryptocoinHistoryDao;
 
     @GET
-    @Path("/currentCryptoRate/{tradePair}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/currentCryptoRate")
+    @Produces(MediaType.TEXT_HTML)
     public String getCurrentCryptoRate() {
 
         final List<Trading> tradings = tradingDao.getAll();
@@ -48,10 +48,7 @@ public class CryptoCoinHistoryService {
                         tradePair.getCurrency().getCode() + '/' +
                         tradePair.getCryptoCurrency().getCode();
 
-                final Gson gson = new Gson();
-                final String jsonString = gson.toJson(currentRate);
-
-                return jsonString;
+                return currentRate;
             }
             else {
                 throw new NotFoundException("Current cryptocoin history not found for tradepair :" + tradePair.getId());

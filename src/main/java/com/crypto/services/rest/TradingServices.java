@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
  */
 @Path("/")
 @Stateless
-@Produces(MediaType.APPLICATION_JSON)
 public class TradingServices {
 
     @EJB
@@ -34,27 +33,47 @@ public class TradingServices {
     private TradingDao tradingDao;
 
     /**
-     * Get the current trading (site and coin versus crypto coins)
+     * Get the current trading (site and coin versus crypto coins) as string text.
      * @return the current trading
      */
     @GET
-    @Path("/getTrading/")
-    @Produces("application/text")
-    public String getCurrenetTrading () {
+    @Path("/getTradingAsStringText/")
+    @Produces(MediaType.TEXT_HTML)
+    public String getCurrenetTradingAsStringText() {
 
        final List<Trading> tradings = tradingDao.getAll();
 
        if (tradings.get(0) != null) {
 
            TradePair tradePair = tradings.get(0).getTradePair();
-           String tradingSiteTitle = tradePair.getTradingSite().getDescription() +
-                                     " (" + tradePair.getCryptoCurrency().getDescription() + "/"
-                                          + tradePair.getCurrency().getDescription() + ")";
-           return tradingSiteTitle;
+           String tradingAsStringText = tradePair.getTradingSite().getDescription() +
+                                     " (" + tradePair.getCurrency().getDescription()  + "/"
+                                          + tradePair.getCryptoCurrency().getDescription() + ")";
+           return tradingAsStringText;
        }
        else {
            throw new NotFoundException("Current Trading not found");
        }
+    }
+
+    /**
+     * Get the current trading
+     * @return the current trading
+     */
+    @GET
+    @Path("/getTrading/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Trading getCurrenetTrading() {
+
+        final List<Trading> tradings = tradingDao.getAll();
+
+        if (tradings.get(0) != null) {
+
+            return tradings.get(0);
+        }
+        else {
+            throw new NotFoundException("Current Trading not found");
+        }
     }
 
     /**
