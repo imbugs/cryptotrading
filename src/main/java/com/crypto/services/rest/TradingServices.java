@@ -39,7 +39,7 @@ public class TradingServices {
      */
     @GET
     @Path("/getTrading/")
-    @Produces("application/json")
+    @Produces("application/text")
     public String getCurrenetTrading () {
 
        final List<Trading> tradings = tradingDao.getAll();
@@ -50,11 +50,7 @@ public class TradingServices {
            String tradingSiteTitle = tradePair.getTradingSite().getDescription() +
                                      " (" + tradePair.getCryptoCurrency().getDescription() + "/"
                                           + tradePair.getCurrency().getDescription() + ")";
-
-           final Gson gson = new Gson();
-           final String jsonString = gson.toJson(tradingSiteTitle);
-
-           return jsonString;
+           return tradingSiteTitle;
        }
        else {
            throw new NotFoundException("Current Trading not found");
