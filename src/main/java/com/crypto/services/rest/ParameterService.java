@@ -19,7 +19,7 @@ package com.crypto.services.rest;
 import com.crypto.dao.ParameterDao;
 import com.crypto.entities.Parameter;
 import com.google.gson.Gson;
-import org.jboss.resteasy.spi.NotFoundException;
+import javassist.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -40,7 +40,7 @@ public class ParameterService {
     @POST
     @Path("/parameter/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getParameter(@PathParam("name") String name) {
+    public String getParameter(@PathParam("name") String name) throws NotFoundException {
 
         final Parameter parameter = parameterDao.get(name);
 

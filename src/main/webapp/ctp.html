@@ -49,23 +49,28 @@
 
         $scope.showOrders = false;
 
-        // get trading site as text
-        $http.get('rest/getTradingAsStringText').
-                success(function (data) {
-                    $scope.tradingAsText = data;
-                });
-
-        // get current crypto trading rate
-        $http.get('rest/currentCryptoRate').
-                success(function (data) {
-                    $scope.currentRate = data;
-                });
-
         // get current trading
-        $http.get('rest/getCurrentTrading').
-                success(function (data) {
-                    $scope.trading = data;
-                });
+        var promise = $http.get('rest/getCurrentTrading').
+                           success(function (data) {
+                           $scope.trading = data;
+                      });
+
+        // Wait until promise of getting current trade is is finished.
+        promise.then(function () {
+
+            // get trading site as text
+            $http.get('rest/getTradingAsStringText').
+                    success(function (data) {
+                        $scope.tradingAsText = data;
+                    });
+
+            // get current crypto trading rate
+            $http.get('rest/currentCryptoRate/' + $scope.trading.id).
+                    success(function (data) {
+                        $scope.currentRate = data;
+                    });
+
+        });
 
         // Get all market orders
         $scope.getOrders = function () {
@@ -76,6 +81,7 @@
                         $scope.marketOrders = data;
                     });
         }
-    });
+    })
+
 </script>
 </html>

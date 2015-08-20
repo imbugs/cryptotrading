@@ -31,15 +31,16 @@ public class CryptoCoinHistoryService {
     private CryptocoinHistoryDao cryptocoinHistoryDao;
 
     @GET
-    @Path("/currentCryptoRate")
+    @Path("/currentCryptoRate/{tradingId}")
     @Produces(MediaType.TEXT_HTML)
-    public String getCurrentCryptoRate() throws NotFoundException {
+    public String getCurrentCryptoRate(@PathParam("tradingId") Integer tradingId) throws NotFoundException {
 
-        final List<Trading> tradings = tradingDao.getAll();
 
-        if (tradings.get(0) != null) {
+        final Trading trading = tradingDao.get(tradingId);
 
-            TradePair tradePair = tradings.get(0).getTradePair();
+        if (trading != null) {
+
+            TradePair tradePair = trading.getTradePair();
 
             final CryptocoinHistory cryptocoinHistory = cryptocoinHistoryDao.getLast(tradePair);
 
