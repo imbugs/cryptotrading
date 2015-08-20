@@ -62,19 +62,14 @@ public class TradingServices {
      * @return the current trading
      */
     @GET
-    @Path("/getTrading/")
+    @Path("/getCurrentTrading/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getCurrentTrading() throws NotFoundException {
+    public Trading getCurrentTrading() throws NotFoundException {
 
         final List<Trading> tradings = tradingDao.getAll();
 
         if (tradings.get(0) != null) {
-
-            final Gson gson = new Gson();
-
-            final String jsonString = gson.toJson(tradings.get(0));
-
-            return jsonString;
+            return tradings.get(0);
         }
         else {
             throw new NotFoundException("Current Trading not found");

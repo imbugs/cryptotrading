@@ -61,8 +61,8 @@
                     $scope.currentRate = data;
                 });
 
-        // get trading
-        $http.get('rest/getTrading').
+        // get current trading
+        $http.get('rest/getCurrentTrading').
                 success(function (data) {
                     $scope.trading = data;
                 });
@@ -71,7 +71,7 @@
         $scope.getOrders = function () {
             $scope.showOrders = true;
 
-            $http.get('rest/marketOrders', {params: {trading: $scope.trading}}).
+            $http.get('rest/marketOrders/' + $scope.trading.id).
                     success(function (data) {
                         $scope.marketOrders = data;
                     });
