@@ -165,10 +165,32 @@
             <version>1.0.2</version>
         </dependency>
 
-        <!-- Import the JAX-RS API, we use provided scope as the API is included in JBoss WildFly. -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>3.0.11.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxb-provider</artifactId>
+            <version>3.0.11.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>jaxrs-api</artifactId>
+            <version>2.3.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.2</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -232,6 +254,11 @@
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-embedded</artifactId>
             <version>8.2.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>jboss.jboss-embeddable-ejb3</groupId>
+            <artifactId>thirdparty-all</artifactId>
+            <version>1.0.0.Alpha9</version>
         </dependency>
 
     </dependencies>

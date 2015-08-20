@@ -25,6 +25,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.google.gson.Gson;
+import javassist.NotFoundException;
 
 /**
  * Rest service returning currency
@@ -39,7 +40,7 @@ public class CurrencyService {
     @POST
     @Path("/currency/{code}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getCurrency(@PathParam("code") String code) {
+    public String getCurrency(@PathParam("code") String code) throws NotFoundException {
 
         final Currency currency = currencyDao.get(code);
 

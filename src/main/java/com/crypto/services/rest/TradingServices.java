@@ -11,6 +11,7 @@ import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
 import com.crypto.util.Utils;
 import com.google.gson.Gson;
+import javassist.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -39,7 +40,7 @@ public class TradingServices {
     @GET
     @Path("/getTradingAsStringText/")
     @Produces(MediaType.TEXT_HTML)
-    public String getCurrenetTradingAsStringText() {
+    public String getCurrenetTradingAsStringText() throws NotFoundException {
 
        final List<Trading> tradings = tradingDao.getAll();
 
@@ -63,7 +64,7 @@ public class TradingServices {
     @GET
     @Path("/getTrading/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getCurrentTrading() {
+    public String getCurrentTrading() throws NotFoundException {
 
         final List<Trading> tradings = tradingDao.getAll();
 

@@ -7,6 +7,7 @@ import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
 import com.google.gson.Gson;
 import com.sun.media.jfxmedia.Media;
+import javassist.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,7 +33,7 @@ public class CryptoCoinHistoryService {
     @GET
     @Path("/currentCryptoRate")
     @Produces(MediaType.TEXT_HTML)
-    public String getCurrentCryptoRate() {
+    public String getCurrentCryptoRate() throws NotFoundException {
 
         final List<Trading> tradings = tradingDao.getAll();
 

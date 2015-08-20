@@ -19,6 +19,7 @@ package com.crypto.services.rest;
 import com.crypto.dao.ParameterDao;
 import com.crypto.entities.Parameter;
 import com.google.gson.Gson;
+import org.jboss.resteasy.spi.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
