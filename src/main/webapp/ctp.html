@@ -59,7 +59,7 @@
         promise.then(function () {
 
             // get trading site as text
-            $http.get('rest/getTradingAsStringText').
+            $http.get('rest/getTradingAsStringText/' + $scope.trading.id).
                     success(function (data) {
                         $scope.tradingAsText = data;
                     });

@@ -38,15 +38,15 @@ public class TradingServices {
      * @return the current trading
      */
     @GET
-    @Path("/getTradingAsStringText/")
+    @Path("/getTradingAsStringText/{tradingId}")
     @Produces(MediaType.TEXT_HTML)
-    public String getCurrenetTradingAsStringText() throws NotFoundException {
+    public String getCurrenetTradingAsStringText(@PathParam("tradingId") Integer tradingId) throws NotFoundException {
 
-       final List<Trading> tradings = tradingDao.getAll();
+       final Trading trading = tradingDao.get(tradingId);
 
-       if (tradings.get(0) != null) {
+       if (trading != null) {
 
-           TradePair tradePair = tradings.get(0).getTradePair();
+           TradePair tradePair = trading.getTradePair();
            String tradingAsStringText = tradePair.getTradingSite().getDescription() +
                                      " (" + tradePair.getCurrency().getDescription()  + "/"
                                           + tradePair.getCryptoCurrency().getDescription() + ")";
