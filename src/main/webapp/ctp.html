@@ -36,6 +36,30 @@
     <div ng-show="showOrders" align="center">
         <h4>Market Orders</h4>
 
+        <table>
+            <tr>
+                <th>Datum en tijd</th>
+                <th>Order tyoe</th>
+                <th>Index</th>
+                <th>Order nummer</th>
+                <th>Munten</th>
+                <th>Crypto munten</th>
+                <th>Koers</th>
+                <th>Commissie</th>
+                <th>Status</th>
+            </tr>
+            <tr ng-repeat="order in marketOrders">
+                <td width="120">{{ order.timestamp }} </td>
+                <td width="100"> {{ order.orderType }}</td>
+                <td width="100">{{ order.index }}</td>
+                <td width="200">{{ order.orderReference }}</td>
+                <td width="100">{{ order.coins }}</td>
+                <td width="100">{{ order.cryptoCoins }}</td>
+                <td width="100">{{ order.exchangeRate }}</td>
+                <td width="100">{{ order.fee }}</td>
+                <td width="100">{{ order.status }}</td>
+            </tr>
+        </table>
 
     </div>
 </div>
