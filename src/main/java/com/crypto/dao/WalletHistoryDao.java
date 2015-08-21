@@ -15,10 +15,11 @@ public interface WalletHistoryDao extends Serializable{
 
     /**
      * Get all wallet histories
+     * @param trading the util
      *
      * @return the wallet histories
      */
-    public List<WalletHistory> retrieveAll();
+    public List<WalletHistory> getAll(final Trading trading);
 
 
     /**

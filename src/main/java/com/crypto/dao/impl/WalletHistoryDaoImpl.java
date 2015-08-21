@@ -24,8 +24,9 @@ public class WalletHistoryDaoImpl implements WalletHistoryDao {
     private EntityManager em;
 
     @Override
-    public List<WalletHistory> retrieveAll() {
-        final TypedQuery<WalletHistory> query = (TypedQuery<WalletHistory>) em.createQuery("SELECT w FROM WalletHistory w");
+    public List<WalletHistory> getAll(Trading trading ) {
+        final TypedQuery<WalletHistory> query = (TypedQuery<WalletHistory>) em.createQuery("SELECT w FROM WalletHistory w WHERE w.pk.trading=:trading ORDER BY w.pk.timestamp DESC");
+        query.setParameter("trading", trading);
 
         return query.getResultList();
     }

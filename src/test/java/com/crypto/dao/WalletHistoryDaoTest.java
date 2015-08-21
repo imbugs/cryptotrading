@@ -60,9 +60,12 @@ public class WalletHistoryDaoTest {
 
     @Test
     @UsingDataSet("datasets/it_test_dataset_21.xml")
-    public void testRetrieveAll() {
+    public void testGetAll() {
 
-        final List<WalletHistory> walletHistories = walletHistoryDao.retrieveAll();
+        final Trading trading = new Trading();
+        trading.setId(1);
+
+        final List<WalletHistory> walletHistories = walletHistoryDao.getAll(trading);
 
         assertEquals(2, walletHistories.size());
     }

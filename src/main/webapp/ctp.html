@@ -38,11 +38,11 @@
         <table>
             <tr>
                 <td width="200"><h4>Munten  :</h4></td>
-                <td><h4>{{ wallet.coins }} {{ trading.tradePair.currency.code }}</h4></td>
+                <td><h4>{{ wallet.coins }} {{ currency.code }}</h4></td>
             </tr>
             <tr>
                 <td><h4>Cryptocoins :</h4></td>
-                <td><h4>{{ wallet.cryptoCoins }} {{ trading.tradePair.cryptoCurrency.code }}</h4></td>
+                <td><h4>{{ wallet.cryptoCoins }} {{ cryptoCurrency.code }}</h4></td>
             </tr>
         </table>
     </div>
@@ -67,8 +67,8 @@
                 <td width="100">{{ order.orderType }}</td>
                 <td width="100">{{ order.index }}</td>
                 <td width="200">{{ order.orderReference }}</td>
-                <td width="100">{{ order.coins }}</td>
-                <td width="100">{{ order.cryptoCoins }}</td>
+                <td width="100">{{ currency.symbol }} {{ order.coins }}</td>
+                <td width="100">{{ cryptoCurrency.symbol }} {{ order.cryptoCoins }}</td>
                 <td width="100">{{ order.exchangeRate }}</td>
                 <td width="100">{{ order.fee }}</td>
                 <td width="100">{{ order.status }}</td>
@@ -107,6 +107,9 @@
                     success(function (data) {
                         $scope.currentRate = data;
                     });
+
+            $scope.currency = $scope.trading.tradePair.currency;
+            $scope.cryptoCurrency = $scope.trading.tradePair.cryptoCurrency;
         });
 
         // Get all market orders
