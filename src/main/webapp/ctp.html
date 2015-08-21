@@ -28,9 +28,23 @@
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
             <button type="button" class="btn btn-primary"> Grafiek</button>
-            <button type="button" class="btn btn-primary"> Wallet</button>
+            <button type="button" class="btn btn-primary" ng-click="getWallet()"> Wallet</button>
             <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders</button>
         </div>
+    </div>
+
+    <div ng-show="showWallet" align="center">
+        <h4>Wallet</h4>
+        <table>
+            <tr>
+                <td width="200"><h4>Munten  :</h4></td>
+                <td><h4>{{ wallet.coins }} {{ trading.tradePair.currency.code }}</h4></td>
+            </tr>
+            <tr>
+                <td><h4>Cryptocoins :</h4></td>
+                <td><h4>{{ wallet.cryptoCoins }} {{ trading.tradePair.cryptoCurrency.code }}</h4></td>
+            </tr>
+        </table>
     </div>
 
     <div ng-show="showOrders" align="center">
@@ -49,8 +63,8 @@
                 <th>Status</th>
             </tr>
             <tr ng-repeat="order in marketOrders">
-                <td width="120">{{ order.timestamp }} </td>
-                <td width="100"> {{ order.orderType }}</td>
+                <td width="120">{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                <td width="100">{{ order.orderType }}</td>
                 <td width="100">{{ order.index }}</td>
                 <td width="200">{{ order.orderReference }}</td>
                 <td width="100">{{ order.coins }}</td>
@@ -60,7 +74,6 @@
                 <td width="100">{{ order.status }}</td>
             </tr>
         </table>
-
     </div>
 </div>
 
@@ -72,6 +85,7 @@
     app.controller("cryptoTradingController", function ($scope, $http) {
 
         $scope.showOrders = false;
+        $scope.showWallet = false;
 
         // get current trading
         var promise = $http.get('rest/getCurrentTrading').
@@ -79,7 +93,7 @@
                            $scope.trading = data;
                       });
 
-        // Wait until promise of getting current trade is is finished.
+        // Wait until promise of getting current trade is finished.
         promise.then(function () {
 
             // get trading site as text
@@ -93,16 +107,27 @@
                     success(function (data) {
                         $scope.currentRate = data;
                     });
-
         });
 
         // Get all market orders
         $scope.getOrders = function () {
             $scope.showOrders = true;
+            $scope.showWallet = false;
 
             $http.get('rest/marketOrders/' + $scope.trading.id).
                     success(function (data) {
                         $scope.marketOrders = data;
+                    });
+        }
+
+        // Get wallet
+        $scope.getWallet = function () {
+            $scope.showOrders = false;
+            $scope.showWallet = true;
+
+            $http.get('rest/getWallet/' + $scope.trading.id).
+                    success(function (data) {
+                        $scope.wallet = data;
                     });
         }
     })
