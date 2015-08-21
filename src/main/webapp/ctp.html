@@ -27,7 +27,7 @@
 
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
-            <button type="button" class="btn btn-primary"> Grafiek</button>
+            <button type="button" class="btn btn-primary" ng-click="getGraph()"> Grafiek</button>
             <button type="button" class="btn btn-primary" ng-click="getWallet()"> Wallet</button>
             <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders</button>
         </div>
@@ -45,6 +45,24 @@
                 <td><h4>{{ wallet.cryptoCoins }} {{ cryptoCurrency.code }}</h4></td>
             </tr>
         </table>
+
+        <h4>Wallet historie</h4>
+        <table>
+            <tr>
+                <th width="120">Datum en tijd</th>
+                <th width="120">Munten</th>
+                <th width="130">Crypto munten</th>
+                <th width="100">Koers</th>
+                <th width="200">Totale waarde</th>
+            </tr>
+            <tr ng-repeat="walletHistory in walletHistories">
+                <td>{{ walletHistory.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                <td>{{ walletHistory.coins }}</td>
+                <td>{{ walletHistory.cryptoCoins }}</td>
+                <td>{{ walletHistory.exchangeRate }}</td>
+                <td>{{ walletHistory.totalValue }}</td>
+            </tr>
+        </table>
     </div>
 
     <div ng-show="showOrders" align="center">
@@ -52,29 +70,34 @@
 
         <table>
             <tr>
-                <th>Datum en tijd</th>
-                <th>Order tyoe</th>
-                <th>Index</th>
-                <th>Order nummer</th>
-                <th>Munten</th>
-                <th>Crypto munten</th>
-                <th>Koers</th>
-                <th>Commissie</th>
-                <th>Status</th>
+                <th width="120">Datum en tijd</th>
+                <th width="100">Order tyoe</th>
+                <th width="100">Index</th>
+                <th width="120">Order nummer</th>
+                <th width="100">Munten</th>
+                <th width="120">Crypto munten</th>
+                <th width="100">Koers</th>
+                <th width="100">Commissie</th>
+                <th width="100">Status</th>
             </tr>
             <tr ng-repeat="order in marketOrders">
-                <td width="120">{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
-                <td width="100">{{ order.orderType }}</td>
-                <td width="100">{{ order.index }}</td>
-                <td width="200">{{ order.orderReference }}</td>
-                <td width="100">{{ currency.symbol }} {{ order.coins }}</td>
-                <td width="100">{{ cryptoCurrency.symbol }} {{ order.cryptoCoins }}</td>
-                <td width="100">{{ order.exchangeRate }}</td>
-                <td width="100">{{ order.fee }}</td>
-                <td width="100">{{ order.status }}</td>
+                <td>{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                <td>{{ order.orderType }}</td>
+                <td>{{ order.index }}</td>
+                <td>{{ order.orderReference }}</td>
+                <td>{{ currency.symbol }} {{ order.coins }}</td>
+                <td>{{ cryptoCurrency.symbol }} {{ order.cryptoCoins }}</td>
+                <td>{{ order.exchangeRate }}</td>
+                <td>{{ order.fee }}</td>
+                <td>{{ order.status }}</td>
             </tr>
         </table>
     </div>
+
+    <div ng-show="showGraph" align="center">
+        <h4>Grafiek</h4>
+    </div>
+
 </div>
 
 </body>
@@ -86,12 +109,13 @@
 
         $scope.showOrders = false;
         $scope.showWallet = false;
+        $scope.showGraph = false;
 
         // get current trading
         var promise = $http.get('rest/getCurrentTrading').
-                           success(function (data) {
-                           $scope.trading = data;
-                      });
+                success(function (data) {
+                    $scope.trading = data;
+                });
 
         // Wait until promise of getting current trade is finished.
         promise.then(function () {
@@ -116,6 +140,7 @@
         $scope.getOrders = function () {
             $scope.showOrders = true;
             $scope.showWallet = false;
+            $scope.showGraph = false;
 
             $http.get('rest/marketOrders/' + $scope.trading.id).
                     success(function (data) {
@@ -127,13 +152,26 @@
         $scope.getWallet = function () {
             $scope.showOrders = false;
             $scope.showWallet = true;
+            $scope.showGraph = false;
 
             $http.get('rest/getWallet/' + $scope.trading.id).
                     success(function (data) {
                         $scope.wallet = data;
                     });
+
+            $http.get('rest/getWalletHistory/' + $scope.trading.id).
+                    success(function (data) {
+                        $scope.walletHistories = data;
+                    });
+        }
+
+        // Show graph
+        $scope.getGraph = function () {
+            $scope.showOrders = false;
+            $scope.showWallet = false;
+            $scope.showGraph = true;
+
         }
     })
-
 </script>
 </html>
