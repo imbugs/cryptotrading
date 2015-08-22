@@ -6,10 +6,10 @@ package com.crypto.services.rest;
  * Created by Jan Wicherink on 27-5-15.
  */
 
+import com.crypto.calculator.bulk.CryptoCoinHistoryTrendCalculator;
 import com.crypto.dao.TradingDao;
 import com.crypto.entities.TradePair;
 import com.crypto.entities.Trading;
-import com.crypto.util.Utils;
 import com.google.gson.Gson;
 import javassist.NotFoundException;
 
@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 public class TradingServices {
 
     @EJB
-    private Utils utils;
+    private CryptoCoinHistoryTrendCalculator cryptoCoinHistoryTrendCalculator;
 
     @EJB
     private TradingDao tradingDao;
@@ -80,11 +80,15 @@ public class TradingServices {
      * Recalculates all the trendlines and signals of a util.
      */
     @POST
-    @Path("/recalculateInParallel/")
-    public void recalculate() throws ExecutionException, InterruptedException {
+    @Path("/recalculate/{tradingId}")
+    @Produces(MediaType.TEXT_HTML)
+    public String reCalculate(@PathParam("tradingId") Integer tradingId) throws ExecutionException, InterruptedException {
 
-        final Trading trading = tradingDao.get(0);
+        final Trading trading = tradingDao.get(tradingId);
 
-        utils.calculateTrendLines(trading);
+        cryptoCoinHistoryTrendCalculator.init(trading);
+        cryptoCoinHistoryTrendCalculator.recalculateInParallel();
+
+        return "Gereed";
     }
 }
