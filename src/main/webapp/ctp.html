@@ -77,7 +77,7 @@
                 <th width="170">Order nummer</th>
                 <th width="100">Munten</th>
                 <th width="120">Crypto munten</th>
-                <th width="80">Koers</th>
+                <th width="120">Koers</th>
                 <th width="100">Commissie</th>
                 <th width="200">Status</th>
             </tr>
@@ -88,7 +88,7 @@
                 <td>{{ order.orderReference }}</td>
                 <td>{{ currency.symbol }} {{ order.coins | number: 2}}</td>
                 <td>{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
-                <td>{{ order.exchangeRate }}</td>
+                <td>{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol }} </td>
                 <td>{{ currency.symbol }} {{ order.fee }}</td>
                 <td>{{ order.status | orderStatus }}</td>
             </tr>
