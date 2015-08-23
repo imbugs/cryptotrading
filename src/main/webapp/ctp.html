@@ -7,11 +7,14 @@
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="jquery-ui/css/smoothness/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="css/overwrite_jquery.css"/>
 
     <script src="jquery/jquery-2.1.3.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="bootstrap/js/bootstrap-select.min.js"></script>
     <script src="angular/angular.min.js"></script>
+    <script src="jquery-ui/js/jquery-ui.js"></script>
 </head>
 <body>
 
@@ -27,10 +30,10 @@
 
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
-            <button type="button" class="btn btn-primary" ng-click="reCalculate()"> Herbereken </button>
-            <button type="button" class="btn btn-primary" ng-click="getGraph()"> Grafiek </button>
-            <button type="button" class="btn btn-primary" ng-click="getWallet()"> Wallet </button>
-            <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders </button>
+            <button type="button" class="btn btn-primary" ng-click="reCalculate()"> Herbereken</button>
+            <button type="button" class="btn btn-primary" ng-click="getGraph()"> Grafiek</button>
+            <button type="button" class="btn btn-primary" ng-click="getWallet()"> Wallet</button>
+            <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders</button>
         </div>
     </div>
 
@@ -38,7 +41,7 @@
         <h4>Wallet</h4>
         <table>
             <tr>
-                <td width="200"><h4>Munten  :</h4></td>
+                <td width="200"><h4>Munten :</h4></td>
                 <td><h4>{{ wallet.coins }} {{ currency.code }}</h4></td>
             </tr>
             <tr>
@@ -88,7 +91,7 @@
                 <td>{{ order.orderReference }}</td>
                 <td>{{ currency.symbol }} {{ order.coins | number: 2}}</td>
                 <td>{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
-                <td>{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol }} </td>
+                <td>{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol }}</td>
                 <td>{{ currency.symbol }} {{ order.fee }}</td>
                 <td>{{ order.status | orderStatus }}</td>
             </tr>
@@ -103,7 +106,7 @@
     <div ng-show="menuOption == 'recalculate'" align="center">
         <h4>Herbereken trends</h4>
         <br/>
-        {{ calculationStatus }}
+        <div id="progressbar" class="progress"><div class="progress-label" align="center">...</div></div>
     </div>
 
 </div>
@@ -113,29 +116,37 @@
 <script>
 
     // Angular filter type for Order Type
-    angular.module('orderTypeFilter', []).filter('orderType', function() {
-        return function(input) {
-           if (input == 'SELL') {
-               return 'Verkoop'
-           }
-           else {
-               return 'Koop';
-           }
+    angular.module('orderTypeFilter', []).filter('orderType', function () {
+        return function (input) {
+            if (input == 'SELL') {
+                return 'Verkoop'
+            }
+            else {
+                return 'Koop';
+            }
         };
     });
 
     // Angular filter type for order status
-    angular.module('orderStatusFilter', []).filter('orderStatus', function() {
-        return function(input) {
-            switch(input) {
-                case  'EXECUTED'   : return 'Uitgevoerd';
-                case  'EXECUTING'  : return 'In uitvoering';
-                case  'CANCELLED'  : return 'Afgebroken';
-                case  'PARTLYEXEC' : return 'Gedeeltelijk uitgevoerd';
-                case  'OPEN'       : return 'Open';
-                case  'RETRY'      : return 'Herhaal';
-                case  'ERROR'      : return 'Fout opgetreden';
-                default : return '-';
+    angular.module('orderStatusFilter', []).filter('orderStatus', function () {
+        return function (input) {
+            switch (input) {
+                case  'EXECUTED'   :
+                    return 'Uitgevoerd';
+                case  'EXECUTING'  :
+                    return 'In uitvoering';
+                case  'CANCELLED'  :
+                    return 'Afgebroken';
+                case  'PARTLYEXEC' :
+                    return 'Gedeeltelijk uitgevoerd';
+                case  'OPEN'       :
+                    return 'Open';
+                case  'RETRY'      :
+                    return 'Herhaal';
+                case  'ERROR'      :
+                    return 'Fout opgetreden';
+                default :
+                    return '-';
             }
         };
     });
@@ -174,7 +185,7 @@
 
         // Get all market orders
         $scope.getOrders = function () {
-            $scope.menuOption  = "showOrders";
+            $scope.menuOption = "showOrders";
 
             $http.get('rest/marketOrders/' + $scope.trading.id).
                     success(function (data) {
@@ -200,23 +211,18 @@
         // Show graph
         $scope.getGraph = function () {
             $scope.menuOption = "showGraph";
-
-            $scope.showOrders = false;
-            $scope.showWallet = false;
-            $scope.showGraph = true;
-
         }
 
         // Recalcuate trends
         $scope.reCalculate = function () {
 
             $scope.menuOption = "recalculate";
-            $scope.calculationStatus = 'Bezig';
 
-            $http.post('rest/recalculate/' + $scope.trading.id ).
-                    success(function (data) {
-                        $scope.calculationStatus = data;
-                    });
+            t = setTimeout($scope.progressMonitor, 2000);
+
+            $scope.progress = 0;
+
+            $http.post('rest/recalculate/' + $scope.trading.id);
         }
 
         // Determine Order Type
@@ -230,6 +236,39 @@
             }
         }
 
+
+        // Progress Monitoring (trend calculation)
+        $scope.progress = 0;
+
+        var progressbar   = $("#progressbar"),
+            progressLabel = $(".progress-label");
+
+         progressbar.progressbar({
+                value: false,
+                change: function () {
+                    progressLabel.text(progressbar.progressbar("value") + "%");
+                },
+                complete: function () {
+                    progressLabel.text("Gereed");
+                }
+         });
+
+         $scope.progressMonitor = function (){
+
+            var progressbar = $("#progressbar");
+
+            $scope.progress = $scope.progress + 10;
+
+            if($scope.progress > 0){
+                progressbar.progressbar( "value", $scope.progress );
+            }
+
+            if($scope.progress < 100){
+                t = setTimeout($scope.progressMonitor, 2000);
+            }
+        };
     })
+
 </script>
+
 </html>
