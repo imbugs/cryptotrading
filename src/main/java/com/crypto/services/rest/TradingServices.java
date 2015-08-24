@@ -14,9 +14,12 @@ import com.google.gson.Gson;
 import javassist.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -24,8 +27,11 @@ import java.util.concurrent.ExecutionException;
  * Rest service returning trading information
  */
 @Path("/")
-@Stateless
-public class TradingServices {
+@Stateful
+@SessionScoped
+public class TradingServices implements Serializable{
+
+    private static final long serialVersionUID = -5594656575774682432L;
 
     @EJB
     private CryptoCoinHistoryTrendCalculator cryptoCoinHistoryTrendCalculator;
@@ -81,14 +87,22 @@ public class TradingServices {
      */
     @POST
     @Path("/recalculate/{tradingId}")
-    @Produces(MediaType.TEXT_HTML)
-    public String reCalculate(@PathParam("tradingId") Integer tradingId) throws ExecutionException, InterruptedException {
+    public void reCalculate(@PathParam("tradingId") Integer tradingId) throws ExecutionException, InterruptedException {
 
         final Trading trading = tradingDao.get(tradingId);
 
         cryptoCoinHistoryTrendCalculator.init(trading);
         cryptoCoinHistoryTrendCalculator.recalculateInParallel();
+    }
 
-        return "Gereed";
+    /**\
+     * Get current calculation status
+     * @return the calculation status.
+     */
+    @GET
+    @Path("/calculationStatus/")
+    @Produces (MediaType.TEXT_PLAIN)
+    public String getCalculationStatus() {
+      return cryptoCoinHistoryTrendCalculator.getCalculationStatus();
     }
 }

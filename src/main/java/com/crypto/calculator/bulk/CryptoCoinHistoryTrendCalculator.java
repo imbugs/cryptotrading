@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -20,7 +22,10 @@ import java.util.logging.Logger;
  * Created by Jan Wicherink on 8-5-15.
  */
 @Stateful
-public class CryptoCoinHistoryTrendCalculator {
+@SessionScoped
+public class CryptoCoinHistoryTrendCalculator implements Serializable{
+
+    private static final long serialVersionUID = -6265098499046631206L;
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryTrendCalculator.class.getName());
 
@@ -45,6 +50,8 @@ public class CryptoCoinHistoryTrendCalculator {
     private BulkCalculator<CryptocoinHistory, MacdValue> macdCalculator;
 
     private BulkCalculator<CryptocoinHistory, Signal> signalCalculator;
+
+    private String calculationStatus;
 
     /**
      * Default constructor
@@ -76,6 +83,7 @@ public class CryptoCoinHistoryTrendCalculator {
         this.macdCalculator = new BulkCalculator<>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading);
         this.signalCalculator = new BulkCalculator<>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading);
 
+        this.calculationStatus = "Geinitialiseerd";
 
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
     }
@@ -85,10 +93,14 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateMovingAverageTrends() {
 
+        this.calculationStatus = "Start berekening Moving Average Trends";
+
         try {
             this.dataProvider.getAllMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for MA trend : " + trend.getName());
+                this.calculationStatus = "Berekening MA trend " + trend.getName();
+
                 dataProvider.setTrend(trend);
                 ((TrendCalculator) maCalculator.getCalculator()).setTrend(trend);
                 maCalculator.calculate();
@@ -98,6 +110,7 @@ public class CryptoCoinHistoryTrendCalculator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.calculationStatus = "Gereed berekening Moving Average Trends";
     }
 
     /**
@@ -105,10 +118,13 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateExponentialMovingAverageTrends() {
 
+        this.calculationStatus = "Start berekening Exponentiele Moving Average Trends";
+
         try {
             this.dataProvider.getAllExponentialMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for EMA trend : " + trend.getName());
+                this.calculationStatus = "Berekening EMA trend " + trend.getName();
 
                 dataProvider.setTrend(trend);
                 ((TrendCalculator) emaCalculator.getCalculator()).setTrend(trend);
@@ -119,6 +135,7 @@ public class CryptoCoinHistoryTrendCalculator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.calculationStatus = "Gereed berekening Exponentiele Moving Average Trends";
     }
 
 
@@ -127,10 +144,13 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateSmoothingMovingAverageTrends() {
 
+        this.calculationStatus = "Start berekening Smoothing Moving Average Trends";
+
         try {
             this.dataProvider.getAllSmoothingMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for SMA trend : " + trend.getName());
+                this.calculationStatus = "Berekening SMA trend " + trend.getName();
 
                 dataProvider.setTrend(trend);
                 ((TrendCalculator) smaCalculator.getCalculator()).setTrend(trend);
@@ -141,18 +161,21 @@ public class CryptoCoinHistoryTrendCalculator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.calculationStatus = "Gereed berekening Smooting Moving Average Trends";
     }
-
 
     /**
      * Calculate all Macd trends.
      */
     private void calculateMacdTrends() {
 
+        this.calculationStatus = "Start berekening Macd Trends";
+
         try {
             this.macdDataProvider.getAllMacds().stream().forEach((macd) -> {
                 // Calculate for every availble macd the macd value
                 LOG.info("Calculator for MACD  : " + macd.getId());
+                this.calculationStatus = "Berekening MACD :" + macd.getId();
 
                 this.macdDataProvider.setMacd(macd);
                 ((MacdCalculator) macdCalculator.getCalculator()).setMacd(macd);
@@ -161,6 +184,8 @@ public class CryptoCoinHistoryTrendCalculator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.calculationStatus = "Gereed berekening Macd Trends";
     }
 
     /**
@@ -168,11 +193,15 @@ public class CryptoCoinHistoryTrendCalculator {
      */
     private void calculateSignals() {
 
+        this.calculationStatus = "Start berekening Signalen";
+
         try {
             signalCalculator.calculate();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.calculationStatus = "Gereed berekening Signalen";
     }
 
 
@@ -181,6 +210,8 @@ public class CryptoCoinHistoryTrendCalculator {
      * finally calculate the signals. Calculation performed in parallel.
      */
     public void recalculateInParallel() throws ExecutionException, InterruptedException {
+
+        this.calculationStatus = "Start berekening trends en signalen.";
 
         // Truncate all data before recalculating
         this.dataProvider.truncateTrendValueData();
@@ -220,5 +251,9 @@ public class CryptoCoinHistoryTrendCalculator {
         calculateSmoothingMovingAverageTrends();
         calculateMacdTrends();
         calculateSignals();
+    }
+
+    public String getCalculationStatus() {
+        return this.calculationStatus;
     }
 }

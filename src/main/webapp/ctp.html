@@ -106,7 +106,9 @@
     <div ng-show="menuOption == 'recalculate'" align="center">
         <h4>Herbereken trends</h4>
         <br/>
-        <div id="progressbar" class="progress"><div class="progress-label" align="center">...</div></div>
+        <div id="progressbar" class="progress"></div><br/>
+        {{ progressStatus }}
+
     </div>
 
 </div>
@@ -218,9 +220,9 @@
 
             $scope.menuOption = "recalculate";
 
-            t = setTimeout($scope.progressMonitor, 2000);
+            t = setTimeout(progressMonitor, 2000);
 
-            $scope.progress = 0;
+            progress = 0;
 
             $http.post('rest/recalculate/' + $scope.trading.id);
         }
@@ -236,36 +238,35 @@
             }
         }
 
-
-        // Progress Monitoring (trend calculation)
-        $scope.progress = 0;
-
-        var progressbar   = $("#progressbar"),
-            progressLabel = $(".progress-label");
+        // Progress bar and progress label are jQuery UI objects that do not work properly with Angular, therefor
+        // the objects are not attached to $scope and under control of Angular.
+        var progressbar   = $("#progressbar");
+        var progress      = 0;
 
          progressbar.progressbar({
                 value: false,
                 change: function () {
-                    progressLabel.text(progressbar.progressbar("value") + "%");
+                    progressbar.progressbar( "value", progress + " %");
                 },
                 complete: function () {
-                    progressLabel.text("Gereed");
+                    progressbar.progressbar( "value", "Klaar");
                 }
          });
 
-         $scope.progressMonitor = function (){
+         // Monitor the progress.
+         function progressMonitor(){
 
-            var progressbar = $("#progressbar");
+             // get trading site as text
+            $http.get('rest/calculationStatus/').
+                     success(function (data) {
+                         $scope.progressStatus = data;
+                     });
 
-            $scope.progress = $scope.progress + 10;
+            progress = progress + 10;
 
-            if($scope.progress > 0){
-                progressbar.progressbar( "value", $scope.progress );
-            }
+            progressbar.progressbar( "value", progress);
 
-            if($scope.progress < 100){
-                t = setTimeout($scope.progressMonitor, 2000);
-            }
+            t = setTimeout(progressMonitor, 2000);
         };
     })
 
