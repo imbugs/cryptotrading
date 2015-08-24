@@ -49,13 +49,18 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
 
     /**
      * Calculate in bulk all of the available cryptocoin history data.
+     * @param calculationProgress the calculation progress monitoring the progress of the calculation.
      */
-    public void calculate() {
+    public void calculate(CalculationProgress calculationProgress ) {
+
+        calculationProgress.setTotalCalculations(this.dataProvider.getAll().size());
 
         this.dataProvider.getAll().stream().forEach((data) -> {
 
             calculator.setIndex(((D) data).getIndex());
             calculator.calculate();
+
+            calculationProgress.incrementCalculation();
 
             if (calculator.getCalculatedValue() != null) {
                 dataPersister.storeValue(calculator.getCalculatedValue());
@@ -89,10 +94,6 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
 
     public void setCalculator(TrendCalculator calculator) {
         this.calculator = calculator;
-    }
-
-    public void setDataProvider(BulkDataProvider dataProvider) {
-        this.dataProvider = dataProvider;
     }
 
     public void setTradePair(TradePair tradePair) {

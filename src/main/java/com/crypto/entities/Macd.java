@@ -13,23 +13,23 @@ import javax.persistence.*;
 public class Macd {
 
     @Id
-    @Column(name="ID")
+    @Column(name = "ID")
     private Integer Id;
 
     @ManyToOne
-    @JoinColumn(name="SHORT_TREND_ID")
+    @JoinColumn(name = "SHORT_TREND_ID")
     private Trend shortTrend;
 
     @ManyToOne
-    @JoinColumn(name="LONG_TREND_ID")
+    @JoinColumn(name = "LONG_TREND_ID")
     private Trend longTrend;
 
     /**
      * Constructor
      *
-     * @param id the Id
+     * @param id         the Id
      * @param shortTrend the short trend of the Macd
-     * @param longTrend the long trend of the Macd
+     * @param longTrend  the long trend of the Macd
      */
     public Macd(Integer id, Trend shortTrend, Trend longTrend) {
         Id = id;
@@ -58,5 +58,11 @@ public class Macd {
 
     public void setId(Integer id) {
         Id = id;
+    }
+
+
+    public String getName() {
+
+        return shortTrend.getName() + '-' + longTrend.getName();
     }
 }

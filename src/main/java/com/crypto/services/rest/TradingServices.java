@@ -6,6 +6,7 @@ package com.crypto.services.rest;
  * Created by Jan Wicherink on 27-5-15.
  */
 
+import com.crypto.calculator.bulk.CalculationProgress;
 import com.crypto.calculator.bulk.CryptoCoinHistoryTrendCalculator;
 import com.crypto.dao.TradingDao;
 import com.crypto.entities.TradePair;
@@ -20,6 +21,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -101,8 +103,8 @@ public class TradingServices implements Serializable{
      */
     @GET
     @Path("/calculationStatus/")
-    @Produces (MediaType.TEXT_PLAIN)
-    public String getCalculationStatus() {
-      return cryptoCoinHistoryTrendCalculator.getCalculationStatus();
+    @Produces (MediaType.APPLICATION_JSON)
+    public HashMap<String, CalculationProgress> getCalculationStatus() {
+      return cryptoCoinHistoryTrendCalculator.getCalculationProgress();
     }
 }

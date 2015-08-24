@@ -106,10 +106,41 @@
     <div ng-show="menuOption == 'recalculate'" align="center">
         <h4>Herbereken trends</h4>
         <br/>
-        <div id="progressbar" class="progress"></div><br/>
-        {{ progressStatus }}
 
+        <div id="progressbar" class="progress">
+            <div align="center"><b> {{ progress }} % </b></div>
+        </div>
+
+        <table>
+            <tr>
+                <td width="60">MA</td>
+                <td width="400">{{ calculationStatus.MaCalculation.status }}</td>
+                <td width="40">{{ calculationStatus.MaCalculation.progress }} %</td>
+            </tr>
+            <tr>
+                <td>EMA</td>
+                <td>{{ calculationStatus.EmaCalculation.status }}</td>
+                <td>{{ calculationStatus.EmaCalculation.progress }} %</td>
+            </tr>
+            <tr>
+                <td>SMA</td>
+                <td>{{ calculationStatus.SmaCalculation.status }}</td>
+                <td>{{ calculationStatus.SmaCalculation.progress }} %</td>
+            </tr>
+            <tr>
+                <td>MACD</td>
+                <td>{{ calculationStatus.MacdCalculation.status }}</td>
+                <td>{{ calculationStatus.MacdCalculation.progress }} %</td>
+            </tr>
+            <tr>
+                <td>Signal</td>
+                <td>{{ calculationStatus.SignalCalculation.status }}</td>
+                <td>{{ calculationStatus.SignalCalculation.progress }} %</td>
+            </tr>
+        </table>
     </div>
+
+</div>
 
 </div>
 
@@ -220,9 +251,9 @@
 
             $scope.menuOption = "recalculate";
 
-            t = setTimeout(progressMonitor, 2000);
+            t = setTimeout(progressMonitor, 1000);
 
-            progress = 0;
+            $scope.progress = 0;
 
             $http.post('rest/recalculate/' + $scope.trading.id);
         }
@@ -240,33 +271,31 @@
 
         // Progress bar and progress label are jQuery UI objects that do not work properly with Angular, therefor
         // the objects are not attached to $scope and under control of Angular.
-        var progressbar   = $("#progressbar");
-        var progress      = 0;
+        $scope.progress = 0;
 
-         progressbar.progressbar({
-                value: false,
-                change: function () {
-                    progressbar.progressbar( "value", progress + " %");
-                },
-                complete: function () {
-                    progressbar.progressbar( "value", "Klaar");
-                }
-         });
+        // Monitor the progress.
+        function progressMonitor() {
 
-         // Monitor the progress.
-         function progressMonitor(){
-
-             // get trading site as text
+            // get trading site as text
             $http.get('rest/calculationStatus/').
-                     success(function (data) {
-                         $scope.progressStatus = data;
-                     });
+                    success(function (data) {
 
-            progress = progress + 10;
+                        $scope.calculationStatus = data;
 
-            progressbar.progressbar( "value", progress);
+                        $scope.progress = (data.MaCalculation.progress +
+                                data.EmaCalculation.progress +
+                                data.SmaCalculation.progress +
+                                data.MacdCalculation.progress +
+                                data.SignalCalculation.progress) / 5;
+                    });
 
-            t = setTimeout(progressMonitor, 2000);
+            $(function () {
+                $("#progressbar").progressbar({value: $scope.progress});
+            });
+
+            if ($scope.progress < 100) {
+                t = setTimeout(progressMonitor, 1000);
+            }
         };
     })
 

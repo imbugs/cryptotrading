@@ -12,6 +12,8 @@ import javax.ejb.Stateful;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -28,6 +30,12 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
     private static final long serialVersionUID = -6265098499046631206L;
 
     private static final Logger LOG = Logger.getLogger(CryptoCoinHistoryTrendCalculator.class.getName());
+
+    private static final String MA_CALCULATION = "MaCalculation";
+    private static final String EMA_CALCULATION = "EmaCalculation";
+    private static final String SMA_CALCULATION = "SmaCalculation";
+    private static final String MACD_CALCULATION = "MacdCalculation";
+    private static final String SIGNAL_CALCULATION = "SignalCalculation";
 
     @Resource
     private ManagedExecutorService executor;
@@ -51,7 +59,9 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
 
     private BulkCalculator<CryptocoinHistory, Signal> signalCalculator;
 
-    private String calculationStatus;
+    private HashMap<String, CalculationProgress> calculationStatus;
+
+
 
     /**
      * Default constructor
@@ -83,7 +93,12 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
         this.macdCalculator = new BulkCalculator<>(macdValueCalculator, this.macdDataProvider, this.macdDataProvider, trading);
         this.signalCalculator = new BulkCalculator<>(signalCalculator, this.signalBulkDataHandler, this.signalBulkDataHandler, trading);
 
-        this.calculationStatus = "Geinitialiseerd";
+        this.calculationStatus = new HashMap<>();
+        this.calculationStatus.put(MA_CALCULATION, new CalculationProgress(MA_CALCULATION));
+        this.calculationStatus.put(EMA_CALCULATION, new CalculationProgress(EMA_CALCULATION));
+        this.calculationStatus.put(SMA_CALCULATION, new CalculationProgress(SMA_CALCULATION));
+        this.calculationStatus.put(MACD_CALCULATION, new CalculationProgress(MACD_CALCULATION));
+        this.calculationStatus.put(SIGNAL_CALCULATION, new CalculationProgress(SIGNAL_CALCULATION));
 
         LOG.info("Initialise for tradepair : " + trading.getTradePair().getId());
     }
@@ -93,24 +108,27 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
      */
     private void calculateMovingAverageTrends() {
 
-        this.calculationStatus = "Start berekening Moving Average Trends";
+        CalculationProgress progress = calculationStatus.get(MA_CALCULATION);
+        progress.setNrOfCalculationsToExecute(this.dataProvider.getAllMovingAverageTrends().size());
+        progress.calculationStart();
 
         try {
+
             this.dataProvider.getAllMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for MA trend : " + trend.getName());
-                this.calculationStatus = "Berekening MA trend " + trend.getName();
+                progress.setStatus("Berekening MA trend " + trend.getName());
 
                 dataProvider.setTrend(trend);
                 ((TrendCalculator) maCalculator.getCalculator()).setTrend(trend);
-                maCalculator.calculate();
+                maCalculator.calculate(progress);
             });
 
             dataProvider.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.calculationStatus = "Gereed berekening Moving Average Trends";
+        progress.setStatus("Gereed berekening Moving Average Trends");
     }
 
     /**
@@ -118,24 +136,26 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
      */
     private void calculateExponentialMovingAverageTrends() {
 
-        this.calculationStatus = "Start berekening Exponentiele Moving Average Trends";
+        CalculationProgress progress = calculationStatus.get(EMA_CALCULATION);
+        progress.setNrOfCalculationsToExecute(this.dataProvider.getAllExponentialMovingAverageTrends().size());
+        progress.calculationStart();
 
         try {
             this.dataProvider.getAllExponentialMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for EMA trend : " + trend.getName());
-                this.calculationStatus = "Berekening EMA trend " + trend.getName();
+                progress.setStatus("Berekening EMA trend " + trend.getName());
 
                 dataProvider.setTrend(trend);
                 ((TrendCalculator) emaCalculator.getCalculator()).setTrend(trend);
-                emaCalculator.calculate();
+                emaCalculator.calculate(progress);
             });
 
             dataProvider.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.calculationStatus = "Gereed berekening Exponentiele Moving Average Trends";
+        progress.setStatus("Gereed berekening Exponentiele Moving Average Trends");
     }
 
 
@@ -144,24 +164,26 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
      */
     private void calculateSmoothingMovingAverageTrends() {
 
-        this.calculationStatus = "Start berekening Smoothing Moving Average Trends";
+        CalculationProgress progress = calculationStatus.get(SMA_CALCULATION);
+        progress.setNrOfCalculationsToExecute(this.dataProvider.getAllSmoothingMovingAverageTrends().size());
+        progress.calculationStart();
 
         try {
             this.dataProvider.getAllSmoothingMovingAverageTrends().stream().forEach((trend) -> {
 
                 LOG.info("Calculator for SMA trend : " + trend.getName());
-                this.calculationStatus = "Berekening SMA trend " + trend.getName();
+                progress.setStatus("Berekening SMA trend " + trend.getName());
 
                 dataProvider.setTrend(trend);
                 ((TrendCalculator) smaCalculator.getCalculator()).setTrend(trend);
-                smaCalculator.calculate();
+                smaCalculator.calculate(progress);
             });
 
             dataProvider.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.calculationStatus = "Gereed berekening Smooting Moving Average Trends";
+        progress.setStatus("Gereed berekening Smooting Moving Average Trends");
     }
 
     /**
@@ -169,23 +191,25 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
      */
     private void calculateMacdTrends() {
 
-        this.calculationStatus = "Start berekening Macd Trends";
+        CalculationProgress progress = calculationStatus.get(MACD_CALCULATION);
+        progress.setNrOfCalculationsToExecute(this.macdDataProvider.getAllMacds().size());
+        progress.calculationStart();
 
         try {
             this.macdDataProvider.getAllMacds().stream().forEach((macd) -> {
                 // Calculate for every availble macd the macd value
                 LOG.info("Calculator for MACD  : " + macd.getId());
-                this.calculationStatus = "Berekening MACD :" + macd.getId();
+                progress.setStatus("Berekening MACD :" + macd.getName());
 
                 this.macdDataProvider.setMacd(macd);
                 ((MacdCalculator) macdCalculator.getCalculator()).setMacd(macd);
-                macdCalculator.calculate();
+                macdCalculator.calculate(progress);
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.calculationStatus = "Gereed berekening Macd Trends";
+        progress.setStatus("Gereed berekening Macd Trends");
     }
 
     /**
@@ -193,15 +217,17 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
      */
     private void calculateSignals() {
 
-        this.calculationStatus = "Start berekening Signalen";
+        CalculationProgress progress = calculationStatus.get(SIGNAL_CALCULATION);
+        progress.setStatus("Start berekening van de signalen");
+        progress.calculationStart();
 
         try {
-            signalCalculator.calculate();
+            signalCalculator.calculate(progress);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.calculationStatus = "Gereed berekening Signalen";
+        progress.setStatus("Gereed berekening Signalen");
     }
 
 
@@ -210,8 +236,6 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
      * finally calculate the signals. Calculation performed in parallel.
      */
     public void recalculateInParallel() throws ExecutionException, InterruptedException {
-
-        this.calculationStatus = "Start berekening trends en signalen.";
 
         // Truncate all data before recalculating
         this.dataProvider.truncateTrendValueData();
@@ -253,7 +277,7 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
         calculateSignals();
     }
 
-    public String getCalculationStatus() {
+    public HashMap<String,CalculationProgress> getCalculationProgress() {
         return this.calculationStatus;
     }
 }
