@@ -187,7 +187,7 @@
     // Register filter
     var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter']);
 
-    app.controller("cryptoTradingController", function ($scope, $http) {
+    app.controller("cryptoTradingController", function ($scope, $interval, $http) {
 
         $scope.menuOption = "showOrders ";
 
@@ -250,12 +250,32 @@
         $scope.reCalculate = function () {
 
             $scope.menuOption = "recalculate";
-
             $scope.progress = 0;
 
             $http.post('rest/recalculate/' + $scope.trading.id);
 
-            t = setTimeout(progressMonitor, 1000);
+            // Monitor the progress
+            $scope.timeoutPromise = $interval(function () {
+
+                // get calculculation status
+                $http.get('rest/calculationStatus/').
+                        success(function (data) {
+
+                            $scope.calculationStatus = data;
+
+                            $scope.progress = (data.MaCalculation.progress +
+                                               data.EmaCalculation.progress +
+                                               data.SmaCalculation.progress +
+                                               data.MacdCalculation.progress +
+                                               data.SignalCalculation.progress) / 5;
+                        });
+
+                $("#progressbar").progressbar({value: $scope.progress});
+
+                if ($scope.progress >= 100) {
+                    $interval.cancel($scope.timeoutPromise);
+                }
+            }, 1000);
         }
 
         // Determine Order Type
@@ -268,35 +288,6 @@
                 return "Verkoop";
             }
         }
-
-        // Progress bar and progress label are jQuery UI objects that do not work properly with Angular, therefor
-        // the objects are not attached to $scope and under control of Angular.
-        $scope.progress = 0;
-
-        // Monitor the progress.
-        function progressMonitor() {
-
-            // get trading site as text
-            $http.get('rest/calculationStatus/').
-                    success(function (data) {
-
-                        $scope.calculationStatus = data;
-
-                        $scope.progress = (data.MaCalculation.progress +
-                                data.EmaCalculation.progress +
-                                data.SmaCalculation.progress +
-                                data.MacdCalculation.progress +
-                                data.SignalCalculation.progress) / 5;
-                    });
-
-            $(function () {
-                $("#progressbar").progressbar({value: $scope.progress});
-            });
-
-            if ($scope.progress < 100) {
-                t = setTimeout(progressMonitor, 1000);
-            }
-        };
     })
 
 </script>
