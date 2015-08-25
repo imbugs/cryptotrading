@@ -25,7 +25,6 @@
         <h3>
             {{tradingAsText}} : {{currentRate}}
         </h3>
-
     </div>
 
     <!--
@@ -33,10 +32,10 @@
     -->
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
-            <button type="button" class="btn btn-primary" ng-click="clickReCalculate()"> Herbereken</button>
-            <button type="button" class="btn btn-primary" ng-click="clickGraph()"> Grafiek</button>
-            <button type="button" class="btn btn-primary" ng-click="clickWallet()"> Wallet</button>
-            <button type="button" class="btn btn-primary" ng-click="clickOrders()"> Orders</button>
+            <button type="button" class="btn btn-primary" ng-click="clickReCalculate()"> Herbereken <span class="glyphicon glyphicon-refresh"></span></button>
+            <button type="button" class="btn btn-primary" ng-click="clickGraph()"> Grafiek <span class="glyphicon glyphicon-stats"></span></button>
+            <button type="button" class="btn btn-primary" ng-click="clickWallet()"> Wallet <span class="glyphicon glyphicon-bitcoin"></span></button>
+            <button type="button" class="btn btn-primary" ng-click="clickOrders()"> Orders <span class="glyphicon glyphicon-briefcase"></span></button>
         </div>
     </div>
 
@@ -119,7 +118,7 @@
      Recalc trends and signals menu option
     -->
     <div ng-show="menuOption == 'recalculate'" align="center" ng-controller="recalculateController">
-        <h4>Herbereken trends</h4>
+        <h4>Herbereken trends en signalen</h4>
         <br/>
 
         <div id="progressbar" class="progress">
@@ -148,7 +147,7 @@
                 <td>{{ calculationStatus.MacdCalculation.progress }} %</td>
             </tr>
             <tr>
-                <td>Signal</td>
+                <td>Signaal</td>
                 <td>{{ calculationStatus.SignalCalculation.status }}</td>
                 <td>{{ calculationStatus.SignalCalculation.progress }} %</td>
             </tr>
@@ -202,8 +201,6 @@
 
     // main controller for the One Page Application
     app.controller("mainController", function ($scope, $interval, $http) {
-
-        $scope.menuOption = "showOrders ";
 
         // get current trading
         var promise = $http.get('rest/getCurrentTrading').
@@ -320,7 +317,7 @@
             $http.post('rest/recalculate/' + $scope.trading.id);
 
             // Monitor the progress
-            $scope.timeoutPromise = $interval(function () {
+            $scope.intervalPromise = $interval(function () {
 
                 // get calculculation status
                 $http.get('rest/calculationStatus/').
@@ -338,7 +335,7 @@
                 $("#progressbar").progressbar({value: $scope.progress});
 
                 if ($scope.progress >= 100) {
-                    $interval.cancel($scope.timeoutPromise);
+                    $interval.cancel($scope.intervalPromise);
                 }
             }, 1000);
         });
