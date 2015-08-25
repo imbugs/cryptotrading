@@ -16,6 +16,7 @@ import com.crypto.entities.Trading;
  *            <p/>
  *            Created by Jan Wicherink on 9-5-15.
  */
+
 public class BulkCalculator<D extends DataIndexProvider, E> {
 
     private Calculator calculator;
@@ -26,18 +27,24 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
 
     private TradePair tradePair;
 
+    private CalculationProgress calculationProgress;
+
     /**
      * Constructor
      *
      * @param calculator
      * @param dataProvider
      */
-    public BulkCalculator(Calculator calculator, BulkDataProvider dataProvider, DataPersister dataPersister, Trading trading) {
+    public BulkCalculator(Calculator calculator,
+                          BulkDataProvider dataProvider,
+                          DataPersister dataPersister,
+                          Trading trading,
+                          CalculationProgress calculationProgress) {
         this.calculator = calculator;
         this.dataProvider = dataProvider;
         this.dataProvider.setTrading(trading);
         this.dataPersister = dataPersister;
-        this.tradePair = tradePair;
+        this.calculationProgress = calculationProgress;
     }
 
     /**
@@ -49,11 +56,12 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
 
     /**
      * Calculate in bulk all of the available cryptocoin history data.
-     * @param calculationProgress the calculation progress monitoring the progress of the calculation.
      */
-    public void calculate(CalculationProgress calculationProgress ) {
+    public void calculate() {
 
-        calculationProgress.setTotalCalculations(this.dataProvider.getAll().size());
+        calculationProgress.setNrOfCalculationsToExecute(this.dataProvider.getAll().size());
+
+        calculationProgress.calculationStart();
 
         this.dataProvider.getAll().stream().forEach((data) -> {
 
@@ -98,5 +106,9 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
 
     public void setTradePair(TradePair tradePair) {
         this.tradePair = tradePair;
+    }
+
+    public CalculationProgress getCalculationProgress() {
+        return calculationProgress;
     }
 }

@@ -17,7 +17,11 @@ public class CalculationProgress {
 
     private Integer nrOfCalculationsToExecute;
 
+    private Integer progress;
+
     private Boolean calculationStarted = false;
+
+    private Boolean calculationFinished = false;
 
     /**
      * Constructor
@@ -28,44 +32,63 @@ public class CalculationProgress {
         this.nrCalculationsCompleted = 0;
         this.nrOfCalculationsToExecute = 0;
         this.status = "";
+        this.progress = 0;
     }
 
     public void setTotalCalculations(final Integer totalCalculations) {
         this.totalCalculations = totalCalculations;
     }
 
+    /**
+     * Increment the number of completed calculations and calculate the progress.
+     */
     public void incrementCalculation() {
         this.nrCalculationsCompleted = this.nrCalculationsCompleted + 1;
+
+        if (this.calculationStarted) {
+
+            if (nrOfCalculationsToExecute == 0) {
+                this.progress = 100;
+            }
+            this.progress = (100 * this.nrCalculationsCompleted) / (this.totalCalculations * this.nrOfCalculationsToExecute);
+        }
+        else {
+            if (nrOfCalculationsToExecute == 0) {
+                this.progress = 100;
+            }
+            else {
+                this.progress = 0;
+            }
+        }
     }
 
     public void setNrOfCalculationsToExecute(Integer nrOfCalculationsToExecute) {
         this.nrOfCalculationsToExecute = nrOfCalculationsToExecute;
     }
 
+
     public void calculationStart() {
         this.calculationStarted = true;
+    }
+
+    public void calculationFinish() {
+        this.calculationFinished = true;
+
+        if (this.nrOfCalculationsToExecute == 0) {
+            this.progress = 100;
+        }
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    /**
-     * The progress of the calculation in percentages
-     * @return the progress
-     */
     public Integer getProgress() {
+        return progress;
+    }
 
-       if (calculationStarted) {
-
-           if (nrOfCalculationsToExecute == 0) {
-               return 100;
-           }
-           return (this.nrCalculationsCompleted / (this.totalCalculations * this.nrOfCalculationsToExecute)) * 100;
-       }
-       else {
-           return 0;
-       }
+    public void setProgress(Integer progress) {
+        this.progress = progress;
     }
 
     /**

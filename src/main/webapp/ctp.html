@@ -251,11 +251,11 @@
 
             $scope.menuOption = "recalculate";
 
-            t = setTimeout(progressMonitor, 1000);
-
             $scope.progress = 0;
 
             $http.post('rest/recalculate/' + $scope.trading.id);
+
+            t = setTimeout(progressMonitor, 1000);
         }
 
         // Determine Order Type
