@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<div ng-app="cryptoTrading" ng-controller="cryptoTradingController">
+<div ng-app="cryptoTrading" ng-controller="mainController">
     <div align="center"><h1>Crypto trading places (Handel)</h1></div>
 
     <div align="center">
@@ -33,17 +33,17 @@
     -->
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
-            <button type="button" class="btn btn-primary" ng-click="reCalculate()"> Herbereken</button>
-            <button type="button" class="btn btn-primary" ng-click="getGraph()"> Grafiek</button>
-            <button type="button" class="btn btn-primary" ng-click="getWallet()"> Wallet</button>
-            <button type="button" class="btn btn-primary" ng-click="getOrders()"> Orders</button>
+            <button type="button" class="btn btn-primary" ng-click="clickReCalculate()"> Herbereken</button>
+            <button type="button" class="btn btn-primary" ng-click="clickGraph()"> Grafiek</button>
+            <button type="button" class="btn btn-primary" ng-click="clickWallet()"> Wallet</button>
+            <button type="button" class="btn btn-primary" ng-click="clickOrders()"> Orders</button>
         </div>
     </div>
 
     <!--
      Wallet menu option
     -->
-    <div ng-show="menuOption == 'showWallet'" align="center">
+    <div ng-show="menuOption == 'showWallet'" align="center" ng-controller="walletController">
         <h4>Wallet</h4>
         <table>
             <tr>
@@ -78,7 +78,7 @@
     <!--
        Market orders menu option
      -->
-    <div ng-show="menuOption == 'showOrders'" align="center">
+    <div ng-show="menuOption == 'showOrders'" align="center" ng-controller="orderController">
         <h4>Market Orders</h4>
 
         <table>
@@ -110,7 +110,7 @@
     <!--
        Graph menu option
      -->
-    <div ng-show="menuOption == 'showGraph'" align="center">
+    <div ng-show="menuOption == 'showGraph'" align="center" ng-controller="graphController">
         <h4>Grafiek</h4>
     </div>
 
@@ -118,7 +118,7 @@
     <!--
      Recalc trends and signals menu option
     -->
-    <div ng-show="menuOption == 'recalculate'" align="center">
+    <div ng-show="menuOption == 'recalculate'" align="center" ng-controller="recalculateController">
         <h4>Herbereken trends</h4>
         <br/>
 
@@ -200,8 +200,8 @@
     // Register filter
     var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter']);
 
-    // Controller
-    app.controller("cryptoTradingController", function ($scope, $interval, $http) {
+    // main controller for the One Page Application
+    app.controller("mainController", function ($scope, $interval, $http) {
 
         $scope.menuOption = "showOrders ";
 
@@ -230,19 +230,38 @@
             $scope.cryptoCurrency = $scope.trading.tradePair.cryptoCurrency;
         });
 
-        // Get all market orders
-        $scope.getOrders = function () {
-            $scope.menuOption = "showOrders";
 
-            $http.get('rest/marketOrders/' + $scope.trading.id).
-                    success(function (data) {
-                        $scope.marketOrders = data;
-                    });
+        //Click wallet menu option
+        $scope.clickWallet = function () {
+            $scope.menuOption = "showWallet";
+            $scope.$broadcast('clickWalletEvent');
         }
 
-        // Get wallet
-        $scope.getWallet = function () {
-            $scope.menuOption = "showWallet";
+        //Click orders menu option
+        $scope.clickOrders = function () {
+            $scope.menuOption = "showOrders";
+            $scope.$broadcast('clickOrdersEvent');
+        }
+
+        //Click graph option
+        $scope.clickGraph = function () {
+            $scope.menuOption = "showGraph";
+            $scope.$broadcast('clickGraphEvent');
+        }
+
+        //Click recalculate option
+        $scope.clickReCalculate = function () {
+            $scope.menuOption = "recalculate";
+            $scope.$broadcast('clickRecalculateEvent');
+        }
+    })
+
+
+    // Wallet controller
+    app.controller("walletController", function ($scope, $http) {
+
+        // Menu option wallet clicked, get wallet
+        $scope.$on('clickWalletEvent', function () {
 
             $http.get('rest/getWallet/' + $scope.trading.id).
                     success(function (data) {
@@ -253,17 +272,49 @@
                     success(function (data) {
                         $scope.walletHistories = data;
                     });
+        });
+    });
+
+
+    // Order controller
+    app.controller("orderController", function ($scope, $http) {
+
+        // Menu option orders clicked, get market orders
+        $scope.$on('clickOrdersEvent', function () {
+
+            $http.get('rest/marketOrders/' + $scope.trading.id).
+                    success(function (data) {
+                        $scope.marketOrders = data;
+                    });
+        });
+
+        // Determine Order Type
+        $scope.getOrderType = function (order) {
+
+            if (order instanceof BuyMarketOrder) {
+                return "Koop";
+            }
+            else {
+                return "Verkoop";
+            }
         }
+    });
 
-        // Show graph
-        $scope.getGraph = function () {
-            $scope.menuOption = "showGraph";
-        }
+    // Graphs controller
+    app.controller("graphController", function ($scope) {
 
-        // Recalcuate trends
-        $scope.reCalculate = function () {
+        // Menu option graph clicked, show graph
+        $scope.$on('clickGraphEvent', function () {
 
-            $scope.menuOption = "recalculate";
+        });
+    });
+
+
+    // Recalculate controller
+    app.controller("recalculateController", function ($scope, $http, $interval) {
+
+        // Menu option graph clicked, show graph
+        $scope.$on('clickRecalculateEvent', function () {
             $scope.progress = 0;
 
             $http.post('rest/recalculate/' + $scope.trading.id);
@@ -290,19 +341,9 @@
                     $interval.cancel($scope.timeoutPromise);
                 }
             }, 1000);
-        }
+        });
+    });
 
-        // Determine Order Type
-        $scope.getOrderType = function (order) {
-
-            if (order instanceof BuyMarketOrder) {
-                return "Koop";
-            }
-            else {
-                return "Verkoop";
-            }
-        }
-    })
 
 </script>
 
