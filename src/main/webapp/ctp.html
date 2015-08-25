@@ -28,6 +28,9 @@
 
     </div>
 
+    <!--
+        Menu
+    -->
     <div align="center">
         <div class="btn-group btn-toolbar" role="group">
             <button type="button" class="btn btn-primary" ng-click="reCalculate()"> Herbereken</button>
@@ -37,6 +40,9 @@
         </div>
     </div>
 
+    <!--
+     Wallet menu option
+    -->
     <div ng-show="menuOption == 'showWallet'" align="center">
         <h4>Wallet</h4>
         <table>
@@ -69,6 +75,9 @@
         </table>
     </div>
 
+    <!--
+       Market orders menu option
+     -->
     <div ng-show="menuOption == 'showOrders'" align="center">
         <h4>Market Orders</h4>
 
@@ -98,11 +107,17 @@
         </table>
     </div>
 
+    <!--
+       Graph menu option
+     -->
     <div ng-show="menuOption == 'showGraph'" align="center">
         <h4>Grafiek</h4>
     </div>
 
 
+    <!--
+     Recalc trends and signals menu option
+    -->
     <div ng-show="menuOption == 'recalculate'" align="center">
         <h4>Herbereken trends</h4>
         <br/>
@@ -139,9 +154,7 @@
             </tr>
         </table>
     </div>
-
 </div>
-
 </div>
 
 </body>
@@ -187,6 +200,7 @@
     // Register filter
     var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter']);
 
+    // Controller
     app.controller("cryptoTradingController", function ($scope, $interval, $http) {
 
         $scope.menuOption = "showOrders ";
@@ -264,10 +278,10 @@
                             $scope.calculationStatus = data;
 
                             $scope.progress = (data.MaCalculation.progress +
-                                               data.EmaCalculation.progress +
-                                               data.SmaCalculation.progress +
-                                               data.MacdCalculation.progress +
-                                               data.SignalCalculation.progress) / 5;
+                                    data.EmaCalculation.progress +
+                                    data.SmaCalculation.progress +
+                                    data.MacdCalculation.progress +
+                                    data.SignalCalculation.progress) / 5;
                         });
 
                 $("#progressbar").progressbar({value: $scope.progress});
