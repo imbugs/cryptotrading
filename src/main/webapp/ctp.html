@@ -136,8 +136,7 @@
 
         <br/>
 
-        <div ui-chart="macdChartData" chart-options="macdChartOptions">
-        </div>
+        <div ui-chart="macdChartData" chart-options="macdChartOptions"></div>
 
     </div>
 
@@ -183,7 +182,6 @@
 </div>
 </div>
 
-
 </body>
 
 <script>
@@ -223,7 +221,6 @@
             }
         };
     });
-
 
     // UI-Chart directive
     angular.module('ui.chart', []).directive('uiChart', function() {
@@ -366,13 +363,18 @@
     // Graphs controller
     app.controller("graphController", function ($scope) {
 
-        $scope.macdChartData = [[14, 32, 41, 44, 40, 37, 29, 23, 21, 2]];
+
+        $http.get('rest/getMacdData/' + $scope.trading.id).
+                success(function (data) {
+                    $scope.macdChartData = [data];
+                });
+//        $scope.macdChartData = [[14, 32, 41, 44, 40, 37, 29, 23, 21, 2]];
 
         $scope.minx = 1;
-        $scope.maxy = 10;
+        $scope.maxy = 1000;
 
-        $scope.miny = -50;
-        $scope.maxy = 50;
+        $scope.miny = -20;
+        $scope.maxy = 20;
 
         $scope.macdLabel = 'EMA50EMA150';
         $scope.macdTitle = 'MACD data: Kraken (Bitcoin/Euro)';

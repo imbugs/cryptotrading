@@ -4,6 +4,7 @@ import com.crypto.entities.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Jan Wicherink on 1-5-15.
@@ -38,6 +39,17 @@ public interface CryptocoinTrendDao extends Serializable{
      * @return the macd value
      */
     public MacdValue getMacdValue (final Integer index, final Macd macd, final TradePair tradePair);
+
+
+    /**
+     * Get al the Macd values from start index to end index of a given tradepair and macd
+     * @param startIndex the start index
+     * @param endIndex the end index
+     * @param macd the macd
+     * @param tradePair the trade pair
+     * @return all of the macd values within the given range for a given trade pair and macd.
+     */
+    public List<MacdValue> getAllMacdValues (final Integer startIndex, final Integer endIndex, final Macd macd, final TradePair tradePair);
 
    /**
      * Stores a trend value

@@ -9,7 +9,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Cryptocoin trend dao implementation
@@ -90,6 +92,28 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
 
         return macdValue;
     }
+
+    @Override
+    public List<MacdValue> getAllMacdValues(Integer startIndex, Integer endIndex, Macd macd, TradePair tradePair) {
+
+        final TypedQuery<MacdValue> query = (TypedQuery<MacdValue>) em.createQuery("SELECT m FROM MacdValue m WHERE m.macd=:macd AND m.tradePair = :tradePair AND m.indx>=:startIndex AND m.indx <=:endIndex");
+        query.setParameter("macd", macd);
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("startIndex", startIndex);
+        query.setParameter("endIndex", endIndex);
+
+       List<MacdValue> macdValues = new ArrayList<>();
+
+        try {
+            macdValues = query.getResultList();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+
+        return macdValues;
+    }
+
 
     @Override
     public void storeTrendValue(TrendValue trendValue) {
