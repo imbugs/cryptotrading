@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="jquery-ui/css/smoothness/jquery-ui.css">
-    <link type="text/css"  rel="stylesheet" media="all" href="css/overwrite_jquery.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="css/overwrite_jquery.css"/>
 
     <script src="jquery/jquery-2.1.3.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -17,26 +17,28 @@
     <script src="angular/angular.min.js"></script>
     <script src="jquery-ui/js/jquery-ui.js"></script>
 
-    <!-- jqPlot -->
-    <script src="jqplot/jquery.jqplot.min.js"></script>
-    <script src="syntaxhighlighter/scripts/shCore.js"></script>
-    <script src="syntaxhighlighter/scripts/shBrushJScript.js"></script>
-    <script src="syntaxhighlighter/scripts/shBrushXml.js"></script>
-
+    <script language="javascript" type="text/javascript" src="jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushXml.js"></script>
     <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shCoreDefault.css"/>
     <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shThemejqPlot.css"/>
     <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css" />
 
     <!-- jqPlot renderers and plugins -->
-    <script src="plugins/jqplot.highlighter.min.js"></script>
-    <script src="plugins/jqplot.cursor.min.js"></script>
-    <script src="plugins/jqplot.dateAxisRenderer.min.js"></script>
-    <script src="plugins/jqplot.dateAxisRenderer.min.js"></script>
-    <script src="plugins/jqplot.canvasTextRenderer.min.js"></script>
-    <script src="plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
-    <script src="plugins/jqplot.pointLabels.min.js"></script>
-    <script src="plugins/jqplot.enhancedLegendRenderer.js"></script>
+
+    <script type="text/javascript" src="plugins/jqplot.highlighter.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.cursor.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.dateAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.dateAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.canvasTextRenderer.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.pointLabels.min.js"></script>
+    <script type="text/javascript" src="plugins/jqplot.enhancedLegendRenderer.js"></script>
+
+
 </head>
+
 <body>
 
 <div ng-app="cryptoTrading" ng-controller="mainController">
@@ -127,6 +129,13 @@
         </table>
     </div>
 
+    <!--
+       Graph menu option
+     -->
+    <div ng-show="menuOption == 'showGraph'" align="center" ng-controller="graphController">
+        <h4>Grafiek</h4>
+
+    </div>
 
     <!--
      Recalc trends and signals menu option
@@ -167,18 +176,12 @@
             </tr>
         </table>
     </div>
-
-
-    <!--
-       Graph menu option
-     -->
-    <div ng-show="menuOption == 'showGraph'" align="center" ng-controller="graphController">
-        <h4>Grafiek</h4>
-
-    <div id="chart_macd" style="height:300px; width:1000px;">grafiek</div>
-    <button class="button-reset">Reset Zoom</button>
 </div>
 </div>
+
+<div id="chart_macd" style="height:300px; width:1000px;">grafiek</div>
+<button class="button-reset">Reset Zoom</button>
+
 
 </body>
 
@@ -367,6 +370,7 @@
 
 
 </script>
+
 
 
 <script>
