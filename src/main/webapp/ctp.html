@@ -361,87 +361,83 @@
     });
 
     // Graphs controller
-    app.controller("graphController", function ($scope) {
-
-
-        $http.get('rest/getMacdData/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.macdChartData = [data];
-                });
-//        $scope.macdChartData = [[14, 32, 41, 44, 40, 37, 29, 23, 21, 2]];
-
-        $scope.minx = 1;
-        $scope.maxy = 1000;
-
-        $scope.miny = -20;
-        $scope.maxy = 20;
-
-        $scope.macdLabel = 'EMA50EMA150';
-        $scope.macdTitle = 'MACD data: Kraken (Bitcoin/Euro)';
-
-        $scope.macdChartOptions =  {
-            height: 300,
-            width:  600,
-            title: $scope.macdTitle,
-            seriesDefaults: {
-                showMarker:false
-            },
-            axesDefaults: {
-                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                tickOptions: {
-                    angle: -45,
-                    fontSize: '8pt'
-                }
-            },
-            legend:{
-                renderer: $.jqplot.EnhancedLegendRenderer,
-                show:true,
-                placement: 'outside'
-            },
-            series: [{label: $scope.macdLabel, xaxis:'xaxis'}],
-            seriesDefaults: {
-                lineWidth: 1,
-                showMarker:false,
-                pointLabels:{ show:true,
-                    location:'n',
-                    ypadding:3 }
-            },
-            axes:{
-                xaxis:{
-                    autoscale : false,
-                    syncTicks : true,
-                    min : $scope.minx ,
-                    max : $scope.minxy,
-                    tickOptions: {
-                        formatString:'%d',
-                        fontSize: '8pt'
-                    }
-                },
-                yaxis:{
-                    pad: 1.3,
-                    min : $scope.miny,
-                    max :$scope.maxy,
-                    tickOptions:{
-                        formatString:'%.2f'
-                    }
-                }
-            },
-            highlighter: {
-                show: true,
-                sizeAdjust: 7.5
-            },
-            cursor: {
-                show: true,
-                zoom:true,
-                showHorizontalLine : true,
-                showVerticalLine : true
-            }
-        };
-
+    app.controller("graphController", function ($scope, $http) {
 
         // Menu option graph clicked, show graph
         $scope.$on('clickGraphEvent', function () {
 
+            $http.get('rest/getMacdData/' + $scope.trading.id).
+                    success(function (data) {
+                        $scope.macdChartData = [data];
+                    });
+
+            $scope.minx = 1;
+            $scope.maxy = 1000;
+
+            $scope.miny = -2;
+            $scope.maxy = 2;
+
+            $scope.macdLabel = 'EMA50EMA150';
+            $scope.macdTitle = 'MACD data: Kraken (Bitcoin/Euro)';
+
+            $scope.macdChartOptions = {
+                height: 300,
+                width: 1000,
+                title: $scope.macdTitle,
+                seriesDefaults: {
+                    showMarker: false
+                },
+                axesDefaults: {
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        angle: -45,
+                        fontSize: '8pt'
+                    }
+                },
+                legend: {
+                    renderer: $.jqplot.EnhancedLegendRenderer,
+                    show: true,
+                    placement: 'outside'
+                },
+                series: [
+                    {label: $scope.macdLabel, xaxis: 'xaxis'}
+                ],
+                seriesDefaults: {
+                    lineWidth: 1,
+                    showMarker: false
+                },
+                axes: {
+                    xaxis: {
+                        autoscale: false,
+                        syncTicks: true,
+                        min: $scope.minx,
+                        max: $scope.minxy,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            formatString: '%d',
+                            fontSize: '8pt'
+                        }
+                    },
+                    yaxis: {
+                        pad: 1.3,
+                        min: $scope.miny,
+                        max: $scope.maxy,
+                        tickOptions: {
+                            formatString: '%.2f'
+                        }
+                    }
+                },
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 7.5
+                },
+                cursor: {
+                    show: true,
+                    zoom: true,
+                    showHorizontalLine: true,
+                    showVerticalLine: true
+                }
+            };
         });
     });
 
