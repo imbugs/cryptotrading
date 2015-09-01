@@ -366,13 +366,21 @@
     // Graphs controller
     app.controller("graphController", function ($scope) {
 
-
         $scope.macdChartData = [[14, 32, 41, 44, 40, 37, 29, 23, 21, 2]];
+
+        $scope.minx = 1;
+        $scope.maxy = 10;
+
+        $scope.miny = -50;
+        $scope.maxy = 50;
+
+        $scope.macdLabel = 'EMA50EMA150';
+        $scope.macdTitle = 'MACD data: Kraken (Bitcoin/Euro)';
 
         $scope.macdChartOptions =  {
             height: 300,
-            width:  800,
-            title:'MACD data: Kraken (Bitcoin/Euro)',
+            width:  600,
+            title: $scope.macdTitle,
             seriesDefaults: {
                 showMarker:false
             },
@@ -388,7 +396,7 @@
                 show:true,
                 placement: 'outside'
             },
-            series: [{label: 'EMA50EMA150', xaxis:'xaxis'}],
+            series: [{label: $scope.macdLabel, xaxis:'xaxis'}],
             seriesDefaults: {
                 lineWidth: 1,
                 showMarker:false,
@@ -400,8 +408,8 @@
                 xaxis:{
                     autoscale : false,
                     syncTicks : true,
-                    min : 1 ,
-                    max : 10,
+                    min : $scope.minx ,
+                    max : $scope.minxy,
                     tickOptions: {
                         formatString:'%d',
                         fontSize: '8pt'
@@ -409,8 +417,8 @@
                 },
                 yaxis:{
                     pad: 1.3,
-                    min :-50,
-                    max :60,
+                    min : $scope.miny,
+                    max :$scope.maxy,
                     tickOptions:{
                         formatString:'%.2f'
                     }
