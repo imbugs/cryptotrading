@@ -12,6 +12,7 @@ import com.crypto.entities.pkey.WithdrawalPk;
 import com.crypto.enums.LoggingLevel;
 import com.crypto.enums.MarketTrend;
 import com.crypto.trader.TradeCryptoCoins;
+import com.crypto.util.Logger;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -50,6 +51,7 @@ public class SignalDaoTest {
                 .addPackage((SignalDao.class).getPackage())
                 .addPackage((MarketTrend.class).getPackage())
                 .addPackage(MacdDao.class.getPackage())
+                .addPackage(Logger.class.getPackage())
                 .addPackage(LoggingLevel.class.getPackage())
                 .addPackage(DataProvider.class.getPackage())
                 .addPackage(CryptocoinHistoryDaoImpl.class.getPackage())

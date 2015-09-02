@@ -283,13 +283,6 @@ public class CryptoCoinHistoryTrendCalculator implements Serializable{
 
     public HashMap<String,CalculationProgress> getCalculationProgress() {
 
-        // Update progress data
-        calculationStatus.get(MA_CALCULATION).setProgress(maCalculator.getCalculationProgress().getProgress());
-        calculationStatus.get(EMA_CALCULATION).setProgress(emaCalculator.getCalculationProgress().getProgress());
-        calculationStatus.get(SMA_CALCULATION).setProgress(smaCalculator.getCalculationProgress().getProgress());
-        calculationStatus.get(MACD_CALCULATION).setProgress(macdCalculator.getCalculationProgress().getProgress());
-        calculationStatus.get(SIGNAL_CALCULATION).setProgress(signalCalculator.getCalculationProgress().getProgress());
-
         return this.calculationStatus;
     }
 }
