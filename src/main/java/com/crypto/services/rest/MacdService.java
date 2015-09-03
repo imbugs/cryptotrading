@@ -1,12 +1,8 @@
 package com.crypto.services.rest;
 
-import com.crypto.dao.CryptocoinHistoryDao;
-import com.crypto.dao.CryptocoinTrendDao;
-import com.crypto.dao.MacdDao;
-import com.crypto.dao.TradingDao;
-import com.crypto.entities.Macd;
-import com.crypto.entities.MacdValue;
-import com.crypto.entities.Trading;
+import com.crypto.dao.*;
+import com.crypto.entities.*;
+import com.crypto.enums.ChartType;
 import com.crypto.services.rest.wrapper.MacdDataWrapper;
 
 import javax.ejb.EJB;
@@ -19,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.*;
+
 /**
  * Service to fetch the Cryptocoin Macd trend data
  *
@@ -27,6 +25,12 @@ import java.util.List;
 @Path("/")
 @Stateless
 public class MacdService {
+
+    @EJB
+    private ChartDao chartDao;
+
+    @EJB
+    private ChartTrendDao chartTrendDao;
 
     @EJB
     private TradingDao tradingDao;
@@ -47,8 +51,11 @@ public class MacdService {
 
         final Trading trading = tradingDao.get(tradingId);
 
-        // TODO :  Get Macd for chart from TRENDS_FOR_CHARTS data
-        final Macd macd = macdDao.get(1);
+         // Get the macd for the MACD chart
+        final Chart macdChart = chartDao.getChart(ChartType.MACD);
+        final ChartTrend chartTrend = chartTrendDao.getChartTrends(macdChart).get(0);
+
+        final Macd macd = chartTrend.getMacd();
 
         final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair()) + macd.getLongTrend().getPeriod();
         final Integer endIndex   = cryptocoinHistoryDao.getLastIndex(trading.getTradePair());
@@ -82,6 +89,9 @@ public class MacdService {
 
             macdList.add(macdValue.getValue());
         };
+
+        minYValue = new Float (floor(minYValue));
+        maxYValue = new Float (ceil(maxYValue));
 
         MacdDataWrapper macdDataWrapper = new MacdDataWrapper(macdList,startIndex, endIndex, minYValue, maxYValue, macd.getName());
 
