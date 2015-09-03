@@ -1,23 +1,19 @@
-package com.crypto.model;
+package com.crypto.services.rest.wrapper;
 
 import com.crypto.entities.BuyMarketOrder;
 import com.crypto.entities.MarketOrder;
 import com.crypto.entities.SellMarketOrder;
 import com.crypto.enums.MarketOrderStatus;
-import com.crypto.enums.MarketTrend;
 import com.crypto.enums.OrderType;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.sql.Timestamp;
 
 /**
- * Wrapper for Market Order entities
+ * Wrapper class for Market Order entities
  *
  * Created by Jan Wicherink on 22-8-15.
  */
-public class MarketOrderModel {
+public class MarketOrderWrapper {
 
     private Integer index;
 
@@ -43,9 +39,9 @@ public class MarketOrderModel {
 
     /**
      * Constructor, builds a MarketOrderModel from a MarketOrder
-     * @param marketOrder the market order to be wrapped into a market order model.
+     * @param marketOrder the market order to be wrapped into a market order wrapper.
      */
-    public MarketOrderModel(final MarketOrder marketOrder) {
+    public MarketOrderWrapper(final MarketOrder marketOrder) {
 
         this.index = marketOrder.getIndex();
         this.orderReference = marketOrder.getOrderReference();

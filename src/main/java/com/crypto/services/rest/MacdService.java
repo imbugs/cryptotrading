@@ -7,6 +7,7 @@ import com.crypto.dao.TradingDao;
 import com.crypto.entities.Macd;
 import com.crypto.entities.MacdValue;
 import com.crypto.entities.Trading;
+import com.crypto.services.rest.wrapper.MacdDataWrapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -42,22 +43,48 @@ public class MacdService {
     @GET
     @Path("/getMacdData/{tradingId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Float> getMacdData (@PathParam("tradingId") Integer tradingId) {
+    public MacdDataWrapper getMacdData (@PathParam("tradingId") Integer tradingId) {
 
         final Trading trading = tradingDao.get(tradingId);
 
-        final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair());
-        final Integer endIndex   = cryptocoinHistoryDao.getLastIndex(trading.getTradePair());
-
         // TODO :  Get Macd for chart from TRENDS_FOR_CHARTS data
         final Macd macd = macdDao.get(1);
+
+        final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair()) + macd.getLongTrend().getPeriod();
+        final Integer endIndex   = cryptocoinHistoryDao.getLastIndex(trading.getTradePair());
 
         final List<MacdValue> macdValues = cryptocoinTrendDao.getAllMacdValues(startIndex, endIndex, macd, trading.getTradePair());
 
         final List<Float> macdList = new ArrayList<>();
 
-        macdValues.forEach(macdvalue-> macdList.add(macdvalue.getValue()));
+        Float minYValue = null;
+        Float maxYValue = null;
 
-        return macdList;
+        for (MacdValue macdValue : macdValues) {
+
+            if (minYValue == null) {
+                minYValue = macdValue.getValue();
+            }
+            else {
+                if (macdValue.getValue() < minYValue) {
+                    minYValue = macdValue.getValue();
+                }
+            }
+
+            if (maxYValue == null) {
+                maxYValue = macdValue.getValue();
+            }
+            else {
+                if (macdValue.getValue() > maxYValue) {
+                    maxYValue = macdValue.getValue();
+                }
+            }
+
+            macdList.add(macdValue.getValue());
+        };
+
+        MacdDataWrapper macdDataWrapper = new MacdDataWrapper(macdList,startIndex, endIndex, minYValue, maxYValue, macd.getName());
+
+        return macdDataWrapper;
     }
 }
