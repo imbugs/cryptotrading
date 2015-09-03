@@ -3,7 +3,7 @@ package com.crypto.services.rest;
 import com.crypto.dao.*;
 import com.crypto.entities.*;
 import com.crypto.enums.ChartType;
-import com.crypto.services.rest.wrapper.MacdDataWrapper;
+import com.crypto.services.rest.wrapper.ChartDataWrapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,13 +18,13 @@ import java.util.List;
 import static java.lang.Math.*;
 
 /**
- * Service to fetch the Cryptocoin Macd trend data
+ * Service to fetch the Cryptocoin Macd trend data for the Macd chart
  *
  * Created by Jan Wicherink on 1-9-15.
  */
 @Path("/")
 @Stateless
-public class MacdService {
+public class MacdChartService {
 
     @EJB
     private ChartDao chartDao;
@@ -47,25 +47,30 @@ public class MacdService {
     @GET
     @Path("/getMacdData/{tradingId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MacdDataWrapper getMacdData (@PathParam("tradingId") Integer tradingId) {
+    public ChartDataWrapper getMacdData (@PathParam("tradingId") Integer tradingId) {
 
         final Trading trading = tradingDao.get(tradingId);
 
-         // Get the macd for the MACD chart
+         // Get the macd of the MACD chart
         final Chart macdChart = chartDao.getChart(ChartType.MACD);
         final ChartTrend chartTrend = chartTrendDao.getChartTrends(macdChart).get(0);
 
         final Macd macd = chartTrend.getMacd();
 
-        final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair()) + macd.getLongTrend().getPeriod();
+        final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair());
         final Integer endIndex   = cryptocoinHistoryDao.getLastIndex(trading.getTradePair());
 
-        final List<MacdValue> macdValues = cryptocoinTrendDao.getAllMacdValues(startIndex, endIndex, macd, trading.getTradePair());
+        final List<MacdValue> macdValues = cryptocoinTrendDao.getAllMacdValues(startIndex + macd.getLongTrend().getPeriod(), endIndex, macd, trading.getTradePair());
 
         final List<Float> macdList = new ArrayList<>();
 
         Float minYValue = null;
         Float maxYValue = null;
+
+                // First values upto Long trend value are irrelevant
+        for (Integer x = 0; x <= macd.getLongTrend().getPeriod(); x++) {
+            macdList.add( new Float(0));
+        }
 
         for (MacdValue macdValue : macdValues) {
 
@@ -93,8 +98,8 @@ public class MacdService {
         minYValue = new Float (floor(minYValue));
         maxYValue = new Float (ceil(maxYValue));
 
-        MacdDataWrapper macdDataWrapper = new MacdDataWrapper(macdList,startIndex, endIndex, minYValue, maxYValue, macd.getName());
+        ChartDataWrapper chartDataWrapper = new ChartDataWrapper(macdList,startIndex, endIndex, minYValue, maxYValue, macd.getName());
 
-        return macdDataWrapper;
+        return chartDataWrapper;
     }
 }

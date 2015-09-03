@@ -138,6 +138,8 @@
 
         <br/>
 
+        <div ui-chart="btcChart" chart-options="btcChartOptions"></div>
+
         <div ui-chart="macdChart" chart-options="macdChartOptions"></div>
 
     </div>
@@ -367,9 +369,76 @@ app.controller("graphController", function ($scope, $http) {
     // Menu option graph clicked, show graph
     $scope.$on('clickGraphEvent', function () {
 
+        // Btc Chart
+        $http.get('rest/getBtcData/' + $scope.trading.id).
+                success(function (data) {
+                    $scope.btcChart = [data.valueList];
+
+                    $scope.btcChartOptions = {
+                        height: 300,
+                        width: 1000,
+                        title: 'Crypto coin data',
+                        seriesDefaults: {
+                            showMarker: false
+                        },
+                        axesDefaults: {
+                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                            tickOptions: {
+                                angle: -45,
+                                fontSize: '8pt'
+                            }
+                        },
+                        legend: {
+                            renderer: $.jqplot.EnhancedLegendRenderer,
+                            show: true,
+                            placement: 'outside'
+                        },
+                        series: [
+                            {label: data.label, xaxis: 'xaxis'}
+                        ],
+                        seriesDefaults: {
+                            lineWidth: 1,
+                            showMarker: false
+                        },
+                        axes: {
+                            xaxis: {
+                                autoscale: false,
+                                syncTicks: true,
+                                min: data.minX,
+                                max: data.maxX,
+                                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                                tickOptions: {
+                                    formatString: '%d',
+                                    fontSize: '8pt'
+                                }
+                            },
+                            yaxis: {
+                                pad: 1.3,
+                                min: data.minY,
+                                max: data.maxY,
+                                tickOptions: {
+                                    formatString: '%.2f'
+                                }
+                            }
+                        },
+                        highlighter: {
+                            show: true,
+                            sizeAdjust: 7.5
+                        },
+                        cursor: {
+                            show: true,
+                            zoom: true,
+                            showHorizontalLine: true,
+                            showVerticalLine: true
+                        }
+                    }
+                });
+
+
+        // Macd Chart
         $http.get('rest/getMacdData/' + $scope.trading.id).
                 success(function (data) {
-                    $scope.macdChart = [data.macdList];
+                    $scope.macdChart = [data.valueList];
 
                     $scope.macdChartOptions = {
                         height: 300,

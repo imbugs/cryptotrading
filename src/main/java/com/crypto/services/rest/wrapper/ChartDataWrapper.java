@@ -6,9 +6,9 @@ import java.util.List;
  * Macd data wrapper class
  * Created by Jan Wicherink on 2-9-15.
  */
-public class MacdDataWrapper {
+public class ChartDataWrapper {
 
-    private List<Float> macdList;
+    private List<Float> valueList;
 
     private Integer minX;
 
@@ -22,15 +22,15 @@ public class MacdDataWrapper {
 
     /**
      * Constructor
-     * @param macdList list of Macd Values
+     * @param valueList list of Values
      * @param minX minimal index value in macdList
      * @param maxX maximal index value in macdList
      * @param minY minimal value in macdList
      * @param maxY maximum value in macdList
      * @param label the label of this macd in chart
      */
-    public MacdDataWrapper(List<Float> macdList, Integer minX, Integer maxX, Float minY, Float maxY, String label) {
-        this.macdList = macdList;
+    public ChartDataWrapper(List<Float> valueList, Integer minX, Integer maxX, Float minY, Float maxY, String label) {
+        this.valueList = valueList;
         this.minX = minX;
         this.maxX = maxX;
         this.minY = minY;
@@ -38,8 +38,8 @@ public class MacdDataWrapper {
         this.label = label;
     }
 
-    public List<Float> getMacdList() {
-        return macdList;
+    public List<Float> getValueList() {
+        return valueList;
     }
 
     public Integer getMinX() {
