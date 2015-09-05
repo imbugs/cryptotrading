@@ -1,3 +1,17 @@
+Skip to content
+This repository
+Pull requests
+Issues
+Gist
+@piramidions
+Unwatch 1
+Star 0
+Fork 0
+piramidions/cryptotrading
+Branch: master  cryptotrading/src/main/webapp/ctp.html
+@wicherinkwicherink an hour ago chart
+1 contributor
+RawBlameHistory    475 lines (408 sloc)  17.638 kB
 <!DOCTYPE html>
 <html>
 <head>
@@ -195,99 +209,76 @@
 </body>
 
 <script>
-
 // Register filter and ui-chart as dependencies
 var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart']);
-
 // main controller for the One Page Application
 app.controller("mainController", function ($scope, $interval, $http) {
-
     // get current trading
     var promise = $http.get('rest/getCurrentTrading').
             success(function (data) {
                 $scope.trading = data;
             });
-
     // Wait until promise of getting current trade is finished.
     promise.then(function () {
-
         // get trading site as text
         $http.get('rest/getTradingAsStringText/' + $scope.trading.id).
                 success(function (data) {
                     $scope.tradingAsText = data;
                 });
-
         // get current crypto trading rate
         $http.get('rest/currentCryptoRate/' + $scope.trading.id).
                 success(function (data) {
                     $scope.currentRate = data;
                 });
-
         $scope.currency = $scope.trading.tradePair.currency;
         $scope.cryptoCurrency = $scope.trading.tradePair.cryptoCurrency;
     });
-
-
     //Click wallet menu option
     $scope.clickWallet = function () {
         $scope.menuOption = "showWallet";
         $scope.$broadcast('clickWalletEvent');
     }
-
     //Click orders menu option
     $scope.clickOrders = function () {
         $scope.menuOption = "showOrders";
         $scope.$broadcast('clickOrdersEvent');
     }
-
     //Click graph option
     $scope.clickGraph = function () {
         $scope.menuOption = "showGraph";
         $scope.$broadcast('clickGraphEvent');
     }
-
     //Click recalculate option
     $scope.clickReCalculate = function () {
         $scope.menuOption = "recalculate";
         $scope.$broadcast('clickRecalculateEvent');
     }
 })
-
-
 // Wallet controller
 app.controller("walletController", function ($scope, $http) {
-
     // Menu option wallet clicked, get wallet
     $scope.$on('clickWalletEvent', function () {
-
         $http.get('rest/getWallet/' + $scope.trading.id).
                 success(function (data) {
                     $scope.wallet = data;
                 });
-
         $http.get('rest/getWalletHistory/' + $scope.trading.id).
                 success(function (data) {
                     $scope.walletHistories = data;
                 });
     });
 });
-
-
 // Order controller
 app.controller("orderController", function ($scope, $http) {
-
     // Menu option orders clicked, get market orders
     $scope.$on('clickOrdersEvent', function () {
-
         $http.get('rest/marketOrders/' + $scope.trading.id).
                 success(function (data) {
                     $scope.marketOrders = data;
                 });
     });
-
     // Determine Order Type
     $scope.getOrderType = function (order) {
-
         if (order instanceof BuyMarketOrder) {
             return "Koop";
         }
@@ -296,18 +287,14 @@ app.controller("orderController", function ($scope, $http) {
         }
     }
 });
-
 // Graphs controller
 app.controller("graphController", function ($scope, $http) {
-
     // Menu option graph clicked, show graph
     $scope.$on('clickGraphEvent', function () {
-
         // Btc Chart
         $http.get('rest/getBtcData/' + $scope.trading.id).
                 success(function (data) {
                     $scope.btcChart = [data.valueList];
-
                     $scope.btcChartOptions = {
                         height: 300,
                         width: 1000,
@@ -367,13 +354,10 @@ app.controller("graphController", function ($scope, $http) {
                         }
                     }
                 });
-
-
         // Macd Chart
         $http.get('rest/getMacdData/' + $scope.trading.id).
                 success(function (data) {
                     $scope.macdChart = [data.valueList];
-
                     $scope.macdChartOptions = {
                         height: 300,
                         width: 1000,
@@ -435,35 +419,25 @@ app.controller("graphController", function ($scope, $http) {
                 });
     });
 });
-
-
 // Recalculate controller
 app.controller("recalculateController", function ($scope, $http, $interval) {
-
     // Menu option graph clicked, show graph
     $scope.$on('clickRecalculateEvent', function () {
         $scope.progress = 0;
-
         $http.post('rest/recalculate/' + $scope.trading.id);
-
         // Monitor the progress
         $scope.intervalPromise = $interval(function () {
-
             // get calculculation status
             $http.get('rest/calculationStatus/').
                     success(function (data) {
-
                         $scope.calculationStatus = data;
-
                         $scope.progress = (data.MaCalculation.progress +
                                 data.EmaCalculation.progress +
                                 data.SmaCalculation.progress +
                                 data.MacdCalculation.progress +
                                 data.SignalCalculation.progress) / 5;
                     });
-
             $("#progressbar").progressbar({value: $scope.progress});
-
             if ($scope.progress >= 100) {
                 $interval.cancel($scope.intervalPromise);
             }
@@ -472,3 +446,5 @@ app.controller("recalculateController", function ($scope, $http, $interval) {
 });
 </script>
 </html>
+Status API Training Shop Blog About Pricing
+© 2015 GitHub, Inc. Terms Privacy Security Contact Help
