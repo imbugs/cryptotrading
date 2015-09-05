@@ -49,7 +49,6 @@ public class BtcChartService {
         Float minYValue = null;
         Float maxYValue = null;
 
-
         for (CryptocoinHistory cryptocoinHistory : cryptocoinHistories) {
 
             if (minYValue == null) {
@@ -73,8 +72,8 @@ public class BtcChartService {
             cryptoCoinList.add(cryptocoinHistory.getClose());
         }
 
-        minYValue = new Float (floor(minYValue));
-        maxYValue = new Float (ceil(maxYValue));
+        minYValue = new Float (floor(minYValue) * 0.999F);
+        maxYValue = new Float (ceil(maxYValue) * 1.001F);
 
         ChartDataWrapper chartDataWrapper = new ChartDataWrapper(cryptoCoinList,startIndex, endIndex, minYValue, maxYValue, "Koers " + trading.getTradePair().getCryptoCurrency().getCode());
 

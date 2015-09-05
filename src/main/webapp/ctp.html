@@ -35,6 +35,13 @@
     <script type="text/javascript" src="plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
     <script type="text/javascript" src="plugins/jqplot.pointLabels.min.js"></script>
     <script type="text/javascript" src="plugins/jqplot.enhancedLegendRenderer.js"></script>
+
+    <!-- Angular modules -->
+
+    <script type="text/javascript" src="angular/chart-ui.js"></script>
+    <script type="text/javascript" src="angular/ordertypefillter.js"></script>
+    <script type="text/javascript" src="angular/orderstatusfilter.js"></script>
+
 </head>
 
 <body>
@@ -189,79 +196,6 @@
 
 <script>
 
-// Angular filter type for Order Type
-angular.module('orderTypeFilter', []).filter('orderType', function () {
-    return function (input) {
-        if (input == 'SELL') {
-            return 'Verkoop'
-        }
-        else {
-            return 'Koop';
-        }
-    };
-});
-
-// Angular filter type for order status
-angular.module('orderStatusFilter', []).filter('orderStatus', function () {
-    return function (input) {
-        switch (input) {
-            case  'EXECUTED'   :
-                return 'Uitgevoerd';
-            case  'EXECUTING'  :
-                return 'In uitvoering';
-            case  'CANCELLED'  :
-                return 'Afgebroken';
-            case  'PARTLYEXEC' :
-                return 'Gedeeltelijk uitgevoerd';
-            case  'OPEN'       :
-                return 'Open';
-            case  'RETRY'      :
-                return 'Herhaal';
-            case  'ERROR'      :
-                return 'Fout opgetreden';
-            default :
-                return '-';
-        }
-    };
-});
-
-// UI-Chart directive
-angular.module('ui.chart', []).directive('uiChart', function () {
-    return {
-        restrict: 'EACM',
-        template: '<div></div>',
-        replace: true,
-        link: function (scope, elem, attrs) {
-            var renderChart = function () {
-                var data = scope.$eval(attrs.uiChart);
-                elem.html('');
-                if (!angular.isArray(data)) {
-                    return;
-                }
-
-                var opts = {};
-                if (!angular.isUndefined(attrs.chartOptions)) {
-                    opts = scope.$eval(attrs.chartOptions);
-                    if (!angular.isObject(opts)) {
-                        throw 'Invalid ui.chart options attribute';
-                    }
-                }
-
-                elem.jqplot(data, opts);
-            };
-
-            scope.$watch(attrs.uiChart, function () {
-                renderChart();
-            }, true);
-
-            scope.$watch(attrs.chartOptions, function () {
-                renderChart();
-            });
-        }
-    };
-});
-
-
 // Register filter and ui-chart as dependencies
 var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart']);
 
@@ -391,7 +325,7 @@ app.controller("graphController", function ($scope, $http) {
                         legend: {
                             renderer: $.jqplot.EnhancedLegendRenderer,
                             show: true,
-                            placement: 'outside'
+                            placement: 'inside'
                         },
                         series: [
                             {label: data.label, xaxis: 'xaxis'}
@@ -457,7 +391,7 @@ app.controller("graphController", function ($scope, $http) {
                         legend: {
                             renderer: $.jqplot.EnhancedLegendRenderer,
                             show: true,
-                            placement: 'outside'
+                            placement: 'inside'
                         },
                         series: [
                             {label: data.label, xaxis: 'xaxis'}
