@@ -8,7 +8,7 @@
         <properties>
             <!-- Properties for Hibernate -->
             <property name="hibernate.show_sql" value="true"/>
-            <property name="javax.persistence.schema-generation.create-database-schemas" value="validate"/>
+            <property name="javax.persistence.schema-generation.create-database-schemas" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="connection.pool_size" value="1"/>
         </properties>
