@@ -46,6 +46,26 @@ public class CryptocoinTrendDaoImpl implements CryptocoinTrendDao {
     }
 
     @Override
+    public List<TrendValue> getAllTrendValues(final Integer fromIndex, final Integer toIndex, final Trend trend, final TradePair tradePair) {
+
+        final TypedQuery<TrendValue> query = (TypedQuery<TrendValue>) em.createQuery("SELECT t FROM TrendValue t WHERE t.trend=:trend AND t.tradePair = :tradePair AND t.indx>=:fromIndex AND t.indx<=:toIndex ORDER BY t.indx ASC");
+        query.setParameter("trend", trend);
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("fromIndex", fromIndex);
+        query.setParameter("toIndex", toIndex);
+
+        List<TrendValue> trendValues;
+
+        try {
+            trendValues = query.getResultList();
+        }
+        catch (Exception e) {
+            return null;
+        }
+        return trendValues;
+    }
+
+    @Override
     public Float getSumTrend(Integer index, Trend trend, Integer period, TradePair tradePair) {
 
         final Integer fromIndex = index - period;

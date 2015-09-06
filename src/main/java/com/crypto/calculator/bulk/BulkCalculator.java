@@ -32,8 +32,11 @@ public class BulkCalculator<D extends DataIndexProvider, E> {
     /**
      * Constructor
      *
-     * @param calculator
-     * @param dataProvider
+     * @param calculator the calculator
+     * @param dataProvider the data provider
+     * @param dataPersister the persister of the calculated data
+     * @param trading the trading
+     * @param calculationProgress progress monitor of the calculation
      */
     public BulkCalculator(Calculator calculator,
                           BulkDataProvider dataProvider,

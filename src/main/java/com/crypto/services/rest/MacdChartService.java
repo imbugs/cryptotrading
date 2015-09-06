@@ -73,32 +73,10 @@ public class MacdChartService {
         }
 
         for (MacdValue macdValue : macdValues) {
-
-            if (minYValue == null) {
-                minYValue = macdValue.getValue();
-            }
-            else {
-                if (macdValue.getValue() < minYValue) {
-                    minYValue = macdValue.getValue();
-                }
-            }
-
-            if (maxYValue == null) {
-                maxYValue = macdValue.getValue();
-            }
-            else {
-                if (macdValue.getValue() > maxYValue) {
-                    maxYValue = macdValue.getValue();
-                }
-            }
-
             macdList.add(macdValue.getValue());
         };
 
-        minYValue = new Float (floor(minYValue));
-        maxYValue = new Float (ceil(maxYValue));
-
-        ChartDataWrapper chartDataWrapper = new ChartDataWrapper(macdList,startIndex, endIndex, minYValue, maxYValue, macd.getName());
+        final ChartDataWrapper chartDataWrapper = new ChartDataWrapper(macdList,startIndex, endIndex, macd.getName());
 
         return chartDataWrapper;
     }

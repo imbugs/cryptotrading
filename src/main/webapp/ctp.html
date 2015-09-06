@@ -335,7 +335,7 @@ app.controller("graphController", function ($scope, $http) {
         // Btc Chart
         $http.get('rest/getBtcData/' + $scope.trading.id).
                 success(function (data) {
-                    $scope.btcChart = [data.valueList];
+                    $scope.btcChart = [data[0].valueList];
                     $scope.btcChartOptions = {
                         height: 300,
                         width: 1000,
@@ -356,7 +356,7 @@ app.controller("graphController", function ($scope, $http) {
                             placement: 'inside'
                         },
                         series: [
-                            {label: data.label, xaxis: 'xaxis'}
+                            {label: data[0].label, xaxis: 'xaxis'}
                         ],
                         seriesDefaults: {
                             lineWidth: 1,
@@ -366,8 +366,8 @@ app.controller("graphController", function ($scope, $http) {
                             xaxis: {
                                 autoscale: false,
                                 syncTicks: true,
-                                min: data.minX,
-                                max: data.maxX,
+                                min: data[0].minX,
+                                max: data[0].maxX,
                                 tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                                 tickOptions: {
                                     formatString: '%d',
@@ -395,6 +395,7 @@ app.controller("graphController", function ($scope, $http) {
                         }
                     }
                 });
+
         // Macd Chart
         $http.get('rest/getMacdData/' + $scope.trading.id).
                 success(function (data) {

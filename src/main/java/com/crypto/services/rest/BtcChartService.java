@@ -1,9 +1,8 @@
 package com.crypto.services.rest;
 
-import com.crypto.dao.CryptocoinHistoryDao;
-import com.crypto.dao.TradingDao;
-import com.crypto.entities.CryptocoinHistory;
-import com.crypto.entities.Trading;
+import com.crypto.dao.*;
+import com.crypto.entities.*;
+import com.crypto.enums.ChartType;
 import com.crypto.services.rest.wrapper.ChartDataWrapper;
 
 import javax.ejb.EJB;
@@ -28,7 +27,16 @@ import static java.lang.Math.floor;
 public class BtcChartService {
 
     @EJB
+    private ChartDao chartDao;
+
+    @EJB
+    private ChartTrendDao chartTrendDao;
+
+    @EJB
     private CryptocoinHistoryDao cryptocoinHistoryDao;
+
+    @EJB
+    private CryptocoinTrendDao cryptocoinTrendDao;
 
     @EJB
     private TradingDao tradingDao;
@@ -36,47 +44,43 @@ public class BtcChartService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("getBtcData/{tradingId}")
-    public ChartDataWrapper getCryptoCoinData(@PathParam("tradingId") Integer tradingId) {
+    public List<ChartDataWrapper> getCryptoCoinData(@PathParam("tradingId") Integer tradingId) {
 
+        // Get crypto trading  history data
         final Trading trading = tradingDao.get(tradingId);
-
         final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair());
         final Integer endIndex = cryptocoinHistoryDao.getLastIndex(trading.getTradePair());
 
         final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getAll(trading.getTradePair());
 
+        // Get the trends for the BTC chart
+        final Chart btcChart = chartDao.getChart(ChartType.BTC);
+        final List<ChartTrend> chartTrends = chartTrendDao.getChartTrends(btcChart);
+
+        // Get trend values
+        final List<TrendValue> trendValues = cryptocoinTrendDao.getAllTrendValues(startIndex, endIndex, chartTrends.get(0).getTrend(), trading.getTradePair());
+
         final List<Float> cryptoCoinList = new ArrayList<>();
-        Float minYValue = null;
-        Float maxYValue = null;
 
         for (CryptocoinHistory cryptocoinHistory : cryptocoinHistories) {
-
-            if (minYValue == null) {
-                minYValue = cryptocoinHistory.getClose();
-            }
-            else {
-                if (minYValue > cryptocoinHistory.getClose()) {
-                    minYValue = cryptocoinHistory.getClose();
-                }
-            }
-
-            if (maxYValue == null) {
-                maxYValue = cryptocoinHistory.getClose();
-            }
-            else {
-                if (maxYValue < cryptocoinHistory.getClose()) {
-                    maxYValue = cryptocoinHistory.getClose();
-                }
-            }
-
             cryptoCoinList.add(cryptocoinHistory.getClose());
         }
 
-        minYValue = new Float (floor(minYValue) * 0.999F);
-        maxYValue = new Float (ceil(maxYValue) * 1.001F);
+        final ChartDataWrapper btcDataWrapper = new ChartDataWrapper(cryptoCoinList, startIndex, endIndex, "Koers " + trading.getTradePair().getCryptoCurrency().getCode());
 
-        ChartDataWrapper chartDataWrapper = new ChartDataWrapper(cryptoCoinList,startIndex, endIndex, minYValue, maxYValue, "Koers " + trading.getTradePair().getCryptoCurrency().getCode());
+        final List<Float> trendList = new ArrayList<>();
 
-        return chartDataWrapper;
+        for (TrendValue trendValue : trendValues) {
+            trendList.add(trendValue.getValue());
+        }
+
+        final ChartDataWrapper trendDataWrapper = new ChartDataWrapper(trendList, startIndex, endIndex, "Trend");
+
+        // Add all the btc and trend values to a list of Chart Data wrappers
+        final List<ChartDataWrapper> wrapperList = new ArrayList<>();
+        wrapperList.add(btcDataWrapper);
+        wrapperList.add(trendDataWrapper);
+
+        return wrapperList;
     }
 }

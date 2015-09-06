@@ -20,6 +20,17 @@ public interface CryptocoinTrendDao extends Serializable{
      */
     public TrendValue getTrendValue(final Integer index, final Trend trend, final TradePair tradePair);
 
+
+    /**
+     * Get all the cryptocointrend values with a given range.
+     * @param fromIndex the start index
+     * @param toIndex end index
+     * @param trend the trend to fetch
+     * @param tradePair the tradepair of the trend
+     * @return the trend value
+     */
+    public List<TrendValue> getAllTrendValues(final Integer fromIndex, final Integer toIndex, final Trend trend, final TradePair tradePair);
+
     /**
      * Get the sum of a series of previous trend values over a period up to a given index
      * @param index the index
