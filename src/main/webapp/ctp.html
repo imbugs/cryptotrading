@@ -61,7 +61,7 @@
             <div clas="jumbotron">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-1">
-                    <img src="trading_places.jpg" height="200">
+                    <img src="trading_places.jpg" height="150">
                 </div>
                 <div class="col-lg-6">
                     <!--
@@ -177,37 +177,45 @@
                 <h4>Herbereken trends en signalen</h4>
                 <br/>
 
-                <div id="progressbar" class="progress">
-                    <div align="center"><b> {{ progress }} % </b></div>
+                <div class="row">
+                    <div class="progress">
+                        <div class="progress">
+                            <div id="progressbar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ng-attr-style="{{progressStyle}}">
+                                <span><b>{{ progress }} %</b></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <table class="row">
-                    <tr>
-                        <td width="60">MA</td>
-                        <td width="400">{{ calculationStatus.MaCalculation.status }}</td>
-                        <td width="40">{{ calculationStatus.MaCalculation.progress }} %</td>
-                    </tr>
-                    <tr>
-                        <td>EMA</td>
-                        <td>{{ calculationStatus.EmaCalculation.status }}</td>
-                        <td>{{ calculationStatus.EmaCalculation.progress }} %</td>
-                    </tr>
-                    <tr>
-                        <td>SMA</td>
-                        <td>{{ calculationStatus.SmaCalculation.status }}</td>
-                        <td>{{ calculationStatus.SmaCalculation.progress }} %</td>
-                    </tr>
-                    <tr>
-                        <td>MACD</td>
-                        <td>{{ calculationStatus.MacdCalculation.status }}</td>
-                        <td>{{ calculationStatus.MacdCalculation.progress }} %</td>
-                    </tr>
-                    <tr>
-                        <td>Signaal</td>
-                        <td>{{ calculationStatus.SignalCalculation.status }}</td>
-                        <td>{{ calculationStatus.SignalCalculation.progress }} %</td>
-                    </tr>
-                </table>
+                <div class="row">
+                    <table class="row">
+                        <tr>
+                            <td width="60">MA</td>
+                            <td width="400">{{ calculationStatus.MaCalculation.status }}</td>
+                            <td width="40">{{ calculationStatus.MaCalculation.progress }} %</td>
+                        </tr>
+                        <tr>
+                            <td>EMA</td>
+                            <td>{{ calculationStatus.EmaCalculation.status }}</td>
+                            <td>{{ calculationStatus.EmaCalculation.progress }} %</td>
+                        </tr>
+                        <tr>
+                            <td>SMA</td>
+                            <td>{{ calculationStatus.SmaCalculation.status }}</td>
+                            <td>{{ calculationStatus.SmaCalculation.progress }} %</td>
+                        </tr>
+                        <tr>
+                            <td>MACD</td>
+                            <td>{{ calculationStatus.MacdCalculation.status }}</td>
+                            <td>{{ calculationStatus.MacdCalculation.progress }} %</td>
+                        </tr>
+                        <tr>
+                            <td>Signaal</td>
+                            <td>{{ calculationStatus.SignalCalculation.status }}</td>
+                            <td>{{ calculationStatus.SignalCalculation.progress }} %</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -433,6 +441,7 @@ app.controller("recalculateController", function ($scope, $http, $interval) {
         $http.post('rest/recalculate/' + $scope.trading.id);
         // Monitor the progress
         $scope.intervalPromise = $interval(function () {
+
             // get calculculation status
             $http.get('rest/calculationStatus/').
                     success(function (data) {
@@ -442,8 +451,9 @@ app.controller("recalculateController", function ($scope, $http, $interval) {
                                 data.SmaCalculation.progress +
                                 data.MacdCalculation.progress +
                                 data.SignalCalculation.progress) / 5;
+                        $scope.progressStyle = "width:" + $scope.progress + "%";
                     });
-            $("#progressbar").progressbar({value: $scope.progress});
+
             if ($scope.progress >= 100) {
                 $interval.cancel($scope.intervalPromise);
             }
