@@ -1,25 +1,18 @@
-body {
-    background-color:#000000;
+.crypto {
+    background-color: #337AB7;
     padding: 0;
     margin: 0 auto;
-    width: 100%;
-    font-size: 1em !important;
+    width: 90%;
+    font-size: 0.9em !important;
+    color: #2377A5 !important;
+}
+
+.app-header {
     color: #ffffff;
-}
-
-td {
-    font-size: 1.2em;
-}
-
-th {
-    font-size :1.5em;
+    background-color: #337AB7;
 }
 
 .progress {
-    width:500px;
+    width:600px;
 }
-
-a{color:#8d6e00;}
-a:hover{color: #685100; text-decoration:none;}
-a:visited{color: #685100;}
 
