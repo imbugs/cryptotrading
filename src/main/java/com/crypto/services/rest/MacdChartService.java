@@ -4,6 +4,7 @@ import com.crypto.dao.*;
 import com.crypto.entities.*;
 import com.crypto.enums.ChartType;
 import com.crypto.services.rest.wrapper.ChartDataWrapper;
+import com.crypto.services.rest.wrapper.Label;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -76,7 +77,13 @@ public class MacdChartService {
             macdList.add(macdValue.getValue());
         };
 
-        final ChartDataWrapper chartDataWrapper = new ChartDataWrapper(macdList, macd.getName(), startIndex, endIndex);
+        final List<Label> labels = new ArrayList<>();
+        labels.add (new Label(macd.getName()));
+
+        final List<List<Float>> valueLists = new ArrayList<>();
+        valueLists.add (macdList);
+
+        final ChartDataWrapper chartDataWrapper = new ChartDataWrapper(valueLists, labels, startIndex, endIndex);
 
         return chartDataWrapper;
     }

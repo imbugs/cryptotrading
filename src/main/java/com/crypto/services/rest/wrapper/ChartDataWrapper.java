@@ -5,14 +5,15 @@ import java.util.List;
 /**
  * Chart data wrapper
  * wraps all the data to be shown on the chart.
+
  *
  * Created by Jan Wicherink on 2-9-15.
  */
 public class ChartDataWrapper {
 
-    private List<Float> valueList;
+    private List<List<Float>> valueLists;
 
-    private String label;
+    private List<Label> labels;
 
     private Integer minX;
 
@@ -25,19 +26,34 @@ public class ChartDataWrapper {
     /**
      * Constructor
      *
-     * @param valueList list of values to be displayed on the chart.
-     * @param label  the legend label.
+     * @param valueLists the lists of trend lists with trend values.
+     * @param labels the list of trend legend labels.
      * @param minX      minimal index value on chart.
      * @param maxX      maximal index value on chart.
      */
-    public ChartDataWrapper(List<Float> valueList, String label, Integer minX, Integer maxX) {
-        this.valueList = valueList;
-        this.label = label;
+    public ChartDataWrapper(List<List<Float>> valueLists, List<Label> labels, Integer minX, Integer maxX) {
+        this.valueLists = valueLists;
+        this.labels = labels;
         this.minX = minX;
         this.maxX = maxX;
 
-        // Determine the extreme values;
-        this.determineYaxisExtremes();
+        determineYaxisExtremes();
+    }
+
+    public List<List<Float>> getValueLists() {
+        return valueLists;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    /**
+     * Determine Y value extremes of the Y axis, get these values from the first list of trend values.
+     */
+    private void determineYaxisExtremes() {
+        this.minY = this.valueLists.get(0).stream().min(Float::compare).get() * 0.999F;
+        this.maxY = this.valueLists.get(0).stream().max(Float::compare).get() * 1.001F;
     }
 
     public Integer getMinX() {
@@ -55,21 +71,4 @@ public class ChartDataWrapper {
     public Float getMaxY() {
         return maxY;
     }
-
-    /**
-     * Determine Y value extremes of the Y axis
-     */
-    private void determineYaxisExtremes() {
-        this.minY = this.valueList.stream().min(Float::compare).get() * 0.999F;
-        this.maxY = this.valueList.stream().max(Float::compare).get() * 1.001F;
-    }
-
-    public List<Float> getValueList() {
-        return valueList;
-    }
-
-    public String getLabel() {
-        return label;
-    }
 }
-

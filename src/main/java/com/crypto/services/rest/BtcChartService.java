@@ -3,8 +3,8 @@ package com.crypto.services.rest;
 import com.crypto.dao.*;
 import com.crypto.entities.*;
 import com.crypto.enums.ChartType;
-import com.crypto.services.rest.wrapper.BtcChartDataWrapper;
 import com.crypto.services.rest.wrapper.ChartDataWrapper;
+import com.crypto.services.rest.wrapper.Label;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,9 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
 
 /**
  * Services crypto coin data and trends for the BTC chart
@@ -45,7 +42,7 @@ public class BtcChartService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("getBtcData/{tradingId}")
-    public BtcChartDataWrapper getCryptoCoinData(@PathParam("tradingId") Integer tradingId) {
+    public ChartDataWrapper getCryptoCoinData(@PathParam("tradingId") Integer tradingId) {
 
         // Get crypto trading  history data
         final Trading trading = tradingDao.get(tradingId);
@@ -64,11 +61,14 @@ public class BtcChartService {
         for (CryptocoinHistory cryptocoinHistory : cryptocoinHistories) {
             cryptoCoinList.add(cryptocoinHistory.getClose());
         }
-        final String cryptocoinLabel = "Koers " + trading.getTradePair().getCryptoCurrency().getCode();
+        final Label cryptocoinLabel = new Label("Koers " + trading.getTradePair().getCryptoCurrency().getCode());
 
          // Get all trend value lists
         final List<List<Float>> trendLists = new ArrayList<>();
-        final List<String> trendLabels = new ArrayList<>();
+        final List<Label> trendLabels = new ArrayList<>();
+
+        trendLists.add(cryptoCoinList);
+        trendLabels.add(cryptocoinLabel);
 
         for (ChartTrend chartTrend : chartTrends) {
             // Get trend values
@@ -78,10 +78,10 @@ public class BtcChartService {
                 trendValueList.add(trendValue.getValue());
             }
             trendLists.add(trendValueList);
-            trendLabels.add(chartTrend.getTrend().getName());
+            trendLabels.add(new Label (chartTrend.getTrend().getName()));
         }
 
-        final BtcChartDataWrapper btcDataWrapper = new BtcChartDataWrapper(cryptoCoinList, cryptocoinLabel, trendLists, trendLabels, startIndex, endIndex);
+        final ChartDataWrapper btcDataWrapper = new ChartDataWrapper(trendLists, trendLabels, startIndex, endIndex);
 
         return btcDataWrapper;
     }

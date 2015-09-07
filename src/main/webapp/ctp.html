@@ -336,7 +336,7 @@ app.controller("graphController", function ($scope, $http) {
         $http.get('rest/getBtcData/' + $scope.trading.id).
                 success(function (data) {
 
-                    $scope.btcChart = [data.valueList, data.trendLists[0], data.trendLists[1], data.trendLists[2]];
+                    $scope.btcChart = data.valueLists;
 
                     $scope.btcChartOptions = {
                         height: 300,
@@ -357,7 +357,7 @@ app.controller("graphController", function ($scope, $http) {
                             show: true,
                             placement: 'inside'
                         },
-                        series: [ {label: data.label}, {label:data.trendLabels[0]}, {label:data.trendLabels[1]}, {label:data.trendLabels[2]} ],
+                        series: data.labels,
                         seriesDefaults: {
                             lineWidth: 1,
                             showMarker: false
@@ -399,7 +399,7 @@ app.controller("graphController", function ($scope, $http) {
         // Macd Chart
         $http.get('rest/getMacdData/' + $scope.trading.id).
                 success(function (data) {
-                    $scope.macdChart = [data.valueList];
+                    $scope.macdChart = data.valueLists;
                     $scope.macdChartOptions = {
                         height: 300,
                         width: 1000,
@@ -419,9 +419,7 @@ app.controller("graphController", function ($scope, $http) {
                             show: true,
                             placement: 'inside'
                         },
-                        series: [
-                            {label: data.label, xaxis: 'xaxis'}
-                        ],
+                        series: data.labels,
                         seriesDefaults: {
                             lineWidth: 1,
                             showMarker: false
