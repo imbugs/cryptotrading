@@ -58,7 +58,7 @@ public class BtcChartService {
         final List<ChartTrend> chartTrends = chartTrendDao.getChartTrends(btcChart);
 
         // Get trend values
-        final List<TrendValue> trendValues = cryptocoinTrendDao.getAllTrendValues(startIndex, endIndex, chartTrends.get(0).getTrend(), trading.getTradePair());
+        final List<TrendValue> trendValues = cryptocoinTrendDao.getAllTrendValues(startIndex, endIndex, chartTrends.get(1).getTrend(), trading.getTradePair());
 
         final List<Float> cryptoCoinList = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public class BtcChartService {
             trendList.add(trendValue.getValue());
         }
 
-        final ChartDataWrapper trendDataWrapper = new ChartDataWrapper(trendList, startIndex, endIndex, "Trend");
+        final ChartDataWrapper trendDataWrapper = new ChartDataWrapper(trendList, startIndex, endIndex, chartTrends.get(1).getTrend().getName());
 
         // Add all the btc and trend values to a list of Chart Data wrappers
         final List<ChartDataWrapper> wrapperList = new ArrayList<>();
