@@ -336,7 +336,7 @@ app.controller("graphController", function ($scope, $http) {
         $http.get('rest/getBtcData/' + $scope.trading.id).
                 success(function (data) {
 
-                    $scope.btcChart = [data[0].valueList, data[1].valueList];
+                    $scope.btcChart = [data.valueList, data.trendLists[0], data.trendLists[1], data.trendLists[2]];
 
                     $scope.btcChartOptions = {
                         height: 300,
@@ -357,10 +357,7 @@ app.controller("graphController", function ($scope, $http) {
                             show: true,
                             placement: 'inside'
                         },
-                        series: [
-                            {label: data[0].label, xaxis: 'xaxis'},
-                            {label: data[1].label, xaxis: 'xaxis'}
-                        ],
+                        series: [ {label: data.label}, {label:data.trendLabels[0]}, {label:data.trendLabels[1]}, {label:data.trendLabels[2]} ],
                         seriesDefaults: {
                             lineWidth: 1,
                             showMarker: false
@@ -369,8 +366,8 @@ app.controller("graphController", function ($scope, $http) {
                             xaxis: {
                                 autoscale: false,
                                 syncTicks: true,
-                                min: data[0].minX,
-                                max: data[0].maxX,
+                                min: data.minX,
+                                max: data.maxX,
                                 tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                                 tickOptions: {
                                     formatString: '%d',
@@ -379,8 +376,8 @@ app.controller("graphController", function ($scope, $http) {
                             },
                             yaxis: {
                                 pad: 1.3,
-                                min: data[0].minY,
-                                max: data[0].maxY,
+                                min: data.minY,
+                                max: data.maxY,
                                 tickOptions: {
                                     formatString: '%.2f'
                                 }

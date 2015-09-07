@@ -76,7 +76,7 @@ public class MacdChartService {
             macdList.add(macdValue.getValue());
         };
 
-        final ChartDataWrapper chartDataWrapper = new ChartDataWrapper(macdList,startIndex, endIndex, macd.getName());
+        final ChartDataWrapper chartDataWrapper = new ChartDataWrapper(macdList, macd.getName(), startIndex, endIndex);
 
         return chartDataWrapper;
     }

@@ -2,16 +2,17 @@ package com.crypto.services.rest.wrapper;
 
 import java.util.List;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-
 /**
- * Macd data wrapper class
+ * Chart data wrapper
+ * wraps all the data to be shown on the chart.
+ *
  * Created by Jan Wicherink on 2-9-15.
  */
 public class ChartDataWrapper {
 
     private List<Float> valueList;
+
+    private String label;
 
     private Integer minX;
 
@@ -21,28 +22,22 @@ public class ChartDataWrapper {
 
     private Float maxY;
 
-    private String label;
-
     /**
      * Constructor
      *
-     * @param valueList list of Values
-     * @param minX      minimal index value in macdList
-     * @param maxX      maximal index value in macdList
-     * @param label     the label of this macd in chart
+     * @param valueList list of values to be displayed on the chart.
+     * @param label  the legend label.
+     * @param minX      minimal index value on chart.
+     * @param maxX      maximal index value on chart.
      */
-    public ChartDataWrapper(List<Float> valueList, Integer minX, Integer maxX, String label) {
+    public ChartDataWrapper(List<Float> valueList, String label, Integer minX, Integer maxX) {
         this.valueList = valueList;
+        this.label = label;
         this.minX = minX;
         this.maxX = maxX;
-        this.label = label;
 
         // Determine the extreme values;
-        this.determineExtremes();
-    }
-
-    public List<Float> getValueList() {
-        return valueList;
+        this.determineYaxisExtremes();
     }
 
     public Integer getMinX() {
@@ -61,15 +56,20 @@ public class ChartDataWrapper {
         return maxY;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
     /**
-     * Determine Y value extremes
+     * Determine Y value extremes of the Y axis
      */
-    private void determineExtremes() {
+    private void determineYaxisExtremes() {
         this.minY = this.valueList.stream().min(Float::compare).get() * 0.999F;
         this.maxY = this.valueList.stream().max(Float::compare).get() * 1.001F;
     }
+
+    public List<Float> getValueList() {
+        return valueList;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 }
+
