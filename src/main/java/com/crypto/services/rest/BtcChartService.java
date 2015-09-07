@@ -37,6 +37,9 @@ public class BtcChartService {
     private CryptocoinTrendDao cryptocoinTrendDao;
 
     @EJB
+    private SignalDao signalDao;
+
+    @EJB
     private TradingDao tradingDao;
 
     @GET
@@ -66,6 +69,10 @@ public class BtcChartService {
          // Get all trend value lists
         final List<List<Float>> trendLists = new ArrayList<>();
         final List<Label> trendLabels = new ArrayList<>();
+
+        // Get the signal data
+   //     final List<Signal> signals = signalDao.getAll(startIndex, endIndex, trading);
+   //     final List<Float> signalList = new ArrayList<>();
 
         trendLists.add(cryptoCoinList);
         trendLabels.add(cryptocoinLabel);

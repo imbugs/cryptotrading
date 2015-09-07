@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Created by Jan Wicherink on 29-4-15.
@@ -51,6 +52,24 @@ public class SignalDaoImpl implements SignalDao {
         }
 
         return signal;
+    }
+
+    @Override
+    public List<Signal> getAll(Integer fromIndx, Integer toIndex, Trading trading) {
+        final TypedQuery<List<Signal>> query = (TypedQuery<List<Signal>>) em.createQuery("SELECT s FROM Signal s WHERE s.pk.trading = :trading AND s.pk.index >= :fromIndx AND s.pk.index <= :toIndex");
+        query.setParameter("trading", trading);
+        query.setParameter("fromIndx", fromIndx);
+        query.setParameter("toIndex", toIndex);
+
+        List<Signal> signals;
+
+        try {
+            signals = query.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+        return signals;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.crypto.entities.TradeRule;
 import com.crypto.entities.Trading;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Signal Dao
@@ -28,6 +29,14 @@ public interface SignalDao extends Serializable{
      */
     public Signal get (final Integer indx, final TradeRule tradeRule, final Trading trading);
 
+    /**
+     * Get a signal
+     * @param fromIndx the start index of the signal range
+     * @param toIndex the end index of the signal range
+     * @param trading the util of the signal
+     * @return the signal
+     */
+    public List<Signal> getAll (final Integer fromIndx, final Integer toIndex, final Trading trading);
 
     /**
      * Get the last signal
