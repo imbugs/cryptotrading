@@ -14,6 +14,11 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="bootstrap/js/bootstrap-select.min.js"></script>
     <script src="angular/angular.min.js"></script>
+    <script src="angular/angular-resource.min.js"></script>
+
+    // Angular services
+    <script src="angular/getCurrentTrading.js"></script>
+
     <script src="jquery-ui/js/jquery-ui.js"></script>
 
     <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shCoreDefault.css"/>
@@ -48,7 +53,7 @@
 
 <div ng-app="cryptoTrading" ng-controller="mainController">
 
-    <div align="center" class="crypto">
+    <div align="center" class="crypto" class="container-fluid">
         <div align="center" class="app-header">
             <div class="row">
                 <div class="col-lg-4" align="right">
@@ -251,16 +256,16 @@
 
 <script>
 // Register filter and ui-chart as dependencies
-var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart']);
+var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart', 'ngResource', 'currentTradingService']);
 // main controller for the One Page Application
-app.controller("mainController", function ($scope, $interval, $http) {
+app.controller("mainController", function ($scope, $interval, $http, getCurrentTrading) {
+
     // get current trading
-    var promise = $http.get('rest/getCurrentTrading').
-            success(function (data) {
-                $scope.trading = data;
-            });
-    // Wait until promise of getting current trade is finished.
-    promise.then(function () {
+    var trading = getCurrentTrading.get(1, function () {
+
+        $scope.trading = trading;
+
+        // Wait until promise of getting current trade is finished.
         // get trading site as text
         $http.get('rest/getTradingAsStringText/' + $scope.trading.id).
                 success(function (data) {
@@ -274,6 +279,7 @@ app.controller("mainController", function ($scope, $interval, $http) {
         $scope.currency = $scope.trading.tradePair.currency;
         $scope.cryptoCurrency = $scope.trading.tradePair.cryptoCurrency;
     });
+
     //Click wallet menu option
     $scope.clickWallet = function () {
         $scope.menuOption = "showWallet";
