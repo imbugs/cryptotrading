@@ -15,6 +15,8 @@ public class Label {
 
     private Boolean showMarker = false;
 
+    private Integer lineWidth = 1;
+
     // Point label property of jqplot defaults
     private class PointLabel {
         private Boolean show = false;
@@ -45,11 +47,12 @@ public class Label {
      * @param label the label string (used in the legend)
      * @param showMarker show marker on data point
      */
-    public Label(final String label, final Boolean showMarker) {
+    public Label(final String label, final Boolean showMarker, final Integer lineWidth) {
 
         this.label = label;
         this.showMarker = showMarker;
         this.pointLabels = new PointLabel(showMarker);
+        this.lineWidth = lineWidth;
     }
 
     public String getLabel() {
@@ -62,6 +65,10 @@ public class Label {
 
     public PointLabel getPointLabels() {
         return pointLabels;
+    }
+
+    public Integer getLineWidth() {
+        return lineWidth;
     }
 }
 

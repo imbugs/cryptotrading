@@ -73,7 +73,7 @@ public class BtcChartService {
 
             cryptoCoinList.add(dataPoint);
         }
-        final Label cryptocoinLabel = new Label("Koers " + trading.getTradePair().getCryptoCurrency().getCode(), false);
+        final Label cryptocoinLabel = new Label("Koers " + trading.getTradePair().getCryptoCurrency().getCode(), false, 2);
 
         // Add the cryptocoin data to the trend lists and labels
         trendLists.add(cryptoCoinList);
@@ -93,13 +93,13 @@ public class BtcChartService {
             }
             // Add trends to trend list and lables
             trendLists.add(trendValueList);
-            trendLabels.add(new Label(chartTrend.getTrend().getName(), false));
+            trendLabels.add(new Label(chartTrend.getTrend().getName(), false, 1));
         }
 
         // Get the signal data
         final List<Signal> signals = signalDao.getAll(startIndex, endIndex, trading);
         final List<List<Object>> signalList = new ArrayList<>();
-        final Label signalLabel = new Label("Signalen", true);
+        final Label signalLabel = new Label("Signalen", true, 5);
 
         for (Signal signal : signals) {
             List <Object> dataPoint = new ArrayList<>();

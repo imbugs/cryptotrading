@@ -75,7 +75,7 @@ public class MacdChartService {
         };
 
         final List<Label> labels = new ArrayList<>();
-        labels.add (new Label(macd.getName(), false));
+        labels.add (new Label(macd.getName(), false, 2));
 
         final List<List<List<Object>>> valueLists = new ArrayList<>();
         valueLists.add (macdList);
