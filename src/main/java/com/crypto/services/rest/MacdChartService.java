@@ -16,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.*;
-
 /**
  * Service to fetch the Cryptocoin Macd trend data for the Macd chart
  *
@@ -63,24 +61,23 @@ public class MacdChartService {
 
         final List<MacdValue> macdValues = cryptocoinTrendDao.getAllMacdValues(startIndex + macd.getLongTrend().getPeriod(), endIndex, macd, trading.getTradePair());
 
-        final List<Float> macdList = new ArrayList<>();
+        final List<List<Object>> macdList = new ArrayList<>();
 
         Float minYValue = null;
         Float maxYValue = null;
 
-                // First values upto Long trend value are irrelevant
-        for (Integer x = 0; x <= macd.getLongTrend().getPeriod(); x++) {
-            macdList.add( new Float(0));
-        }
-
         for (MacdValue macdValue : macdValues) {
-            macdList.add(macdValue.getValue());
+            List<Object> dataPoint = new ArrayList<>();
+            dataPoint.add(macdValue.getIndex());
+            dataPoint.add(macdValue.getValue());
+
+            macdList.add(dataPoint);
         };
 
         final List<Label> labels = new ArrayList<>();
-        labels.add (new Label(macd.getName()));
+        labels.add (new Label(macd.getName(), false));
 
-        final List<List<Float>> valueLists = new ArrayList<>();
+        final List<List<List<Object>>> valueLists = new ArrayList<>();
         valueLists.add (macdList);
 
         final ChartDataWrapper chartDataWrapper = new ChartDataWrapper(valueLists, labels, startIndex, endIndex);

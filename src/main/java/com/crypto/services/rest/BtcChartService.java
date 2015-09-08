@@ -47,10 +47,14 @@ public class BtcChartService {
     @Path("getBtcData/{tradingId}")
     public ChartDataWrapper getCryptoCoinData(@PathParam("tradingId") Integer tradingId) {
 
-        // Get crypto trading  history data
+        // Get the crypto trading
         final Trading trading = tradingDao.get(tradingId);
 
-        // Get the trends for the BTC chart
+        // Trend value lists and labels for the chart
+        final List<List<List<Object>>> trendLists = new ArrayList<>();
+        final List<Label> trendLabels = new ArrayList<>();
+
+        // Get the trends to be displayed on the BTC chart
         final Chart btcChart = chartDao.getChart(ChartType.BTC);
         final List<ChartTrend> chartTrends = chartTrendDao.getChartTrends(btcChart);
 
@@ -58,35 +62,62 @@ public class BtcChartService {
         final Integer startIndex = cryptocoinHistoryDao.getStartIndex(trading.getTradePair());
         final Integer endIndex = cryptocoinHistoryDao.getLastIndex(trading.getTradePair());
         final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getAll(trading.getTradePair());
-
-        final List<Float> cryptoCoinList = new ArrayList<>();
+        final List<List<Object>> cryptoCoinList = new ArrayList<>();
 
         for (CryptocoinHistory cryptocoinHistory : cryptocoinHistories) {
-            cryptoCoinList.add(cryptocoinHistory.getClose());
+
+            // Data point (index, value)
+            List <Object> dataPoint = new ArrayList<>();
+            dataPoint.add(cryptocoinHistory.getIndex());
+            dataPoint.add(cryptocoinHistory.getClose());
+
+            cryptoCoinList.add(dataPoint);
         }
-        final Label cryptocoinLabel = new Label("Koers " + trading.getTradePair().getCryptoCurrency().getCode());
+        final Label cryptocoinLabel = new Label("Koers " + trading.getTradePair().getCryptoCurrency().getCode(), false);
 
-         // Get all trend value lists
-        final List<List<Float>> trendLists = new ArrayList<>();
-        final List<Label> trendLabels = new ArrayList<>();
-
-        // Get the signal data
-   //     final List<Signal> signals = signalDao.getAll(startIndex, endIndex, trading);
-   //     final List<Float> signalList = new ArrayList<>();
-
+        // Add the cryptocoin data to the trend lists and labels
         trendLists.add(cryptoCoinList);
         trendLabels.add(cryptocoinLabel);
 
+        // Trend data
         for (ChartTrend chartTrend : chartTrends) {
             // Get trend values
             final List<TrendValue> trendValues = cryptocoinTrendDao.getAllTrendValues(startIndex, endIndex, chartTrend.getTrend(), trading.getTradePair());
-            final List<Float> trendValueList = new ArrayList<>();
+            final List<List<Object>> trendValueList = new ArrayList<>();
             for (TrendValue trendValue : trendValues){
-                trendValueList.add(trendValue.getValue());
+                // data point (index, value)
+                List <Object> dataPoint = new ArrayList<>();
+                dataPoint.add(trendValue.getIndx());
+                dataPoint.add(trendValue.getValue());
+                trendValueList.add(dataPoint);
             }
+            // Add trends to trend list and lables
             trendLists.add(trendValueList);
-            trendLabels.add(new Label (chartTrend.getTrend().getName()));
+            trendLabels.add(new Label(chartTrend.getTrend().getName(), false));
         }
+
+        // Get the signal data
+        final List<Signal> signals = signalDao.getAll(startIndex, endIndex, trading);
+        final List<List<Object>> signalList = new ArrayList<>();
+        final Label signalLabel = new Label("Signalen", true);
+
+        for (Signal signal : signals) {
+            List <Object> dataPoint = new ArrayList<>();
+
+            Integer index = signal.getPk().getIndex();
+            dataPoint.add(index);
+            dataPoint.add(cryptocoinHistories.get(index).getClose());
+
+            switch (signal.getTradeSignal()) {
+                case BEAR : dataPoint.add("VERKOOP");
+                                   break;
+                case BULL: dataPoint.add("KOOP");
+            }
+            signalList.add(dataPoint);
+        }
+
+        trendLists.add(signalList);
+        trendLabels.add(signalLabel);
 
         final ChartDataWrapper btcDataWrapper = new ChartDataWrapper(trendLists, trendLabels, startIndex, endIndex);
 

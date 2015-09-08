@@ -36,7 +36,7 @@ public interface SignalDao extends Serializable{
      * @param trading the util of the signal
      * @return the signal
      */
-    public List<Signal> getAll (final Integer fromIndx, final Integer toIndex, final Trading trading);
+    public List<Signal> getAll(final Integer fromIndx, final Integer toIndex, final Trading trading);
 
     /**
      * Get the last signal

@@ -56,7 +56,7 @@ public class SignalDaoImpl implements SignalDao {
 
     @Override
     public List<Signal> getAll(Integer fromIndx, Integer toIndex, Trading trading) {
-        final TypedQuery<List<Signal>> query = (TypedQuery<List<Signal>>) em.createQuery("SELECT s FROM Signal s WHERE s.pk.trading = :trading AND s.pk.index >= :fromIndx AND s.pk.index <= :toIndex");
+        final TypedQuery<Signal> query = (TypedQuery<Signal>) em.createQuery("SELECT s FROM Signal s WHERE s.pk.trading = :trading AND s.pk.index >= :fromIndx AND s.pk.index <= :toIndex");
         query.setParameter("trading", trading);
         query.setParameter("fromIndx", fromIndx);
         query.setParameter("toIndex", toIndex);
@@ -64,7 +64,7 @@ public class SignalDaoImpl implements SignalDao {
         List<Signal> signals;
 
         try {
-            signals = query.getSingleResult();
+            signals = query.getResultList();
         }
         catch (NoResultException e) {
             return null;

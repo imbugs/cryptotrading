@@ -1,5 +1,6 @@
 package com.crypto.services.rest.wrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,9 @@ import java.util.List;
  */
 public class ChartDataWrapper {
 
-    private List<List<Float>> valueLists;
+    // a List of Lists with data points each list represents a set of data to be displayed on the chart
+    // the List<Object> represents a datapoint on the chart and may contain : (x-axix value, y-axix-value, label string text).
+    private List<List<List<Object>>> valueLists;
 
     private List<Label> labels;
 
@@ -31,7 +34,7 @@ public class ChartDataWrapper {
      * @param minX      minimal index value on chart.
      * @param maxX      maximal index value on chart.
      */
-    public ChartDataWrapper(List<List<Float>> valueLists, List<Label> labels, Integer minX, Integer maxX) {
+    public ChartDataWrapper(List<List<List<Object>>> valueLists, List<Label> labels, Integer minX, Integer maxX) {
         this.valueLists = valueLists;
         this.labels = labels;
         this.minX = minX;
@@ -40,7 +43,7 @@ public class ChartDataWrapper {
         determineYaxisExtremes();
     }
 
-    public List<List<Float>> getValueLists() {
+    public List<List<List<Object>>> getValueLists() {
         return valueLists;
     }
 
@@ -52,8 +55,19 @@ public class ChartDataWrapper {
      * Determine Y value extremes of the Y axis, get these values from the first list of trend values.
      */
     private void determineYaxisExtremes() {
-        this.minY = this.valueLists.get(0).stream().min(Float::compare).get() * 0.999F;
-        this.maxY = this.valueLists.get(0).stream().max(Float::compare).get() * 1.001F;
+
+       // Get the y values from the first list of value lists (containing the crypto coin data).
+       // the list contains datapoints (index, value)
+       List<Float> yValues = new ArrayList<>();
+
+       for (List<Object> dataPoint : this.valueLists.get(0)) {
+          // Add the y value of a datapoint to the yValues list
+          yValues.add ((Float)dataPoint.get(1));
+       }
+
+       // determine the extreme values of the y value list.
+       this.minY = yValues.stream().min(Float::compare).get() * 0.999F;
+       this.maxY = yValues.stream().max(Float::compare).get() * 1.001F;
     }
 
     public Integer getMinX() {
