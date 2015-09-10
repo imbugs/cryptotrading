@@ -172,18 +172,32 @@
                                     <th width="200">Status</th>
                                 </tr>
                                 <tr ng-repeat="order in marketOrders">
-                                    <td>{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
-                                    <td>{{ order.index }}</td>
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.index }}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.index }}</td>
+
                                     <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.type | orderType }}</td>
                                     <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.type | orderType }}</td>
-                                    <td>{{ order.orderReference }}</td>
-                                    <td>{{ currency.symbol }} {{ order.coins | number: 2}}</td>
-                                    <td>{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
-                                    <td>{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol
-                                        }}
-                                    </td>
-                                    <td>{{ currency.symbol }} {{ order.fee }}</td>
-                                    <td>{{ order.status | orderStatus }}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.orderReference }}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.orderReference }}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ currency.symbol }} {{ order.coins | number: 2}}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ currency.symbol }} {{ order.coins | number: 2}}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol}}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol}}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ currency.symbol }} {{ order.fee }}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ currency.symbol }} {{ order.fee }}</td>
+
+                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.status | orderStatus }}</td>
+                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.status | orderStatus }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -208,7 +222,7 @@
                         <div class="panel-body">
                             <table class="table">
                                 <tr>
-                                    <th width="100">Timestamp</th>
+                                    <th width="70">Timestamp</th>
                                     <th width="50">Level</th>
                                     <th width="50">Index</th>
                                     <th width="400">Message</th>
