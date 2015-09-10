@@ -13,3 +13,39 @@ currentTradingService.factory('getCurrentTrading', function ($resource) {
 currentTradingService.factory('getCurrentCryptoRate', function ($resource) {
     return $resource('rest/currentCryptoRate/:id');
 });
+
+/**
+ * Service returning wallet
+*/
+currentTradingService.factory('getWallet', function ($resource) {
+    return $resource('rest/getWallet/:id');
+});
+
+/**
+ * Service returning wallet history
+ */
+currentTradingService.factory('getWalletHistory', function ($resource) {
+    return $resource('rest/getWalletHistory/:id');
+});
+
+/**
+ * Service returning market orders
+ */
+currentTradingService.factory('getMarketOrders', function ($resource) {
+    return $resource('rest/marketOrders/:id');
+});
+
+
+/**
+ * Service to get the crypto coin data
+ */
+currentTradingService.factory('getBtcData', function ($resource) {
+    return $resource('rest/getBtcData/:id');
+});
+
+/**
+ * Service to get the Macd data
+ */
+currentTradingService.factory('getMacdData', function ($resource) {
+    return $resource('rest/getMacdData/:id');
+});

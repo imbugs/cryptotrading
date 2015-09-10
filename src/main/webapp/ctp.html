@@ -270,7 +270,7 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
                 trading.tradePair.cryptoCurrency.description + ")";
 
         // Get the current crypto trading rate
-        var rate = getCurrentCryptoRate.get({id : $scope.trading.id}, function () {
+        var rate = getCurrentCryptoRate.get({id: $scope.trading.id}, function () {
             $scope.currentRate = rate.close + " " + trading.tradePair.currency.code + "/" + trading.tradePair.cryptoCurrency.code;
         });
     });
@@ -298,167 +298,161 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
 })
 
 // Wallet controller
-app.controller("walletController", function ($scope, $http) {
+app.controller("walletController", function ($scope, $http, getWallet, getWalletHistory) {
     // Menu option wallet clicked, get wallet
     $scope.$on('clickWalletEvent', function () {
-        $http.get('rest/getWallet/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.wallet = data;
-                });
-        $http.get('rest/getWalletHistory/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.walletHistories = data;
-                });
+
+        var wallet = getWallet.get({ id: $scope.trading.id}, function () {
+            $scope.wallet = wallet;
+        });
+
+        var walletHistory = getWalletHistory.query({id: $scope.trading.id}, function () {
+            $scope.walletHistory = walletHistory;
+        });
     });
 });
+
 // Order controller
-app.controller("orderController", function ($scope, $http) {
+app.controller("orderController", function ($scope, $http, getMarketOrders) {
     // Menu option orders clicked, get market orders
     $scope.$on('clickOrdersEvent', function () {
-        $http.get('rest/marketOrders/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.marketOrders = data;
-                });
+
+        var marketOrders = getMarketOrders.query({id: $scope.trading.id}, function () {
+            $scope.marketOrders = marketOrders;
+        })
     });
-    // Determine Order Type
-    $scope.getOrderType = function (order) {
-        if (order instanceof BuyMarketOrder) {
-            return "Koop";
-        }
-        else {
-            return "Verkoop";
-        }
-    }
 });
+
+
 // Graphs controller
-app.controller("graphController", function ($scope, $http) {
+app.controller("graphController", function ($scope, $http, getBtcData, getMacdData) {
     // Menu option graph clicked, show graph
     $scope.$on('clickGraphEvent', function () {
         // Btc Chart
-        $http.get('rest/getBtcData/' + $scope.trading.id).
-                success(function (data) {
 
-                    $scope.btcChart = data.valueLists;
+        var btcData = getBtcData.get({ id: $scope.trading.id}, function () {
 
-                    $scope.btcChartOptions = {
-                        height: 300,
-                        width: 1000,
-                        title: 'Crypto coin data',
-                        seriesDefaults: {
-                            showMarker: false
-                        },
-                        axesDefaults: {
-                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                            tickOptions: {
-                                angle: -45,
-                                fontSize: '8pt'
-                            }
-                        },
-                        legend: {
-                            renderer: $.jqplot.EnhancedLegendRenderer,
-                            show: true,
-                            placement: 'inside'
-                        },
-                        series: data.labels,
-                        seriesDefaults: {
-                            lineWidth: 1,
-                            showMarker: false
-                        },
-                        axes: {
-                            xaxis: {
-                                autoscale: false,
-                                syncTicks: true,
-                                min: data.minX,
-                                max: data.maxX,
-                                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                                tickOptions: {
-                                    formatString: '%d',
-                                    fontSize: '8pt'
-                                }
-                            },
-                            yaxis: {
-                                pad: 1.3,
-                                min: data.minY,
-                                max: data.maxY,
-                                tickOptions: {
-                                    formatString: '%.2f'
-                                }
-                            }
-                        },
-                        highlighter: {
-                            show: true,
-                            sizeAdjust: 7.5
-                        },
-                        cursor: {
-                            show: true,
-                            zoom: true,
-                            showHorizontalLine: true,
-                            showVerticalLine: true
+            $scope.btcChart = btcData.valueLists;
+
+            $scope.btcChartOptions = {
+                height: 300,
+                width: 1000,
+                title: 'Crypto coin data',
+                seriesDefaults: {
+                    showMarker: false
+                },
+                axesDefaults: {
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        angle: -45,
+                        fontSize: '8pt'
+                    }
+                },
+                legend: {
+                    renderer: $.jqplot.EnhancedLegendRenderer,
+                    show: true,
+                    placement: 'inside'
+                },
+                series: btcData.labels,
+                seriesDefaults: {
+                    lineWidth: 1,
+                    showMarker: false
+                },
+                axes: {
+                    xaxis: {
+                        autoscale: false,
+                        syncTicks: true,
+                        min: btcData.minX,
+                        max: btcData.maxX,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            formatString: '%d',
+                            fontSize: '8pt'
+                        }
+                    },
+                    yaxis: {
+                        pad: 1.3,
+                        min: btcData.minY,
+                        max: btcData.maxY,
+                        tickOptions: {
+                            formatString: '%.2f'
                         }
                     }
-                });
+                },
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 7.5
+                },
+                cursor: {
+                    show: true,
+                    zoom: true,
+                    showHorizontalLine: true,
+                    showVerticalLine: true
+                }
+            }
+        });
 
         // Macd Chart
-        $http.get('rest/getMacdData/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.macdChart = data.valueLists;
-                    $scope.macdChartOptions = {
-                        height: 300,
-                        width: 1000,
-                        title: 'Macd data',
-                        seriesDefaults: {
-                            showMarker: false
-                        },
-                        axesDefaults: {
-                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                            tickOptions: {
-                                angle: -45,
-                                fontSize: '8pt'
-                            }
-                        },
-                        legend: {
-                            renderer: $.jqplot.EnhancedLegendRenderer,
-                            show: true,
-                            placement: 'inside'
-                        },
-                        series: data.labels,
-                        seriesDefaults: {
-                            lineWidth: 1,
-                            showMarker: false
-                        },
-                        axes: {
-                            xaxis: {
-                                autoscale: false,
-                                syncTicks: true,
-                                min: data.minX,
-                                max: data.maxX,
-                                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                                tickOptions: {
-                                    formatString: '%d',
-                                    fontSize: '8pt'
-                                }
-                            },
-                            yaxis: {
-                                pad: 1.3,
-                                min: data.minY,
-                                max: data.maxY,
-                                tickOptions: {
-                                    formatString: '%.2f'
-                                }
-                            }
-                        },
-                        highlighter: {
-                            show: true,
-                            sizeAdjust: 7.5
-                        },
-                        cursor: {
-                            show: true,
-                            zoom: true,
-                            showHorizontalLine: true,
-                            showVerticalLine: true
+        var macdData = getMacdData.get({ id: $scope.trading.id}, function () {
+
+            $scope.macdChart = macdData.valueLists;
+            $scope.macdChartOptions = {
+                height: 300,
+                width: 1000,
+                title: 'Macd data',
+                seriesDefaults: {
+                    showMarker: false
+                },
+                axesDefaults: {
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        angle: -45,
+                        fontSize: '8pt'
+                    }
+                },
+                legend: {
+                    renderer: $.jqplot.EnhancedLegendRenderer,
+                    show: true,
+                    placement: 'inside'
+                },
+                series: macdData.labels,
+                seriesDefaults: {
+                    lineWidth: 1,
+                    showMarker: false
+                },
+                axes: {
+                    xaxis: {
+                        autoscale: false,
+                        syncTicks: true,
+                        min: macdData.minX,
+                        max: macdData.maxX,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            formatString: '%d',
+                            fontSize: '8pt'
+                        }
+                    },
+                    yaxis: {
+                        pad: 1.3,
+                        min: macdData.minY,
+                        max: macdData.maxY,
+                        tickOptions: {
+                            formatString: '%.2f'
                         }
                     }
-                });
+                },
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 7.5
+                },
+                cursor: {
+                    show: true,
+                    zoom: true,
+                    showHorizontalLine: true,
+                    showVerticalLine: true
+                }
+            }
+        });
     });
 });
 // Recalculate controller
