@@ -267,10 +267,12 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
 
         // Wait until promise of getting current trade is finished.
         // get trading site as text
+
         $http.get('rest/getTradingAsStringText/' + $scope.trading.id).
                 success(function (data) {
                     $scope.tradingAsText = data;
                 });
+
         // get current crypto trading rate
         $http.get('rest/currentCryptoRate/' + $scope.trading.id).
                 success(function (data) {
