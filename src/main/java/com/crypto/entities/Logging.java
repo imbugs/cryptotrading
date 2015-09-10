@@ -16,6 +16,9 @@ import java.sql.Timestamp;
 public class Logging {
 
     @Id
+    private Long Id;
+
+    @Column(name="TIMESTAMP")
     private Timestamp timestamp;
 
     @ManyToOne(cascade = CascadeType.ALL)
