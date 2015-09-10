@@ -49,3 +49,10 @@ currentTradingService.factory('getBtcData', function ($resource) {
 currentTradingService.factory('getMacdData', function ($resource) {
     return $resource('rest/getMacdData/:id');
 });
+
+/**
+ * Service to get logging data
+ */
+currentTradingService.factory('getLogging', function ($resource) {
+    return $resource('rest/getLogging/:id');
+});

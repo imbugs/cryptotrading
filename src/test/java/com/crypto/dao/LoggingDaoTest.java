@@ -96,7 +96,7 @@ public class LoggingDaoTest {
         List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.INFO);
 
         assertEquals(3, loggings.size());
-        assertEquals("INFO", loggings.get(0).getMesssage());
+        assertEquals("INFO", loggings.get(0).getMessage());
     }
 
 
@@ -109,7 +109,7 @@ public class LoggingDaoTest {
         List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.WARNING);
 
         assertEquals(2, loggings.size());
-        assertEquals("WARNING", loggings.get(0).getMesssage());
+        assertEquals("WARNING", loggings.get(0).getMessage());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class LoggingDaoTest {
         List<Logging> loggings = loggingDao.getAll(trading, LoggingLevel.DEBUG);
 
         assertEquals(4, loggings.size());
-        assertEquals("DEBUG", loggings.get(3).getMesssage());
+        assertEquals("DEBUG", loggings.get(3).getMessage());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class LoggingDaoTest {
 
         assertEquals(1, loggings.size());
 
-        assertEquals("ERROR", loggings.get(0).getMesssage());
+        assertEquals("ERROR", loggings.get(0).getMessage());
     }
 }
 

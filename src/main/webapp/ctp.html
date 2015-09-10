@@ -88,6 +88,9 @@
                                 <button type="button" class="btn btn-primary" ng-click="clickGraph()">
                                     Grafiek <span class="glyphicon glyphicon-stats"></span>
                                 </button>
+                                <button type="button" class="btn btn-primary" ng-click="clickLog()">
+                                    Log <span class="glyphicon glyphicon-list-alt"></span>
+                                </button>
                                 <button type="button" class="btn btn-primary" ng-click="clickWallet()">
                                     Wallet <span class="glyphicon glyphicon-bitcoin"></span>
                                 </button>
@@ -197,6 +200,31 @@
                 </div>
 
                 <!--
+                   Log menu option
+                 -->
+                <div ng-show="menuOption == 'showLog'" align="center" ng-controller="logController">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h4>Logging</h4></div>
+                        <div class="panel-body">
+                            <table class="table">
+                                <tr>
+                                    <th width="100">Timestamp</th>
+                                    <th width="50">Level</th>
+                                    <th width="50">Index</th>
+                                    <th width="400">Message</th>
+                                </tr>
+                                <tr ng-repeat="log in loggings">
+                                    <td>{{ log.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                                    <td>{{ log.level }}</td>
+                                    <td>{{ log.index }}</td>
+                                    <td>{{ log.message }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
                  Recalc trends and signals menu option
                 -->
                 <div ng-show="menuOption == 'recalculate'" align="center" ng-controller="recalculateController">
@@ -290,6 +318,11 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
     $scope.clickGraph = function () {
         $scope.menuOption = "showGraph";
         $scope.$broadcast('clickGraphEvent');
+    }
+    //Click log option
+    $scope.clickLog = function () {
+        $scope.menuOption = "showLog";
+        $scope.$broadcast('clickLogEvent');
     }
     //Click recalculate option
     $scope.clickReCalculate = function () {
@@ -456,6 +489,21 @@ app.controller("graphController", function ($scope, $http, getBtcData, getMacdDa
         });
     });
 });
+
+
+// Log controller
+app.controller("logController", function ($scope, getLogging) {
+    // Menu option graph clicked, show graph
+    $scope.$on('clickLogEvent', function () {
+
+       var loggings = getLogging.query ({ id: $scope.trading.id}, function () {
+
+           $scope.loggings = loggings;
+       })
+    });
+});
+
+
 // Recalculate controller
 app.controller("recalculateController", function ($scope, $http, $interval) {
     // Menu option graph clicked, show graph
