@@ -32,9 +32,8 @@ public class CryptoCoinHistoryService {
 
     @GET
     @Path("/currentCryptoRate/{tradingId}")
-    @Produces(MediaType.TEXT_HTML)
-    public String getCurrentCryptoRate(@PathParam("tradingId") Integer tradingId) throws NotFoundException {
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public CryptocoinHistory getCurrentCryptoRate(@PathParam("tradingId") Integer tradingId) throws NotFoundException {
 
         final Trading trading = tradingDao.get(tradingId);
 
@@ -45,12 +44,7 @@ public class CryptoCoinHistoryService {
             final CryptocoinHistory cryptocoinHistory = cryptocoinHistoryDao.getLast(tradePair);
 
             if (cryptocoinHistory != null) {
-
-                final String currentRate = cryptocoinHistory.getClose().toString() + ' ' +
-                        tradePair.getCurrency().getCode() + '/' +
-                        tradePair.getCryptoCurrency().getCode();
-
-                return currentRate;
+                return cryptocoinHistory;
             }
             else {
                 throw new NotFoundException("Current cryptocoin history not found for tradepair :" + tradePair.getId());

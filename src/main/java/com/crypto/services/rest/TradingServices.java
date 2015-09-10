@@ -42,30 +42,6 @@ public class TradingServices implements Serializable{
     private TradingDao tradingDao;
 
     /**
-     * Get the current trading (site and coin versus crypto coins) as string text.
-     * @return the current trading
-     */
-    @GET
-    @Path("/getTradingAsStringText/{tradingId}")
-    @Produces(MediaType.TEXT_HTML)
-    public String getCurrenetTradingAsStringText(@PathParam("tradingId") Integer tradingId) throws NotFoundException {
-
-       final Trading trading = tradingDao.get(tradingId);
-
-       if (trading != null) {
-
-           TradePair tradePair = trading.getTradePair();
-           String tradingAsStringText = tradePair.getTradingSite().getDescription() +
-                                     " (" + tradePair.getCurrency().getDescription()  + "/"
-                                          + tradePair.getCryptoCurrency().getDescription() + ")";
-           return tradingAsStringText;
-       }
-       else {
-           throw new NotFoundException("Current Trading not found");
-       }
-    }
-
-    /**
      * Get the current trading
      * @return the current trading
      */

@@ -258,28 +258,21 @@
 // Register filter and ui-chart as dependencies
 var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart', 'ngResource', 'cryptoTrading.services']);
 // main controller for the One Page Application
-app.controller("mainController", function ($scope, $interval, $http, getCurrentTrading) {
+app.controller("mainController", function ($scope, $interval, $http, getCurrentTrading, getCurrentCryptoRate) {
 
     // get current trading
     var trading = getCurrentTrading.get(1, function () {
 
         $scope.trading = trading;
+        $scope.currency = trading.tradePair.currency;
+        $scope.cryptoCurrency = trading.tradePair.cryptoCurrency;
+        $scope.tradingAsText = trading.tradePair.tradingSite.description + " (" + trading.tradePair.currency.description + "/" +
+                trading.tradePair.cryptoCurrency.description + ")";
 
-        // Wait until promise of getting current trade is finished.
-        // get trading site as text
-
-        $http.get('rest/getTradingAsStringText/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.tradingAsText = data;
-                });
-
-        // get current crypto trading rate
-        $http.get('rest/currentCryptoRate/' + $scope.trading.id).
-                success(function (data) {
-                    $scope.currentRate = data;
-                });
-        $scope.currency = $scope.trading.tradePair.currency;
-        $scope.cryptoCurrency = $scope.trading.tradePair.cryptoCurrency;
+        // Get the current crypto trading rate
+        var rate = getCurrentCryptoRate.get({id : $scope.trading.id}, function () {
+            $scope.currentRate = rate.close + " " + trading.tradePair.currency.code + "/" + trading.tradePair.cryptoCurrency.code;
+        });
     });
 
     //Click wallet menu option
