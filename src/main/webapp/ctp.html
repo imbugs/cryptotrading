@@ -461,6 +461,7 @@ app.controller("recalculateController", function ($scope, $http, $interval) {
     $scope.$on('clickRecalculateEvent', function () {
         $scope.progress = 0;
         $http.post('rest/recalculate/' + $scope.trading.id);
+
         // Monitor the progress
         $scope.intervalPromise = $interval(function () {
 
