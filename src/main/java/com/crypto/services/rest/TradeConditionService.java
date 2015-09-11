@@ -5,6 +5,7 @@ import com.crypto.dao.TradeRuleDao;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradeRule;
 import com.crypto.services.rest.wrapper.TradeRuleWrapper;
+import com.crypto.util.TradeConditionFormatter;
 import javassist.NotFoundException;
 
 import javax.ejb.EJB;
@@ -47,7 +48,10 @@ public class TradeConditionService {
             tradeRuleText = tradeRule.getDescription();
 
             for (TradeCondition tradeCondition : tradeConditions) {
-                tradeRuleConditionsText.add(tradeCondition.getTradeConditionType().getMessageFormat());
+                TradeConditionFormatter tradeConditionFormatter = new TradeConditionFormatter(tradeCondition);
+                tradeConditionFormatter.format();
+
+                tradeRuleConditionsText.add(tradeConditionFormatter.getReadableTradeCondition());
             }
 
             TradeRuleWrapper tradeRuleWrapper = new TradeRuleWrapper(tradeRuleText, tradeRuleConditionsText);

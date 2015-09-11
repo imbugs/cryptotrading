@@ -15,6 +15,7 @@
     <script src="bootstrap/js/bootstrap-select.min.js"></script>
     <script src="angular/angular.min.js"></script>
     <script src="angular/angular-resource.min.js"></script>
+    <script src="angular/angular-sanatize.min.js"></script>
 
     <!-- Angular services -->
     <script src="angular/cryptoServices.js"></script>
@@ -251,10 +252,11 @@
                            <h4>Handel op {{ tradingAsText }}</h4> <br/>
 
                             <div ng-repeat="tradeRule in tradeRuleList">
-                               <h4> {{tradeRule.tradeRule}} </h4> <br/>
+                               <h4> {{tradeRule.tradeRule}} </h4>
                                    <div ng-repeat="tradeCondition in tradeRule.tradeConditions">
-                                     {{ tradeCondition}} </br/>
+                                     <p ng-bind-html="tradeCondition"></p>
                                    </div>
+                                <br/>
                             </div>
                         </div>
                     </div>
@@ -321,7 +323,7 @@
 
 <script>
 // Register filter and ui-chart as dependencies
-var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart', 'ngResource', 'cryptoTrading.services']);
+var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart', 'ngResource', 'ngSanitize', 'cryptoTrading.services']);
 // main controller for the One Page Application
 app.controller("mainController", function ($scope, $interval, $http, getCurrentTrading, getCurrentCryptoRate) {
 
@@ -379,12 +381,12 @@ app.controller("walletController", function ($scope, $http, getWallet, getWallet
     // Menu option wallet clicked, get wallet
     $scope.$on('clickWalletEvent', function () {
 
-        var wallet = getWallet.get({ id: $scope.trading.id}, function () {
-            $scope.wallet = wallet;
+        getWallet.get({ id: $scope.trading.id}, function (data) {
+            $scope.wallet = data;
         });
 
-        var walletHistory = getWalletHistory.query({id: $scope.trading.id}, function () {
-            $scope.walletHistory = walletHistory;
+        getWalletHistory.query({id: $scope.trading.id}, function (data) {
+            $scope.walletHistory = data;
         });
     });
 });
@@ -394,8 +396,8 @@ app.controller("orderController", function ($scope, $http, getMarketOrders) {
     // Menu option orders clicked, get market orders
     $scope.$on('clickOrdersEvent', function () {
 
-        var marketOrders = getMarketOrders.query({id: $scope.trading.id}, function () {
-            $scope.marketOrders = marketOrders;
+        getMarketOrders.query({id: $scope.trading.id}, function (data) {
+            $scope.marketOrders = data;
         })
     });
 });
@@ -407,7 +409,7 @@ app.controller("graphController", function ($scope, $http, getBtcData, getMacdDa
     $scope.$on('clickGraphEvent', function () {
         // Btc Chart
 
-        var btcData = getBtcData.get({ id: $scope.trading.id}, function () {
+        getBtcData.get({ id: $scope.trading.id}, function (btcData) {
 
             $scope.btcChart = btcData.valueLists;
 
@@ -470,7 +472,7 @@ app.controller("graphController", function ($scope, $http, getBtcData, getMacdDa
         });
 
         // Macd Chart
-        var macdData = getMacdData.get({ id: $scope.trading.id}, function () {
+        getMacdData.get({ id: $scope.trading.id}, function (macdData) {
 
             $scope.macdChart = macdData.valueLists;
             $scope.macdChartOptions = {
@@ -539,9 +541,8 @@ app.controller("logController", function ($scope, getLogging) {
     // Menu option graph clicked, show graph
     $scope.$on('clickLogEvent', function () {
 
-       var loggings = getLogging.query ({ id: $scope.trading.id}, function () {
-
-           $scope.loggings = loggings;
+       getLogging.query ({ id: $scope.trading.id}, function (data) {
+           $scope.loggings = data;
        })
     });
 });
