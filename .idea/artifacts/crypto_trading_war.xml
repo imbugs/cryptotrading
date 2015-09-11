@@ -1,8 +1,8 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="crypto-trading:war">
+  <artifact type="war" name="crypto trading:war">
     <output-path>$PROJECT_DIR$/target</output-path>
     <root id="archive" name="crypto-trading.war">
-      <element id="artifact" artifact-name="crypto-trading:war exploded" />
+      <element id="artifact" artifact-name="crypto trading:war exploded" />
     </root>
   </artifact>
 </component>

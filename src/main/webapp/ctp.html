@@ -85,6 +85,9 @@
                                 <button type="button" class="btn btn-primary" ng-click="clickReCalculate()">
                                     Herbereken <span class="glyphicon glyphicon-refresh"></span>
                                 </button>
+                                <button type="button" class="btn btn-primary" ng-click="clickRules()">
+                                    Handelsregels <span class="glyphicon glyphicon-briefcase"></span>
+                                </button>
                                 <button type="button" class="btn btn-primary" ng-click="clickGraph()">
                                     Grafiek <span class="glyphicon glyphicon-stats"></span>
                                 </button>
@@ -239,6 +242,25 @@
                 </div>
 
                 <!--
+                   Trade rules menu option
+                 -->
+                <div ng-show="menuOption == 'showRules'" align="center" ng-controller="rulesController">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h4>Handels regels</h4></div>
+                        <div class="panel-body">
+                           Handel op {{ tradingAsText }} <br/>
+
+                           <div ng-repeat="tradeRule in trading.tradeRules">
+                               <h2> {{tradeRule.id}} : {{tradeRule.description}}  </h2>
+
+                               {{ tradeConditionList[tradeRule.id] }}
+
+                           </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
                  Recalc trends and signals menu option
                 -->
                 <div ng-show="menuOption == 'recalculate'" align="center" ng-controller="recalculateController">
@@ -328,6 +350,11 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
         $scope.menuOption = "showOrders";
         $scope.$broadcast('clickOrdersEvent');
     }
+    // Click rules option
+   $scope.clickRules = function () {
+       $scope.menuOption = "showRules";
+       $scope.$broadcast('clickRulesEvent');
+   }
     //Click graph option
     $scope.clickGraph = function () {
         $scope.menuOption = "showGraph";
@@ -343,6 +370,8 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
         $scope.menuOption = "recalculate";
         $scope.$broadcast('clickRecalculateEvent');
     }
+
+
 })
 
 // Wallet controller
@@ -514,6 +543,25 @@ app.controller("logController", function ($scope, getLogging) {
 
            $scope.loggings = loggings;
        })
+    });
+});
+
+
+// Rules controller
+app.controller("rulesController", function ($scope, getTradeConditions) {
+    // Menu option graph clicked, show graph
+    $scope.$on('clickRulesEvent', function () {
+
+        var length = $scope.trading.tradeRules.length;
+        var tradeRule;
+
+        for (var i=0; i < length; i++) {
+            tradeRule = $scope.trading.tradeRules[i];
+
+            var tradeConditions = getTradeConditions.query ( { id: tradeRule.id}, function () {
+                $scope.tradeConditionList[i] = tradeConditions;
+            })
+        }
     });
 });
 

@@ -56,3 +56,10 @@ currentTradingService.factory('getMacdData', function ($resource) {
 currentTradingService.factory('getLogging', function ($resource) {
     return $resource('rest/getLogging/:id');
 });
+
+/**
+ * Service to get trade conditions of a trade rule
+ */
+currentTradingService.factory('getTradeConditions', function ($resource) {
+    return $resource('rest/getTradeConditions/:id');
+});
