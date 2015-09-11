@@ -4,6 +4,7 @@ import com.crypto.dao.TradeConditionDao;
 import com.crypto.dao.TradeRuleDao;
 import com.crypto.entities.TradeCondition;
 import com.crypto.entities.TradeRule;
+import com.crypto.services.rest.wrapper.TradeRuleWrapper;
 import javassist.NotFoundException;
 
 import javax.ejb.EJB;
@@ -13,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,13 +34,25 @@ public class TradeConditionService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getTradeConditions/{tradeRuleId}")
-    public List<TradeCondition> getTradeConditions(@PathParam("tradeRuleId") Integer tradeRuleId) throws NotFoundException {
+    public TradeRuleWrapper getTradeConditions(@PathParam("tradeRuleId") Integer tradeRuleId) throws NotFoundException {
 
         final TradeRule tradeRule = tradeRuleDao.get(tradeRuleId);
         final List<TradeCondition> tradeConditions = tradeConditionDao.getAllActiveTradeConditionsOfTradeRule(tradeRule);
 
         if (tradeConditions != null) {
-            return tradeConditions;
+
+            String tradeRuleText;
+            List<String> tradeRuleConditionsText = new ArrayList<>();
+
+            tradeRuleText = tradeRule.getDescription();
+
+            for (TradeCondition tradeCondition : tradeConditions) {
+                tradeRuleConditionsText.add(tradeCondition.getTradeConditionType().getMessageFormat());
+            }
+
+            TradeRuleWrapper tradeRuleWrapper = new TradeRuleWrapper(tradeRuleText, tradeRuleConditionsText);
+
+            return tradeRuleWrapper;
         }
         else {
             throw new NotFoundException("Trade conditions not found for trade rule: " + tradeRule.getId());

@@ -248,14 +248,14 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading"><h4>Handels regels</h4></div>
                         <div class="panel-body">
-                           Handel op {{ tradingAsText }} <br/>
+                           <h4>Handel op {{ tradingAsText }}</h4> <br/>
 
-                           <div ng-repeat="tradeRule in trading.tradeRules">
-                               <h2> {{tradeRule.id}} : {{tradeRule.description}}  </h2>
-
-                               {{ tradeConditionList[tradeRule.id] }}
-
-                           </div>
+                            <div ng-repeat="tradeRule in tradeRuleList">
+                               <h4> {{tradeRule.tradeRule}} </h4> <br/>
+                                   <div ng-repeat="tradeCondition in tradeRule.tradeConditions">
+                                     {{ tradeCondition}} </br/>
+                                   </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -553,15 +553,17 @@ app.controller("rulesController", function ($scope, getTradeConditions) {
     $scope.$on('clickRulesEvent', function () {
 
         var length = $scope.trading.tradeRules.length;
-        var tradeRule;
+
+        var tradeRuleList = [];
 
         for (var i=0; i < length; i++) {
-            tradeRule = $scope.trading.tradeRules[i];
+            var tradeRule = $scope.trading.tradeRules[i];
+            getTradeConditions.get ( { id: tradeRule.id}, function(data) {
+                tradeRuleList.push(data);
+            } );
+       }
 
-            var tradeConditions = getTradeConditions.query ( { id: tradeRule.id}, function () {
-                $scope.tradeConditionList[i] = tradeConditions;
-            })
-        }
+        $scope.tradeRuleList = tradeRuleList;
     });
 });
 

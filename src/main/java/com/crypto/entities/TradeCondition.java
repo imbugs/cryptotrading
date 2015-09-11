@@ -145,7 +145,7 @@ public class TradeCondition {
         return period;
     }
 
-      public LogicalOperator getLogicalOperator() {
+    public LogicalOperator getLogicalOperator() {
         return logicalOperator;
     }
 
@@ -168,4 +168,5 @@ public class TradeCondition {
     public void setPercentage(Float percentage) {
         this.percentage = percentage;
     }
+
 }

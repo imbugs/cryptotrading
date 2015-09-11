@@ -46,4 +46,9 @@ public enum TradeConditionType {
     TradeConditionType(final String messageFormat) {
         this.messageFormat = messageFormat;
     }
+
+    public String getMessageFormat() {
+        return messageFormat;
+    }
 }
+
