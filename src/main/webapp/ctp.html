@@ -8,19 +8,25 @@
     <link type="text/css" rel="stylesheet" media="all" href="css/overwrite_jquery.css"/>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-slider.css">
     <link rel="stylesheet" type="text/css" href="jquery-ui/css/smoothness/jquery-ui.css">
 
     <script src="jquery/jquery-2.1.3.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="bootstrap/js/bootstrap-slider.min.js"></script>
+
     <script src="angular/angular.min.js"></script>
     <script src="angular/angular-resource.min.js"></script>
     <script src="angular/angular-sanatize.min.js"></script>
+    <script src="angular/slider.js"></script>
 
     <!-- Angular services -->
     <script src="angular/cryptoServices.js"></script>
 
-    <script src="jquery-ui/js/jquery-ui.js"></script>
+    <!-- Angular jquery -->
+    <script src="jquery/jquery.min.js"></script>
+    <script src="jquery/modernizr.js"></script>
 
     <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shCoreDefault.css"/>
     <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shThemejqPlot.css"/>
@@ -54,282 +60,368 @@
 
 <div ng-app="cryptoTrading" ng-controller="mainController">
 
-    <div align="center" class="crypto" class="container-fluid">
-        <div align="center" class="app-header">
+<div align="center" class="crypto" class="container-fluid">
+<div align="center" class="app-header">
+    <div class="row">
+        <div class="col-lg-4" align="right">
+            <img src="trading_places.jpg" height="150">
+        </div>
+        <div class="col-lg-8" align="left">
             <div class="row">
-                <div class="col-lg-4" align="right">
-                    <img src="trading_places.jpg" height="150">
-                </div>
-                <div class="col-lg-8" align="left">
-                    <div class="row">
-                        <h1>Crypto trading places (Handel)</h1>
-                    </div>
-                    <div class="row">
-                        <h3>
-                            {{tradingAsText}} : {{currentRate}}
-                        </h3>
-                    </div>
+                <h1>Crypto trading places (Handel)</h1>
+            </div>
+            <div class="row">
+                <h3>
+                    {{tradingAsText}} : {{currentRate}}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <!--
+                Menu
+            -->
+            <div align="center">
+                <div class="btn-group btn-toolbar" role="group">
+                    <button type="button" class="btn btn-primary" ng-click="clickReCalculate()">
+                        Herbereken <span class="glyphicon glyphicon-refresh"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="clickRules()">
+                        Handelsregels <span class="glyphicon glyphicon-briefcase"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="clickGraph()">
+                        Grafiek <span class="glyphicon glyphicon-stats"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="clickLog()">
+                        Log <span class="glyphicon glyphicon-list-alt"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="clickWallet()">
+                        Wallet <span class="glyphicon glyphicon-bitcoin"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="clickOrders()">
+                        Orders <span class="glyphicon glyphicon-briefcase"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="clickTrade()">
+                        Handel <span class="glyphicon glyphicon-usd"></span>
+                    </button>
                 </div>
             </div>
         </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-3"></div>
-                    <div class="col-lg-6">
-                        <!--
-                            Menu
-                        -->
-                        <div align="center">
-                            <div class="btn-group btn-toolbar" role="group">
-                                <button type="button" class="btn btn-primary" ng-click="clickReCalculate()">
-                                    Herbereken <span class="glyphicon glyphicon-refresh"></span>
-                                </button>
-                                <button type="button" class="btn btn-primary" ng-click="clickRules()">
-                                    Handelsregels <span class="glyphicon glyphicon-briefcase"></span>
-                                </button>
-                                <button type="button" class="btn btn-primary" ng-click="clickGraph()">
-                                    Grafiek <span class="glyphicon glyphicon-stats"></span>
-                                </button>
-                                <button type="button" class="btn btn-primary" ng-click="clickLog()">
-                                    Log <span class="glyphicon glyphicon-list-alt"></span>
-                                </button>
-                                <button type="button" class="btn btn-primary" ng-click="clickWallet()">
-                                    Wallet <span class="glyphicon glyphicon-bitcoin"></span>
-                                </button>
-                                <button type="button" class="btn btn-primary" ng-click="clickOrders()">
-                                    Orders <span class="glyphicon glyphicon-briefcase"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3"></div>
-                </div>
-            </div>
+<div class="row">
+<!--
+ Wallet menu option
+-->
+<div ng-show="menuOption == 'showWallet'" align="center" ng-controller="walletController">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Wallet</h4></div>
+        <div class="panel-body">
 
             <div class="row">
-                <!--
-                 Wallet menu option
-                -->
-                <div ng-show="menuOption == 'showWallet'" align="center" ng-controller="walletController">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><h4>Wallet</h4></div>
-                        <div class="panel-body">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-2"><h4>Munten :</h4></div>
+                <div class="col-lg-2"><h4>{{ wallet.coins }} {{ currency.code }}</h4></div>
+                <div class="col-lg-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-2"><h4>Cryptocoins :</h4></div>
+                <div class="col-lg-2"><h4>{{ wallet.cryptoCoins }} {{ cryptoCurrency.code }}</h4></div>
+                <div class="col-lg-4"></div>
+            </div>
 
-                            <div class="row">
-                                <div class="col-lg-4"></div>
-                                <div class="col-lg-2"><h4>Munten :</h4></div>
-                                <div class="col-lg-2"><h4>{{ wallet.coins }} {{ currency.code }}</h4></div>
-                                <div class="col-lg-4"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4"></div>
-                                <div class="col-lg-2"><h4>Cryptocoins :</h4></div>
-                                <div class="col-lg-2"><h4>{{ wallet.cryptoCoins }} {{ cryptoCurrency.code }}</h4></div>
-                                <div class="col-lg-4"></div>
-                            </div>
-
-                            <div class="panel panel-primary">
-                                <div class="panel-heading"><h4>Wallet historie</h4></div>
-                                <div class="panel-body">
-                                    <table class="table">
-                                        <tr>
-                                            <th width="150">Datum en tijd</th>
-                                            <th width="120">Munten</th>
-                                            <th width="130">Crypto munten</th>
-                                            <th width="100">Koers</th>
-                                            <th width="200">Totale waarde</th>
-                                        </tr>
-                                        <tr ng-repeat="walletHistory in walletHistories">
-                                            <td>{{ walletHistory.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
-                                            <td>{{ walletHistory.coins }}</td>
-                                            <td>{{ walletHistory.cryptoCoins }}</td>
-                                            <td>{{ walletHistory.exchangeRate }}</td>
-                                            <td>{{ walletHistory.totalValue }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--
-                   Market orders menu option
-                 -->
-                <div ng-show="menuOption == 'showOrders'" align="center" ng-controller="orderController">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><h4>Market Orders</h4></div>
-                        <div class="panel-body">
-
-                            <table class="table">
-                                <tr>
-                                    <th width="150">Datum en tijd</th>
-                                    <th width="80">Index</th>
-                                    <th width="100">Order type</th>
-                                    <th width="170">Order nummer</th>
-                                    <th width="100">Munten</th>
-                                    <th width="120">Crypto munten</th>
-                                    <th width="120">Koers</th>
-                                    <th width="100">Commissie</th>
-                                    <th width="200">Status</th>
-                                </tr>
-                                <tr ng-repeat="order in marketOrders">
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.index }}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.index }}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.type | orderType }}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.type | orderType }}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.orderReference }}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.orderReference }}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ currency.symbol }} {{ order.coins | number: 2}}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ currency.symbol }} {{ order.coins | number: 2}}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ cryptoCurrency.symbol }} {{ order.cryptoCoins | number: 5}}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol}}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.exchangeRate }} {{ currency.symbol}} / {{ cryptoCurrency.symbol}}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ currency.symbol }} {{ order.fee }}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ currency.symbol }} {{ order.fee }}</td>
-
-                                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.status | orderStatus }}</td>
-                                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.status | orderStatus }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!--
-                   Graph menu option
-                 -->
-                <div ng-show="menuOption == 'showGraph'" align="center" ng-controller="graphController">
-                    <div ui-chart="btcChart" chart-options="btcChartOptions"></div>
-
-                    <div ui-chart="macdChart" chart-options="macdChartOptions"></div>
-                </div>
-
-                <!--
-                   Log menu option
-                 -->
-                <div ng-show="menuOption == 'showLog'" align="center" ng-controller="logController">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><h4>Logging</h4></div>
-                        <div class="panel-body">
-                            <table class="table">
-                                <tr>
-                                    <th width="70">Timestamp</th>
-                                    <th width="50">Level</th>
-                                    <th width="50">Index</th>
-                                    <th width="400">Message</th>
-                                </tr>
-                                <tr ng-repeat="log in loggings">
-                                    <td>{{ log.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
-                                    <td>{{ log.level }}</td>
-                                    <td>{{ log.index }}</td>
-                                    <td>{{ log.message }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!--
-                   Trade rules menu option
-                 -->
-                <div ng-show="menuOption == 'showRules'" align="center" ng-controller="rulesController">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><h4>Handels regels</h4></div>
-                        <div class="panel-body">
-                           <h4>Handel op {{ tradingAsText }}</h4> <br/>
-
-                            <div ng-repeat="tradeRule in tradeRuleList">
-                               <h4> {{tradeRule.tradeRule}} </h4>
-                                   <div ng-repeat="tradeCondition in tradeRule.tradeConditions">
-                                     <p ng-bind-html="tradeCondition"></p>
-                                   </div>
-                                <br/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--
-                 Recalc trends and signals menu option
-                -->
-                <div ng-show="menuOption == 'recalculate'" align="center" ng-controller="recalculateController">
-                    <h4>Herbereken trends en signalen</h4>
-                    <br/>
-
-                    <div class="row">
-                        <div class="progress">
-                            <div id="progressbar" class="progress-bar progress-bar-striped active"
-                                 role="progressbar"
-                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                                 ng-attr-style="{{progressStyle}}">
-                                <span><b>{{ progress }} %</b></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-8">
-                            <div class="row">
-                                <div class="col-lg-1">MA</div>
-                                <div class="col-lg-5">{{ calculationStatus.MaCalculation.status }}</div>
-                                <div class="col-lg-2">{{ calculationStatus.MaCalculation.progress }} %</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-1">EMA</div>
-                                <div class="col-lg-5">{{ calculationStatus.EmaCalculation.status }}</div>
-                                <div class="col-lg-2">{{ calculationStatus.EmaCalculation.progress }} %</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-1">SMA</div>
-                                <div class="col-lg-5">{{ calculationStatus.SmaCalculation.status }}</div>
-                                <div class="col-lg-2">{{ calculationStatus.SmaCalculation.progress }} %</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-1">MACD</div>
-                                <div class="col-lg-5">{{ calculationStatus.MacdCalculation.status }}</div>
-                                <div class="col-lg-2">{{ calculationStatus.MacdCalculation.progress }} %</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-1">Signaal</div>
-                                <div class="col-lg-5">{{ calculationStatus.SignalCalculation.status }}</div>
-                                <div class="col-lg-2">{{ calculationStatus.SignalCalculation.progress }} %</div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4>Wallet historie</h4></div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tr>
+                            <th width="150">Datum en tijd</th>
+                            <th width="120">Munten</th>
+                            <th width="130">Crypto munten</th>
+                            <th width="100">Koers</th>
+                            <th width="200">Totale waarde</th>
+                        </tr>
+                        <tr ng-repeat="walletHistory in walletHistories">
+                            <td>{{ walletHistory.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                            <td>{{ walletHistory.coins }}</td>
+                            <td>{{ walletHistory.cryptoCoins }}</td>
+                            <td>{{ walletHistory.exchangeRate }}</td>
+                            <td>{{ walletHistory.totalValue }}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!--
+   Market orders menu option
+ -->
+<div ng-show="menuOption == 'showOrders'" align="center" ng-controller="orderController">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Market Orders</h4></div>
+        <div class="panel-body">
+
+            <table class="table">
+                <tr>
+                    <th width="150">Datum en tijd</th>
+                    <th width="80">Index</th>
+                    <th width="100">Order type</th>
+                    <th width="170">Order nummer</th>
+                    <th width="100">Munten</th>
+                    <th width="120">Crypto munten</th>
+                    <th width="120">Koers</th>
+                    <th width="100">Commissie</th>
+                    <th width="200">Status</th>
+                </tr>
+                <tr ng-repeat="order in marketOrders">
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.timestamp | date: "dd-M-yyyy -
+                        hh:mm:ss uur" }}
+                    </td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.timestamp | date: "dd-M-yyyy -
+                        hh:mm:ss uur" }}
+                    </td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.index }}</td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.index }}</td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.type | orderType }}</td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL'">{{ order.type | orderType }}</td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.orderReference }}</td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.orderReference }}</td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ currency.symbol }} {{ order.coins | number:
+                        2}}
+                    </td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ currency.symbol }} {{ order.coins | number:
+                        2}}
+                    </td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ cryptoCurrency.symbol }} {{
+                        order.cryptoCoins | number: 5}}
+                    </td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ cryptoCurrency.symbol }} {{
+                        order.cryptoCoins | number: 5}}
+                    </td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.exchangeRate }} {{ currency.symbol}} /
+                        {{ cryptoCurrency.symbol}}
+                    </td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.exchangeRate }} {{ currency.symbol}}
+                        / {{ cryptoCurrency.symbol}}
+                    </td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ currency.symbol }} {{ order.fee }}</td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ currency.symbol }} {{ order.fee }}</td>
+
+                    <td bgcolor="#a9a9a9" ng-show="order.type == 'BUY' ">{{ order.status | orderStatus }}</td>
+                    <td bgcolor="#f5f5dc" ng-show="order.type == 'SELL' ">{{ order.status | orderStatus }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--
+   Graph menu option
+ -->
+<div ng-show="menuOption == 'showGraph'" align="center" ng-controller="graphController">
+    <div ui-chart="btcChart" chart-options="btcChartOptions"></div>
+
+    <div ui-chart="macdChart" chart-options="macdChartOptions"></div>
+</div>
+
+<!--
+   Log menu option
+ -->
+<div ng-show="menuOption == 'showLog'" align="center" ng-controller="logController">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Logging</h4></div>
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <th width="70">Timestamp</th>
+                    <th width="50">Level</th>
+                    <th width="50">Index</th>
+                    <th width="400">Message</th>
+                </tr>
+                <tr ng-repeat="log in loggings">
+                    <td>{{ log.timestamp | date: "dd-M-yyyy - hh:mm:ss uur" }}</td>
+                    <td>{{ log.level }}</td>
+                    <td>{{ log.index }}</td>
+                    <td>{{ log.message }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--
+   Trade rules menu option
+ -->
+<div ng-show="menuOption == 'showRules'" align="center" ng-controller="rulesController">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Handels regels</h4></div>
+        <div class="panel-body">
+            <h4>Handel op {{ tradingAsText }}</h4> <br/>
+
+            <div ng-repeat="tradeRule in tradeRuleList">
+                <h4> {{tradeRule.tradeRule}} </h4>
+
+                <div ng-repeat="tradeCondition in tradeRule.tradeConditions">
+                    <p ng-bind-html="tradeCondition"></p>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+ Recalc trends and signals menu option
+-->
+<div ng-show="menuOption == 'recalculate'" align="center" ng-controller="recalculateController">
+    <h4>Herbereken trends en signalen</h4>
+    <br/>
+
+    <div class="row">
+        <div class="progress">
+            <div id="progressbar" class="progress-bar progress-bar-striped active"
+                 role="progressbar"
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                 ng-attr-style="{{progressStyle}}">
+                <span><b>{{ progress }} %</b></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-lg-1">MA</div>
+                <div class="col-lg-5">{{ calculationStatus.MaCalculation.status }}</div>
+                <div class="col-lg-2">{{ calculationStatus.MaCalculation.progress }} %</div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-1">EMA</div>
+                <div class="col-lg-5">{{ calculationStatus.EmaCalculation.status }}</div>
+                <div class="col-lg-2">{{ calculationStatus.EmaCalculation.progress }} %</div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-1">SMA</div>
+                <div class="col-lg-5">{{ calculationStatus.SmaCalculation.status }}</div>
+                <div class="col-lg-2">{{ calculationStatus.SmaCalculation.progress }} %</div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-1">MACD</div>
+                <div class="col-lg-5">{{ calculationStatus.MacdCalculation.status }}</div>
+                <div class="col-lg-2">{{ calculationStatus.MacdCalculation.progress }} %</div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-1">Signaal</div>
+                <div class="col-lg-5">{{ calculationStatus.SignalCalculation.status }}</div>
+                <div class="col-lg-2">{{ calculationStatus.SignalCalculation.progress }} %</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+   Trade menu option
+ -->
+<div ng-show="menuOption == 'showTrade'" align="center" ng-controller="tradeController">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Gesimuleerde handel</h4></div>
+        <div class="panel-body">
+
+            <div class="row" align="left">
+                <div class="col-lg-1" align="right"><b>{{ fromIndex }}</b></div>
+                <div class="col-lg-2">
+                    <slider ng-model="slider.sliderValue" ng-attr-min="fromIndex" step="1" ng-attr-max="toIndex" value="100"></slider>
+                </div>
+                <div class="col-lg-1" class="left"><b>{{ toIndex }}</b></div>
+            </div>
+
+            <div class="row">
+                <form>
+                    <div class="row">
+                        <div class="col-lg-2">Van index:</div>
+                        <div class="col-lg-2">
+                            <input type="text" ng-model="slider.sliderValue">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">Tot index:</div>
+                        <div class="col-lg-2">
+                            <input type="text" ng-model="toIndex">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">Munten:</div>
+                        <div class="col-lg-2">
+                            <input type="text" ng-model="coins">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">Crypto munten:</div>
+                        <div class="col-lg-2">
+                            <input type="text" ng-model="cryptoCoins">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">Life simulatie</div>
+                        <div class="col-lg-1">
+                            <select class="selectpicker" data-style="btn-primary" ng-model="lifeSimulation" width="200">
+                                <option value="Y" selected>Ja</option>
+                                <option value="N">Nee</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div clas="row" align="left">
+                <button type="button" class="btn btn-primary" ng-click="clickTrade()">Start simulatie</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
 </body>
 
 <script>
 // Register filter and ui-chart as dependencies
-var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart', 'ngResource', 'ngSanitize', 'cryptoTrading.services']);
+var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter', 'ui.chart', 'ui.bootstrap-slider', 'ngResource', 'ngSanitize', 'cryptoTrading.services']);
 // main controller for the One Page Application
 app.controller("mainController", function ($scope, $interval, $http, getCurrentTrading, getCurrentCryptoRate) {
 
     // get current trading
     var trading = getCurrentTrading.get(1, function () {
-
         $scope.trading = trading;
         $scope.currency = trading.tradePair.currency;
         $scope.cryptoCurrency = trading.tradePair.cryptoCurrency;
@@ -353,10 +445,10 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
         $scope.$broadcast('clickOrdersEvent');
     }
     // Click rules option
-   $scope.clickRules = function () {
-       $scope.menuOption = "showRules";
-       $scope.$broadcast('clickRulesEvent');
-   }
+    $scope.clickRules = function () {
+        $scope.menuOption = "showRules";
+        $scope.$broadcast('clickRulesEvent');
+    }
     //Click graph option
     $scope.clickGraph = function () {
         $scope.menuOption = "showGraph";
@@ -372,8 +464,11 @@ app.controller("mainController", function ($scope, $interval, $http, getCurrentT
         $scope.menuOption = "recalculate";
         $scope.$broadcast('clickRecalculateEvent');
     }
-
-
+    //Click tade option
+    $scope.clickTrade = function () {
+        $scope.menuOption = "showTrade";
+        $scope.$broadcast('clickTradeEvent');
+    }
 })
 
 // Wallet controller
@@ -541,9 +636,9 @@ app.controller("logController", function ($scope, getLogging) {
     // Menu option graph clicked, show graph
     $scope.$on('clickLogEvent', function () {
 
-       getLogging.query ({ id: $scope.trading.id}, function (data) {
-           $scope.loggings = data;
-       })
+        getLogging.query({ id: $scope.trading.id}, function (data) {
+            $scope.loggings = data;
+        })
     });
 });
 
@@ -557,12 +652,12 @@ app.controller("rulesController", function ($scope, getTradeConditions) {
 
         var tradeRuleList = [];
 
-        for (var i=0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             var tradeRule = $scope.trading.tradeRules[i];
-            getTradeConditions.get ( { id: tradeRule.id}, function(data) {
+            getTradeConditions.get({ id: tradeRule.id}, function (data) {
                 tradeRuleList.push(data);
-            } );
-       }
+            });
+        }
 
         $scope.tradeRuleList = tradeRuleList;
     });
@@ -593,9 +688,34 @@ app.controller("recalculateController", function ($scope, $http, $interval) {
 
             if ($scope.progress >= 100) {
                 $interval.cancel($scope.intervalPromise);
-            }
-        }, 1000);
+            }       }, 1000);
     });
 });
+
+// Tradecontroller
+app.controller("tradeController", function ($scope, $http) {
+
+    // Menu option graph clicked, show graph
+    $scope.$on('clickTradeEvent', function () {
+        $scope.fromIndex = 1;
+        $scope.toIndex = 1000;
+
+        $scope.coins = 100;
+        $scope.cryptoCoins = 1000;
+
+        $scope.slider = {};
+        $scope.slider.sliderValue = 50;
+    });
+
+    $scope.clickTrade = function () {
+
+        $http.get('rest/trade/' + $scope.trading.id + '/' + $scope.fromIndex + '/' + $scope.toIndex).
+                success(function (data) {
+                    alert("Klaar");
+                })
+    }
+
+});
+
 </script>
 </html>

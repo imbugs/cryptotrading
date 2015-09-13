@@ -28,14 +28,12 @@ public class MarketOrderTrader extends Trader {
     @EJB
     private CryptocoinHistoryDao cryptocoinHistoryDao;
 
-
     /**
      * Default constructor
      */
     public MarketOrderTrader() {
         super();
     }
-
 
     /**
      * Constructor
@@ -50,7 +48,6 @@ public class MarketOrderTrader extends Trader {
 
         super(sinceIndex, funds, wallet, trading, logger);
     }
-
 
     private Boolean walletValueDecreases(final CryptocoinHistory cryptocoinHistory) {
         final WalletHistory previousWalletHistory = walletHistoryDao.getLast(getTrading());
