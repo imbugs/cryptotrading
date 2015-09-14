@@ -7,6 +7,7 @@ import com.crypto.entities.Trading;
 import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -50,20 +51,30 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
 
     @Override
     public MarketOrder getLastSell(Integer beforeIndex, Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.pk.index < :beforeIndex AND m.pk.trading = :trading AND ORDER_TYPE = 'SELL' ORDER BY m.timestamp DESC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m1 FROM MarketOrder m1 WHERE m1.pk.index = (SELECT max(m.pk.index) FROM MarketOrder m WHERE m.pk.index < :beforeIndex AND m.pk.trading = :trading AND ORDER_TYPE = 'SELL')");
         query.setParameter("beforeIndex", beforeIndex);
         query.setParameter("trading", trading);
 
-        return query.getResultList().get(0);
+        try {
+            return query.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public MarketOrder getLastBuy(Integer beforeIndex, Trading trading) {
-        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m FROM MarketOrder m WHERE m.pk.index < :beforeIndex AND m.pk.trading = :trading AND ORDER_TYPE = 'BUY' ORDER BY m.timestamp DESC");
+        final TypedQuery<MarketOrder> query = (TypedQuery<MarketOrder>) em.createQuery("SELECT m1 FROM MarketOrder m1 WHERE m1.pk.index = (SELECT max(m.pk.index) FROM MarketOrder m WHERE m.pk.index < :beforeIndex AND m.pk.trading = :trading AND ORDER_TYPE = 'BUY')");
         query.setParameter("beforeIndex", beforeIndex);
         query.setParameter("trading", trading);
 
-        return query.getResultList().get(0);
+        try {
+            return query.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

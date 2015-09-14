@@ -7,16 +7,15 @@ import com.crypto.enums.MarketOrderStatus;
 import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * A crypto coin trader
  * Created by Jan Wicherink on 24-6-15.
  */
-@Stateful
 public class Trader {
 
     @EJB
@@ -34,7 +33,10 @@ public class Trader {
     @EJB
     private MarketOrderDao marketOrderDao;
 
-    private Integer sinceIndex;
+    private Integer fromIndex;
+
+    private Integer toIndex;
+
 
     // key value pairs of funds, key = currency code
     private Map<Currency, Fund> funds;
@@ -56,15 +58,17 @@ public class Trader {
     /**
      * Constructor.
      *
-     * @param sinceIndex the start index to start trading.
-     * @param funds      the funds used for trading.
-     * @param wallet     the wallet of the trading.
-     * @param trading    the trading.
+     * @param fromIndex the start index to start trading.
+     * @param toIndex   the end index of the trading.
+     * @param funds     the funds used for trading.
+     * @param wallet    the wallet of the trading.
+     * @param trading   the trading.
      */
 
 
-    public Trader(final Integer sinceIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
-        this.sinceIndex = sinceIndex;
+    public Trader(final Integer fromIndex, final Integer toIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
+        this.fromIndex = fromIndex;
+        this.toIndex = toIndex;
         this.funds = funds;
         this.wallet = wallet;
         this.trading = trading;
@@ -246,7 +250,6 @@ public class Trader {
         }
 
         return total;
-
     }
 
 
@@ -479,8 +482,20 @@ public class Trader {
         return trading.getLogging();
     }
 
-    public void setSinceIndex(Integer sinceIndex) {
-        this.sinceIndex = sinceIndex;
+    public void setFromIndex(Integer fromIndex) {
+        this.fromIndex = fromIndex;
+    }
+
+    public Integer getFromIndex() {
+        return fromIndex;
+    }
+
+    public Integer getToIndex() {
+        return toIndex;
+    }
+
+    public void setToIndex(Integer toIndex) {
+        this.toIndex = toIndex;
     }
 
     public void setFunds(Map<Currency, Fund> funds) {
@@ -523,10 +538,6 @@ public class Trader {
         return wallet;
     }
 
-    public Integer getSinceIndex() {
-        return sinceIndex;
-    }
-
     public Boolean getLogging() {
         return getTrading().getLogging();
     }
@@ -538,4 +549,6 @@ public class Trader {
     public Map<Currency, Fund> getFunds() {
         return funds;
     }
+
+
 }

@@ -8,16 +8,22 @@ import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Trader which traders market orders, orders which are traded immediately against a given cryptocurrency rate.
+ * Trader which traders market orders, orders which are traded immediately against a given cryptocurrency rate.
  * <p/>
  * Created by Jan Wicherink on 16-7-15.
  */
+@SessionScoped
 @Stateful
-public class MarketOrderTrader extends Trader {
+public class MarketOrderTrader extends Trader implements Serializable{
+
+    private static final long serialVersionUID = -5055535882875761231L;
 
     @EJB
     private WalletHistoryDao walletHistoryDao;
@@ -38,15 +44,16 @@ public class MarketOrderTrader extends Trader {
     /**
      * Constructor
      *
-     * @param sinceIndex since index for trading
+     * @param fromIndex start index for trading
+     * @parama toIndex end index for trading
      * @param funds      the funds that are available for trading
      * @param wallet     the wallet
      * @param trading    the trading
      * @param logger     the logger used for logging.
      */
-    public MarketOrderTrader(final Integer sinceIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
+    public MarketOrderTrader(final Integer fromIndex, final Integer toIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
 
-        super(sinceIndex, funds, wallet, trading, logger);
+        super(fromIndex, toIndex, funds, wallet, trading, logger);
     }
 
     private Boolean walletValueDecreases(final CryptocoinHistory cryptocoinHistory) {
@@ -209,12 +216,13 @@ public class MarketOrderTrader extends Trader {
         }
     }
 
+
     /**
      * Trade with all available crypto coin histories.
      */
     public void trade() {
 
-        final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistorySinceIndex(getTrading().getTradePair(), getSinceIndex());
+        final List<CryptocoinHistory> cryptocoinHistories = cryptocoinHistoryDao.getCryptoCoinHistoryRangeIndex(getTrading().getTradePair(), getFromIndex(), getToIndex());
 
         cryptocoinHistories.forEach(cryptocoinHistory -> {
             tradeAtIndex(cryptocoinHistory);
