@@ -38,7 +38,7 @@ public class Fund {
     }
 
     public TradePair getTradepair() {
-        return this.pk.getTradepair();
+        return this.pk.getTradePair();
     }
 
     public Float getCoins() {

@@ -94,4 +94,10 @@ public interface MarketOrderDao extends Serializable{
      */
     public List<MarketOrder> getAll (final Trading trading);
 
+    /**
+     * Delete all market orders of a trading
+     * @param trading the trading
+     */
+    public void deleteAll (final Trading trading);
+
 }

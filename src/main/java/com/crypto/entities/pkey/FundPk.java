@@ -21,7 +21,7 @@ public class FundPk implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TRADE_PAIR_ID", nullable=false, updatable=false)
-    private TradePair tradepair;
+    private TradePair tradePair;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name = "CURRENCY", nullable=false, updatable=false)
@@ -30,11 +30,11 @@ public class FundPk implements Serializable {
     /**
      * Constructor
      *
-     * @param tradepair  the tradepair of the fund
+     * @param tradePair  the tradepair of the fund
      * @param currency the currency of the fund
      */
-    public FundPk(TradePair tradepair, Currency currency) {
-        this.tradepair = tradepair;
+    public FundPk(TradePair tradePair, Currency currency) {
+        this.tradePair = tradePair;
         this.currency = currency;
     }
 
@@ -45,8 +45,8 @@ public class FundPk implements Serializable {
 
     }
 
-    public TradePair getTradepair() {
-        return tradepair;
+    public TradePair getTradePair() {
+        return tradePair;
     }
 
     public Currency getCurrency() {

@@ -6,10 +6,7 @@ import com.crypto.entities.Trading;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -115,5 +112,12 @@ public class MarketOrderDaoImpl implements MarketOrderDao {
         query.setParameter("trading", trading);
 
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteAll(Trading trading) {
+        final Query query = em.createQuery("DELETE FROM MarketOrder m WHERE m.pk.trading=:trading");
+        query.setParameter("trading", trading);
+        query.executeUpdate();
     }
 }

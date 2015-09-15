@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -34,5 +35,12 @@ public class WalletDaoImpl implements WalletDao {
         query.setParameter("trading", trading);
 
         return query.getSingleResult();
+    }
+
+    @Override
+    public void deleteAll(final Trading trading) {
+        final Query query = em.createQuery("DELETE FROM Wallet w WHERE w.trading= :trading");
+        query.setParameter("trading", trading);
+        query.executeUpdate();
     }
 }

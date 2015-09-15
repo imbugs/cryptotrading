@@ -6,8 +6,8 @@ import com.crypto.entities.Trading;
 import com.crypto.entities.Withdrawal;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -31,7 +31,11 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
         query.setParameter("trading", trading);
         query.setParameter("currency", currency);
 
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

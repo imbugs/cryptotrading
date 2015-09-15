@@ -25,6 +25,9 @@ public interface WalletDao extends Serializable {
      */
     public Wallet get (final Trading trading);
 
-
-
+    /**
+     * Delete all the wallet data of a trading.
+     * @param trading the trading of which the wallet is to be removed.
+     */
+    public void deleteAll(final Trading trading);
 }

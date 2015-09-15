@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.logging.Logger;
 
 /**
@@ -38,5 +39,17 @@ public class FundDaoImpl implements FundDao {
         final FundPk pk = new FundPk(tradepair, currency);
 
         return em.find(Fund.class, pk);
+    }
+
+    @Override
+    public void deleteAll(TradePair tradePair) {
+
+        final Query query = em.createQuery("DELETE FROM Fund f WHERE f.pk.tradePair=:tradePair AND f.pk.currency=:currency");
+        query.setParameter("tradePair", tradePair);
+        query.setParameter("currency", tradePair.getCurrency());
+        query.executeUpdate();
+
+        query.setParameter("currency", tradePair.getCryptoCurrency());
+        query.executeUpdate();
     }
 }

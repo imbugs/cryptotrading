@@ -24,4 +24,10 @@ public interface FundDao extends Serializable {
      * @return the fund
      */
     public Fund get(final TradePair tradepair, Currency currency);
+
+    /**
+     * Remove all fund data of a trade pair.
+     * @param tradePair the trade pair.
+     */
+    public void deleteAll(final TradePair tradePair);
 }

@@ -7,6 +7,7 @@ package com.crypto.services.rest;
  */
 
 import com.crypto.dao.FundDao;
+import com.crypto.dao.MarketOrderDao;
 import com.crypto.dao.TradingDao;
 import com.crypto.dao.WalletDao;
 import com.crypto.entities.*;
@@ -34,6 +35,15 @@ public class TradeService implements Serializable {
     @EJB
     private MarketOrderTrader marketOrderTrader;
 
+    @EJB
+    private FundDao fundDao;
+
+    @EJB
+    private WalletDao walletDao;
+
+    @EJB
+    private MarketOrderDao marketOrderDao;
+
     @GET
     @Path("/trade/{tradingId}/{fromIndex}/{toIndex}/{coins}/{cryptoCoins}")
     public void trade(@PathParam("tradingId") Integer tradingId, @PathParam("fromIndex") Integer fromIndex, @PathParam("toIndex") Integer toIndex,
@@ -47,12 +57,22 @@ public class TradeService implements Serializable {
         final Fund coinsFund = new Fund(trading.getTradePair(), coins, currency);
         final Fund cryptoCoinsFund = new Fund(trading.getTradePair(), cryptoCoins, cryptoCurrency);
 
+        // Replace the current funds in the database with the ones past as arguments.
+        fundDao.deleteAll(trading.getTradePair());
+        fundDao.perist(coinsFund);
+        fundDao.perist(cryptoCoinsFund);
+
         final Map<Currency, Fund> funds = new HashMap<>();
         funds.put(currency, coinsFund);
         funds.put(cryptoCurrency, cryptoCoinsFund);
 
         // Start with empty wallet, wallet is to be refunded from funds.
         final Wallet wallet = new Wallet(trading,0F, 0F, currency, cryptoCurrency, 0F);
+        walletDao.deleteAll(trading);
+        walletDao.persist(wallet);
+
+        // Delete all market orders
+        marketOrderDao.deleteAll(trading);
 
         Logger logger = new Logger();
 

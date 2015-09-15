@@ -348,8 +348,8 @@
 
             <div class="row" align="left">
                 <div class="col-lg-1" align="right"><b>{{ fromIndex }}</b></div>
-                <div class="col-lg-3">
-                    <div range-slider min="fromIndex" max="toIndex" model-min="fromValue" model-max="toValue"></div>
+                <div class="col-lg-4">
+                    <div range-slidermin="fromIndex" max="toIndex" model-min="fromValue" model-max="toValue"></div>
                 </div>
                 <div class="col-lg-1" align="left"><b>{{ toIndex }}</b></div>
             </div>
@@ -359,7 +359,7 @@
                     <div class="row">
                         <div class="col-lg-1"></div>
                         <div class="col-lg-2" align="left">Van index:</div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" align="left">
                             <input type="text" ng-model="fromValue">
                         </div>
                     </div>
@@ -367,7 +367,7 @@
                     <div class="row">
                         <div class="col-lg-1"></div>
                         <div class="col-lg-2" align="left">Tot index:</div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" align="left">
                             <input type="text" ng-model="toValue">
                         </div>
                     </div>
@@ -375,7 +375,7 @@
                     <div class="row">
                         <div class="col-lg-1"></div>
                         <div class="col-lg-2" align="left">Munten:</div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" align="left">
                             <input type="text" ng-model="coins">
                         </div>
                     </div>
@@ -383,7 +383,7 @@
                     <div class="row">
                         <div class="col-lg-1"></div>
                         <div class="col-lg-2" align="left">Crypto munten:</div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" align="left">
                             <input type="text" ng-model="cryptoCoins">
                         </div>
                     </div>
@@ -392,7 +392,7 @@
                         <div class="col-lg-1"></div>
                         <div class="col-lg-2" align="left">Life simulatie</div>
                         <div class="col-lg-2" align="left">
-                            <select data-style="btn-primary" ng-model="lifeSimulation" width="100">
+                            <select data-style="btn-primary" ng-model="lifeSimulation" width="200">
                                 <option value="Y">Ja</option>
                                 <option value="N">Nee</option>
                             </select>
