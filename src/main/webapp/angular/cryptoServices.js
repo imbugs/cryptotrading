@@ -10,6 +10,13 @@ currentTradingService.factory('getCurrentTrading', function ($resource) {
 /**
  * Service returning the current crypto coin currency rate
  */
+currentTradingService.factory('getCryptoCoinIndexRange', function ($resource) {
+    return $resource('rest/getCryptoCoinIndexRange/:id');
+});
+
+/**
+ * Service returning the current crypto coin index range
+ */
 currentTradingService.factory('getCurrentCryptoRate', function ($resource) {
     return $resource('rest/currentCryptoRate/:id');
 });
@@ -34,7 +41,6 @@ currentTradingService.factory('getWalletHistory', function ($resource) {
 currentTradingService.factory('getMarketOrders', function ($resource) {
     return $resource('rest/marketOrders/:id');
 });
-
 
 /**
  * Service to get the crypto coin data

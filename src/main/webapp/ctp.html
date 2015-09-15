@@ -348,8 +348,8 @@
 
             <div class="row" align="left">
                 <div class="col-lg-1" align="right"><b>{{ fromIndex }}</b></div>
-                <div class="col-lg-4">
-                    <div range-slidermin="fromIndex" max="toIndex" model-min="fromValue" model-max="toValue"></div>
+                <div class="col-lg-3">
+                    <div range-slider min="fromIndex" max="toIndex" model-min="fromValue" model-max="toValue"></div>
                 </div>
                 <div class="col-lg-1" align="left"><b>{{ toIndex }}</b></div>
             </div>
@@ -698,23 +698,24 @@ app.controller("recalculateController", function ($scope, $http, $interval) {
 });
 
 // Tradecontroller
-app.controller("tradeController", function ($scope, $http) {
+app.controller("tradeController", function ($scope, $http, getCryptoCoinIndexRange) {
 
     // Menu option graph clicked, show graph
     $scope.$on('clickTradeEvent', function () {
-        $scope.fromIndex = 1;
-        $scope.toIndex = 1000;
 
-        $scope.fromValue = 1;
-        $scope.toValue = 1000;
+        // Get the crypto coin history range
+        getCryptoCoinIndexRange.get( { id: $scope.trading.id}, function(data) {
+            $scope.fromIndex = data.minIndex;
+            $scope.toIndex = data.maxIndex;
 
-        $scope.coins = 100;
-        $scope.cryptoCoins = 1000;
+            $scope.fromValue = data.minIndex;
+            $scope.toValue = data.maxIndex;
 
-        $scope.slider = {};
-
-        $scope.lifeSimulation = 'N';
-    });
+            $scope.coins = 1000;
+            $scope.cryptoCoins = 0;
+            $scope.lifeSimulation = 'N';
+        });
+     });
 
     $scope.clickTrade = function () {
 
