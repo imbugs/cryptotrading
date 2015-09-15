@@ -211,10 +211,10 @@ public class Trader {
             withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund coins: " + currencyString + ' ' + walletCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund wallet with coins from fund: " + currencyString + ' ' + walletCoins);
             }
         } else {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "No withdrawal of coins possible");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Refunding of wallet with coins impossible since withdrawals have exhausted the fund.");
         }
 
         Float cryptoCoinsToBeWithdrawn = walletCryptoCoins - alreadyWithdrawn(this.trading.getTradePair().getCryptoCurrency());
@@ -228,10 +228,10 @@ public class Trader {
             withdraw(this.wallet.getCryptoCurrency(), cryptoCoinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund crypto coins: " + cryptoCurrencyString + ' ' + walletCryptoCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund wallet with crypto coins from fund: " + cryptoCurrencyString + ' ' + walletCryptoCoins);
             }
         } else {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "No withdrawal of crypto coins possible");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Refunding of wallet with crypto coins impossible since withdrawals have exhausted the fund.");
         }
 
         saveWallet();
@@ -276,7 +276,7 @@ public class Trader {
     public void processWithdrawals() {
 
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Reset withdrawals.");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Reset withdrawals of funds.");
         }
 
         withdrawalDao.getAll().forEach((withdrawal) -> {
@@ -295,7 +295,7 @@ public class Trader {
     protected void restoreToFund(final Float coins) {
 
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Restore coins : " + coins.toString());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Restore coins to fund : " + coins.toString());
         }
 
         Fund fund = funds.get(trading.getTradePair().getCurrency());
@@ -551,5 +551,7 @@ public class Trader {
         return funds;
     }
 
-
+    public Logger getLogger() {
+        return logger;
+    }
 }

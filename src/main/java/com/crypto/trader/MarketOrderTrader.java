@@ -4,6 +4,7 @@ import com.crypto.dao.CryptocoinHistoryDao;
 import com.crypto.dao.SignalDao;
 import com.crypto.dao.WalletHistoryDao;
 import com.crypto.entities.*;
+import com.crypto.enums.LoggingLevel;
 import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
@@ -199,6 +200,9 @@ public class MarketOrderTrader extends Trader implements Serializable{
 
         if (marketOrder != null) {
             if (marketOrder instanceof BuyMarketOrder) {
+
+                getLogger().LOG(getTrading(), LoggingLevel.INFO, cryptocoinHistory.getIndex(), "Buy signal received.");
+
                 if (((BuyMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
                     getMarketOrderDao().persist(marketOrder);
                     updateWallet(marketOrder);
@@ -206,11 +210,13 @@ public class MarketOrderTrader extends Trader implements Serializable{
             }
 
             if (marketOrder instanceof SellMarketOrder) {
+
+                getLogger().LOG(getTrading(), LoggingLevel.INFO, cryptocoinHistory.getIndex(), "Sell signal received.");
+
                 if (((SellMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
                     getMarketOrderDao().persist(marketOrder);
                     updateWallet(marketOrder);
                 }
-
             }
         }
     }
