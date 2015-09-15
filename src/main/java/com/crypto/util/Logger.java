@@ -40,11 +40,10 @@ public class Logger {
     public void LOG(final Trading trading, final LoggingLevel level, final Integer index, final String message) {
 
         final LocalDateTime localDateTime = LocalDateTime.now();
-        ZoneId zoneId = ZoneId.systemDefault();
-        long epoch = localDateTime.atZone(zoneId).toEpochSecond();
-
-        Timestamp timestamp = new Timestamp(epoch);
+        final Timestamp timestamp = Timestamp.valueOf(localDateTime);
 
         final Logging logging = new Logging(timestamp, trading, index, level, message);
+
+        loggingDao.persist(logging);
     }
 }

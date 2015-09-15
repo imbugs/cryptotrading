@@ -15,7 +15,7 @@ public interface FundDao extends Serializable {
      * Persist a fund
      * @param fund the fund to be persisted.
      */
-    public void perist (final Fund fund);
+    public void persist(final Fund fund);
 
     /**
      * Get a fund of a given trade pair and currency

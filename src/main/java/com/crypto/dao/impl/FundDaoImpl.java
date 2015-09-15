@@ -27,7 +27,7 @@ public class FundDaoImpl implements FundDao {
     private EntityManager em;
 
     @Override
-    public void perist(Fund fund) {
+    public void persist(Fund fund) {
         em.persist(fund);
     }
 

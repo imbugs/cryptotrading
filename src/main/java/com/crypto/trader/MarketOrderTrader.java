@@ -198,7 +198,6 @@ public class MarketOrderTrader extends Trader implements Serializable{
         final MarketOrder marketOrder = checkCurrentSignalForOrderCreation(cryptocoinHistory);
 
         if (marketOrder != null) {
-
             if (marketOrder instanceof BuyMarketOrder) {
                 if (((BuyMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
                     getMarketOrderDao().persist(marketOrder);
@@ -215,7 +214,6 @@ public class MarketOrderTrader extends Trader implements Serializable{
             }
         }
     }
-
 
     /**
      * Trade with all available crypto coin histories.

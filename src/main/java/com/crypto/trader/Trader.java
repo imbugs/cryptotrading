@@ -7,6 +7,7 @@ import com.crypto.enums.MarketOrderStatus;
 import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  * A crypto coin trader
  * Created by Jan Wicherink on 24-6-15.
  */
+@Stateful
 public class Trader {
 
     @EJB
@@ -54,7 +56,6 @@ public class Trader {
 
     }
 
-
     /**
      * Constructor.
      *
@@ -64,7 +65,6 @@ public class Trader {
      * @param wallet    the wallet of the trading.
      * @param trading   the trading.
      */
-
 
     public Trader(final Integer fromIndex, final Integer toIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
         this.fromIndex = fromIndex;
@@ -134,7 +134,6 @@ public class Trader {
 
         if (this.wallet.getCoins() == 0F) {
             // There's nothing to buy, check if the wallet can be refunded.
-
             refundWallet();
 
             if (this.wallet.getCoins() == 0F) {
@@ -191,11 +190,14 @@ public class Trader {
         final Float walletCoins = (percentage / 100) * fundCoins;
         final Float walletCryptoCoins = (percentage / 100) * fundCryptoCoins;
 
+        final String currencyString = wallet.getCurrency().getCode();
+        final String cryptoCurrencyString = wallet.getCryptoCurrency().getCode();
+
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund coins: " + fundCoins);
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund cryptocoins: " + fundCryptoCoins);
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet coins : " + wallet.getCoins());
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet crypto coins : " + wallet.getCryptoCoins());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund coins: " + currencyString + ' '+ fundCoins);
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund cryptocoins: " + cryptoCurrencyString + ' ' + fundCryptoCoins);
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet coins : " + currencyString + ' ' + wallet.getCoins());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet crypto coins : " + cryptoCurrencyString + ' '+ wallet.getCryptoCoins());
         }
 
         Float coinsToBeWithdrawn = walletCoins - alreadyWithdrawn(this.trading.getTradePair().getCurrency());
@@ -209,12 +211,11 @@ public class Trader {
             withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "'Refund coins: " + walletCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund coins: " + currencyString + ' ' + walletCoins);
             }
         } else {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "'No withdrawal of coins possible");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "No withdrawal of coins possible");
         }
-
 
         Float cryptoCoinsToBeWithdrawn = walletCryptoCoins - alreadyWithdrawn(this.trading.getTradePair().getCryptoCurrency());
         cryptoCoinsToBeWithdrawn = new Float(Math.floor((cryptoCoinsToBeWithdrawn * 10000)) / 10000);
@@ -227,7 +228,7 @@ public class Trader {
             withdraw(this.wallet.getCryptoCurrency(), cryptoCoinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund crypto coins: " + walletCryptoCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund crypto coins: " + cryptoCurrencyString + ' ' + walletCryptoCoins);
             }
         } else {
             logger.LOG(trading, LoggingLevel.DEBUG, null, "No withdrawal of crypto coins possible");
@@ -338,7 +339,7 @@ public class Trader {
             fund.setCoins(0F);
         }
 
-        fundDao.perist(fund);
+        fundDao.persist(fund);
 
         final FundHistory fundHistory = new FundHistory(this.trading, fund.getCurrency(), fund.getCoins());
 

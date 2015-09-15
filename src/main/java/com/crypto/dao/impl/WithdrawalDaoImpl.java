@@ -6,11 +6,9 @@ import com.crypto.entities.Trading;
 import com.crypto.entities.Withdrawal;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Withdrawal Dao implementation
@@ -66,5 +64,13 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
     @Override
     public void persist(Withdrawal withdrawal) {
         em.persist(withdrawal);
+    }
+
+    @Override
+    public void deleteAll(Trading trading) {
+
+        final Query query = em.createQuery("DELETE FROM Withdrawal w WHERE w.pk.trading=:trading");
+        query.setParameter("trading", trading);
+        query.executeUpdate();
     }
 }

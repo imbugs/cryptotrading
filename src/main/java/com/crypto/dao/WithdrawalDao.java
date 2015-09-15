@@ -55,4 +55,11 @@ public interface WithdrawalDao extends Serializable{
      * @param withdrawal the withdrawal to be persisted.
      */
     public void persist (final Withdrawal withdrawal);
+
+    /**
+     * Delete all withdrawals of a funding for a trading
+     * @param trading the trading
+     */
+    public void deleteAll(Trading trading);
+
 }

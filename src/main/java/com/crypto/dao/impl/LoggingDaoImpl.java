@@ -19,11 +19,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
+ * Loggin Dao.
+ *
  * Created by Jan Wicherink on 18-4-15.
  */
 @Stateless
 public class LoggingDaoImpl implements LoggingDao {
-
 
     private static final long serialVersionUID = 6177946802223896971L;
 
@@ -44,7 +45,6 @@ public class LoggingDaoImpl implements LoggingDao {
         em.persist(logging);
     }
 
-
     @Override
     public Logging get(Integer index) {
         final TypedQuery<Logging> query = (TypedQuery<Logging>) em.createQuery("SELECT l FROM Logging l WHERE l.index= :index");
@@ -52,7 +52,6 @@ public class LoggingDaoImpl implements LoggingDao {
 
         return query.getSingleResult();
     }
-
 
     @Override
     public List<Logging> getAll(final Trading trading, final LoggingLevel level) {
@@ -102,6 +101,15 @@ public class LoggingDaoImpl implements LoggingDao {
         final String timestampString = dateFormat.format(beforeDate);
 
         final Query query = em.createQuery("DELETE FROM Logging l WHERE l.timestamp < '" + timestampString + "'");
+
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteAll(Trading trading) {
+
+        final Query query = em.createQuery("DELETE FROM Logging l WHERE l.trading=:trading");
+        query.setParameter("trading", trading);
 
         query.executeUpdate();
     }

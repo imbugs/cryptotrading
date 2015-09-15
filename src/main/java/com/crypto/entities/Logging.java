@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 public class Logging {
 
     @Id
+    @GeneratedValue
     private Long Id;
 
     @Column(name="TIMESTAMP")

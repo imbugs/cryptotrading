@@ -6,10 +6,7 @@ package com.crypto.services.rest;
  * Created by Jan Wicherink on 12-9-2015.
  */
 
-import com.crypto.dao.FundDao;
-import com.crypto.dao.MarketOrderDao;
-import com.crypto.dao.TradingDao;
-import com.crypto.dao.WalletDao;
+import com.crypto.dao.*;
 import com.crypto.entities.*;
 import com.crypto.trader.MarketOrderTrader;
 import com.crypto.util.Logger;
@@ -39,10 +36,19 @@ public class TradeService implements Serializable {
     private FundDao fundDao;
 
     @EJB
+    private WithdrawalDao withdrawalDao;
+
+    @EJB
     private WalletDao walletDao;
 
     @EJB
     private MarketOrderDao marketOrderDao;
+
+    @EJB
+    private LoggingDao loggingDao;
+
+    @EJB
+    private Logger logger;
 
     @GET
     @Path("/trade/{tradingId}/{fromIndex}/{toIndex}/{coins}/{cryptoCoins}")
@@ -59,12 +65,14 @@ public class TradeService implements Serializable {
 
         // Replace the current funds in the database with the ones past as arguments.
         fundDao.deleteAll(trading.getTradePair());
-        fundDao.perist(coinsFund);
-        fundDao.perist(cryptoCoinsFund);
-
         final Map<Currency, Fund> funds = new HashMap<>();
         funds.put(currency, coinsFund);
         funds.put(cryptoCurrency, cryptoCoinsFund);
+        fundDao.persist(coinsFund);
+        fundDao.persist(cryptoCoinsFund);
+
+        // Remove withdrawals from the funds
+        withdrawalDao.deleteAll(trading);
 
         // Start with empty wallet, wallet is to be refunded from funds.
         final Wallet wallet = new Wallet(trading,0F, 0F, currency, cryptoCurrency, 0F);
@@ -74,7 +82,8 @@ public class TradeService implements Serializable {
         // Delete all market orders
         marketOrderDao.deleteAll(trading);
 
-        Logger logger = new Logger();
+        // Delete current logger
+        loggingDao.deleteAll(trading);
 
         marketOrderTrader.setFromIndex(fromIndex);
         marketOrderTrader.setToIndex(toIndex);

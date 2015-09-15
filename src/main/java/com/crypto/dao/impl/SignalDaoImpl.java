@@ -50,7 +50,6 @@ public class SignalDaoImpl implements SignalDao {
         catch (NoResultException e) {
             return null;
         }
-
         return signal;
     }
 

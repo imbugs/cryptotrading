@@ -40,4 +40,10 @@ public interface LoggingDao {
      */
     public void deleteBeforeDate (final Date beforeDate);
 
+    /**
+     * Delete all logging of a trading.
+     * @param trading the trading.
+     */
+    public void deleteAll (final Trading trading);
+
 }
