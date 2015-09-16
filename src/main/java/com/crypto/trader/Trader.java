@@ -84,7 +84,10 @@ public class Trader {
      */
     public SellMarketOrder createSellMarketOrder(final CryptocoinHistory cryptocoinHistory) {
 
+        final Integer index = cryptocoinHistory.getIndex();
+
         if (this.wallet.getCryptoCoins() == 0F) {
+            logger.LOG(trading, LoggingLevel.INFO, index, "Geen verkoop order kunnen aanmaken, geen crypto munten in beurs.");
             return null;
         }
 
@@ -92,6 +95,7 @@ public class Trader {
         maxTradingCryptoCoins -= getCryptoCoinsOfOpenSellOrders();
 
         if (maxTradingCryptoCoins <= 0F) {
+            logger.LOG(trading, LoggingLevel.INFO, index, "Geen verkoop order kunnen aanmaken, geen crypto munten in beurs.");
             return null;
         }
 
@@ -119,6 +123,8 @@ public class Trader {
                         amountOfCryptoCoins);
 
         sellMarketOrder.calculateFee();
+        logger.LOG(trading, LoggingLevel.INFO, index, "Verkoop order aangemaakt voor : " +
+                   trading.getTradePair().getCryptoCurrency().getCode() + ' '+ amountOfCryptoCoins);
 
         return sellMarketOrder;
     }
@@ -132,12 +138,16 @@ public class Trader {
      */
     public BuyMarketOrder createBuyMarketOrder(final CryptocoinHistory cryptocoinHistory) {
 
+        final Integer index = cryptocoinHistory.getIndex();
+
         if (this.wallet.getCoins() == 0F) {
             // There's nothing to buy, check if the wallet can be refunded.
             refundWallet();
 
             if (this.wallet.getCoins() == 0F) {
                 // Refunding failed.
+                logger.LOG(trading, LoggingLevel.INFO, index, "Aanvullen beurs met munten vanuit fonds niet mogelijk, fons leeg");
+
                 return null;
             }
         }
@@ -146,6 +156,8 @@ public class Trader {
         maxTradingCoins -= getCoinsOfOpenBuyOrders();
 
         if (maxTradingCoins <= 0F) {
+            logger.LOG(trading, LoggingLevel.INFO, index, "Onvoldoende munten in beurs voor aankoop koop order");
+
             return null;
         }
 
@@ -174,6 +186,9 @@ public class Trader {
 
         buyMarketOrder.calculateFee();
 
+        logger.LOG(trading, LoggingLevel.INFO, index, "Koop order aangemaakt voor : " +
+                   trading.getTradePair().getCurrency().getCode() + ' '+ amountOfCoins);
+
         return buyMarketOrder;
     }
 
@@ -194,10 +209,10 @@ public class Trader {
         final String cryptoCurrencyString = wallet.getCryptoCurrency().getCode();
 
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund coins: " + currencyString + ' '+ fundCoins);
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Availiable fund cryptocoins: " + cryptoCurrencyString + ' ' + fundCryptoCoins);
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet coins : " + currencyString + ' ' + wallet.getCoins());
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Wallet crypto coins : " + cryptoCurrencyString + ' '+ wallet.getCryptoCoins());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Beschikbare munten in fonds: " + currencyString + ' '+ fundCoins);
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Beschikbare crypto munten in fonds: " + cryptoCurrencyString + ' ' + fundCryptoCoins);
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Munten in beurs : " + currencyString + ' ' + wallet.getCoins());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Crypto munten in beurs : " + cryptoCurrencyString + ' '+ wallet.getCryptoCoins());
         }
 
         Float coinsToBeWithdrawn = walletCoins - alreadyWithdrawn(this.trading.getTradePair().getCurrency());
@@ -211,10 +226,10 @@ public class Trader {
             withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund wallet with coins from fund: " + currencyString + ' ' + walletCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Vul beurs aan met munten uit fonds: " + currencyString + ' ' + walletCoins);
             }
         } else {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Refunding of wallet with coins impossible since withdrawals have exhausted the fund.");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Aanvullen van beurs met munten vanuit fonds niet mogelijk doordat fonds leeg is.");
         }
 
         Float cryptoCoinsToBeWithdrawn = walletCryptoCoins - alreadyWithdrawn(this.trading.getTradePair().getCryptoCurrency());
@@ -228,10 +243,10 @@ public class Trader {
             withdraw(this.wallet.getCryptoCurrency(), cryptoCoinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
-                logger.LOG(trading, LoggingLevel.DEBUG, null, "Refund wallet with crypto coins from fund: " + cryptoCurrencyString + ' ' + walletCryptoCoins);
+                logger.LOG(trading, LoggingLevel.DEBUG, null, "Aanvullen van beurs met crypto munten uit fonds: " + cryptoCurrencyString + ' ' + walletCryptoCoins);
             }
         } else {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Refunding of wallet with crypto coins impossible since withdrawals have exhausted the fund.");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Aanvullen van beurs met crypto munten vanuit fonds niet mogelijk doordat fonds leeg is.");
         }
 
         saveWallet();
@@ -276,7 +291,7 @@ public class Trader {
     public void processWithdrawals() {
 
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Reset withdrawals of funds.");
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Reset opnames uit fonds.");
         }
 
         withdrawalDao.getAll().forEach((withdrawal) -> {
@@ -295,7 +310,7 @@ public class Trader {
     protected void restoreToFund(final Float coins) {
 
         if (isLoggingEnabled()) {
-            logger.LOG(trading, LoggingLevel.DEBUG, null, "Restore coins to fund : " + coins.toString());
+            logger.LOG(trading, LoggingLevel.DEBUG, null, "Stort munten terug in fonds : " + coins.toString());
         }
 
         Fund fund = funds.get(trading.getTradePair().getCurrency());
@@ -412,7 +427,7 @@ public class Trader {
 
 
     /**
-     * Update the wallet afer a market order has been created
+     * Update the wallet after a market order has been created
      *
      * @param marketOrder the market order.
      */
@@ -426,7 +441,7 @@ public class Trader {
             Float cryptoCoins = getWallet().getCryptoCoins();
 
             if (getLogging()) {
-                message = "Update wallet current cryptocoins:" + cryptoCoins;
+                message = "Update crypto munten in beurs :" + cryptoCoins;
                 logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
             }
 
@@ -437,10 +452,10 @@ public class Trader {
                 coins = 0F;
 
                 if (getLogging()) {
-                    message = "Subtracted cryptocoins :" + ((SellMarketOrder) marketOrder).getCryptoCoins();
+                    message = "Verkochte crypto munten :" + ((SellMarketOrder) marketOrder).getCryptoCoins();
                     logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
 
-                    message = "New wallet cryptocoins :" + cryptoCoins;
+                    message = "Nieuwe aantal crypto munten in beurs :" + cryptoCoins;
                     logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
 
                     // Coins restored to fund and withdrawals removed from fund
@@ -449,7 +464,6 @@ public class Trader {
                 }
             }
 
-
             if (marketOrder instanceof BuyMarketOrder) {
                 // Crypto coins added to wallet
 
@@ -457,10 +471,10 @@ public class Trader {
                 coins = coins - ((BuyMarketOrder) marketOrder).getCoins();
 
                 if (getLogging()) {
-                    message = "Added cryptocoins :" + ((BuyMarketOrder) marketOrder).getCryptoCoins();
+                    message = "Gekochte crypto munten :" + ((BuyMarketOrder) marketOrder).getCryptoCoins();
                     logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
 
-                    message = "New wallet cryptocoins :" + cryptoCoins;
+                    message = "Nieuwe aanatal crypto munten in beurs :" + cryptoCoins;
                     logger.LOG(getTrading(), LoggingLevel.DEBUG, marketOrder.getIndex(), message);
                 }
             }

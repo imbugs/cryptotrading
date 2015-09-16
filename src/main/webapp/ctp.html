@@ -374,7 +374,7 @@
 
                     <div class="row">
                         <div class="col-lg-1"></div>
-                        <div class="col-lg-2" align="left">Munten:</div>
+                        <div class="col-lg-2" align="left">Munten in fonds:</div>
                         <div class="col-lg-2" align="left">
                             <input type="text" ng-model="coins">
                         </div>
@@ -382,7 +382,7 @@
 
                     <div class="row">
                         <div class="col-lg-1"></div>
-                        <div class="col-lg-2" align="left">Crypto munten:</div>
+                        <div class="col-lg-2" align="left">Crypto munten in fonds:</div>
                         <div class="col-lg-2" align="left">
                             <input type="text" ng-model="cryptoCoins">
                         </div>
@@ -407,9 +407,118 @@
                     <button type="button" class="btn btn-primary" ng-click="clickTrade()">Start simulatie</button>
                 </div>
             </div>
+
+        </div>
+
+        <div ng-show="tradingFinished">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4>Resultaten</h4></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-2" align="left">
+                            <h4>Voor handel</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Munten:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceBeforeTrade.coins |
+                            number:2}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Crypto munten:</div>
+                        <div class="col-lg-2" align="left">{{ cryptoCurrency.symbol }} {{
+                            balanceBeforeTrade.cryptoCoins}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Koers:</div>
+                        <div class="col-lg-2" align="left">{{ balanceBeforeTrade.exchangeRate}} {{ currency.symbol }} /
+                            {{ cryptoCurrency.symbol }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Totale waarde:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceBeforeTrade.totalValue |
+                            number:2}}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2" align="left">
+                            <h4>Na handel</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Munten:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceAfterTrade.coins |
+                            number:2}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Crypto munten:</div>
+                        <div class="col-lg-2" align="left">{{ cryptoCurrency.symbol }} {{
+                            balanceAfterTrade.cryptoCoins}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Koers:</div>
+                        <div class="col-lg-2" align="left">{{ balanceAfterTrade.exchangeRate}} {{ currency.symbol }} /
+                            {{ cryptoCurrency.symbol }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Totale waarde:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceAfterTrade.totalValue |
+                            number:2}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Winst:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceAfterTrade.profit |
+                            number:2}}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2" align="left">
+                            <h4>Zonder handel</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Munten:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceWithoutTrade.coins |
+                            number:2}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Crypto munten:</div>
+                        <div class="col-lg-2" align="left">{{ cryptoCurrency.symbol }} {{
+                            balanceWithoutTrade.cryptoCoins}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Koers:</div>
+                        <div class="col-lg-2" align="left">{{ balanceWithoutTrade.exchangeRate}} {{ currency.symbol }} /
+                            {{ cryptoCurrency.symbol }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Totale waarde:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceWithoutTrade.totalValue |
+                            number:2}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2" align="left">Winst:</div>
+                        <div class="col-lg-2" align="left">{{ currency.symbol }} {{ balanceWithoutTrade.profit |
+                            number:2}}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 </div>
@@ -425,7 +534,7 @@ var app = angular.module("cryptoTrading", ['orderTypeFilter', 'orderStatusFilter
 app.controller("mainController", function ($scope, $interval, $http, getCurrentTrading, getCurrentCryptoRate) {
 
     // get current trading
-    var trading = getCurrentTrading.get(1, function () {
+    getCurrentTrading.get(1, function (trading) {
         $scope.trading = trading;
         $scope.currency = trading.tradePair.currency;
         $scope.cryptoCurrency = trading.tradePair.cryptoCurrency;
@@ -703,8 +812,10 @@ app.controller("tradeController", function ($scope, $http, getCryptoCoinIndexRan
     // Menu option graph clicked, show graph
     $scope.$on('clickTradeEvent', function () {
 
+        $scope.tradingFinished = false;
+
         // Get the crypto coin history range
-        getCryptoCoinIndexRange.get( { id: $scope.trading.id}, function(data) {
+        getCryptoCoinIndexRange.get({ id: $scope.trading.id}, function (data) {
             $scope.fromIndex = data.minIndex;
             $scope.toIndex = data.maxIndex;
 
@@ -715,16 +826,20 @@ app.controller("tradeController", function ($scope, $http, getCryptoCoinIndexRan
             $scope.cryptoCoins = 0;
             $scope.lifeSimulation = 'N';
         });
-     });
+    });
 
     $scope.clickTrade = function () {
 
-        $http.get('rest/trade/' + $scope.trading.id + '/' + $scope.fromIndex + '/' + $scope.toIndex + '/' + $scope.coins + '/' + $scope.cryptoCoins).
+        $scope.tradingFinished = false;
+
+        $http.get('rest/trade/' + $scope.trading.id + '/' + $scope.fromValue + '/' + $scope.toValue + '/' + $scope.coins + '/' + $scope.cryptoCoins).
                 success(function (data) {
-                    alert("Klaar");
+                    $scope.tradingFinished = true;
+                    $scope.balanceBeforeTrade = data[0];
+                    $scope.balanceAfterTrade = data[1];
+                    $scope.balanceWithoutTrade = data[2];
                 })
     }
-
 });
 
 </script>

@@ -171,15 +171,23 @@ public class MarketOrderTrader extends Trader implements Serializable{
                 switch (signal.getTradeSignal()) {
 
                     case BULL:
+                        getLogger().LOG(getTrading(), LoggingLevel.INFO, index, "Koop signaal ontvangen.");
+
                         if (!badBuyTrade(cryptocoinHistory)) {
+
                             return createBuyMarketOrder(cryptocoinHistory);
                         }
+                        getLogger().LOG(getTrading(), LoggingLevel.INFO, index, "Slecht koop moment, koop afgeblazen.");
                         break;
 
                     case BEAR:
+                        getLogger().LOG(getTrading(), LoggingLevel.INFO, index, "Verkoop signaal ontvangen.");
+
                         if (!badSellTrade(cryptocoinHistory)) {
+
                             return createSellMarketOrder(cryptocoinHistory);
                         }
+                        getLogger().LOG(getTrading(), LoggingLevel.INFO, index, "Slecht verkoop moment, verkoop afgeblazen.");
                         break;
                 }
             }
@@ -201,17 +209,13 @@ public class MarketOrderTrader extends Trader implements Serializable{
         if (marketOrder != null) {
             if (marketOrder instanceof BuyMarketOrder) {
 
-                getLogger().LOG(getTrading(), LoggingLevel.INFO, cryptocoinHistory.getIndex(), "Buy signal received.");
-
-                if (((BuyMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
+               if (((BuyMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
                     getMarketOrderDao().persist(marketOrder);
                     updateWallet(marketOrder);
                 }
             }
 
             if (marketOrder instanceof SellMarketOrder) {
-
-                getLogger().LOG(getTrading(), LoggingLevel.INFO, cryptocoinHistory.getIndex(), "Sell signal received.");
 
                 if (((SellMarketOrder) marketOrder).getCryptoCoins() >= getTrading().getMinTradingCryptoCurrency()) {
                     getMarketOrderDao().persist(marketOrder);
