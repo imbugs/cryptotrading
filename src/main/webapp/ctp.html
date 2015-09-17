@@ -761,7 +761,6 @@ app.controller("logController", function ($scope, getLogging) {
         $scope.logLevel = "DEBUG";
 
         getLogging.query({ id: $scope.trading.id, level:$scope.logLevel}, function (data) {
-            $scope.logLevel = "DEBUG";
             $scope.loggings = data;
         })
     });
