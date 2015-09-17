@@ -60,7 +60,7 @@ currentTradingService.factory('getMacdData', function ($resource) {
  * Service to get logging data
  */
 currentTradingService.factory('getLogging', function ($resource) {
-    return $resource('rest/getLogging/:id');
+    return $resource('rest/getLogging/:id/:level');
 });
 
 /**

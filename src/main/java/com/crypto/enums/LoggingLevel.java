@@ -9,7 +9,7 @@ public enum LoggingLevel {
 
     DEBUG("DEBUG"),
     INFO("INFO"),
-    WARNING ("WARNING"),
+    WARNING("WARNING"),
     ERROR("ERROR");
 
     final private String code;
@@ -19,13 +19,11 @@ public enum LoggingLevel {
      * @param code the logging level code
      */
     LoggingLevel(final String code) {
-
         this.code = code;
     }
 
     @Override
     public String toString () {
-
         return this.code;
     }
 }

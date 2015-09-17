@@ -34,20 +34,18 @@ public class LoggingService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getLogging/{tradingId}")
-    public List<Logging> getLogging(@PathParam("tradingId") Integer tradingId) throws NotFoundException {
+    @Path("/getLogging/{tradingId}/{level}")
+    public List<Logging> getLogging(@PathParam("tradingId") Integer tradingId, @PathParam("level") LoggingLevel level) throws NotFoundException {
 
         final Trading trading = tradingDao.get(tradingId);
 
-        final LoggingLevel loggingLevel = LoggingLevel.DEBUG;
-
-        final List<Logging> loggings = loggingDao.getAll(trading, loggingLevel);
+        final List<Logging> loggings = loggingDao.getAll(trading, level);
 
         if (loggings != null) {
             return loggings;
         }
         else {
-            throw new NotFoundException("No logging found at log level: " + loggingLevel);
+            throw new NotFoundException("No logging found at log level: " + level);
         }
     }
 }

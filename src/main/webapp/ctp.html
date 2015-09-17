@@ -756,17 +756,20 @@ app.controller("graphController", function ($scope, $http, getBtcData, getMacdDa
 // Log controller
 app.controller("logController", function ($scope, getLogging) {
     // Menu option graph clicked, show graph
-    $scope.$on('clickLogEvent', function () {
 
-        getLogging.query({ id: $scope.trading.id}, function (data) {
+    $scope.$on('clickLogEvent', function () {
+        $scope.logLevel = "DEBUG";
+
+        getLogging.query({ id: $scope.trading.id, level:$scope.logLevel}, function (data) {
             $scope.logLevel = "DEBUG";
             $scope.loggings = data;
         })
     });
 
     $scope.levelChange = function() {
-        alert ("VERANDERD");
-    }
+        getLogging.query({ id: $scope.trading.id, level:$scope.logLevel}, function (data) {
+            $scope.loggings = data;
+        })  }
 });
 
 
