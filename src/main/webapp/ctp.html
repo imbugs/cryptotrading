@@ -245,6 +245,15 @@
     <div class="panel panel-primary">
         <div class="panel-heading"><h4>Logging</h4></div>
         <div class="panel-body">
+
+            <h4><b>Logging level</b></h4>
+                              <select ng-model="logLevel" ng-change="levelChange()">
+                              <option value="DEBUG">DEBUG</option>
+                              <option value="INFO">INFO</option>
+                              <option value="WARNING">WARNING</option>
+                              <option value="ERROR">ERROR</option>
+                             </select>
+
             <table class="table">
                 <tr>
                     <th width="70">Timestamp</th>
@@ -750,9 +759,14 @@ app.controller("logController", function ($scope, getLogging) {
     $scope.$on('clickLogEvent', function () {
 
         getLogging.query({ id: $scope.trading.id}, function (data) {
+            $scope.logLevel = "DEBUG";
             $scope.loggings = data;
         })
     });
+
+    $scope.levelChange = function() {
+        alert ("VERANDERD");
+    }
 });
 
 

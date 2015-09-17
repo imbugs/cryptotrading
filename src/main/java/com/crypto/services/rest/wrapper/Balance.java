@@ -9,9 +9,9 @@ import com.crypto.entities.Withdrawal;
  */
 public class Balance {
 
-    private Float coins;
+    private Float walletCoins;
 
-    private Float cryptoCoins;
+    private Float walletCryptoCoins;
 
     private Fund fundCoins;
 
@@ -30,17 +30,17 @@ public class Balance {
     /**
      * Constructor
      *
-     * @param coins coins
-     * @param cryptoCoins crypto coins
-     * @param fundCoins coins in fund
-     * @param fundCryptoCoins crypto coins in fund
-     * @param withdrawalCoins withdrawal of coins from fund
-     * @param withdrawalCryptoCoins withdrawal of cryptoCoins of fund
-     * @param exchangeRate exchange rage
+     * @param walletCoins           walletCoins
+     * @param wallletCryptoCoins    crypto walletCoins
+     * @param fundCoins             walletCoins in fund
+     * @param fundCryptoCoins       crypto walletCoins in fund
+     * @param withdrawalCoins       withdrawal of walletCoins from fund
+     * @param withdrawalCryptoCoins withdrawal of wallletCryptoCoins of fund
+     * @param exchangeRate          exchange rage
      */
-    public Balance(Float coins, Float cryptoCoins, Fund fundCoins, Fund fundCryptoCoins, Withdrawal withdrawalCoins, Withdrawal withdrawalCryptoCoins, Float exchangeRate) {
-        this.coins = coins;
-        this.cryptoCoins = cryptoCoins;
+    public Balance(Float walletCoins, Float wallletCryptoCoins, Fund fundCoins, Fund fundCryptoCoins, Withdrawal withdrawalCoins, Withdrawal withdrawalCryptoCoins, Float exchangeRate) {
+        this.walletCoins = walletCoins;
+        this.walletCryptoCoins = wallletCryptoCoins;
         this.fundCoins = fundCoins;
         this.fundCryptoCoins = fundCryptoCoins;
         this.withdrawalCoins = withdrawalCoins;
@@ -48,12 +48,12 @@ public class Balance {
         this.exchangeRate = exchangeRate;
     }
 
-    public Float getCoins() {
-        return coins;
+    public Float getWalletCoins() {
+        return walletCoins;
     }
 
-    public Float getCryptoCoins() {
-        return cryptoCoins;
+    public Float getWalletCryptoCoins() {
+        return walletCryptoCoins;
     }
 
     public Float getExchangeRate() {
@@ -71,18 +71,16 @@ public class Balance {
 
         if (withdrawalCoins == null) {
             withdrawalCoinsValue = 0F;
-        }
-        else {
+        } else {
             withdrawalCoinsValue = withdrawalCoins.getCoins();
         }
 
         if (withdrawalCryptoCoins == null) {
-           withdrawalCryptoCoinsValue = 0F;
-        }
-        else {
+            withdrawalCryptoCoinsValue = 0F;
+        } else {
             withdrawalCryptoCoinsValue = withdrawalCryptoCoins.getCoins();
         }
-            this.totalValue = cryptoCoins + fundCoins.getCoins() - withdrawalCoinsValue + ((cryptoCoins + fundCryptoCoins.getCoins() - withdrawalCryptoCoinsValue) * exchangeRate);
+        this.totalValue = walletCoins + fundCoins.getCoins() - withdrawalCoinsValue + ((walletCryptoCoins + fundCryptoCoins.getCoins() - withdrawalCryptoCoinsValue) * exchangeRate);
     }
 
     public Float getProfit() {
@@ -108,4 +106,34 @@ public class Balance {
     public Withdrawal getWithdrawalCryptoCoins() {
         return withdrawalCryptoCoins;
     }
+
+    public Float getCoins () {
+        Float withdrawalCoinsValue;
+        Float totalValue;
+
+        if (withdrawalCoins == null) {
+            withdrawalCoinsValue = 0F;
+        } else {
+            withdrawalCoinsValue = withdrawalCoins.getCoins();
+        }
+
+        totalValue = walletCoins + fundCoins.getCoins() - withdrawalCoinsValue;
+        return totalValue;
+    }
+
+    public Float getCryptoCoins() {
+
+        Float withdrawalCryptoCoinsValue;
+        Float totalValue;
+
+        if (withdrawalCryptoCoins == null) {
+            withdrawalCryptoCoinsValue = 0F;
+        } else {
+            withdrawalCryptoCoinsValue = withdrawalCryptoCoins.getCoins();
+        }
+
+        totalValue = walletCryptoCoins + fundCryptoCoins.getCoins() - withdrawalCryptoCoinsValue;
+        return totalValue;
+    }
 }
+
