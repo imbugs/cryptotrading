@@ -30,4 +30,14 @@ public interface FundDao extends Serializable {
      * @param tradePair the trade pair.
      */
     public void deleteAll(final TradePair tradePair);
+
+    /**
+     * Detach an entity from the persistence context
+     * */
+    public void detach(final Fund fund);
+
+    /**
+     * Flush the persistence context
+     */
+    public void flush();
 }

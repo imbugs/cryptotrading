@@ -102,7 +102,6 @@ public class TraderTest {
         trader.setTrading(trading);
 
         Logger logger = new Logger();
-        trader.setLogger(logger);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);

@@ -42,21 +42,6 @@ public class MarketOrderTrader extends Trader implements Serializable{
         super();
     }
 
-    /**
-     * Constructor
-     *
-     * @param fromIndex start index for trading
-     * @parama toIndex end index for trading
-     * @param funds      the funds that are available for trading
-     * @param wallet     the wallet
-     * @param trading    the trading
-     * @param logger     the logger used for logging.
-     */
-    public MarketOrderTrader(final Integer fromIndex, final Integer toIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
-
-        super(fromIndex, toIndex, funds, wallet, trading, logger);
-    }
-
     private Boolean walletValueDecreases(final CryptocoinHistory cryptocoinHistory) {
         final WalletHistory previousWalletHistory = walletHistoryDao.getLast(getTrading());
         final Float previouslyWalletHistoryValue = previousWalletHistory.getTotalValue();

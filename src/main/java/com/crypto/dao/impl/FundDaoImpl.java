@@ -52,4 +52,16 @@ public class FundDaoImpl implements FundDao {
         query.setParameter("currency", tradePair.getCryptoCurrency());
         query.executeUpdate();
     }
+
+    @Override
+    public void detach(Fund fund) {
+        em.detach(fund);
+    }
+
+    @Override
+    public void flush() {
+        em.flush();
+    }
+
+
 }

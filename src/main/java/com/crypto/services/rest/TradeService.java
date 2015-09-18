@@ -75,11 +75,13 @@ public class TradeService implements Serializable {
 
         // Replace the current funds in the database with the ones past as arguments.
         fundDao.deleteAll(tradePair);
-        final Map<Currency, Fund> funds = new HashMap<>();
-        funds.put(currency, fundCoinsBeforeTrade);
-        funds.put(cryptoCurrency, fundCryptoCoinsBeforeTrade);
         fundDao.persist(fundCoinsBeforeTrade);
         fundDao.persist(fundCryptoCoinsBeforeTrade);
+        fundDao.flush();
+
+        // Detach entities from persistence context that would otherwise be updated during trading.
+        fundDao.detach(fundCoinsBeforeTrade);
+        fundDao.detach(fundCryptoCoinsBeforeTrade);
 
         // Remove withdrawals from the funds
         withdrawalDao.deleteAll(trading);
@@ -97,35 +99,31 @@ public class TradeService implements Serializable {
 
         marketOrderTrader.setFromIndex(fromIndex);
         marketOrderTrader.setToIndex(toIndex);
-        marketOrderTrader.setFunds(funds);
-        marketOrderTrader.setWallet(walletBeforeTrade);
         marketOrderTrader.setTrading(trading);
-        marketOrderTrader.setLogger(logger);
 
         CryptocoinHistory currentRate = cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(tradePair, fromIndex);
 
-        final Balance balanceBeforeTrade = new Balance(0F, 0F, fundCoinsBeforeTrade, fundCryptoCoinsBeforeTrade, null, null, currentRate.getClose());
+        final Balance balanceBeforeTrade = new Balance(0F, 0F, fundCoinsBeforeTrade, fundCryptoCoinsBeforeTrade, currentRate.getClose());
         balanceBeforeTrade.calculateTotalValue();
 
+        marketOrderTrader.init();
         marketOrderTrader.trade();
 
         // After trade, get balance sheet of trading.
         Fund fundCoinsAfterTrade = fundDao.get(tradePair,currency);
         Fund fundCryptoCoinsAfterTrade = fundDao.get(tradePair, cryptoCurrency);
         Wallet walletAfterTrade = walletDao.get(trading);
-        Withdrawal withdrawalCoins = withdrawalDao.get(trading, currency);
-        Withdrawal withdrawalCryptoCoins = withdrawalDao.get(trading, cryptoCurrency);
 
         currentRate = cryptocoinHistoryDao.getCryptoCoinHistoryByIndex(tradePair, toIndex);
 
         // Balance after trading
-        final Balance balanceAfterTrade = new Balance(walletAfterTrade.getCoins(), walletAfterTrade.getCryptoCoins(), fundCoinsAfterTrade, fundCryptoCoinsAfterTrade, withdrawalCoins, withdrawalCryptoCoins, currentRate.getClose());
+        final Balance balanceAfterTrade = new Balance(walletAfterTrade.getCoins(), walletAfterTrade.getCryptoCoins(), fundCoinsAfterTrade, fundCryptoCoinsAfterTrade, currentRate.getClose());
         balanceAfterTrade.calculateTotalValue();
         Float profit = balanceAfterTrade.getTotalValue() - balanceBeforeTrade.getTotalValue();
         balanceAfterTrade.setProfit(profit);
 
         // Balance without trading
-        final Balance balanceWithoutTrade = new Balance(0F, 0F, fundCoinsBeforeTrade, fundCryptoCoinsBeforeTrade, null, null, currentRate.getClose());
+        final Balance balanceWithoutTrade = new Balance(0F, 0F, fundCoinsBeforeTrade, fundCryptoCoinsBeforeTrade, currentRate.getClose());
         balanceWithoutTrade.calculateTotalValue();
         profit = balanceWithoutTrade.getTotalValue() - balanceBeforeTrade.getTotalValue();
         balanceWithoutTrade.setProfit(profit);

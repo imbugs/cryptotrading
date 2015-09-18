@@ -68,7 +68,6 @@ public class MarketOrderTraderTest {
     @EJB
     private SignalDao signalDao;
 
-
     @Deployment
     public static Archive<?> createDeployment() {
 
@@ -122,9 +121,6 @@ public class MarketOrderTraderTest {
         trader.setWallet(wallet);
         trader.setTrading(trading);
 
-        Logger logger = new Logger();
-        trader.setLogger(logger);
-
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         final LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
         final Timestamp timestamp = Timestamp.valueOf(date);
@@ -171,7 +167,6 @@ public class MarketOrderTraderTest {
         trader.setTrading(trading);
 
         Logger logger = new Logger();
-        trader.setLogger(logger);
 
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         final LocalDateTime date = LocalDateTime.parse("2015-07-13 12:00", formatter);
@@ -244,7 +239,6 @@ public class MarketOrderTraderTest {
         trader.setTrading(trading);
 
         Logger logger = new Logger();
-        trader.setLogger(logger);
 
         trading.setCheckBadSellWallet(false);
         trading.setCheckBadSell(false);

@@ -8,6 +8,9 @@ import com.crypto.util.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,7 @@ public class Trader {
 
     private Trading trading;
 
+    @EJB
     private Logger logger;
 
     /**
@@ -57,24 +61,18 @@ public class Trader {
     }
 
     /**
-     * Constructor.
-     *
-     * @param fromIndex the start index to start trading.
-     * @param toIndex   the end index of the trading.
-     * @param funds     the funds used for trading.
-     * @param wallet    the wallet of the trading.
-     * @param trading   the trading.
+     * Initialise the trader
      */
+    public void init() {
+        Fund fundCoins = fundDao.get(trading.getTradePair(), trading.getTradePair().getCurrency());
+        Fund fundCryptoCoins = fundDao.get(trading.getTradePair(), trading.getTradePair().getCryptoCurrency());
 
-    public Trader(final Integer fromIndex, final Integer toIndex, final Map<Currency, Fund> funds, final Wallet wallet, final Trading trading, final Logger logger) {
-        this.fromIndex = fromIndex;
-        this.toIndex = toIndex;
-        this.funds = funds;
-        this.wallet = wallet;
-        this.trading = trading;
-        this.logger = logger;
+        this.funds = new HashMap<>();
+        this.funds.put(trading.getTradePair().getCurrency(), fundCoins);
+        this.funds.put(trading.getTradePair().getCryptoCurrency(), fundCryptoCoins);
+
+        this.wallet = walletDao.get(trading);
     }
-
 
     /**
      * Create a sell market order
@@ -195,7 +193,6 @@ public class Trader {
     /**
      * Refund the wallet when it's empty.
      */
-
     protected void refundWallet() {
 
         final Float percentage = this.trading.getRefundPercentage();
@@ -215,14 +212,13 @@ public class Trader {
             logger.LOG(trading, LoggingLevel.DEBUG, null, "Crypto munten in beurs : " + cryptoCurrencyString + ' '+ wallet.getCryptoCoins());
         }
 
-        Float coinsToBeWithdrawn = walletCoins - alreadyWithdrawn(this.trading.getTradePair().getCurrency());
-        coinsToBeWithdrawn = new Float(Math.floor((coinsToBeWithdrawn * 100)) / 100);
+        Float coinsToBeWithdrawn = new Float(Math.floor((walletCoins * 100)) / 100);
 
         if (coinsToBeWithdrawn > 0) {
             // Add the funding to the wallet
             this.wallet.addCoins(coinsToBeWithdrawn);
 
-            // Register the withdrawal from the funding.
+            // Withdraw from the funds.
             withdraw(this.wallet.getCurrency(), coinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
@@ -232,14 +228,13 @@ public class Trader {
             logger.LOG(trading, LoggingLevel.DEBUG, null, "Aanvullen van beurs met munten vanuit fonds niet mogelijk doordat fonds leeg is.");
         }
 
-        Float cryptoCoinsToBeWithdrawn = walletCryptoCoins - alreadyWithdrawn(this.trading.getTradePair().getCryptoCurrency());
-        cryptoCoinsToBeWithdrawn = new Float(Math.floor((cryptoCoinsToBeWithdrawn * 10000)) / 10000);
+        Float cryptoCoinsToBeWithdrawn = new Float(Math.floor((walletCryptoCoins * 10000)) / 10000);
 
         if (cryptoCoinsToBeWithdrawn > 0) {
             // Add the funding to the wallet
             this.wallet.addCryptoCoins(cryptoCoinsToBeWithdrawn);
 
-            // Register the withdrawal from the funding.
+            // Withdraw from the funding.
             withdraw(this.wallet.getCryptoCurrency(), cryptoCoinsToBeWithdrawn);
 
             if (isLoggingEnabled()) {
@@ -250,6 +245,7 @@ public class Trader {
         }
 
         saveWallet();
+        saveFunds();
     }
 
     /**
@@ -366,7 +362,7 @@ public class Trader {
      * /**
      * Get funding from the available funds.
      *
-     * @param currency the currency seekd as a funding
+     * @param currency the currency seeked as a funding
      * @return the available amount of currency, null when no funding is found.
      */
     public Float getFunding(final Currency currency) {
@@ -382,49 +378,33 @@ public class Trader {
 
 
     /**
-     * Register a Withdrawal of currency from the funding.
+     * Witdraw the currency from the fund.
      *
      * @param currency the currency.
-     * @param coins    the amout of coins withdrawn.
+     * @param coins    the amount of coins withdrawn from the fund.
      */
     public void withdraw(final Currency currency, final Float coins) {
-        Withdrawal withdrawal = withdrawalDao.get(trading, currency);
 
-        if (withdrawal == null) {
-            withdrawal = new Withdrawal(trading, coins, currency);
-            withdrawalDao.persist(withdrawal);
-        } else {
-            // Add the addition withdrawal
-            withdrawal.addCoins(coins);
-            withdrawalDao.update(withdrawal);
-        }
-    }
+       Fund fund = this.funds.get(currency);
+       fund.setCoins(fund.getCoins()-coins);
 
-
-    /**
-     * Get the amount of currency already withdrawn from the funding.
-     *
-     * @param currency the currency
-     * @return the amount of currency already withdrawn.
-     */
-    private Float alreadyWithdrawn(final Currency currency) {
-
-        final Withdrawal withdrawal = withdrawalDao.get(this.trading, currency);
-
-        if (withdrawal == null) {
-            return 0F;
-        }
-        return withdrawal.getCoins();
+       this.funds.put(currency, fund);
     }
 
     /**
      * Save the wallet.
      */
     private void saveWallet() {
-
         walletDao.persist(this.wallet);
     }
 
+    /**
+     * Save the funds.
+     */
+    private void saveFunds() {
+        fundDao.persist(this.funds.get(this.wallet.getCurrency()));
+        fundDao.persist(this.funds.get(this.wallet.getCryptoCurrency()));
+    }
 
     /**
      * Update the wallet after a market order has been created
@@ -555,10 +535,6 @@ public class Trader {
 
     public Boolean getLogging() {
         return getTrading().getLogging();
-    }
-
-    public void setLogger(Logger logger) {
-        this.logger = logger;
     }
 
     public Map<Currency, Fund> getFunds() {
